@@ -2354,9 +2354,9 @@
     "@octokit/openapi-types" "^18.0.0"
 
 "@originjs/vite-plugin-federation@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@originjs/vite-plugin-federation/-/vite-plugin-federation-1.2.1.tgz#14ec0066f5a5d44b0c45defc8182294eb9ee09a0"
-  integrity sha512-bKlosfNGtQM9LjS+Wju1joVly6C1ftL18zfpzzTgiZnO+mgn55lGCjz/ogLFbBn0OhE/h0fDUm+FRKeCNCXK+A==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@originjs/vite-plugin-federation/-/vite-plugin-federation-1.2.3.tgz#5f9639348f83d3c8ee54187fffd5acc92d119ea2"
+  integrity sha512-9uHeyOLV1kMB4MT6D9MGbC2QbiX7m8U7cJWvimNBQBtP1S2qc4KPlNa7VK6Rfukjk/UGL1etwjLhkeBrEWh9bQ==
   dependencies:
     estree-walker "^3.0.2"
     magic-string "^0.27.0"
@@ -2762,7 +2762,7 @@
     "@types/estree" "*"
     "@types/json-schema" "*"
 
-"@types/estree@*", "@types/estree@^1.0.0":
+"@types/estree@*":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.0.tgz#5fb2e536c1ae9bf35366eed879e827fa59ca41c2"
   integrity sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==
@@ -2771,6 +2771,11 @@
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
+
+"@types/estree@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.1.tgz#aa22750962f3bf0e79d753d3cc067f010c95f194"
+  integrity sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==
 
 "@types/glob@^7.1.1":
   version "7.2.0"
