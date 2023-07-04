@@ -7,6 +7,10 @@ import { VitePWA } from "vite-plugin-pwa";
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   return {
+    define: {
+      // eslint-disable-next-line no-undef
+      APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    },
     plugins: [
       react(),
       federation({
@@ -41,7 +45,11 @@ export default defineConfig(({ command, mode }) => {
         strategies: "injectManifest",
         srcDir: "src",
         filename: "sw.js",
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+        includeAssets: [
+          "favicon.ico",
+          "apple-touch-icon.png",
+          "masked-icon.svg",
+        ],
         manifest: {
           name: "Questionnaire",
           short_name: "Questionnaire",

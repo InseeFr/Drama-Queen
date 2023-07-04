@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-pwa/client" />
 
+declare const APP_VERSION: string;
 interface ImportMetaEnv {
   readonly VITE_QUEEN_URL: string;
   readonly VITE_QUEEN_V2_URL: string;

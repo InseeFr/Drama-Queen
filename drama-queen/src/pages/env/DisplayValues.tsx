@@ -4,7 +4,7 @@ import './env.css'
 export function EnvPage() {
   return (
     <div className="App">
-      <h1>Drama Queen</h1>
+      <h1>Drama Queen v{APP_VERSION}</h1>
       <div className="card">
         <p>Les variables d'environnements</p>
         <p className="read-the-docs">
