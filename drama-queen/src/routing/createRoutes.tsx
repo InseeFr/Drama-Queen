@@ -31,5 +31,9 @@ export const createRoutes = (queenVersion: 1 | 2 = 1): RouteObject[] => {
       path: "/queen/authentication/*",
       element: queenElement
     },
+    {
+      path: "/queen/authentication-v2/*",
+      element: queenElement
+    },
   ]
 }

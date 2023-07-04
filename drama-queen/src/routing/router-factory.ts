@@ -8,7 +8,10 @@ interface CreateRouterProps {
 }
 
 export function createRouter({ strategy, initialPathname }: CreateRouterProps) {
-  const isQueenV2 = window.location.href.toLowerCase().includes("_queenv2");
+  const lowerHref = window.location.href.toLowerCase();
+  const keywords = ["queenv2", "authentication-v2"];
+  const isQueenV2 = keywords.some((keyword) => lowerHref.includes(keyword));
+
   const appRoutes = createRoutes(isQueenV2 ? 2 : 1);
   if (strategy === "browser") {
     return createBrowserRouter(appRoutes);

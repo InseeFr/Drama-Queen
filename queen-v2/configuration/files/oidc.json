@@ -4,7 +4,7 @@
   "config": {
     "authority": "${oidc_authority}",
     "client_id": "${oidc_client_id}",
-    "redirect_uri": "my_origin/authentication/callback",
+    "redirect_uri": "my_origin/authentication-v2/callback",
     "response_type": "code",
     "post_logout_redirect_uri": "my_origin/",
     "scope": "openid profile email",
