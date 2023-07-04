@@ -1,5 +1,5 @@
 import { EnvPage } from "pages/env";
-import { SurveyUnitMapping, VisualisationMapping } from "pages/caseIssue";
+import { SurveyUnitMapping, VisualisationMapping } from "pages/queenMapping";
 import { READ_ONLY } from "utils/constants";
 import type { RouteObject } from "react-router-dom";
 
