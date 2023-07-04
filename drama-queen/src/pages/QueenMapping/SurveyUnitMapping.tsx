@@ -8,7 +8,7 @@ type Params = {
   id: string;
 }
 
-function SurveyUnitMapping() {
+export function SurveyUnitMapping() {
   const { readonly, id } = useParams<Params>();
 
   const surveyUnit = useLiveQuery(
@@ -19,5 +19,3 @@ function SurveyUnitMapping() {
 
   return <Navigate to={(`/queen/${readonly ? `${readonly}/` : ''}questionnaire/${surveyUnit?.questionnaireId}/survey-unit/${id}`)} />
 }
-
-export default SurveyUnitMapping

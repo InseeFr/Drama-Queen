@@ -1,7 +1,7 @@
 import React from 'react'
-import './Env.css'
+import './env.css'
 
-function Env() {
+export function EnvPage() {
   return (
     <div className="App">
       <h1>Drama Queen</h1>
@@ -18,6 +18,4 @@ function Env() {
       </div>
     </div >
   )
-}
-
-export default Env
+};

@@ -10,11 +10,11 @@
   "scripts": {
     "build": "lerna run build",
     "build:drama-queen": "lerna run build --scope 'drama-queen'",
-    "build:queen-cra": "lerna run build --scope 'queen-cra'",
+    "build:queen": "lerna run build --scope 'queen'",
     "build:queen-v2": "lerna run build --scope 'queen-v2'",
     "serve:drama-queen": "lerna run serve --scope 'drama-queen'",
     "dev:drama-queen": "lerna run dev --scope 'drama-queen'",
-    "dev:queen-cra": "lerna run start --scope 'queen'",
+    "dev:queen": "lerna run start --scope 'queen'",
     "dev:queen-v2": "lerna run start --scope 'queen-v2'",
     "stop": "kill-port --port 5000,5001,5002"
   },

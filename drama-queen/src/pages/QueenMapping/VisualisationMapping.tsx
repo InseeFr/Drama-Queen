@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { isQueenV2Survey } from "utils/checkLunaticVersion/isQueenV2Survey";
 
-function VisualisationMapping() {
+export function VisualisationMapping() {
   const [searchParams,] = useSearchParams();
   const questionnaireUrl = searchParams.get("questionnaire")
   const [isQueenV2, setIsQueenV2] = useState<boolean | undefined>(undefined);
@@ -24,5 +24,3 @@ function VisualisationMapping() {
 
   return isQueenV2 ? <queen-v2-app /> : <queen-app />
 }
-
-export default VisualisationMapping

@@ -45,17 +45,17 @@ const AuthProviderOIDC = ({ children }) => {
       });
   }, [conf]);
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader message="loading" />;
   if (error) return <Error message={D.noAuthFile} />;
   return (
     <AuthenticationProvider
       configuration={oidcConf}
       isEnabled={oidcConf.isEnabled}
       UserStore={InMemoryWebStorage}
-      callbackComponentOverride={() => <Loader />}
-      authenticating={() => <Loader />}
+      callbackComponentOverride={() => <Loader message="callbackComponentOverride" />}
+      authenticating={() => <Loader message="authenticating" />}
       notAuthorized={() => <Error message={D.unauthorized} />}
-      sessionLostComponent={() => <Loader />}
+      sessionLostComponent={() => <Loader message="sessionLostComponent" />}
     >
       {children}
     </AuthenticationProvider>

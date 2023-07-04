@@ -1,5 +1,5 @@
 import { createBrowserRouter, createMemoryRouter } from "react-router-dom";
-import { routes } from "./routes";
+import { createRoutes } from "./createRoutes";
 import { RoutingStrategy } from "./types";
 
 interface CreateRouterProps {
@@ -8,10 +8,14 @@ interface CreateRouterProps {
 }
 
 export function createRouter({ strategy, initialPathname }: CreateRouterProps) {
+  const isQueenV2 = window.location.href.toLowerCase().includes("_queenv2");
+  const appRoutes = createRoutes(isQueenV2 ? 2 : 1);
   if (strategy === "browser") {
-    return createBrowserRouter(routes);
+    return createBrowserRouter(appRoutes);
   }
 
   const initialEntries = [initialPathname || "/"];
-  return createMemoryRouter(routes, { initialEntries: initialEntries });
+  return createMemoryRouter(appRoutes, {
+    initialEntries: initialEntries,
+  });
 }

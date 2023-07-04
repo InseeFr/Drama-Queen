@@ -17,15 +17,15 @@ const Rooter = () => {
     <Switch>
       <Route
         path={`/queen/:${READ_ONLY}?/questionnaire/:idQ/survey-unit/:idSU`}
-        component={OrchestratorManager}
+        component={secure(OrchestratorManager)}
       />
       <Route path={`/queen/:${READ_ONLY}?/survey-unit/:idSU`} component={QueenRedirect} />
       {!standalone && <Route path="/queen/synchronize" component={secure(Synchronize)} />}
       <Route path="/queen/visualize" component={Visualizer} />
       {!standalone &&
-        !pathname.startsWith('/queen/authentication-v2') &&
+        !pathname.startsWith('/queen/authentication') &&
         pathname.startsWith('/queen') && <Redirect to="/queen/visualize" />}
-      {standalone && !pathname.startsWith('/queen/authentication-v2') && (
+      {standalone && !pathname.startsWith('/queen/authentication') && (
         <Redirect to="/queen/visualize" />
       )}
     </Switch>
