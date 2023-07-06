@@ -80,7 +80,7 @@ const ServiceWorkerNotification = ({ standaloneSW }) => {
   };
 
   return (
-    standalone && (
+    standaloneSW && (
       <Snackbar
         open={open}
         onClose={close}
