@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { AuthProvider } from 'components/auth';
-import { BrowserRouter } from 'react-router-dom';
-import D from 'i18n';
-import Preloader from 'components/shared/preloader';
 import Rooter from 'components/router';
+import Preloader from 'components/shared/preloader';
 import ServiceWorkerNotification from 'components/shared/serviceWorkerNotification';
 import { StyleProvider } from 'components/style';
+import D from 'i18n';
+import { BrowserRouter } from 'react-router-dom';
 import { addOnlineStatusObserver } from 'utils';
 import customStyle from './app.style';
 // import root from 'react-shadow/material-ui';
@@ -39,7 +39,7 @@ const App = () => {
       {configuration && (
         <AppContext.Provider value={contextValue}>
           <StyleProvider>
-            <ServiceWorkerNotification standalone={configuration.standalone} />
+            <ServiceWorkerNotification standalone={configuration.standaloneSW} />
             <AuthProvider authType={configuration.authenticationType}>
               <BrowserRouter>
                 <Rooter />

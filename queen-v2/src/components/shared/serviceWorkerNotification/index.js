@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import D from 'i18n';
-import { useServiceWorker } from 'utils/hook';
-import { Box, makeStyles, Slide, Snackbar } from '@material-ui/core';
+import { Box, Slide, Snackbar, makeStyles } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Button } from 'components/designSystem';
+import D from 'i18n';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useServiceWorker } from 'utils/hook';
 
 const SlideTransition = props => <Slide {...props} direction="down" />;
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ServiceWorkerNotification = ({ standalone }) => {
+const ServiceWorkerNotification = ({ standaloneSW }) => {
   const classes = useStyles();
   const [message, setMessage] = useState(null);
   const {
@@ -34,7 +34,7 @@ const ServiceWorkerNotification = ({ standalone }) => {
     updateApp,
     clearUpdating,
   } = useServiceWorker({
-    standalone,
+    standaloneSW,
   });
 
   const [open, setOpen] = useState(false);

@@ -11,6 +11,8 @@ export const useConfiguration = () => {
         const configurationResponse = await response.json();
         const baseUrl = new URL(configurationResponse.queenUrl);
         configurationResponse.standalone = baseUrl.origin === window.location.origin;
+        configurationResponse.standaloneSW =
+          configurationResponse.queenUrl === window.location.origin;
         setConfiguration(configurationResponse);
       };
       loadConfiguration();

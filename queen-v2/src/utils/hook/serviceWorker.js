@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as serviceWorker from 'utils/serviceWorker/serviceWorker';
 
 const SW_UPDATE_KEY = 'installing-update';
 
-export const useServiceWorker = ({ standalone }) => {
+export const useServiceWorker = ({ standaloneSW }) => {
   const [isInstallingServiceWorker, setIsInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);
@@ -21,7 +21,7 @@ export const useServiceWorker = ({ standalone }) => {
   };
 
   useEffect(() => {
-    if (standalone) {
+    if (standaloneSW) {
       serviceWorker.register({
         onInstalling: installing => {
           setIsInstallingServiceWorker(installing);
@@ -43,7 +43,7 @@ export const useServiceWorker = ({ standalone }) => {
         },
       });
     }
-  }, [standalone]);
+  }, [standaloneSW]);
 
   const updateAssets = () => {
     if (waitingServiceWorker) {
