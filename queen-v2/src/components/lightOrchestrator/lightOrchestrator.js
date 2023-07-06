@@ -47,24 +47,29 @@ function LightOrchestrator({
   const lunaticStateRef = useRef();
 
   // allow auto-next page when component is "complete"
-  const customHandleChange = useCallback(() => {
-    if (lunaticStateRef === undefined) return;
-    const { getComponents, goNextPage, getData } = lunaticStateRef.current;
+  const customHandleChange = useCallback(
+    valueChange => {
+      if (lunaticStateRef === undefined) return;
+      const { getComponents, goNextPage, getData } = lunaticStateRef.current;
 
-    // check if state should be updated, and events sent
-    const { COLLECTED } = getData();
-    onDataChange(COLLECTED);
+      // check if state should be updated, and events sent
+      const { COLLECTED } = getData();
+      onDataChange(COLLECTED);
 
-    const currentComponent = getComponents()[0];
-    // search for Radio-like components
-    if (
-      currentComponent.componentType === 'Radio' ||
-      currentComponent.componentType === 'CheckboxBoolean' ||
-      currentComponent.componentType === 'CheckboxOne'
-    ) {
-      goNextPage();
-    }
-  }, [onDataChange]);
+      const variableChanged = valueChange?.name;
+      const currentComponent = getComponents()[0];
+      // search for Radio-like components
+      if (
+        !variableChanged.includes('_MISSING') &&
+        (currentComponent.componentType === 'Radio' ||
+          currentComponent.componentType === 'CheckboxBoolean' ||
+          currentComponent.componentType === 'CheckboxOne')
+      ) {
+        goNextPage();
+      }
+    },
+    [onDataChange]
+  );
 
   const missingStrategy = useCallback(() => {
     if (lunaticStateRef === undefined) return;
