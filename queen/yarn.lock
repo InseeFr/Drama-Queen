@@ -4685,9 +4685,7 @@ cookie@0.4.0:
   integrity sha512-+Hp8fLp57wnUSt0tY0tHEXh4voZRDnoIrZPqlo3DPiI4y9lwg/jqx+1Om94/W6ZaPDOUbnjOt/99w66zk+l1Xg==
 
 copy-and-watch@^0.1.4:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/copy-and-watch/-/copy-and-watch-0.1.5.tgz#01a8d85f48d558e9d5f3759b5cb97fb8cc4560d2"
-  integrity sha512-DHWIPXhboSoAeWWMnG3GTetgzunjX9MLVuLb6yfLxEYzVu56C3LHZ5GNelA1wNChLWKM4Xmspg8np2yRs15Zsg==
+  version "0.1.6"
   dependencies:
     chokidar "3.4.1"
     colors "1.4.0"
