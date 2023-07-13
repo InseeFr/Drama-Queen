@@ -2769,9 +2769,7 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16.9.23":
-  version "16.9.53"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.53.tgz#40cd4f8b8d6b9528aedd1fff8fcffe7a112a3d23"
-  integrity sha512-4nW60Sd4L7+WMXH1D6jCdVftuW7j4Za6zdp6tJ33Rqv0nk1ZAmQKML9ZLD4H0dehA3FZxXR/GM8gXplf82oNGw==
+  version "16.14.43"
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -6066,9 +6064,7 @@ eslint-plugin-prettier@^3.3.1:
     prettier-linter-helpers "^1.0.0"
 
 eslint-plugin-react-hooks@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.2.0.tgz#8c229c268d468956334c943bb45fc860280f5556"
-  integrity sha512-623WEiZJqxR7VdxFCKLI6d6LLpwJkGPYKODnkH3D7WpOG5KM8yWueBd8TLsNAetEJNF5iJmolaAKO3F8yzyVBQ==
+  version "4.6.0"
 
 eslint-plugin-react@^7.21.5:
   version "7.22.0"
@@ -11126,9 +11122,7 @@ react-dev-utils@^11.0.3:
     text-table "0.2.0"
 
 react-dom@^17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.1.tgz#1de2560474ec9f0e334285662ede52dbc5426fc6"
-  integrity sha512-6eV150oJZ9U2t9svnsspTMrWNyHc6chX0KzDeAOXftRa8bNeOKTTfCJ7KorIwenkHd2xqVTBTCZd79yk/lx/Ug==
+  version "17.0.2"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -11332,9 +11326,7 @@ react-use@^15.3.3:
     tslib "^2.0.0"
 
 react@^17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-17.0.1.tgz#6e0600416bd57574e3f86d92edba3d9008726127"
-  integrity sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w==
+  version "17.0.2"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
