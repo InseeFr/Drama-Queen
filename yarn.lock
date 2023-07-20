@@ -1602,10 +1602,10 @@
     remove-accents "^0.4.2"
     sass "^1.32.2"
 
-"@inseefr/lunatic@^2.4.7":
-  version "2.4.7"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.4.7.tgz#bb66548ebd071883ee23a3c80944925b29ffc8f7"
-  integrity sha512-z5cD/dDGoG94WRAD6i7zRQgnMNIIT6KMDBkt96aeLrldj4YkofO4Jvevy5NLzlx8bC6JfH5CFJhWZwuqH0F8HA==
+"@inseefr/lunatic@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.4.9.tgz#788892acc94e3a52dd4f1b4a02ea702b2ab4405f"
+  integrity sha512-qQDnARkPVHjMD/xlIRVPdizTjqZKNFT9Ws4P9Yy6hfEELnOrUemMBgKqmydiHazNhYX4BN5Kdn1dn0AbfBCYjQ==
   dependencies:
     "@inseefr/trevas" "^0.1.17"
     "@inseefr/vtl-2.0-antlr-tools" "^0.1.0-bundle"
