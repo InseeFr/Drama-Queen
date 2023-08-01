@@ -106,16 +106,16 @@ export const OrchestratorManager = () => {
   );
 
   const saveQueen = useCallback(
-    async (newState, newData, page) => {
+    async (newState, newData, lastReachedPage) => {
       const currentState = getState();
-      console.log('save queen', { newState, newData, page, currentState, surveyUnit });
+      console.log('save queen', { newState, newData, lastReachedPage, currentState, surveyUnit });
       saveData({
         comment: {},
         ...surveyUnit,
         stateData: {
           state: newState ?? currentState,
           date: new Date().getTime(),
-          currentPage: page,
+          currentPage: lastReachedPage,
         },
         data: newData ?? surveyUnit.data,
       });
@@ -133,15 +133,15 @@ export const OrchestratorManager = () => {
 
   const quit = useCallback(
     async (pager, getData) => {
-      const { page, maxPage } = pager;
+      const { page, maxPage, lastReachedPage } = pager;
       const isLastPage = page === maxPage;
       const newData = getData();
       if (isLastPage) {
         // TODO : make algo to calculate COMPLETED event
         changeState(COMPLETED);
         changeState(VALIDATED);
-        await saveQueen(VALIDATED, newData, page);
-      } else await saveQueen(undefined, newData, page);
+        await saveQueen(VALIDATED, newData, lastReachedPage);
+      } else await saveQueen(undefined, newData, lastReachedPage);
       closeOrchestrator();
     },
     [changeState, closeOrchestrator, saveQueen]
@@ -149,10 +149,10 @@ export const OrchestratorManager = () => {
 
   const definitiveQuit = useCallback(
     async (pager, getData) => {
-      const { page } = pager;
+      const { lastReachedPage } = pager;
       const newData = getData();
       changeState(VALIDATED);
-      await saveQueen(VALIDATED, newData, page);
+      await saveQueen(VALIDATED, newData, lastReachedPage);
       closeOrchestrator();
     },
     [changeState, closeOrchestrator, saveQueen]
