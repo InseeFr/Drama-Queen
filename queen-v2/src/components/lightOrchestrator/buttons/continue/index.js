@@ -19,14 +19,12 @@ const ButtonContinue = ({
   isLastReachedPage,
   componentHasResponse,
   isLastPage,
-  loopVariables = [],
   page,
 }) => {
   const classes = useStyles();
   const localPageFastForward = () => goToLastReachedPage();
 
-  const shouldFastForward =
-    loopVariables.length === 0 && !readonly && rereading && !isLastReachedPage;
+  const shouldFastForward = !readonly && rereading && !isLastReachedPage;
   const shouldQuit = isLastPage && readonly;
   const shouldSaveAndQuit = isLastPage && !readonly;
   const shouldContinue = !shouldFastForward && componentHasResponse && !rereading;
