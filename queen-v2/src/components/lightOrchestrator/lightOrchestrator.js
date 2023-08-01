@@ -1,11 +1,11 @@
-import * as lunatic from '@inseefr/lunatic';
+import { useLunatic } from '@inseefr/lunatic';
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import ButtonContinue from './buttons/continue/index';
 
 import D from 'i18n';
 import { componentHasResponse } from 'utils/components/deduceState';
 import { LoopPanel } from './LoopPanel';
-import ButtonContinue from './buttons/continue/index';
 import { ComponentDisplayer } from './componentDisplayer';
 import Header from './header';
 import { useStyles } from './lightOrchestrator.style';
@@ -42,34 +42,25 @@ function LightOrchestrator({
   quit,
   definitiveQuit,
 }) {
-  const { data } = surveyUnit;
+  const { data, stateData } = surveyUnit;
   const classes = useStyles();
   const lunaticStateRef = useRef();
+  const [init, setInit] = useState(false);
 
-  // allow auto-next page when component is "complete"
-  const customHandleChange = useCallback(
-    valueChange => {
-      if (lunaticStateRef === undefined) return;
-      const { getComponents, goNextPage, getData } = lunaticStateRef.current;
-
-      // check if state should be updated, and events sent
-      const { COLLECTED } = getData();
-      onDataChange(COLLECTED);
-
-      const variableChanged = valueChange?.name;
-      const currentComponent = getComponents()[0];
-      // search for Radio-like components
-      if (
-        !variableChanged.includes('_MISSING') &&
-        (currentComponent.componentType === 'Radio' ||
-          currentComponent.componentType === 'CheckboxBoolean' ||
-          currentComponent.componentType === 'CheckboxOne')
-      ) {
-        goNextPage();
-      }
-    },
-    [onDataChange]
-  );
+  const lightCustomHandleChange = useCallback(valueChange => {
+    if (lunaticStateRef === undefined) return;
+    const { getComponents, goNextPage } = lunaticStateRef.current;
+    const currentComponent = getComponents()?.[0];
+    if (
+      currentComponent &&
+      !valueChange?.name?.includes('_MISSING') &&
+      (currentComponent.componentType === 'Radio' ||
+        currentComponent.componentType === 'CheckboxBoolean' ||
+        currentComponent.componentType === 'CheckboxOne')
+    ) {
+      goNextPage();
+    }
+  }, []);
 
   const missingStrategy = useCallback(() => {
     if (lunaticStateRef === undefined) return;
@@ -83,10 +74,11 @@ function LightOrchestrator({
   const dontKnowButton = D.doesntKnowButton;
   const refusedButton = D.refusalButton;
 
-  lunaticStateRef.current = lunatic.useLunatic(source, data, {
+  lunaticStateRef.current = useLunatic(source, data, {
+    lastReachedPage: stateData?.currentPage ?? '1',
     features,
     pagination,
-    onChange: customHandleChange,
+    onChange: lightCustomHandleChange,
     preferences,
     autoSuggesterLoading,
     getReferentiel,
@@ -99,23 +91,6 @@ function LightOrchestrator({
     refusedButton,
     withAutofocus: true,
   });
-
-  // useDetectChange({
-  //   source,
-  //   data,
-  //   features,
-  //   pagination,
-  //   customHandleChange,
-  //   preferences,
-  //   autoSuggesterLoading,
-  //   suggesters,
-  //   suggesterFetcher,
-  //   missing,
-  //   missingStrategy,
-  //   missingShortcut,
-  //   dontKnowButton,
-  //   refusedButton,
-  // });
 
   const {
     getComponents,
@@ -136,38 +111,31 @@ function LightOrchestrator({
     Provider,
   } = lunaticStateRef.current;
 
-  const previousPager = useRef();
+  const previousPageTag = useRef();
 
   // page change : update pager and save data
   useEffect(() => {
     if (lunaticStateRef.current === undefined) return;
-    const { getData, pager } = lunaticStateRef.current;
-    // save ask for an optional new questionnaire state, new Data and current page, unused for Visualizer
-    // no previous pager for comparison : save current pager for future comparisons
-    if (previousPager.current === undefined) {
-      previousPager.current = pager;
+    const { getData, pageTag, pager } = lunaticStateRef.current;
+    if (previousPageTag.current === undefined) {
+      previousPageTag.current = pageTag;
       return;
     }
-    // no page change => no save needed
-    if (
-      previousPager.current.page === pager.page &&
-      previousPager.current.subPage === pager.subPage &&
-      previousPager.current.iteration === pager.iteration
-    ) {
-      return;
+    if (pageTag !== previousPageTag.current) {
+      previousPageTag.current = pageTag;
+      const allData = getData();
+      onDataChange(allData.COLLECTED);
+      save(undefined, allData, pager.lastReachedPage);
     }
-    // page change : update current pager then save
-    previousPager.current = pager;
-    save(undefined, getData(), pager.page);
-  }, [save, pager]);
+  }, [save, pager.lastReachedPage, onDataChange]);
 
   const memoQuit = useCallback(() => {
-    quit(previousPager.current, getData);
-  }, [getData, quit]);
+    quit(pager, getData);
+  }, [getData, pager, quit]);
 
   const memoDefinitiveQuit = useCallback(() => {
-    definitiveQuit(previousPager.current, getData);
-  }, [getData, definitiveQuit]);
+    definitiveQuit(pager, getData);
+  }, [definitiveQuit, pager, getData]);
 
   const [components, setComponents] = useState([]);
 
@@ -185,13 +153,7 @@ function LightOrchestrator({
   const trueGoToPage = useCallback(
     targetPage => {
       if (typeof targetPage === 'string') {
-        if (targetPage.includes('#') && targetPage.includes('.')) {
-          const [foundPage, foundSubPage, foundIteration] = targetPage.split(/\W+/);
-          // lunatic way of page numbering
-          goToPage({ page: foundPage, iteration: foundIteration - 1, subPage: foundSubPage - 1 });
-        } else {
-          goToPage({ page: targetPage, subPage: undefined, iteration: undefined });
-        }
+        goToPage({ page: targetPage });
       } else {
         const { page, iteration, subPage } = targetPage;
         goToPage({ page: page, iteration: iteration, subPage: subPage });
@@ -201,8 +163,9 @@ function LightOrchestrator({
   );
 
   const goToLastReachedPage = useCallback(() => {
-    if (previousPager.current === undefined) return;
-    trueGoToPage(previousPager.current.lastReachedPage);
+    if (lunaticStateRef.current === undefined) return;
+    const { pager } = lunaticStateRef.current;
+    trueGoToPage(pager.lastReachedPage);
   }, [trueGoToPage]);
 
   const firstComponent = useMemo(() => [...components]?.[0], [components]);
@@ -217,7 +180,7 @@ function LightOrchestrator({
     label: { value: questionnaireTitle },
   } = source;
 
-  if (previousPager === undefined) return null;
+  if (previousPageTag === undefined) return null;
 
   // lastReachedpage can have values like "35" or like "35.1#1"
   const checkIfLastReachedPage = () => {
@@ -282,7 +245,6 @@ function LightOrchestrator({
             isLastReachedPage={isLastReachedPage}
             componentHasResponse={hasResponse}
             goToLastReachedPage={goToLastReachedPage}
-            loopVariables={loopVariables}
           ></ButtonContinue>
         </div>
         <NavBar
