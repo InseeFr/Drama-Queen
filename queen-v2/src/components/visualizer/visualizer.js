@@ -7,6 +7,7 @@ import LightOrchestrator from 'components/lightOrchestrator';
 import Error from 'components/shared/Error';
 import Preloader from 'components/shared/preloader';
 import { useHistory } from 'react-router';
+import { useQuestionnaireState } from 'utils/hook/questionnaire';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
 import QuestionnaireForm from './questionnaireForm';
 
@@ -26,6 +27,12 @@ const Visualizer = () => {
   } = useRemoteData(questionnaireUrl, dataUrl);
 
   const { getReferentielForVizu } = useGetReferentiel(nomenclatures);
+
+  const [getState, , onDataChange] = useQuestionnaireState(
+    surveyUnit?.id,
+    suData?.data,
+    suData?.stateData?.state
+  );
 
   const history = useHistory();
 
@@ -66,17 +73,27 @@ const Visualizer = () => {
   //   });
   // }, []);
 
-  const save = useCallback(() => {
-    console.log('visu save');
-  }, []);
+  const save = useCallback(
+    async (newState, newData, lastReachedPage) => {
+      const currentState = getState();
+      const unit = {
+        ...surveyUnit,
+        stateData: {
+          state: newState ?? currentState,
+          date: new Date().getTime(),
+          currentPage: lastReachedPage,
+        },
+        data: newData ?? surveyUnit?.data,
+      };
+      await surveyUnitIdbService.addOrUpdateSU(unit);
+    },
+    [getState, surveyUnit]
+  );
   const closeAndDownloadData = useCallback(async () => {
     const data = await surveyUnitIdbService.get('1234');
     downloadDataAsJson(data, 'data');
     history.push('/');
   }, [history]);
-  useEffect(() => {
-    console.log(surveyUnit);
-  }, [surveyUnit]);
 
   return (
     <>
@@ -93,6 +110,7 @@ const Visualizer = () => {
           pagination={true}
           missing={true}
           save={save}
+          onDataChange={onDataChange}
           filterDescription={false}
           quit={closeAndDownloadData}
           definitiveQuit={closeAndDownloadData}
