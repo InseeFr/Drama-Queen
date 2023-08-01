@@ -1602,12 +1602,12 @@
     remove-accents "^0.4.2"
     sass "^1.32.2"
 
-"@inseefr/lunatic@2.4.9":
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.4.9.tgz#788892acc94e3a52dd4f1b4a02ea702b2ab4405f"
-  integrity sha512-qQDnARkPVHjMD/xlIRVPdizTjqZKNFT9Ws4P9Yy6hfEELnOrUemMBgKqmydiHazNhYX4BN5Kdn1dn0AbfBCYjQ==
+"@inseefr/lunatic@^2.5.0-fast-forward":
+  version "2.5.0-fast-forward"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.5.0-fast-forward.tgz#cf8ebb652ccb2f08dd36a0efc692c9987d28125f"
+  integrity sha512-VpHad8oL1K3FwOXAJ5OCfreg+3jXDDomGEGtVVRUntwakg9FJU/EEoA6T+RkmpY2eYVjvrDIovBCDOZAWcYoyw==
   dependencies:
-    "@inseefr/trevas" "^0.1.17"
+    "@inseefr/trevas" "^0.1.19"
     "@inseefr/vtl-2.0-antlr-tools" "^0.1.0-bundle"
     antlr4 "4.11.0"
     classnames "^2.3.1"
@@ -1626,10 +1626,20 @@
     snowball "^0.3.1"
     string-tokenizer "^0.0.8"
 
-"@inseefr/trevas@^0.1.14", "@inseefr/trevas@^0.1.16", "@inseefr/trevas@^0.1.17":
+"@inseefr/trevas@^0.1.14", "@inseefr/trevas@^0.1.16":
   version "0.1.17"
   resolved "https://registry.yarnpkg.com/@inseefr/trevas/-/trevas-0.1.17.tgz#747ee1b2c712b0d5b277760ea27ce1fb78f65415"
   integrity sha512-hQ6mXtcID6kmbpQPuJpyjiBMzGnsC2MAFKIt3qjHBCpYOXbgzl+VteSi+Sj0q4J2EQAx45drIcIZdX7FOf4EUw==
+  dependencies:
+    "@inseefr/vtl-2.0-antlr-tools" "0.1.0"
+    antlr4 "4.8.0"
+    data-forge "^1.8.8"
+    date-fns "^2.27.0"
+
+"@inseefr/trevas@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@inseefr/trevas/-/trevas-0.1.19.tgz#5b0cf8d288afba4880ac15592cf80657dc8ade9d"
+  integrity sha512-zvNw8JPf7jlgqznvnteEYTTnS3i0Lslb7y8EPs1OHYqsSyDiXwp9RG25oUSMK8A/y4kblkQO/cVDc971+H3RoA==
   dependencies:
     "@inseefr/vtl-2.0-antlr-tools" "0.1.0"
     antlr4 "4.8.0"
