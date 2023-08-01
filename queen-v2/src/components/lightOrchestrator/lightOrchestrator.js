@@ -45,7 +45,6 @@ function LightOrchestrator({
   const { data, stateData } = surveyUnit;
   const classes = useStyles();
   const lunaticStateRef = useRef();
-  const [init, setInit] = useState(false);
 
   const lightCustomHandleChange = useCallback(valueChange => {
     if (lunaticStateRef === undefined) return;
