@@ -115,7 +115,6 @@ function LightOrchestrator({
   // page change : update pager and save data
   useEffect(() => {
     const savingTask = async () => {
-      console.log('saving');
       if (lunaticStateRef.current === undefined) return;
       const { getData: freshGetData, pageTag, pager } = lunaticStateRef.current;
       if (previousPageTag.current === undefined) {
@@ -130,7 +129,7 @@ function LightOrchestrator({
       }
     };
     savingTask();
-  }, [save, pager.lastReachedPage, onDataChange]);
+  }, [save, pager, onDataChange]);
 
   const memoQuit = useCallback(() => {
     quit(pager, getData);
