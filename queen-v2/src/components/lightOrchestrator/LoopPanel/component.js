@@ -1,9 +1,13 @@
-import { Panel } from './panel';
+import { memo, useEffect, useState } from 'react';
 import { useStyles } from './component.style';
+import { Panel } from './panel';
 
-export const LoopPanel = ({ loopVariables = [], getData, pager, goToPage }) => {
+const LoopPanelNotMemo = ({ loopVariables = [], getData, pager, goToPage }) => {
+  const noLoopVariables = loopVariables.length === 0 || loopVariables[0] === undefined;
+
   const classes = useStyles();
-  if (loopVariables.length === 0 || loopVariables[0] === undefined) return null;
+
+  const [datas, setDatas] = useState(null);
 
   const {
     page: currentPage,
@@ -12,13 +16,19 @@ export const LoopPanel = ({ loopVariables = [], getData, pager, goToPage }) => {
     lastReachedPage,
   } = pager;
 
+  useEffect(() => {
+    if (!noLoopVariables) setDatas(getData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [noLoopVariables, loopVariables]);
+
+  if (noLoopVariables) return null;
+
   // use page to select loopVariables depth
   const depth = 0;
   const targetVariable = loopVariables[depth];
-  const datas = getData();
-  const targetData = datas.COLLECTED[targetVariable];
-  const { COLLECTED } = targetData;
-  if (COLLECTED.length === 0 || COLLECTED[0] === null) return null;
+  const targetData = datas?.COLLECTED[targetVariable];
+  const COLLECTED = targetData?.COLLECTED;
+  if (COLLECTED && (COLLECTED.length === 0 || COLLECTED[0] === null)) return null;
 
   // get max page/subPage/iteration from lastReachedPage :
   // handle subPage/iteration starting from 1 in lastReachedPage while starting from 0 in pager
@@ -34,7 +44,7 @@ export const LoopPanel = ({ loopVariables = [], getData, pager, goToPage }) => {
   };
   return (
     <div className={classes.loops}>
-      {COLLECTED.map((value, index) => {
+      {COLLECTED?.map((value, index) => {
         return (
           <Panel
             key={`panel-${index}`}
@@ -54,3 +64,5 @@ export const LoopPanel = ({ loopVariables = [], getData, pager, goToPage }) => {
     </div>
   );
 };
+
+export const LoopPanel = memo(LoopPanelNotMemo);

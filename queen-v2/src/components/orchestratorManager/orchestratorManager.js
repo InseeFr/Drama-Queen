@@ -108,7 +108,6 @@ export const OrchestratorManager = () => {
   const saveQueen = useCallback(
     async (newState, newData, lastReachedPage) => {
       const currentState = getState();
-      console.log('save queen', { newState, newData, lastReachedPage, currentState, surveyUnit });
       saveData({
         comment: {},
         ...surveyUnit,
