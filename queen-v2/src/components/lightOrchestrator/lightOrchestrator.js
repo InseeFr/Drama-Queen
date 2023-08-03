@@ -114,18 +114,22 @@ function LightOrchestrator({
 
   // page change : update pager and save data
   useEffect(() => {
-    if (lunaticStateRef.current === undefined) return;
-    const { getData, pageTag, pager } = lunaticStateRef.current;
-    if (previousPageTag.current === undefined) {
-      previousPageTag.current = pageTag;
-      return;
-    }
-    if (pageTag !== previousPageTag.current) {
-      previousPageTag.current = pageTag;
-      const allData = getData();
-      onDataChange(allData.COLLECTED);
-      save(undefined, allData, pager.lastReachedPage);
-    }
+    const savingTask = async () => {
+      console.log('saving');
+      if (lunaticStateRef.current === undefined) return;
+      const { getData: freshGetData, pageTag, pager } = lunaticStateRef.current;
+      if (previousPageTag.current === undefined) {
+        previousPageTag.current = pageTag;
+        return;
+      }
+      if (pageTag !== previousPageTag.current) {
+        previousPageTag.current = pageTag;
+        const allData = freshGetData();
+        onDataChange(allData.COLLECTED);
+        save(undefined, allData, pager.lastReachedPage);
+      }
+    };
+    savingTask();
   }, [save, pager.lastReachedPage, onDataChange]);
 
   const memoQuit = useCallback(() => {
