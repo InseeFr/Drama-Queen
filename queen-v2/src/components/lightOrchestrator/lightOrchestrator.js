@@ -132,12 +132,14 @@ function LightOrchestrator({
   }, [save, pager, onDataChange]);
 
   const memoQuit = useCallback(() => {
-    quit(pager, getData);
-  }, [getData, pager, quit]);
+    const { getData: freshGetData, pager: freshPager } = lunaticStateRef.current;
+    quit(freshPager, freshGetData);
+  }, [quit]);
 
   const memoDefinitiveQuit = useCallback(() => {
-    definitiveQuit(pager, getData);
-  }, [definitiveQuit, pager, getData]);
+    const { getData: freshGetData, pager: freshPager } = lunaticStateRef.current;
+    definitiveQuit(freshPager, freshGetData);
+  }, [definitiveQuit]);
 
   const [components, setComponents] = useState([]);
 
