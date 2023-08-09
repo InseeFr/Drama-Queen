@@ -89,11 +89,25 @@ const Visualizer = () => {
     },
     [getState, surveyUnit]
   );
-  const closeAndDownloadData = useCallback(async () => {
-    const data = await surveyUnitIdbService.get('1234');
-    downloadDataAsJson(data, 'data');
-    history.push('/');
-  }, [history]);
+  const closeAndDownloadData = useCallback(
+    async (pager, getData) => {
+      const { lastReachedPage } = pager;
+      const newData = getData();
+      const unit = {
+        ...surveyUnit,
+        stateData: {
+          state: getState(),
+          date: new Date().getTime(),
+          currentPage: lastReachedPage,
+        },
+        data: newData ?? surveyUnit?.data,
+      };
+
+      downloadDataAsJson(unit, 'data');
+      history.push('/');
+    },
+    [getState, history, surveyUnit]
+  );
 
   return (
     <>
