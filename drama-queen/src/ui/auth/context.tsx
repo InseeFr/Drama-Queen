@@ -35,7 +35,7 @@ export function createAuthProvider(params: {
     origin = window.location.origin + import.meta.env.BASE_URL
   } = params;
 
-  const prOidcClient = (() => {
+  const prOidc = (() => {
     switch (authType) {
       case "OIDC":
         return createKeycloakClient({ url: keycloakUrl, clientId, realm, origin });
@@ -55,7 +55,7 @@ export function createAuthProvider(params: {
 
         let isActive = true;
 
-        prOidcClient.then(oidc => {
+        prOidc.then(oidc => {
 
           if (!isActive) return;
 
