@@ -2,48 +2,60 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 import { Oidc } from "core/keycloakClient/Oidc";
 import { createKeycloakClient } from "core/keycloakClient/createKeycloakClient";
 import { dummyOidcClient } from "core/keycloakClient/dummyOidcClient";
-import { assert, type Equals } from "tsafe/assert";
-
+import { assert } from "tsafe/assert";
 
 const context = createContext<Oidc | undefined>(undefined);
 
-export function useAuthContext() {
+export function useOidc() {
   const value = useContext(context);
   if (value === undefined) throw new Error("You must wrap your component inside AuthProvider");
   return value;
 }
 
-export function useAccessToken() {
-  const value = useContext(context);
-  if (!value?.isUserLoggedIn) return null;
-  return value.getAccessToken();
+export function useLoggedInOidc(): Oidc.LoggedIn {
+
+  const oidc = useOidc();
+
+  assert(oidc.isUserLoggedIn, "Must wrap in <Authenticated /> provider to use this hook");
+
+  return oidc;
+
 }
 
+export function RequiresAuthentication(props:
+  { children: ReactNode }) {
+
+  const { children } = props
+  const oidc = useOidc();
+
+  if (!oidc.isUserLoggedIn) {
+    oidc.login();
+    return null;
+  }
+
+  return <>{children}</>
+}
+
+
 export function createAuthProvider(params: {
-  authType: "OIDC" | "DUMMY";
+  isMock: true;
+} | {
+  isMock: false;
   keycloakUrl: string;
   clientId: string;
   realm: string;
-  origin: string | undefined;
-}) {
+  origin: string;
+}
+) {
 
-  const {
-    authType,
-    keycloakUrl,
-    clientId,
-    realm,
-    origin = window.location.origin + import.meta.env.BASE_URL
-  } = params;
-
-  const prOidc = (() => {
-    switch (authType) {
-      case "OIDC":
-        return createKeycloakClient({ url: keycloakUrl, clientId, realm, origin });
-      case "DUMMY":
-        return Promise.resolve(dummyOidcClient);
-    }
-    assert<Equals<typeof authType, never>>(false);
-  })();
+  const prOidc = params.isMock ?
+    Promise.resolve(dummyOidcClient) :
+    createKeycloakClient({
+      url: params.keycloakUrl,
+      clientId: params.clientId,
+      realm: params.realm,
+      origin: params.origin
+    });
 
   function AuthProvider(props: { fallback?: ReactNode; children: ReactNode; }) {
     const { fallback = null, children } = props;

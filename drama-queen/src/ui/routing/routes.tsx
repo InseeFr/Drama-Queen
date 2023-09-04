@@ -4,13 +4,13 @@ import { READ_ONLY } from "ui/constants";
 import type { RouteObject } from "react-router-dom";
 import { SynchronizePage } from "ui/pages/synchronize/SynchronizePage";
 import { SurveyMapping } from "ui/pages/queenMapping/SuryveyMapping";
-import { Authenticated } from "ui/auth";
+import { RequiresAuthentication } from "ui/auth";
 
 //ReadOnly path is a bad pattern must be change (affects pearl,moog,queen)
 export const routes: RouteObject[] = [
   {
     path: "/env",
-    element: <Authenticated><DisplayEnvValues /></Authenticated>
+    element: <RequiresAuthentication><DisplayEnvValues /></RequiresAuthentication>
   },
   {
     path: `/:${READ_ONLY}?/survey-unit/:id`,
@@ -26,6 +26,6 @@ export const routes: RouteObject[] = [
   },
   {
     path: "/synchronize",
-    element: <Authenticated><SynchronizePage /></Authenticated>
+    element: <RequiresAuthentication><SynchronizePage /></RequiresAuthentication>
   }
 ]
