@@ -1,8 +1,8 @@
-import { ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { Oidc } from "core/keycloakClient/Oidc";
 import { createKeycloakClient } from "core/keycloakClient/createKeycloakClient";
 import { dummyOidcClient } from "core/keycloakClient/dummyOidcClient";
-import { useQuery } from "@tanstack/react-query";
+import { assert, type Equals } from "tsafe/assert";
 
 
 const context = createContext<Oidc | undefined>(undefined);
@@ -19,26 +19,61 @@ export function useAccessToken() {
   return value.getAccessToken();
 }
 
-export type AuthProviderProps = { authType?: "OIDC", keycloakUrl: string, clientId: string, realm: string, origin?: string, children: ReactNode };
+export function createAuthProvider(params: {
+  authType: "OIDC" | "DUMMY";
+  keycloakUrl: string;
+  clientId: string;
+  realm: string;
+  origin: string | undefined;
+}) {
 
-let prOidcClient: Promise<Oidc> | undefined = undefined
+  const {
+    authType,
+    keycloakUrl,
+    clientId,
+    realm,
+    origin = window.location.origin + import.meta.env.BASE_URL
+  } = params;
 
-export function AuthProvider(props: AuthProviderProps) {
-  const { authType, keycloakUrl, clientId, realm, origin = window.location.origin + import.meta.env.BASE_URL, children } = props
-
-  const { data: oidcClient, isLoading } = useQuery({
-    queryKey: ["keycloak-client", authType, keycloakUrl, realm, origin],
-    queryFn: () => {
-      switch (authType) {
-        case "OIDC":
-          return createKeycloakClient({ url: keycloakUrl, clientId, realm, origin });
-        default:
-          return dummyOidcClient;
-      }
+  const prOidcClient = (() => {
+    switch (authType) {
+      case "OIDC":
+        return createKeycloakClient({ url: keycloakUrl, clientId, realm, origin });
+      case "DUMMY":
+        return Promise.resolve(dummyOidcClient);
     }
-  });
+    assert<Equals<typeof authType, never>>(false);
+  })();
 
-  if (isLoading) return <div>Context Loading</div>
-  return <context.Provider value={oidcClient}>{children}</context.Provider>
+  function AuthProvider(props: { fallback?: ReactNode; children: ReactNode; }) {
+    const { fallback = null, children } = props;
+
+    const [oidc, setOidc] = useState<Oidc | undefined>(undefined);
+
+    useEffect(
+      () => {
+
+        let isActive = true;
+
+        prOidcClient.then(oidc => {
+
+          if (!isActive) return;
+
+          setOidc(oidc);
+
+        });
+
+        return () => { isActive = false; }
+
+      },
+      []
+    );
+
+    if (oidc === undefined) return fallback;
+    return <context.Provider value={oidc}>{children}</context.Provider>
+
+  }
+
+  return { AuthProvider };
 
 }

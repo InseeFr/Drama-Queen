@@ -1,4 +1,4 @@
-import React, { ReactNode, type Component, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useAuthContext } from "./context";
 
 export function Authenticated(props:
@@ -8,13 +8,12 @@ export function Authenticated(props:
   const authCtx = useAuthContext();
 
   useEffect(() => {
-    if (authCtx?.isUserLoggedIn) {
-      return;
+    if (!authCtx.isUserLoggedIn) {
+      authCtx.login();
     }
-    authCtx?.login();
   }, [authCtx]);
 
-  if (!authCtx?.isUserLoggedIn) return null;
+  if (!authCtx.isUserLoggedIn) return null;
 
   return <>{children}</>
 }
