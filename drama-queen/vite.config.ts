@@ -16,7 +16,7 @@ export default defineConfig(({ command, mode }) => {
       federation({
         name: "drama-queen",
         // remotes: {
-        //This is the right way of mfe with vite module federation (but legacy queens does not use)
+        // //This is the right way of mfe with vite module federation (but legacy queens does not use)
         // queen: {
         //   external: `Promise.resolve((window?._env_?.["VITE_QUEEN_URL"] || import.meta.env["VITE_QUEEN_URL"]) + "/entry.js")`,
         //   externalType: "promise",

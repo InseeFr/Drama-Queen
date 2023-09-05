@@ -3,7 +3,7 @@ import { z } from "zod";
 export const NomenclatureSchema = z
   .object({
     id: z.string(),
-    label: z.number(),
+    label: z.string(),
   })
   .passthrough()
   .array();

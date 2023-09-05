@@ -40,11 +40,9 @@ const mount = ({
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <QueenApiProvider>
-          {/*@ts-expect-error*/}
           <RouterProvider router={router} />
         </QueenApiProvider>
       </AuthProvider>
-      {/*@ts-expect-error*/}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
