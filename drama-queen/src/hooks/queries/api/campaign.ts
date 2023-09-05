@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useApiClient } from "ui/api/context";
+import { useQueenApi } from "ui/queenApi";
 
 export const useGetCampaigns = () => {
-  const { getCampaigns } = useApiClient();
+  const { getCampaigns } = useQueenApi();
   return useQuery({
     queryKey: ["campaigns"],
     queryFn: () => getCampaigns(),

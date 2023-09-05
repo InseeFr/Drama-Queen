@@ -1,10 +1,10 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { useApiClient } from "ui/api/context";
 import { useGetNomenclatures } from "./nomenclature";
-import {QuestionnaireSyncError} from "../../SyncError";
+import { useQueenApi } from "ui/queenApi";
+import { QuestionnaireSyncError } from "hooks/queries/SyncError";
 
 export const useGetQuestionnaire = (idQuestionnaire: string) => {
-  const { getQuestionnaire } = useApiClient();
+  const { getQuestionnaire } = useQueenApi();
   return useQuery({
     queryKey: ["survey", idQuestionnaire],
     queryFn: () => getQuestionnaire(idQuestionnaire),
@@ -12,7 +12,7 @@ export const useGetQuestionnaire = (idQuestionnaire: string) => {
 };
 
 export const useGetQuestionnaires = (questionnaireIds: string[]) => {
-  const { getQuestionnaire } = useApiClient();
+  const { getQuestionnaire } = useQueenApi();
   return useQueries({
     queries: questionnaireIds.map((questionnaireId) => ({
       queryKey: ["questionnaire", questionnaireId],
