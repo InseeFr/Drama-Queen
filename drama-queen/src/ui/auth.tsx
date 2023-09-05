@@ -2,7 +2,7 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 import { Oidc } from "core/keycloakClient/Oidc";
 import { createKeycloakClient } from "core/keycloakClient/createKeycloakClient";
 import { dummyOidcClient } from "core/keycloakClient/dummyOidcClient";
-import { assert } from "tsafe/assert";
+import { useQuery } from "@tanstack/react-query"
 
 const context = createContext<Oidc | undefined>(undefined);
 
@@ -13,11 +13,8 @@ export function useOidc() {
 }
 
 export function useLoggedInOidc(): Oidc.LoggedIn {
-
   const oidc = useOidc();
-
-  assert(oidc.isUserLoggedIn, "Must wrap in <Authenticated /> provider to use this hook");
-
+  if (!oidc.isUserLoggedIn) throw new Error("You  wrap your component inside RequiresAuthentication to use this hook")
   return oidc;
 
 }
@@ -60,28 +57,12 @@ export function createAuthProvider(params: {
   function AuthProvider(props: { fallback?: ReactNode; children: ReactNode; }) {
     const { fallback = null, children } = props;
 
-    const [oidc, setOidc] = useState<Oidc | undefined>(undefined);
+    const { data: oidc, isLoading } = useQuery({
+      queryKey: ["keycloak-client"],
+      queryFn: () => prOidc
+    });
 
-    useEffect(
-      () => {
-
-        let isActive = true;
-
-        prOidc.then(oidc => {
-
-          if (!isActive) return;
-
-          setOidc(oidc);
-
-        });
-
-        return () => { isActive = false; }
-
-      },
-      []
-    );
-
-    if (oidc === undefined) return fallback;
+    if (isLoading) return fallback;
     return <context.Provider value={oidc}>{children}</context.Provider>
 
   }
