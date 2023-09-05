@@ -1,4 +1,4 @@
-import { QueenApi } from "./QueenApi";
+import type { QueenApi } from "./QueenApi";
 import { surveySample } from "./mockData/surveySample";
 
 export function createMockApiClient() {
@@ -12,11 +12,7 @@ export function createMockApiClient() {
     putSurveyUnit: (idSurveyUnit, surveyUnit) =>
       console.log("putSurveyUnit", `id: ${idSurveyUnit}`, surveyUnit),
     postSurveyUnitInTemp: (idSurveyUnit, surveyUnit) =>
-      console.log(
-        "postSurveyUnitInTemp",
-        `id: ${idSurveyUnit}`,
-        surveyUnit
-      ),
+      console.log("postSurveyUnitInTemp", `id: ${idSurveyUnit}`, surveyUnit),
     getCampaigns: () =>
       Promise.resolve([
         {

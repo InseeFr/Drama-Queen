@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { type RoutingStrategy, createRouter } from "./ui/routing/createRouter";
+import { type RoutingStrategy, createRouter } from "ui/routing/createRouter";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { injectLegacyEntryQueens } from "core/injectLegacyQueens";
 import { createAuthProvider } from "ui/auth";

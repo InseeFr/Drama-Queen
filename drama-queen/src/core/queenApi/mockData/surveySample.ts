@@ -1,4 +1,4 @@
-import { Questionnaire } from "core/model/survey";
+import type { Questionnaire } from "core/model/survey";
 
 export const surveySample = {
   id: "lk9s32o5",
@@ -130,4 +130,4 @@ export const surveySample = {
   cleaning: {},
   missingBlock: { Q1_MISSING: ["Q1"], Q1: ["Q1_MISSING"] },
   resizing: {},
-} satisfies Questionnaire as Questionnaire;
+} as Questionnaire;

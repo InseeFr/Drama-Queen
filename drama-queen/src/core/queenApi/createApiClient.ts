@@ -1,22 +1,22 @@
 import {
-  IdAndQuestionnaireId,
+  type IdAndQuestionnaireId,
   IdAndQuestionnaireIdSchema,
   SurveyUnitSchema,
-  SurveyUnitWithId,
-} from "../model/surveyUnit";
+  type SurveyUnitWithId,
+} from "core/model/surveyUnit";
 import axios from "axios";
 import memoize from "memoizee";
-import { SurveyUnitData } from "../model/surveyUnitData";
-import { QueenApi } from "./QueenApi";
-import { Campaign, CampaignSchema } from "../model/campaing";
-import { APIReturnedListOfSurvey, Questionnaire } from "../model/survey";
+import type { SurveyUnitData } from "core/model/surveyUnitData";
+import type { QueenApi } from "./QueenApi";
+import { type Campaign, CampaignSchema } from "core/model/campaing";
+import { type APIReturnedListOfSurvey } from "core/model/survey";
 import {
-  Nomenclature,
+  type Nomenclature,
   NomenclatureSchema,
-  RequiredNomenclatures,
+  type RequiredNomenclatures,
   RequiredNomenclaturesSchema,
-} from "../model/nomenclature";
-import { Paradata } from "../model/paradata";
+} from "core/model/nomenclature";
+import type { Paradata } from "core/model/paradata";
 
 export function createApiClient(params: {
   apiUrl: string;
