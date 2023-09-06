@@ -1602,10 +1602,10 @@
     remove-accents "^0.4.2"
     sass "^1.32.2"
 
-"@inseefr/lunatic@^2.5.0-fix-last-reached-page":
-  version "2.5.0-fix-last-reached-page"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.5.0-fix-last-reached-page.tgz#25a23c6a6c1c8bf7829f172e56c4c5c2f79a476a"
-  integrity sha512-kQLHGbe8LuV/dJl9q5jqFph3jxhuI3AbW/CX9wjPilihsvSyunBa25v+CeW1twquVjGMdbcjRlVoc76SrULeZw==
+"@inseefr/lunatic@2.5.2-rc1-beta":
+  version "2.5.2-rc1-beta"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.5.2-rc1-beta.tgz#b06dc4cde9e34ffb4236cb1e448295edee7f40ed"
+  integrity sha512-dQxWo9PnyJDfUCYl3lxilozd/hY7oSyV8gBkx1QXUY2V7n30CBdEvDhXSP9iYMEwOE1sTWlgFMuWxFJddI2EGA==
   dependencies:
     "@inseefr/trevas" "^0.1.19"
     "@inseefr/vtl-2.0-antlr-tools" "^0.1.0-bundle"
@@ -1637,9 +1637,9 @@
     date-fns "^2.27.0"
 
 "@inseefr/trevas@^0.1.19":
-  version "0.1.19"
-  resolved "https://registry.yarnpkg.com/@inseefr/trevas/-/trevas-0.1.19.tgz#5b0cf8d288afba4880ac15592cf80657dc8ade9d"
-  integrity sha512-zvNw8JPf7jlgqznvnteEYTTnS3i0Lslb7y8EPs1OHYqsSyDiXwp9RG25oUSMK8A/y4kblkQO/cVDc971+H3RoA==
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@inseefr/trevas/-/trevas-0.1.20.tgz#a1d68cf3d22a4da1ef99c1c8560470c8dda407d7"
+  integrity sha512-x1UotSHqHfGhut0JgPCLu+TXZtDpcYSrFQtlIl/L1kav6zYBa888AHhkADWB2hpJM/XAG3lQEfZrqgnsgbQK1g==
   dependencies:
     "@inseefr/vtl-2.0-antlr-tools" "0.1.0"
     antlr4 "4.8.0"
@@ -14047,9 +14047,9 @@ react-markdown@^8.0.3:
     vfile "^5.0.0"
 
 react-number-format@^5.1.3:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-5.1.4.tgz#23057d94a4f1b08e12ee41328e86be929b60a791"
-  integrity sha512-QV7QHzHrk9ZS9V0bWkIwu6ywiXJt0www4/cXWEVEgwaNqthmOZl/Cf5O0ukEPlGZJJr06Jh3+CM4rZsvXn8cOg==
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-5.3.1.tgz#840c257da9cb4b248990d8db46e4d23e8bac67ff"
+  integrity sha512-qpYcQLauIeEhCZUZY9jXZnnroOtdy3jYaS1zQ3M1Sr6r/KMOBEIGNIb7eKT19g2N1wbYgFgvDzs19hw5TrB8XQ==
   dependencies:
     prop-types "^15.7.2"
 
@@ -14927,9 +14927,9 @@ sass@^1.32.2:
     source-map-js ">=0.6.2 <2.0.0"
 
 sass@^1.58.3:
-  version "1.62.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.62.0.tgz#3686b2195b93295d20765135e562366b33ece37d"
-  integrity sha512-Q4USplo4pLYgCi+XlipZCWUQz5pkg/ruSSgJ0WRDSb/+3z9tXUOkQ7QPYn4XrhZKYAK4HlpaQecRwKLJX6+DBg==
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.66.1.tgz#04b51c4671e4650aa393740e66a4e58b44d055b1"
+  integrity sha512-50c+zTsZOJVgFfTgwwEzkjA3/QACgdNsKueWPyAR0mRINIvLAStVQBbPg14iuqEQ74NPDbXzJARJ/O4SI1zftA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
