@@ -21,7 +21,7 @@ function noDataChange() {
 
 const preferences = ['COLLECTED'];
 const features = ['VTL'];
-const savingType = 'COLLECTED';
+// const savingType = 'COLLECTED';
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' };
 
@@ -104,10 +104,11 @@ function LightOrchestrator({
 
     // getErrors,
     // getModalErrors,
-    getCurrentErrors,
+    // getCurrentErrors,
     getData,
     loopVariables = [],
     Provider,
+    pageTag,
   } = lunaticStateRef.current;
 
   const previousPageTag = useRef();
@@ -152,7 +153,7 @@ function LightOrchestrator({
 
   // const errors = getErrors();
   // const modalErrors = getModalErrors();
-  const currentErrors = typeof getCurrentErrors === 'function' ? getCurrentErrors() : [];
+  // const currentErrors = typeof getCurrentErrors === 'function' ? getCurrentErrors() : [];
 
   const trueGoToPage = useCallback(
     targetPage => {
@@ -222,15 +223,7 @@ function LightOrchestrator({
         <div className={classes.mainTile}>
           <div className={classes.activeView}>
             <Provider>
-              <ComponentDisplayer
-                components={components}
-                preferences={preferences}
-                features={features}
-                readonly={readonly}
-                savingType={savingType}
-                filterDescription={filterDescription}
-                currentErrors={currentErrors}
-              />
+              <ComponentDisplayer components={components} readonly={readonly} pageTag={pageTag} />
             </Provider>
             <LoopPanel
               loopVariables={loopVariables}
