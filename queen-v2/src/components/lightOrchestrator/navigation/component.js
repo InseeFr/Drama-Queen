@@ -8,19 +8,19 @@ import {
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback, useRef, useState } from 'react';
-import { dependencies, version } from '../../../../package.json';
+import packageInfo from '../../../../package.json';
 
+import { IconButton } from '@material-ui/core';
 import { Apps } from '@material-ui/icons';
 import { ButtonItemMenu } from 'components/designSystem';
 import D from 'i18n';
-import { IconButton } from '@material-ui/core';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
+import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
+import { useStyles } from './component.style';
 import SequenceNavigation from './sequenceNavigation';
 import StopNavigation from './stopNavigation';
 import SubsequenceNavigation from './subSequenceNavigation';
-import isEqual from 'lodash.isequal';
-import { useStyles } from './component.style';
 
 const Navigation = ({
   className,
@@ -36,7 +36,7 @@ const Navigation = ({
   const [surveyOpen, setSurveyOpen] = useState(false);
   const [stopOpen, setStopOpen] = useState(false);
   const [selectedSequence, setSelectedSequence] = useState(undefined);
-  const lunaticVersion = dependencies['@inseefr/lunatic'].replace('^', '');
+  const lunaticVersion = packageInfo.dependencies['@inseefr/lunatic'].replace('^', '');
 
   const offset = 1;
 
@@ -186,7 +186,7 @@ const Navigation = ({
             </div>
             <div
               className={classes.version}
-            >{`Queen : ${version} | Lunatic : ${lunaticVersion}`}</div>
+            >{`Queen : ${packageInfo.version} | Lunatic : ${lunaticVersion}`}</div>
           </>
         )}
       </div>

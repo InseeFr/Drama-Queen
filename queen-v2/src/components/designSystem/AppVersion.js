@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import React from 'react';
-import { version, dependencies } from '../../../package.json';
+import packageInfo from '../../../package.json';
 
 const useStyles = makeStyles({
   root: {
@@ -15,9 +14,13 @@ const useStyles = makeStyles({
   },
 });
 
-const lunaticVersion = dependencies['@inseefr/lunatic'].replace('^', '');
+const lunaticVersion = packageInfo.dependencies['@inseefr/lunatic'].replace('^', '');
 
 export const AppVersion = () => {
   const classes = useStyles();
-  return <div className={classes.root}>{`Queen : ${version} | Lunatic : ${lunaticVersion}`}</div>;
+  return (
+    <div
+      className={classes.root}
+    >{`Queen : ${packageInfo.version} | Lunatic : ${lunaticVersion}`}</div>
+  );
 };
