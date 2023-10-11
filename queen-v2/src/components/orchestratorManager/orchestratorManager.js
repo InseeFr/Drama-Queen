@@ -11,7 +11,6 @@ import Error from 'components/shared/Error';
 import NotFound from 'components/shared/not-found';
 import Preloader from 'components/shared/preloader';
 import { sendCloseEvent } from 'utils/communication';
-import paradataIdbService from 'utils/indexedbb/services/paradata-idb-service';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
 import { checkQuestionnaire } from 'utils/questionnaire';
 
@@ -92,13 +91,18 @@ export const OrchestratorManager = () => {
         };
 
         await surveyUnitIdbService.addOrUpdateSU(unit);
-        const paradatas = LOGGER.getEventsToSend();
+
+        /**
+         * Disable temporaly paradata
+         *
+         * const paradatas = LOGGER.getEventsToSend();
+         */
         // TODO : make a true update of paradatas : currently adding additional completed arrays => SHOULD save one and only one array
-        await paradataIdbService.update(paradatas);
+        // await paradataIdbService.update(paradatas);
         if (standalone) {
           // TODO managing errors
           await putSurveyUnit(unit);
-          await postParadata(paradatas);
+          // await postParadata(paradatas);
         }
       }
     },

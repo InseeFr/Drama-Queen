@@ -1,19 +1,18 @@
 /* eslint-disable no-alert */
-import React, { useState, useEffect, useContext } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import Preloader from 'components/shared/preloader';
+import { AppContext } from 'components/app';
 import Error from 'components/shared/Error';
 import NotFound from 'components/shared/not-found';
-import { AppContext } from 'components/app';
+import Preloader from 'components/shared/preloader';
+import { useContext, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { sendCloseEvent } from 'utils/communication';
+import { ORCHESTRATOR_COLLECT, ORCHESTRATOR_READONLY, READ_ONLY } from 'utils/constants';
+import { EventsManager, INIT_ORCHESTRATOR_EVENT, INIT_SESSION_EVENT } from 'utils/events';
 import { useAPI, useAPIRemoteData, useAuth } from 'utils/hook';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
-import paradataIdbService from 'utils/indexedbb/services/paradata-idb-service';
-import { sendCloseEvent } from 'utils/communication';
-import Orchestrator from '../orchestrator';
 import { checkQuestionnaire } from 'utils/questionnaire';
 import { buildSuggesterFromNomenclatures } from 'utils/questionnaire/nomenclatures';
-import { EventsManager, INIT_ORCHESTRATOR_EVENT, INIT_SESSION_EVENT } from 'utils/events';
-import { ORCHESTRATOR_COLLECT, ORCHESTRATOR_READONLY, READ_ONLY } from 'utils/constants';
+import Orchestrator from '../orchestrator';
 
 const OrchestratorManager = () => {
   const { standalone, apiUrl } = useContext(AppContext);
@@ -88,12 +87,18 @@ const OrchestratorManager = () => {
     if (!readonly) {
       console.log('addOrUpdateIDB');
       await surveyUnitIdbService.addOrUpdateSU(unit);
-      const paradatas = LOGGER.getEventsToSend();
-      await paradataIdbService.update(paradatas);
+      /**
+       * Disable temporaly paradata
+       *
+       * const paradatas = LOGGER.getEventsToSend();
+       * await paradataIdbService.update(paradatas);
+       */
       if (standalone) {
         // TODO managing errors
         await putSurveyUnit(unit);
-        await postParadata(paradatas);
+        /**
+         * await postParadata(paradatas);
+         */
       }
     }
   };
