@@ -37,7 +37,7 @@ const OrchestratorManager = () => {
 
   const [error, setError] = useState(null);
   const [source, setSource] = useState(null);
-  const { putUeData, postParadata } = useAPI(idSU, idQ);
+  const { putUeData /* postParadata */ } = useAPI(idSU, idQ);
 
   const [init, setInit] = useState(false);
 

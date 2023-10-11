@@ -106,7 +106,7 @@ export const OrchestratorManager = () => {
         }
       }
     },
-    [LOGGER, postParadata, putUeData, readonly, standalone]
+    [putUeData, readonly, standalone]
   );
 
   const saveQueen = useCallback(
