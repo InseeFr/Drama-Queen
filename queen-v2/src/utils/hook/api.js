@@ -39,7 +39,7 @@ export const useGetReferentiel = nomenclatures => {
   const getReferentiel = useCallback(
     refName => {
       const finalUrl = `${apiUrl}/api/nomenclature/${refName}`;
-      return getFetcherForLunatic(oidcUser?.accessToken)(finalUrl);
+      return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
     },
     [apiUrl, oidcUser]
   );
@@ -48,7 +48,7 @@ export const useGetReferentiel = nomenclatures => {
     refName => {
       if (nomenclatures && Object.keys(nomenclatures).includes(refName)) {
         const finalUrl = nomenclatures[refName];
-        return getFetcherForLunatic(oidcUser?.accessToken)(finalUrl);
+        return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
       }
       // No nomenclature, return empty array to lunatic
       return Promise.resolve([]);
@@ -169,20 +169,18 @@ export const useGetSurveyUnit = () => {
 export const useAPIRemoteData = (surveyUnitID, questionnaireID) => {
   const { standalone } = useContext(AppContext);
   const [questionnaire, setQuestionnaire] = useState(null);
-  const [nomenclatures, setNomenclatures] = useState(null);
   const [surveyUnit, setSurveyUnit] = useState(null);
 
   const [loadingMessage, setLoadingMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { getQuestionnaire, getRequiredNomenclatures } = useAPI();
+  const { getQuestionnaire } = useAPI();
   const getSurveyUnit = useGetSurveyUnit();
 
   useEffect(() => {
     if (questionnaireID && surveyUnitID && !questionnaire && !surveyUnit) {
       setErrorMessage(null);
       setQuestionnaire(null);
-      setNomenclatures(null);
       setSurveyUnit(null);
       const load = async () => {
         setLoadingMessage(Dictionary.waitingCleaning);
@@ -190,10 +188,8 @@ export const useAPIRemoteData = (surveyUnitID, questionnaireID) => {
         if (!error) {
           setLoadingMessage(Dictionary.waitingQuestionnaire);
           const qR = await getQuestionnaire(questionnaireID);
-          const nR = await getRequiredNomenclatures(questionnaireID);
-          if (!qR.error && !nR.error && qR.status !== 404) {
+          if (!qR.error && qR.status !== 404) {
             setQuestionnaire(qR.data.value);
-            setNomenclatures(nR.data);
             setLoadingMessage(Dictionary.waitingDataSU);
             const suR = await getSurveyUnit(surveyUnitID, standalone);
             if (!suR.error && suR.surveyUnit) {
@@ -212,7 +208,7 @@ export const useAPIRemoteData = (surveyUnitID, questionnaireID) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyUnitID, questionnaireID]);
 
-  return { loadingMessage, errorMessage, surveyUnit, questionnaire, nomenclatures };
+  return { loadingMessage, errorMessage, surveyUnit, questionnaire };
 };
 
 export const useRemoteData = (questionnaireUrl, dataUrl) => {

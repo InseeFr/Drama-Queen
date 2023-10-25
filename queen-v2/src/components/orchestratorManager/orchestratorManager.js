@@ -31,8 +31,7 @@ export const OrchestratorManager = () => {
     [idQ, idSU, readonly]
   );
 
-  const { surveyUnit, questionnaire, nomenclatures, loadingMessage, errorMessage } =
-    useAPIRemoteData(idSU, idQ);
+  const { surveyUnit, questionnaire, loadingMessage, errorMessage } = useAPIRemoteData(idSU, idQ);
 
   const stateData = surveyUnit?.stateData;
   const initialData = surveyUnit?.data;
@@ -73,7 +72,7 @@ export const OrchestratorManager = () => {
         setError(questionnaireError);
       }
     }
-  }, [questionnaire, surveyUnit, nomenclatures, apiUrl, LOGGER, init]);
+  }, [questionnaire, surveyUnit, apiUrl, LOGGER, init]);
 
   useEffect(() => {
     if (errorMessage) setError(errorMessage);
