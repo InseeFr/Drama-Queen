@@ -5,6 +5,7 @@ import ButtonContinue from './buttons/continue/index';
 
 import D from 'i18n';
 import { componentHasResponse } from 'utils/components/deduceState';
+import { QUEEN_URL } from 'utils/constants';
 import { LoopPanel } from './LoopPanel';
 import { ComponentDisplayer } from './componentDisplayer';
 import Header from './header';
@@ -88,7 +89,7 @@ function LightOrchestrator({
     missingShortcut,
     dontKnowButton,
     refusedButton,
-    withAutofocus: true,
+    workersBasePath: `${QUEEN_URL}/workers`,
   });
 
   const {

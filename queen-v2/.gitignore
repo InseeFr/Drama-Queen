@@ -11,6 +11,9 @@
 # production
 /build
 
+# Lunatic workers
+/public/workers
+
 # misc
 .DS_Store
 .env.local
