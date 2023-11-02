@@ -1,6 +1,6 @@
 import * as lunatic from '@inseefr/lunatic';
 
-import { useCustomLunaticStyles } from 'components/orchestrator/lunaticStyle/style';
+import { useCustomLunaticStyles } from 'components/lightOrchestrator/lunaticStyle/style';
 
 export const ComponentDisplayer = ({ components, readonly, pageTag }) => {
   const lunaticClasses = useCustomLunaticStyles();

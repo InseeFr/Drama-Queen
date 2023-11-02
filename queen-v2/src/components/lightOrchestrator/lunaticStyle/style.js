@@ -30,16 +30,21 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     },
     /* Firefox */
     '& input[type=text]': {
+      MozAppearance: 'textfield',
+      marginLeft: '1em',
+      padding: '0.375rem 0 0.375rem 0.4375rem',
       minWidth: '40%',
       borderRadius: '10px',
       border: '1px solid black',
+      backgroundColor: 'white',
     },
     '& input[type=number]': {
       MozAppearance: 'textfield',
       marginLeft: '1em',
-      height: '2em',
+      padding: '0.375rem 0 0.375rem 0.4375rem',
       borderRadius: '10px',
       border: '1px solid black',
+      backgroundColor: 'white',
     },
 
     // to replace checkbox by svg
@@ -265,6 +270,9 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     // lunatic label
     '& .lunatic-input , .lunatic-textarea, .lunatic-input-number': {
       '& .lunatic-label': {
+        backgroundColor: 'transparent',
+        fontSize: '1em',
+        color: 'black',
         display: 'block',
         marginBottom: '1em',
         fontWeight: 'bold',
