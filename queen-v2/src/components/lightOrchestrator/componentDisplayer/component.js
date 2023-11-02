@@ -7,6 +7,7 @@ export const ComponentDisplayer = ({ components, readonly, pageTag }) => {
   return (
     <>
       <lunatic.LunaticComponents
+        autoFocusKey={pageTag}
         components={components}
         componentProps={() => ({
           filterDescription: false,
@@ -19,7 +20,7 @@ export const ComponentDisplayer = ({ components, readonly, pageTag }) => {
             {children}
           </div>
         )}
-      />{' '}
+      />
     </>
   );
 };

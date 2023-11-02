@@ -10,17 +10,17 @@ import {
 import React, { useCallback, useRef, useState } from 'react';
 import { dependencies, version } from '../../../../package.json';
 
+import { IconButton } from '@material-ui/core';
 import { Apps } from '@material-ui/icons';
 import { ButtonItemMenu } from 'components/designSystem';
 import D from 'i18n';
-import { IconButton } from '@material-ui/core';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
+import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
+import { useStyles } from './component.style';
 import SequenceNavigation from './sequenceNavigation';
 import StopNavigation from './stopNavigation';
 import SubsequenceNavigation from './subSequenceNavigation';
-import isEqual from 'lodash.isequal';
-import { useStyles } from './component.style';
 
 const Navigation = ({
   className,
@@ -131,8 +131,6 @@ const Navigation = ({
     <>
       <IconButton
         ref={listRefs[0]}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
-        autoFocus
         title={D.mainMenu}
         className={classes.menuIcon}
         onClick={openCloseMenu}
