@@ -20,11 +20,18 @@ export const useStyles = makeStyles(() => ({
     width: '100%',
   },
   activeView: {
+    height: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: '100%',
+    width: '100%',
     // fix css with a new <div/> elements needed for autoFocus
     '& > div:first-of-type': {
+      display: 'flex',
+      flexDirection: 'row',
+      height: '100%',
+      width: 'inherit',
+    },
+    '& > div:first-of-type > div': {
       width: '80%',
       marginLeft: '100px',
       marginTop: '3em',
