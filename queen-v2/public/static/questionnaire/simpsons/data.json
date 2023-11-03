@@ -11,8 +11,8 @@
     "CALCULATED": {},
     "COLLECTED": {
       "COMMENT": {
-        "PREVIOUS": "Hello\n\nI'm a \"PREVIOUS\" value !",
-        "COLLECTED": null,
+        "PREVIOUS": null,
+        "COLLECTED": "Hello\n\nI'm a \"COLLECTED\" value !",
         "FORCED": null,
         "EDITED": null,
         "INPUTED": null
