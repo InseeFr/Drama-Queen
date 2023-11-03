@@ -10,17 +10,8 @@ const borderInput = '1px solid #767676';
 
 export const useCustomLunaticStyles = makeStyles(theme => ({
   lunatic: {
-    width: '80%',
-    marginLeft: '100px',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '3em',
-    overflow: 'auto',
-    marginRight: 'auto',
-    flexGrow: 1,
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: 'auto',
-    },
 
     /* Remove arrow for input number */
     /* Chrome, Safari, Edge, Opera */

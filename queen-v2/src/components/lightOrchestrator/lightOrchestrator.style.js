@@ -24,8 +24,13 @@ export const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     height: '100%',
     // fix css with a new <div/> elements needed for autoFocus
-    '& > div': {
-      display: 'contents',
+    '& > div:first-of-type': {
+      width: '80%',
+      marginLeft: '100px',
+      marginTop: '3em',
+      overflow: 'auto',
+      marginRight: 'auto',
+      flexGrow: 1,
     },
   },
 }));
