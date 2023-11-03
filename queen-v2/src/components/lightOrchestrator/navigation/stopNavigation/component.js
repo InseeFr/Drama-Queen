@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   NEXT_FOCUS,
   PREVIOUS_FOCUS,
@@ -5,12 +6,12 @@ import {
   createReachableElement,
   getNewFocusElementIndex,
 } from 'utils/navigation';
-import React, { useCallback, useState } from 'react';
 
 import { ButtonItemMenu } from 'components/designSystem';
+import { StopModal } from 'components/shared/modals/stopModal';
 import D from 'i18n';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
-import { StopModal } from 'components/shared/modals/stopModal';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import { useStyles } from '../component.style';
 
 const StopNavigation = React.forwardRef(({ close, quit, definitiveQuit, currentPage }, ref) => {
@@ -36,10 +37,7 @@ const StopNavigation = React.forwardRef(({ close, quit, definitiveQuit, currentP
   };
   const closeMenu = () => close('stop');
 
-  const setFocus = useCallback(
-    index => () => setCurrentFocusElementIndex(index),
-    [setCurrentFocusElementIndex]
-  );
+  const setFocus = useConstCallback(index => () => setCurrentFocusElementIndex(index));
   const reachableRefs = labels.reduce(_ => [..._, true], createReachableElement(offset));
 
   const keysToHandle = ['left', 'right', 'esc', 'up', 'down'];

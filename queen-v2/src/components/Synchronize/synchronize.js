@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import D from 'i18n';
-import Preloader from 'components/shared/preloader';
-import { ProgressBar } from 'components/shared/ProgressBar';
+import { Box, Container, Typography, makeStyles } from '@material-ui/core';
 import { AppVersion, Button } from 'components/designSystem';
-import { Box, Container, makeStyles, Typography } from '@material-ui/core';
+import { ProgressBar } from 'components/shared/ProgressBar';
+import Preloader from 'components/shared/preloader';
+import D from 'i18n';
+import { useEffect, useState } from 'react';
 import { QUEEN_SYNC_RESULT, SYNCHRONIZE_KEY } from 'utils/constants';
-import { useSynchronisation } from 'utils/synchronize';
-import { SimpleLabelProgress } from './SimpleLabelProgress';
-import { IconStatus } from './IconStatus';
-import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import paradataIdbService from 'utils/indexedbb/services/paradata-idb-service';
+import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
+import { useSynchronisation } from 'utils/synchronize';
+import { IconStatus } from './IconStatus';
+import { SimpleLabelProgress } from './SimpleLabelProgress';
 
 const useStyles = makeStyles(theme => ({
   welcome: { textAlign: 'center', paddingTop: '3em' },
@@ -59,7 +60,7 @@ const Synchronize = () => {
     }, []);
   };
 
-  const endOfSync = useCallback(
+  const endOfSync = useConstCallback(
     async ({
       error,
       surveyUnitsInTempZone = [],
@@ -76,11 +77,10 @@ const Synchronize = () => {
       paradataIdbService.addAll(paradataInError); // We store in IDB paradatas that failted to be sent
       window.localStorage.setItem(QUEEN_SYNC_RESULT, JSON.stringify(result));
       setTimeout(() => redirect(), 600);
-    },
-    [setCurrentJob]
+    }
   );
 
-  const launchSynchronize = useCallback(async () => {
+  const launchSynchronize = useConstCallback(async () => {
     if (navigator.onLine) {
       const tempResult = { error: 'pending' };
       window.localStorage.setItem(QUEEN_SYNC_RESULT, JSON.stringify(tempResult));
@@ -90,7 +90,7 @@ const Synchronize = () => {
     } else {
       endOfSync({ error: 'send' });
     }
-  }, [endOfSync, synchronize]);
+  });
 
   useEffect(() => {
     if (toSynchronize && !pending) {

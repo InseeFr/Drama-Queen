@@ -7,7 +7,7 @@ import {
 } from 'utils/navigation';
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { dependencies, version } from '../../../../package.json';
 
 import { IconButton } from '@material-ui/core';
@@ -17,6 +17,7 @@ import D from 'i18n';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import { useStyles } from './component.style';
 import SequenceNavigation from './sequenceNavigation';
 import StopNavigation from './stopNavigation';
@@ -51,53 +52,44 @@ const Navigation = ({
     )
   );
 
-  const setFocus = useCallback(
-    index => () => setCurrentFocusElementIndex(index),
-    [setCurrentFocusElementIndex]
-  );
+  const setFocus = useConstCallback(index => () => setCurrentFocusElementIndex(index));
   const reachableRefs = [...menuItemsSurvey, ...menuItemsQuality].reduce(
     _ => [..._, true],
     createReachableElement(offset)
   );
 
-  const openCloseSubMenu = useCallback(
-    type => {
-      if (type === 'sequence') {
-        setStopOpen(false);
-        if (surveyOpen) {
-          setSelectedSequence(undefined);
-          setSurveyOpen(false);
-          listRefs[1].current.focus();
-        } else {
-          setSurveyOpen(true);
-        }
-      } else if (type === 'stop') {
+  const openCloseSubMenu = useConstCallback(type => {
+    if (type === 'sequence') {
+      setStopOpen(false);
+      if (surveyOpen) {
+        setSelectedSequence(undefined);
         setSurveyOpen(false);
-        if (stopOpen) {
-          setStopOpen(false);
-          listRefs[2].current.focus();
-        } else {
-          setStopOpen(true);
-        }
+        listRefs[1].current.focus();
+      } else {
+        setSurveyOpen(true);
       }
-    },
-    [listRefs, stopOpen, surveyOpen]
-  );
+    } else if (type === 'stop') {
+      setSurveyOpen(false);
+      if (stopOpen) {
+        setStopOpen(false);
+        listRefs[2].current.focus();
+      } else {
+        setStopOpen(true);
+      }
+    }
+  });
 
-  const openCloseMenu = useCallback(() => {
+  const openCloseMenu = useConstCallback(() => {
     if (surveyOpen) openCloseSubMenu('sequence');
     if (stopOpen) openCloseSubMenu('stop');
     setOpen(!open);
     listRefs[0].current.focus();
-  }, [surveyOpen, openCloseSubMenu, stopOpen, open, listRefs]);
+  });
 
-  const setNavigationPage = useCallback(
-    page => {
-      openCloseMenu();
-      setPage(page);
-    },
-    [openCloseMenu, setPage]
-  );
+  const setNavigationPage = useConstCallback(page => {
+    openCloseMenu();
+    setPage(page);
+  });
 
   const getKeysToHandle = () => {
     if (open && (surveyOpen || stopOpen)) return ['alt+b'];

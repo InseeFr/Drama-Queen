@@ -6,13 +6,14 @@ import {
   getNewFocusElementIndex,
 } from 'utils/navigation';
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ButtonItemMenu } from 'components/designSystem';
 import D from 'i18n';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
 import PropTypes from 'prop-types';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 import { isReachable } from 'utils/breadcrumb';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import { useStyles } from '../component.style';
 
 const SequenceNavigation = ({
@@ -43,10 +44,7 @@ const SequenceNavigation = ({
     }
   }, [subSequenceOpen, currentFocusElementIndex, listRefs]);
 
-  const setFocus = useCallback(
-    index => () => setCurrentFocusElementIndex(index),
-    [setCurrentFocusElementIndex]
-  );
+  const setFocus = useConstCallback(index => () => setCurrentFocusElementIndex(index));
 
   const openSubComponents = sequence => {
     if (sequence.children && sequence.children.length > 0) {

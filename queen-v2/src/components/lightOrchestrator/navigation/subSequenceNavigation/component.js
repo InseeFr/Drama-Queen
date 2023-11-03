@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   NEXT_FOCUS,
   PREVIOUS_FOCUS,
@@ -5,13 +6,13 @@ import {
   createReachableElement,
   getNewFocusElementIndex,
 } from 'utils/navigation';
-import React, { useCallback, useState } from 'react';
 
 import { ButtonItemMenu } from 'components/designSystem';
 import D from 'i18n';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
 import PropTypes from 'prop-types';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 import { isReachable } from 'utils/breadcrumb';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 
 const SubsequenceNavigation = ({ sequence, close, setPage }) => {
   const offset = 2;
@@ -22,10 +23,7 @@ const SubsequenceNavigation = ({ sequence, close, setPage }) => {
       : createArrayOfRef(offset)
   );
 
-  const setFocus = useCallback(
-    index => () => setCurrentFocusElementIndex(index),
-    [setCurrentFocusElementIndex]
-  );
+  const setFocus = useConstCallback(index => () => setCurrentFocusElementIndex(index));
   const reachableRefs = sequence.children.reduce((_, current) => {
     return [..._, isReachable(current)];
   }, createReachableElement(offset));
@@ -41,15 +39,12 @@ const SubsequenceNavigation = ({ sequence, close, setPage }) => {
     }
   };
 
-  const changePage = useCallback(
-    sequence => () => {
-      const { page, goToPage } = sequence;
-      const reachable = isReachable(sequence);
-      if (reachable && goToPage) setPage(goToPage);
-      else if (reachable && page) setPage(page);
-    },
-    [setPage]
-  );
+  const changePage = useConstCallback(sequence => () => {
+    const { page, goToPage } = sequence;
+    const reachable = isReachable(sequence);
+    if (reachable && goToPage) setPage(goToPage);
+    else if (reachable && page) setPage(page);
+  });
 
   return (
     <div className="content">

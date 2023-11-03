@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DEFAULT_DATA_URL, OIDC } from 'utils/constants';
 
 import { AppContext } from 'components/app';
@@ -9,6 +9,7 @@ import clearAllData from 'utils/indexedbb/services/allTables-idb-service';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
 import { useAsyncValue } from '.';
 import { useAuth } from './auth';
+import { useConstCallback } from './useConstCallback';
 
 const clean = async (standalone = false) => {
   try {
@@ -36,25 +37,19 @@ export const useGetReferentiel = nomenclatures => {
   const { oidcUser } = useAuth();
   const { apiUrl } = useContext(AppContext);
 
-  const getReferentiel = useCallback(
-    refName => {
-      const finalUrl = `${apiUrl}/api/nomenclature/${refName}`;
-      return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
-    },
-    [apiUrl, oidcUser]
-  );
+  const getReferentiel = useConstCallback(refName => {
+    const finalUrl = `${apiUrl}/api/nomenclature/${refName}`;
+    return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
+  });
 
-  const getReferentielForVizu = useCallback(
-    refName => {
-      if (nomenclatures && Object.keys(nomenclatures).includes(refName)) {
-        const finalUrl = nomenclatures[refName];
-        return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
-      }
-      // No nomenclature, return empty array to lunatic
-      return Promise.resolve([]);
-    },
-    [nomenclatures, oidcUser]
-  );
+  const getReferentielForVizu = useConstCallback(refName => {
+    if (nomenclatures && Object.keys(nomenclatures).includes(refName)) {
+      const finalUrl = nomenclatures[refName];
+      return getFetcherForLunatic(oidcUser?.access_token)(finalUrl);
+    }
+    // No nomenclature, return empty array to lunatic
+    return Promise.resolve([]);
+  });
 
   return { getReferentiel, getReferentielForVizu };
 };
@@ -63,74 +58,50 @@ export const useAPI = () => {
   const { authenticationType, oidcUser } = useAuth();
   const { apiUrl } = useContext(AppContext);
 
-  const getCampaigns = useCallback(() => {
+  const getCampaigns = useConstCallback(() => {
     const token = authenticationType === OIDC ? oidcUser?.access_token : null;
     return API.getCampaigns(apiUrl)(token);
-  }, [apiUrl, authenticationType, oidcUser]);
+  });
 
-  const getQuestionnaire = useCallback(
-    questionnaireID => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.getQuestionnaire(apiUrl)(questionnaireID)(token);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const getQuestionnaire = useConstCallback(questionnaireID => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.getQuestionnaire(apiUrl)(questionnaireID)(token);
+  });
 
-  const getRequiredNomenclatures = useCallback(
-    id => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.getRequiredNomenclatures(apiUrl)(id)(token);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const getRequiredNomenclatures = useConstCallback(id => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.getRequiredNomenclatures(apiUrl)(id)(token);
+  });
 
-  const getSurveyUnits = useCallback(
-    id => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.getSurveyUnits(apiUrl)(id)(token);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const getSurveyUnits = useConstCallback(id => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.getSurveyUnits(apiUrl)(id)(token);
+  });
 
-  const getNomenclature = useCallback(
-    id => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.getNomenclature(apiUrl)(id)(token);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const getNomenclature = useConstCallback(id => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.getNomenclature(apiUrl)(id)(token);
+  });
 
-  const getUeData = useCallback(
-    surveyUnitID => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.getUeData(apiUrl)(surveyUnitID)(token);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const getUeData = useConstCallback(surveyUnitID => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.getUeData(apiUrl)(surveyUnitID)(token);
+  });
 
-  const putUeData = useCallback(
-    (surveyUnitID, body) => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.putUeData(apiUrl)(surveyUnitID)(token)(body);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const putUeData = useConstCallback((surveyUnitID, body) => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.putUeData(apiUrl)(surveyUnitID)(token)(body);
+  });
 
-  const putUeDataToTempZone = useCallback(
-    (surveyUnitID, body) => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.putUeDataToTempZone(apiUrl)(surveyUnitID)(token)(body);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const putUeDataToTempZone = useConstCallback((surveyUnitID, body) => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.putUeDataToTempZone(apiUrl)(surveyUnitID)(token)(body);
+  });
 
-  const postParadata = useCallback(
-    body => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.postParadata(apiUrl)(token)(body);
-    },
-    [apiUrl, authenticationType, oidcUser]
-  );
+  const postParadata = useConstCallback(body => {
+    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
+    return API.postParadata(apiUrl)(token)(body);
+  });
 
   return {
     getCampaigns,
