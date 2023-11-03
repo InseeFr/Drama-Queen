@@ -1,13 +1,11 @@
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { useStyles } from './component.style';
 import { Panel } from './panel';
 
-const LoopPanelNotMemo = ({ loopVariables = [], getData, pager, goToPage }) => {
+const LoopPanelNotMemo = ({ loopVariables = [], allData, pager, goToPage }) => {
   const noLoopVariables = loopVariables.length === 0 || loopVariables[0] === undefined;
 
   const classes = useStyles();
-
-  const [datas, setDatas] = useState(null);
 
   const {
     page: currentPage,
@@ -16,17 +14,12 @@ const LoopPanelNotMemo = ({ loopVariables = [], getData, pager, goToPage }) => {
     lastReachedPage,
   } = pager;
 
-  useEffect(() => {
-    if (!noLoopVariables) setDatas(getData());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [noLoopVariables, loopVariables]);
-
   if (noLoopVariables) return null;
 
   // use page to select loopVariables depth
   const depth = 0;
   const targetVariable = loopVariables[depth];
-  const targetData = datas?.COLLECTED[targetVariable];
+  const targetData = allData?.COLLECTED[targetVariable];
   const COLLECTED = targetData?.COLLECTED;
   if (COLLECTED && (COLLECTED.length === 0 || COLLECTED[0] === null)) return null;
 

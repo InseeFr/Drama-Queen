@@ -1,52 +1,37 @@
-import { sendCompletedEvent, sendStartedEvent, sendValidatedEvent } from 'utils/communication';
 import { useCallback, useRef } from 'react';
+import { sendCompletedEvent, sendStartedEvent, sendValidatedEvent } from 'utils/communication';
+import { useConstCallback } from './useConstCallback';
 
 export const NOT_STARTED = null;
 export const INIT = 'INIT';
 export const COMPLETED = 'COMPLETED';
 export const VALIDATED = 'VALIDATED';
 
-export const useQuestionnaireState = (idSurveyUnit, initialData, initialState = NOT_STARTED) => {
-  console.log('useQuestionnaireState', { idSurveyUnit, initialData, initialState });
+export const useQuestionnaireState = (idSurveyUnit, initialState = NOT_STARTED) => {
   const stateRef = useRef(initialState);
   const getState = useCallback(() => stateRef.current, []);
 
-  const initialDataRef = useRef(initialData);
-
   // Send an event when questionnaire's state has changed (started, completed, validated)
-  const changeState = useCallback(
-    newState => {
-      console.log('change state to ', newState);
-      if (newState === INIT) sendStartedEvent(idSurveyUnit);
-      if (newState === COMPLETED) sendCompletedEvent(idSurveyUnit);
-      if (newState === VALIDATED) sendValidatedEvent(idSurveyUnit);
-      stateRef.current = newState;
-    },
-    [idSurveyUnit]
-  );
-  const onDataChange = useCallback(
-    newData => {
-      // initialisation des data de référence
-      if (initialDataRef.current === undefined) {
-        console.log('persisting initial data');
-        initialDataRef.current = JSON.stringify(newData);
-      }
+  const changeState = useConstCallback(newState => {
+    if (newState === INIT) sendStartedEvent(idSurveyUnit);
+    if (newState === COMPLETED) sendCompletedEvent(idSurveyUnit);
+    if (newState === VALIDATED) sendValidatedEvent(idSurveyUnit);
+    stateRef.current = newState;
+  });
+  const onDataChange = useConstCallback((newData = {}) => {
+    const { COLLECTED = {} } = newData;
+    const hasDataChanged = Object.keys(COLLECTED).length > 0;
 
-      if (stateRef.current === NOT_STARTED) {
-        changeState(INIT);
-      } else if (
-        stateRef.current === VALIDATED &&
-        initialDataRef.current !== JSON.stringify(newData)
-      ) {
-        // state VALIDATED et données entrantes !== données initiales
-        changeState(INIT);
-      } else {
-        // here we do nothing
-        console.log({ newData, state: stateRef.current });
-      }
-    },
-    [changeState]
-  );
+    if (stateRef.current === NOT_STARTED) {
+      changeState(INIT);
+    } else if (stateRef.current === VALIDATED && hasDataChanged) {
+      // state VALIDATED et données entrantes !== données initiales
+      changeState(INIT);
+    } else {
+      // here we do nothing
+      console.log({ newData, state: stateRef.current });
+    }
+  });
 
   // Analyse collected variables to update state (only to STARTED state)
 

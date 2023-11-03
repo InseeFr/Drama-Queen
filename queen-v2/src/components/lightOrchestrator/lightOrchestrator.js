@@ -1,11 +1,12 @@
 import { useLunatic } from '@inseefr/lunatic';
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import ButtonContinue from './buttons/continue/index';
 
 import D from 'i18n';
 import { componentHasResponse } from 'utils/components/deduceState';
 import { QUEEN_URL } from 'utils/constants';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import { LoopPanel } from './LoopPanel';
 import { ComponentDisplayer } from './componentDisplayer';
 import Header from './header';
@@ -36,6 +37,7 @@ function LightOrchestrator({
   missing = true,
   shortcut = true,
   autoSuggesterLoading,
+  allData,
   filterDescription,
   onChange = onLogChange,
   onDataChange = noDataChange,
@@ -47,7 +49,7 @@ function LightOrchestrator({
   const classes = useStyles();
   const lunaticStateRef = useRef();
 
-  const lightCustomHandleChange = useCallback(valueChange => {
+  const lightCustomHandleChange = useConstCallback(valueChange => {
     if (lunaticStateRef === undefined) return;
     const { getComponents, goNextPage } = lunaticStateRef.current;
     const currentComponent = getComponents()?.[0];
@@ -60,13 +62,13 @@ function LightOrchestrator({
     ) {
       goNextPage();
     }
-  }, []);
+  });
 
-  const missingStrategy = useCallback(() => {
+  const missingStrategy = useConstCallback(() => {
     if (lunaticStateRef === undefined) return;
     const { goNextPage } = lunaticStateRef.current;
     goNextPage();
-  }, []);
+  });
 
   // TODO restore when lunatic handle object in missingButtons properties
   // const dontKnowButton = <MissingButton shortcutLabel="F2" buttonLabel={D.doesntKnowButton} />;
@@ -89,6 +91,7 @@ function LightOrchestrator({
     missingShortcut,
     dontKnowButton,
     refusedButton,
+    trackChanges: true,
     workersBasePath: `${QUEEN_URL}/workers`,
   });
 
@@ -106,7 +109,8 @@ function LightOrchestrator({
     // getErrors,
     // getModalErrors,
     // getCurrentErrors,
-    getData,
+    // getData,
+    // getChangedData,
     loopVariables = [],
     Provider,
     pageTag,
@@ -118,30 +122,30 @@ function LightOrchestrator({
   useEffect(() => {
     const savingTask = async () => {
       if (lunaticStateRef.current === undefined) return;
-      const { getData: freshGetData, pageTag, pager } = lunaticStateRef.current;
+      const { getChangedData: freshGetChangedData, pageTag, pager } = lunaticStateRef.current;
       if (previousPageTag.current === undefined) {
         previousPageTag.current = pageTag;
         return;
       }
       if (pageTag !== previousPageTag.current) {
         previousPageTag.current = pageTag;
-        const allData = freshGetData();
-        onDataChange(allData.COLLECTED);
-        save(undefined, allData, pager.lastReachedPage);
+        const partialData = freshGetChangedData(true);
+        onDataChange(partialData);
+        save(undefined, partialData, pager.lastReachedPage);
       }
     };
     savingTask();
   }, [save, pager, onDataChange]);
 
-  const memoQuit = useCallback(() => {
-    const { getData: freshGetData, pager: freshPager } = lunaticStateRef.current;
-    quit(freshPager, freshGetData);
-  }, [quit]);
+  const memoQuit = useConstCallback(() => {
+    const { getChangedData: freshGetChangedData, pager: freshPager } = lunaticStateRef.current;
+    quit(freshPager, freshGetChangedData);
+  });
 
-  const memoDefinitiveQuit = useCallback(() => {
-    const { getData: freshGetData, pager: freshPager } = lunaticStateRef.current;
-    definitiveQuit(freshPager, freshGetData);
-  }, [definitiveQuit]);
+  const memoDefinitiveQuit = useConstCallback(() => {
+    const { getChangedData: freshGetChangedData, pager: freshPager } = lunaticStateRef.current;
+    definitiveQuit(freshPager, freshGetChangedData);
+  });
 
   const [components, setComponents] = useState([]);
 
@@ -156,23 +160,20 @@ function LightOrchestrator({
   // const modalErrors = getModalErrors();
   // const currentErrors = typeof getCurrentErrors === 'function' ? getCurrentErrors() : [];
 
-  const trueGoToPage = useCallback(
-    targetPage => {
-      if (typeof targetPage === 'string') {
-        goToPage({ page: targetPage });
-      } else {
-        const { page, iteration, subPage } = targetPage;
-        goToPage({ page: page, iteration: iteration, subPage: subPage });
-      }
-    },
-    [goToPage]
-  );
+  const trueGoToPage = useConstCallback(targetPage => {
+    if (typeof targetPage === 'string') {
+      goToPage({ page: targetPage });
+    } else {
+      const { page, iteration, subPage } = targetPage;
+      goToPage({ page: page, iteration: iteration, subPage: subPage });
+    }
+  });
 
-  const goToLastReachedPage = useCallback(() => {
+  const goToLastReachedPage = useConstCallback(() => {
     if (lunaticStateRef.current === undefined) return;
     const { pager } = lunaticStateRef.current;
     trueGoToPage(pager.lastReachedPage);
-  }, [trueGoToPage]);
+  });
 
   const firstComponent = useMemo(() => [...components]?.[0], [components]);
   const hasResponse = componentHasResponse(firstComponent);
@@ -228,7 +229,7 @@ function LightOrchestrator({
             </Provider>
             <LoopPanel
               loopVariables={loopVariables}
-              getData={getData}
+              allData={allData}
               pager={pager}
               goToPage={trueGoToPage}
             ></LoopPanel>

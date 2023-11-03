@@ -1,6 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useGetReferentiel, useRemoteData, useVisuQuery } from 'utils/hook';
-import { checkQuestionnaire, downloadDataAsJson } from 'utils/questionnaire';
+import {
+  checkQuestionnaire,
+  downloadDataAsJson,
+  getFullData,
+  removeNullCollectedData,
+} from 'utils/questionnaire';
 
 import { AppContext } from 'components/app';
 import LightOrchestrator from 'components/lightOrchestrator';
@@ -8,11 +13,13 @@ import Error from 'components/shared/Error';
 import Preloader from 'components/shared/preloader';
 import { useHistory } from 'react-router';
 import { useQuestionnaireState } from 'utils/hook/questionnaire';
+import { useConstCallback } from 'utils/hook/useConstCallback';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
 import QuestionnaireForm from './questionnaireForm';
 
 const Visualizer = () => {
   const { apiUrl, standalone } = useContext(AppContext);
+  const [surveyUnitData, setSurveyUnitData] = useState(null);
 
   const [surveyUnit, setSurveyUnit] = useState(undefined);
   const [error, setError] = useState(null);
@@ -30,7 +37,6 @@ const Visualizer = () => {
 
   const [getState, , onDataChange] = useQuestionnaireState(
     surveyUnit?.id,
-    suData?.data,
     suData?.stateData?.state
   );
 
@@ -55,6 +61,7 @@ const Visualizer = () => {
       const { valid, error: questionnaireError } = checkQuestionnaire(questionnaire);
       if (valid) {
         setSource(questionnaire);
+        setSurveyUnitData(suData?.data || {});
       } else {
         setError(questionnaireError);
       }
@@ -65,49 +72,39 @@ const Visualizer = () => {
     if (errorMessage) setError(errorMessage);
   }, [errorMessage]);
 
-  // const save = useCallback(async (unit, newData) => {
-  //   console.log(unit, newData);
-  //   await surveyUnitIdbService.addOrUpdateSU({
-  //     ...unit,
-  //     data: newData,
-  //   });
-  // }, []);
+  const savePartial = useConstCallback(async (newState, newPartialData, lastReachedPage) => {
+    const currentState = getState();
 
-  const save = useCallback(
-    async (newState, newData, lastReachedPage) => {
-      const currentState = getState();
-      const unit = {
-        ...surveyUnit,
-        stateData: {
-          state: newState ?? currentState,
-          date: new Date().getTime(),
-          currentPage: lastReachedPage,
-        },
-        data: newData ?? surveyUnit?.data,
-      };
-      await surveyUnitIdbService.addOrUpdateSU(unit);
-    },
-    [getState, surveyUnit]
-  );
-  const closeAndDownloadData = useCallback(
-    async (pager, getData) => {
-      const { lastReachedPage } = pager;
-      const newData = getData();
-      const unit = {
-        ...surveyUnit,
-        stateData: {
-          state: getState(),
-          date: new Date().getTime(),
-          currentPage: lastReachedPage,
-        },
-        data: newData ?? surveyUnit?.data,
-      };
+    const newData = getFullData(surveyUnitData, removeNullCollectedData(newPartialData));
+    setSurveyUnitData(newData);
+    const unit = {
+      ...surveyUnit,
+      stateData: {
+        state: newState ?? currentState,
+        date: new Date().getTime(),
+        currentPage: lastReachedPage,
+      },
+      data: newData ?? surveyUnit.data,
+    };
+    await surveyUnitIdbService.addOrUpdateSU(unit);
+  });
 
-      downloadDataAsJson(unit, 'data');
-      history.push('/');
-    },
-    [getState, history, surveyUnit]
-  );
+  const closeAndDownloadData = useConstCallback(async (pager, getChangedData) => {
+    const { lastReachedPage } = pager;
+    const newData = getFullData(surveyUnitData, removeNullCollectedData(getChangedData(true)));
+    const unit = {
+      ...surveyUnit,
+      stateData: {
+        state: getState(),
+        date: new Date().getTime(),
+        currentPage: lastReachedPage,
+      },
+      data: newData ?? surveyUnit?.data,
+    };
+
+    downloadDataAsJson(unit, 'data');
+    history.push('/');
+  });
 
   return (
     <>
@@ -119,11 +116,12 @@ const Visualizer = () => {
           source={source}
           autoSuggesterLoading={true}
           getReferentiel={getReferentielForVizu}
+          allData={surveyUnitData}
           standalone={standalone}
           readonly={readonly}
           pagination={true}
           missing={true}
-          save={save}
+          save={savePartial}
           onDataChange={onDataChange}
           filterDescription={false}
           quit={closeAndDownloadData}
