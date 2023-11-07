@@ -1,6 +1,6 @@
 import { useLunatic } from '@inseefr/lunatic';
 
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import ButtonContinue from './buttons/continue/index';
 
 import D from 'i18n';
@@ -13,10 +13,6 @@ import Header from './header';
 import { useStyles } from './lightOrchestrator.style';
 import NavBar from './navBar';
 
-function onLogChange(response, value, args) {
-  console.log('onChange', { response, value, args });
-}
-
 function noDataChange() {
   /**/
 }
@@ -26,6 +22,9 @@ const features = ['VTL'];
 // const savingType = 'COLLECTED';
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' };
+
+const dontKnowButton = D.doesntKnowButton;
+const refusedButton = D.refusalButton;
 
 function LightOrchestrator({
   surveyUnit,
@@ -38,15 +37,14 @@ function LightOrchestrator({
   shortcut = true,
   autoSuggesterLoading,
   allData,
-  filterDescription,
-  onChange = onLogChange,
+  // onChange = onLogChange,
   onDataChange = noDataChange,
   save,
   quit,
   definitiveQuit,
 }) {
-  const { data, stateData } = surveyUnit;
   const classes = useStyles();
+
   const lunaticStateRef = useRef();
 
   const lightCustomHandleChange = useConstCallback(valueChange => {
@@ -70,14 +68,8 @@ function LightOrchestrator({
     goNextPage();
   });
 
-  // TODO restore when lunatic handle object in missingButtons properties
-  // const dontKnowButton = <MissingButton shortcutLabel="F2" buttonLabel={D.doesntKnowButton} />;
-  // const refusedButton = <MissingButton shortcutLabel="F4" buttonLabel={D.refusalButton} />;
-  const dontKnowButton = D.doesntKnowButton;
-  const refusedButton = D.refusalButton;
-
-  lunaticStateRef.current = useLunatic(source, data, {
-    lastReachedPage: stateData?.currentPage ?? '1',
+  lunaticStateRef.current = useLunatic(source, surveyUnit?.data, {
+    lastReachedPage: surveyUnit?.stateData?.currentPage ?? '1',
     features,
     pagination,
     onChange: lightCustomHandleChange,
@@ -110,55 +102,31 @@ function LightOrchestrator({
     // getModalErrors,
     // getCurrentErrors,
     // getData,
-    // getChangedData,
+    getChangedData,
     loopVariables = [],
     Provider,
     pageTag,
   } = lunaticStateRef.current;
 
-  const previousPageTag = useRef();
+  const components = getComponents();
 
+  const previousPageTag = useRef();
   // page change : update pager and save data
   useEffect(() => {
     const savingTask = async () => {
-      if (lunaticStateRef.current === undefined) return;
-      const { getChangedData: freshGetChangedData, pageTag, pager } = lunaticStateRef.current;
       if (previousPageTag.current === undefined) {
         previousPageTag.current = pageTag;
         return;
       }
       if (pageTag !== previousPageTag.current) {
         previousPageTag.current = pageTag;
-        const partialData = freshGetChangedData(true);
+        const partialData = getChangedData(true);
         onDataChange(partialData);
         save(undefined, partialData, pager.lastReachedPage);
       }
     };
     savingTask();
-  }, [save, pager, onDataChange]);
-
-  const memoQuit = useConstCallback(() => {
-    const { getChangedData: freshGetChangedData, pager: freshPager } = lunaticStateRef.current;
-    quit(freshPager, freshGetChangedData);
-  });
-
-  const memoDefinitiveQuit = useConstCallback(() => {
-    const { getChangedData: freshGetChangedData, pager: freshPager } = lunaticStateRef.current;
-    definitiveQuit(freshPager, freshGetChangedData);
-  });
-
-  const [components, setComponents] = useState([]);
-
-  // persist components independently from Lunatic state
-  useEffect(() => {
-    if (typeof getComponents === 'function') {
-      setComponents(getComponents);
-    }
-  }, [getComponents]);
-
-  // const errors = getErrors();
-  // const modalErrors = getModalErrors();
-  // const currentErrors = typeof getCurrentErrors === 'function' ? getCurrentErrors() : [];
+  }, [save, pager, onDataChange, pageTag, getChangedData]);
 
   const trueGoToPage = useConstCallback(targetPage => {
     if (typeof targetPage === 'string') {
@@ -168,28 +136,18 @@ function LightOrchestrator({
       goToPage({ page: page, iteration: iteration, subPage: subPage });
     }
   });
-
   const goToLastReachedPage = useConstCallback(() => {
-    if (lunaticStateRef.current === undefined) return;
-    const { pager } = lunaticStateRef.current;
     trueGoToPage(pager.lastReachedPage);
   });
 
-  const firstComponent = useMemo(() => [...components]?.[0], [components]);
-  const hasResponse = componentHasResponse(firstComponent);
+  const memoQuit = useConstCallback(() => {
+    quit(pager, getChangedData);
+  });
 
-  const hierarchy = firstComponent?.hierarchy ?? {
-    sequence: { label: 'There is no sequence', page: '1' },
-  };
+  const memoDefinitiveQuit = useConstCallback(() => {
+    definitiveQuit(pager, getChangedData);
+  });
 
-  // directly from source, could be in raw VTL in future versions
-  const {
-    label: { value: questionnaireTitle },
-  } = source;
-
-  if (previousPageTag === undefined) return null;
-
-  // lastReachedpage can have values like "35" or like "35.1#1"
   const checkIfLastReachedPage = () => {
     if (pager === undefined || pager.lastReachedPage === undefined) {
       return false;
@@ -205,8 +163,20 @@ function LightOrchestrator({
       pager.subPage === lastSubPage - 1
     );
   };
+
+  const firstComponent = useMemo(() => [...components]?.[0], [components]);
+  const hasResponse = componentHasResponse(firstComponent);
+
   const isLastReachedPage = pager !== undefined ? checkIfLastReachedPage() : false;
   const { maxPage, page, subPage, nbSubPages, iteration, nbIterations } = pager;
+
+  const hierarchy = firstComponent?.hierarchy ?? {
+    sequence: { label: 'There is no sequence', page: '1' },
+  };
+  // directly from source, could be in raw VTL in future versions
+  const {
+    label: { value: questionnaireTitle },
+  } = source;
 
   return (
     <div className={classes.root}>
@@ -225,7 +195,7 @@ function LightOrchestrator({
         <div className={classes.mainTile}>
           <div className={classes.activeView}>
             <Provider>
-              <ComponentDisplayer components={components} readonly={readonly} pageTag={pageTag} />
+              <ComponentDisplayer components={components} pageTag={pageTag} readonly={readonly} />
             </Provider>
             <LoopPanel
               loopVariables={loopVariables}
@@ -244,7 +214,7 @@ function LightOrchestrator({
             isLastReachedPage={isLastReachedPage}
             componentHasResponse={hasResponse}
             goToLastReachedPage={goToLastReachedPage}
-          ></ButtonContinue>
+          />
         </div>
         <NavBar
           page={page}
