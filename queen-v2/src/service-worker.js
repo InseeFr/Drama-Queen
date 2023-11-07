@@ -7,12 +7,12 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate, NetworkFirst, CacheFirst } from 'workbox-strategies';
+import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
 
 clientsClaim();
 
@@ -98,13 +98,9 @@ registerRoute(
 const queenPrecacheController = async () => {
   const responseFromQueen = await fetch('/manifest.json');
   const { icons } = await responseFromQueen.json();
-  const urlsToPrecache = [
-    `/manifest.json`,
-    `/configuration.json`,
-    process.env.REACT_APP_LUNATIC_LOADER_WORKER_PATH,
-    process.env.REACT_APP_LUNATIC_SEARCH_WORKER_PATH,
-    process.env.REACT_APP_LUNATIC_LABEL_WORKER_PATH,
-  ].concat(icons.map(({ src }) => src));
+  const urlsToPrecache = [`/manifest.json`, `/configuration.json`].concat(
+    icons.map(({ src }) => src)
+  );
   const cache = await self.caches.open(configurationCacheName);
   await cache.addAll(urlsToPrecache);
   cache
