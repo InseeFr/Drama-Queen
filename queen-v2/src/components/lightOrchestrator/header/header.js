@@ -1,5 +1,4 @@
 import { ButtonBase, IconButton } from '@material-ui/core';
-import { useRef } from 'react';
 import { SIMPLE_CLICK_EVENT, paradataHandler } from 'utils/events';
 
 import { ExitToApp } from '@material-ui/icons';
@@ -25,7 +24,6 @@ const Header = ({
 }) => {
   const classes = useStyles({ standalone });
   const setToFirstPage = useConstCallback(() => setPage('1'));
-  const quitButtonRef = useRef();
 
   const utilInfo = type => {
     return {
@@ -37,7 +35,6 @@ const Header = ({
   const { sequence, subSequence } = hierarchy;
 
   const quitShortCut = () => {
-    if (quitButtonRef && quitButtonRef.current) quitButtonRef.current.focus();
     quit();
   };
 
@@ -78,7 +75,6 @@ const Header = ({
         <>
           <div className={classes.headerClose}>
             <IconButton
-              ref={quitButtonRef}
               title={D.simpleQuit}
               className={classes.closeIcon}
               onClick={paradataHandler(quit)(utilInfo('end-survey'))}
