@@ -207,7 +207,7 @@ export const useRemoteData = (questionnaireUrl, dataUrl) => {
             setLoadingMessage(Dictionary.waintingData);
             const dR = await API.getRequest(dataUrl || DEFAULT_DATA_URL)(fakeToken);
             if (!dR.error) {
-              setSurveyUnit(dR.data);
+              setSurveyUnit({ ...(dR.data || {}), id: '1234' });
               setLoadingMessage(null);
             } else setErrorMessage(getErrorMessage(dR, 'd'));
             setLoadingMessage(null);

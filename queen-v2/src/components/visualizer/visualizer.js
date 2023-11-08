@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useGetReferentiel, useRemoteData, useVisuQuery } from 'utils/hook';
 import {
+  addGlobalVariablesToData,
+  addGlobalVariablesToQuestionnaire,
   checkQuestionnaire,
   downloadDataAsJson,
   getFullData,
@@ -12,6 +14,7 @@ import LightOrchestrator from 'components/lightOrchestrator';
 import Error from 'components/shared/Error';
 import Preloader from 'components/shared/preloader';
 import { useHistory } from 'react-router';
+import { GLOBAL_QUEEN_VARIABLES } from 'utils/constants';
 import { useQuestionnaireState } from 'utils/hook/questionnaire';
 import { useConstCallback } from 'utils/hook/useConstCallback';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
@@ -21,52 +24,57 @@ const Visualizer = () => {
   const { apiUrl, standalone } = useContext(AppContext);
   const [surveyUnitData, setSurveyUnitData] = useState(null);
 
-  const [surveyUnit, setSurveyUnit] = useState(undefined);
+  const [initalStateForLunatic, setInitalStateForLunatic] = useState(null);
   const [error, setError] = useState(null);
   const [source, setSource] = useState(null);
 
   const { questionnaireUrl, dataUrl, nomenclatures, readonly } = useVisuQuery();
-  const {
-    surveyUnit: suData,
-    questionnaire,
-    loadingMessage,
-    errorMessage,
-  } = useRemoteData(questionnaireUrl, dataUrl);
+  const { surveyUnit, questionnaire, loadingMessage, errorMessage } = useRemoteData(
+    questionnaireUrl,
+    dataUrl
+  );
 
   const { getReferentielForVizu } = useGetReferentiel(nomenclatures);
 
   const [getState, , onDataChange] = useQuestionnaireState(
     surveyUnit?.id,
-    suData?.stateData?.state
+    surveyUnit?.stateData?.state
   );
 
   const history = useHistory();
 
   useEffect(() => {
-    if (suData === null) return;
-    const unit = {
-      ...suData,
-      id: '1234',
-    };
+    if (surveyUnit === null) return;
     const insertSuInIndexedDB = async su => {
-      console.log('Initiating sudata in IDB', su);
+      console.log('Initiating fake surveyUnit in IDB', su);
       await surveyUnitIdbService.addOrUpdateSU(su);
     };
-    insertSuInIndexedDB(unit);
-    setSurveyUnit(unit);
-  }, [suData]);
+    insertSuInIndexedDB(surveyUnit);
+  }, [surveyUnit]);
 
   useEffect(() => {
-    if (questionnaireUrl && questionnaire && suData) {
+    if (questionnaireUrl && questionnaire && surveyUnit) {
       const { valid, error: questionnaireError } = checkQuestionnaire(questionnaire);
       if (valid) {
-        setSource(questionnaire);
-        setSurveyUnitData(suData?.data || {});
+        const globalQueenData = {
+          [GLOBAL_QUEEN_VARIABLES.GLOBAL_SURVEY_UNIT_ID]: surveyUnit.id,
+          [GLOBAL_QUEEN_VARIABLES.GLOBAL_QUESTIONNAIRE_ID]:
+            surveyUnit.questionnaireId ?? questionnaire.id,
+        };
+        const newQuestionnaire = addGlobalVariablesToQuestionnaire(questionnaire, globalQueenData);
+        setSource(newQuestionnaire);
+
+        const newData = addGlobalVariablesToData(surveyUnit?.data || {}, globalQueenData);
+        setSurveyUnitData(newData);
+        setInitalStateForLunatic({
+          initialData: newData,
+          lastReachedPage: surveyUnit?.stateData?.currentPage,
+        });
       } else {
         setError(questionnaireError);
       }
     }
-  }, [questionnaireUrl, questionnaire, suData, apiUrl]);
+  }, [questionnaireUrl, questionnaire, surveyUnit, apiUrl]);
 
   useEffect(() => {
     if (errorMessage) setError(errorMessage);
@@ -110,9 +118,10 @@ const Visualizer = () => {
     <>
       {loadingMessage && <Preloader message={loadingMessage} />}
       {error && <Error message={error} />}
-      {questionnaireUrl && source && surveyUnit && (
+      {questionnaireUrl && source && initalStateForLunatic && (
         <LightOrchestrator
-          surveyUnit={surveyUnit}
+          initialData={initalStateForLunatic.initialData}
+          lastReachedPage={initalStateForLunatic.lastReachedPage}
           source={source}
           autoSuggesterLoading={true}
           getReferentiel={getReferentielForVizu}

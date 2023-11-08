@@ -1,6 +1,11 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { ORCHESTRATOR_COLLECT, ORCHESTRATOR_READONLY, READ_ONLY } from 'utils/constants';
+import {
+  GLOBAL_QUEEN_VARIABLES,
+  ORCHESTRATOR_COLLECT,
+  ORCHESTRATOR_READONLY,
+  READ_ONLY,
+} from 'utils/constants';
 import { EventsManager, INIT_ORCHESTRATOR_EVENT, INIT_SESSION_EVENT } from 'utils/events';
 import { useAPI, useAPIRemoteData, useAuth, useGetReferentiel } from 'utils/hook';
 import { COMPLETED, VALIDATED, useQuestionnaireState } from 'utils/hook/questionnaire';
@@ -13,12 +18,19 @@ import Preloader from 'components/shared/preloader';
 import { sendCloseEvent } from 'utils/communication';
 import { useConstCallback } from 'utils/hook/useConstCallback';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
-import { checkQuestionnaire, getFullData, removeNullCollectedData } from 'utils/questionnaire';
+import {
+  addGlobalVariablesToData,
+  addGlobalVariablesToQuestionnaire,
+  checkQuestionnaire,
+  getFullData,
+  removeNullCollectedData,
+} from 'utils/questionnaire';
 
 export const OrchestratorManager = () => {
   const { standalone, apiUrl } = useContext(AppContext);
   const { readonly: readonlyParam, idQ, idSU } = useParams();
   const [surveyUnitData, setSurveyUnitData] = useState(null);
+  const [initalStateForLunatic, setInitalStateForLunatic] = useState(null);
   const history = useHistory();
 
   const readonly = readonlyParam === READ_ONLY;
@@ -65,8 +77,20 @@ export const OrchestratorManager = () => {
     if (!init && questionnaire && surveyUnit) {
       const { valid, error: questionnaireError } = checkQuestionnaire(questionnaire);
       if (valid) {
-        setSource(questionnaire);
-        setSurveyUnitData(surveyUnit.data);
+        const globalQueenData = {
+          [GLOBAL_QUEEN_VARIABLES.GLOBAL_SURVEY_UNIT_ID]: surveyUnit.id,
+          [GLOBAL_QUEEN_VARIABLES.GLOBAL_QUESTIONNAIRE_ID]:
+            surveyUnit.questionnaireId ?? questionnaire.id,
+        };
+        const newQuestionnaire = addGlobalVariablesToQuestionnaire(questionnaire, globalQueenData);
+        setSource(newQuestionnaire);
+
+        const newData = addGlobalVariablesToData(surveyUnit?.data || {}, globalQueenData);
+        setSurveyUnitData(newData);
+        setInitalStateForLunatic({
+          initialData: newData,
+          lastReachedPage: surveyUnit?.stateData?.currentPage,
+        });
         setInit(true);
         LOGGER.log(INIT_ORCHESTRATOR_EVENT);
       } else {
@@ -157,9 +181,10 @@ export const OrchestratorManager = () => {
       {![READ_ONLY, undefined].includes(readonlyParam) && <NotFound />}
       {loadingMessage && <Preloader message={loadingMessage} />}
       {error && <Error message={error} />}
-      {!loadingMessage && !error && source && surveyUnit && (
+      {!loadingMessage && !error && source && initalStateForLunatic && (
         <LightOrchestrator
-          surveyUnit={surveyUnit}
+          initialData={initalStateForLunatic.initialData}
+          lastReachedPage={initalStateForLunatic.lastReachedPage}
           source={source}
           getReferentiel={getReferentiel}
           allData={surveyUnitData}

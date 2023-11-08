@@ -27,7 +27,8 @@ const dontKnowButton = D.doesntKnowButton;
 const refusedButton = D.refusalButton;
 
 function LightOrchestrator({
-  surveyUnit,
+  initialData,
+  lastReachedPage,
   standalone,
   readonly,
   pagination,
@@ -68,8 +69,8 @@ function LightOrchestrator({
     goNextPage();
   });
 
-  lunaticStateRef.current = useLunatic(source, surveyUnit?.data, {
-    lastReachedPage: surveyUnit?.stateData?.currentPage ?? '1',
+  lunaticStateRef.current = useLunatic(source, initialData, {
+    lastReachedPage: lastReachedPage ?? '1',
     features,
     pagination,
     onChange: lightCustomHandleChange,
