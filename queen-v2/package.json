@@ -12,7 +12,7 @@
   "dependencies": {
     "@axa-fr/react-oidc-context": "^3.1.6",
     "@craco/craco": "^6.4.0",
-    "@inseefr/lunatic": "^2.7.3",
+    "@inseefr/lunatic": "^2.7.4",
     "@inseefr/trevas": "^0.1.16",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
@@ -38,10 +38,10 @@
     "workbox-strategies": "^6.1.1"
   },
   "scripts": {
-    "prestart": "npx @inseefr/lunatic@2.7.3 workers",
+    "prestart": "npx @inseefr/lunatic@2.7.4 workers",
     "start": "cross-env PORT=5002 react-scripts start",
     "start-dev": "cross-env PORT=5002 craco start",
-    "prebuild": "npx @inseefr/lunatic@2.7.3 workers",
+    "prebuild": "npx @inseefr/lunatic@2.7.4 workers",
     "build": "react-scripts build && npm run post-build",
     "post-build": "node ./configuration/build/build-sw.js && node ./configuration/build/manage-public-url.js && copy-and-watch configuration/files/* build",
     "test": "react-scripts test",
