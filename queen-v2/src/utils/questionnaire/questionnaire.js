@@ -1,4 +1,4 @@
-import { MIN_LUNATIC_MODEL_VERSION, MIN_ENO_CORE_VERSION } from 'utils/constants';
+import { MIN_ENO_CORE_VERSION, MIN_LUNATIC_MODEL_VERSION } from 'utils/constants';
 
 const checkVersion = (actualVersion, expectedVersion) => {
   try {
@@ -53,4 +53,26 @@ export const checkQuestionnaire = ({
     };
   }
   return { valid: true };
+};
+
+/**
+ *
+ * @param {*} source questionnaire source
+ * @param {*} variables object of key, value
+ */
+export const addGlobalVariablesToQuestionnaire = (source = {}, globalVariables = {}) => {
+  const { variables } = source;
+  const newVariables = Object.entries(globalVariables).reduce((result, [name, value]) => {
+    return [...result, { variableType: 'EXTERNAL', name: name, value: null }];
+  }, variables);
+  return { ...source, variables: newVariables };
+};
+
+export const addGlobalVariablesToData = (lunaticData = {}, globalVariables = {}) => {
+  const { EXTERNAL } = lunaticData;
+  const newEXTERNAL = Object.entries(globalVariables).reduce((result, [name, value]) => {
+    return { ...result, [name]: value };
+  }, EXTERNAL || {});
+
+  return { ...lunaticData, EXTERNAL: newEXTERNAL };
 };
