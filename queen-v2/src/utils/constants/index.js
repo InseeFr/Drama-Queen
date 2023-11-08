@@ -66,4 +66,9 @@ export const SHORTCUT_NEXT = 'alt+enter';
 export const SHORTCUT_PREVIOUS = 'alt+backspace';
 export const SHORTCUT_FAST_FORWARD = 'alt+end';
 
+export const GLOBAL_QUEEN_VARIABLES = {
+  GLOBAL_SURVEY_UNIT_ID: 'GLOBAL_SURVEY_UNIT_ID',
+  GLOBAL_QUESTIONNAIRE_ID: 'GLOBAL_QUESTIONNAIRE_ID',
+};
+
 export * from './paradata';
