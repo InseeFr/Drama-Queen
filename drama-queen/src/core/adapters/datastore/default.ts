@@ -7,7 +7,7 @@ type Tables = {
   paradata: Table<Paradata>;
 };
 
-export async function createDataStore(params: {
+export function createDataStore(params: {
   name: string;
   schema: Record<keyof Tables, string>;
   version: number;

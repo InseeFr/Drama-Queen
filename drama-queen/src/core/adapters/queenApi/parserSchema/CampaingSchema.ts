@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CampaignSchema = z.object({
+export const campaignSchema = z.object({
   id: z.string(),
   questionnaireIds: z.string().array(),
 });

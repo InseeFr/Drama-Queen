@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const EventSchema = z.object({
+const eventSchema = z.object({
   type: z.enum(["click", "session-started", "orchestrator-create"]),
   timestamp: z.number().int().min(0),
   userAgent: z.string(),
@@ -16,7 +16,7 @@ const EventSchema = z.object({
   page: z.string().nullable(),
 });
 
-export const ParadataSchema = z.object({
+export const paradataSchema = z.object({
   idSu: z.string(),
-  event: EventSchema.array(),
+  event: eventSchema.array(),
 });

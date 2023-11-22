@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const VariableSchema = z
+const variableSchema = z
   .union([
     z.string(),
     z.number(),
@@ -9,18 +9,18 @@ const VariableSchema = z
   ])
   .nullable();
 
-const CollectedValueSchema = z.object({
-  COLLECTED: VariableSchema,
-  EDITED: VariableSchema,
-  FORCED: VariableSchema,
-  INPUTED: VariableSchema,
-  PREVIOUS: VariableSchema,
+const collectedValueSchema = z.object({
+  COLLECTED: variableSchema,
+  EDITED: variableSchema,
+  FORCED: variableSchema,
+  INPUTED: variableSchema,
+  PREVIOUS: variableSchema,
 });
 
-export const SurveyUnitDataSchema = z
+export const surveyUnitDataSchema = z
   .object({
-    CALCULATED: z.record(VariableSchema),
-    EXTERNAL: z.record(VariableSchema),
-    COLLECTED: z.record(CollectedValueSchema),
+    CALCULATED: z.record(variableSchema),
+    EXTERNAL: z.record(variableSchema),
+    COLLECTED: z.record(collectedValueSchema),
   })
   .partial();

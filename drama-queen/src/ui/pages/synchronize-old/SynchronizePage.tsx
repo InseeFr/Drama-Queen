@@ -6,7 +6,6 @@ import preloader from 'ui/assets/preloader.svg';
 import { tss } from "tss-react/mui";
 import { Fragment, useEffect, useState } from "react";
 import { type PullData, usePullData } from 'hooks/usePullData';
-import type { SurveyUnitWithId } from "core/model/SurveyUnit
 import { SyncError } from "hooks/queries/SyncError";
 import { storeSyncProgress } from "./storeSyncProgress";
 import { db } from 'core/indexedDb';

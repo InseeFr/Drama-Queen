@@ -3,7 +3,7 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe/Equals";
 import { z } from "zod";
 
-export const NomenclatureSchema = z.array(
+export const nomenclatureSchema = z.array(
   z
     .object({
       id: z.string(),
@@ -12,4 +12,4 @@ export const NomenclatureSchema = z.array(
     .catchall(z.string())
 );
 
-export const RequiredNomenclaturesSchema = z.string().array();
+export const requiredNomenclaturesSchema = z.string().array();

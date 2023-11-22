@@ -1,12 +1,17 @@
-import axios from "axios";
+import axios, {
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
 import memoize from "memoizee";
 import type { QueenApi } from "core/ports/QueenApi";
 import {
-  CampaignSchema,
-  IdAndQuestionnaireIdSchema,
-  NomenclatureSchema,
-  RequiredNomenclaturesSchema,
-  SurveyUnitSchema,
+  campaignSchema,
+  idAndQuestionnaireIdSchema,
+  nomenclatureSchema,
+  requiredNomenclaturesSchema,
+  surveyUnitSchema,
+  surveyUnitWithIdSchema,
 } from "./parserSchema";
 import {
   Campaign,
@@ -26,39 +31,46 @@ export function createApiClient(params: {
   const { axiosInstance } = (() => {
     const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 });
 
-    axiosInstance.interceptors.request.use((config) => ({
-      ...(config as any),
-      headers: {
-        ...config.headers,
-        ...(() => {
-          const accessToken = getAccessToken();
+    const onRequest = (config: AxiosRequestConfig) => {
+      console.info(`[request] [${JSON.stringify(config)}]`);
+      return {
+        ...(config as any),
+        headers: {
+          ...config.headers,
+          ...(() => {
+            const accessToken = getAccessToken();
 
-          if (!accessToken) {
-            return undefined;
-          }
+            if (!accessToken) {
+              return undefined;
+            }
 
-          return {
-            Authorization: `Bearer ${accessToken}`,
-          };
-        })(),
-      },
-      "Content-Type": "application/json;charset=utf-8",
-      Accept: "application/json;charset=utf-8",
-    }));
+            return {
+              Authorization: `Bearer ${accessToken}`,
+            };
+          })(),
+        },
+        "Content-Type": "application/json;charset=utf-8",
+        Accept: "application/json;charset=utf-8",
+      };
+    };
 
-    axiosInstance.interceptors.response.use(
-      function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
-        return response;
-      },
-      function (error) {
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
-        // Do something with response error
-        console.log(error.response);
-        return Promise.reject(error);
-      }
-    );
+    const onRequestError = (error: AxiosError): Promise<AxiosError> => {
+      console.error(`[request error] [${JSON.stringify(error)}]`);
+      return Promise.reject(error);
+    };
+
+    const onResponse = (response: AxiosResponse): AxiosResponse => {
+      console.info(`[response] [${JSON.stringify(response)}]`);
+      return response;
+    };
+
+    const onResponseError = (error: AxiosError): Promise<AxiosError> => {
+      console.error(`[response error] [${JSON.stringify(error)}]`);
+      return Promise.reject(error);
+    };
+
+    axiosInstance.interceptors.request.use(onRequest, onRequestError);
+    axiosInstance.interceptors.response.use(onResponse, onResponseError);
     return { axiosInstance };
   })();
 
@@ -67,7 +79,7 @@ export function createApiClient(params: {
       (idCampaign) =>
         axiosInstance
           .get<IdAndQuestionnaireId>(`/api/campaign/${idCampaign}/survey-units`)
-          .then(({ data }) => IdAndQuestionnaireIdSchema.array().parse(data)),
+          .then(({ data }) => idAndQuestionnaireIdSchema.array().parse(data)),
       { promise: true }
     ),
     getSurveyUnits: memoize(
@@ -75,7 +87,7 @@ export function createApiClient(params: {
         axiosInstance
           .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
           .then(({ data }) =>
-            data.map((surveyUnit) => SurveyUnitSchema.parse(surveyUnit))
+            data.map((surveyUnit) => surveyUnitWithIdSchema.parse(surveyUnit))
           ),
       { promise: true }
     ),
@@ -83,7 +95,10 @@ export function createApiClient(params: {
       (idSurveyUnit) =>
         axiosInstance
           .get<SurveyUnit>(`/api/survey-unit/${idSurveyUnit}`)
-          .then(({ data }) => SurveyUnitSchema.parse(data)),
+          .then(({ data }) => ({
+            id: idSurveyUnit,
+            ...surveyUnitSchema.parse(data),
+          })),
       { promise: true }
     ),
     putSurveyUnit: (idSurveyUnit, surveyUnit) =>
@@ -105,7 +120,7 @@ export function createApiClient(params: {
       () =>
         axiosInstance
           .get<Campaign>(`api/campaigns`)
-          .then(({ data }) => CampaignSchema.array().parse(data)),
+          .then(({ data }) => campaignSchema.array().parse(data)),
       { promise: true }
     ),
     getQuestionnaire: memoize(
@@ -121,14 +136,14 @@ export function createApiClient(params: {
           .get<RequiredNomenclatures>(
             `/api/questionnaire/${idNomenclature}/required-nomenclatures`
           )
-          .then(({ data }) => RequiredNomenclaturesSchema.parse(data)),
+          .then(({ data }) => requiredNomenclaturesSchema.parse(data)),
       { promise: true }
     ),
     getNomenclature: memoize(
       (idNomenclature) =>
         axiosInstance
           .get<Nomenclature>(`/api/nomenclature/${idNomenclature}`)
-          .then(({ data }) => NomenclatureSchema.parse(data)),
+          .then(({ data }) => nomenclatureSchema.parse(data)),
       { promise: true }
     ),
     postParadata: (paradata) =>
