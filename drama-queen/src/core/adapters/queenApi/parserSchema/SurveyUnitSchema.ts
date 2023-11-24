@@ -13,13 +13,10 @@ const stateDataSchema = z.object({
 });
 
 export const surveyUnitSchema = z.object({
+  id: z.string(),
   questionnaireId: z.string(),
   personalization: z.union([z.object({}).array(), z.object({})]),
   data: surveyUnitDataSchema,
   comment: z.object({}), // not implemented yet, only present in test data
   stateData: stateDataSchema.optional(),
-});
-
-export const surveyUnitWithIdSchema = surveyUnitSchema.extend({
-  id: z.string(),
 });

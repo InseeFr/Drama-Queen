@@ -20,9 +20,9 @@ export function createDataStore(params: {
   return {
     updateSurveyUnit: (surveyUnit) => db.surveyUnit.put(surveyUnit),
     deleteSurveyUnit: (id) => db.surveyUnit.delete(id),
-    getAllSurveyUnit: () => db.surveyUnit.toArray(),
+    getAllSurveyUnits: () => db.surveyUnit.toArray(),
     getSurveyUnit: (id) => db.surveyUnit.get(id),
-    getAllParadata: () => db.paradata.toArray(),
+    getAllParadatas: () => db.paradata.toArray(),
     deleteParadata: (id) => db.paradata.delete(id),
     getParadata: (id) => db.paradata.get(id),
   };

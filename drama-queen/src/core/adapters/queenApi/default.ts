@@ -11,7 +11,6 @@ import {
   nomenclatureSchema,
   requiredNomenclaturesSchema,
   surveyUnitSchema,
-  surveyUnitWithIdSchema,
 } from "./parserSchema";
 import {
   Campaign,
@@ -32,7 +31,7 @@ export function createApiClient(params: {
     const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 });
 
     const onRequest = (config: AxiosRequestConfig) => {
-      console.info(`[request] [${JSON.stringify(config)}]`);
+      //console.info(`[request] [${JSON.stringify(config)}]`);
       return {
         ...(config as any),
         headers: {
@@ -60,11 +59,11 @@ export function createApiClient(params: {
     };
 
     const onResponse = (response: AxiosResponse): AxiosResponse => {
-      console.info(`[response] [${JSON.stringify(response)}]`);
+      //console.info(`[response] [${JSON.stringify(response)}]`);
       return response;
     };
 
-    const onResponseError = (error: AxiosError): Promise<AxiosError> => {
+    const onResponseError = (error: AxiosError) => {
       console.error(`[response error] [${JSON.stringify(error)}]`);
       return Promise.reject(error);
     };
@@ -87,35 +86,34 @@ export function createApiClient(params: {
         axiosInstance
           .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
           .then(({ data }) =>
-            data.map((surveyUnit) => surveyUnitWithIdSchema.parse(surveyUnit))
+            data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit))
           ),
       { promise: true }
     ),
     getSurveyUnit: memoize(
       (idSurveyUnit) =>
         axiosInstance
-          .get<SurveyUnit>(`/api/survey-unit/${idSurveyUnit}`)
-          .then(({ data }) => ({
-            id: idSurveyUnit,
-            ...surveyUnitSchema.parse(data),
-          })),
+          .get<Omit<SurveyUnit, "id">>(`/api/survey-unit/${idSurveyUnit}`)
+          .then(({ data }) =>
+            surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
+          ),
       { promise: true }
     ),
     putSurveyUnit: (idSurveyUnit, surveyUnit) =>
-      axiosInstance.put<typeof surveyUnit>(
-        `api/survey-unit/${idSurveyUnit}`,
-        surveyUnit
-      ),
+      axiosInstance
+        .put<typeof surveyUnit>(`api/survey-unit/${idSurveyUnit}`, surveyUnit)
+        .then(() => undefined),
     putSurveyUnitsData: (surveyUnitsData) =>
-      axiosInstance.put<typeof surveyUnitsData>(
-        `/api/survey-units/data`,
-        surveyUnitsData
-      ),
+      axiosInstance
+        .put<typeof surveyUnitsData>(`/api/survey-units/data`, surveyUnitsData)
+        .then(() => undefined),
     postSurveyUnitInTemp: (idSurveyUnit, surveyUnit) =>
-      axiosInstance.post<typeof surveyUnit>(
-        `api/survey-unit/${idSurveyUnit}/temp-zone`,
-        surveyUnit
-      ),
+      axiosInstance
+        .post<typeof surveyUnit>(
+          `api/survey-unit/${idSurveyUnit}/temp-zone`,
+          surveyUnit
+        )
+        .then(() => undefined),
     getCampaigns: memoize(
       () =>
         axiosInstance
@@ -147,6 +145,8 @@ export function createApiClient(params: {
       { promise: true }
     ),
     postParadata: (paradata) =>
-      axiosInstance.post<typeof paradata>(`/api/paradata`, paradata),
+      axiosInstance
+        .post<typeof paradata>(`/api/paradata`, paradata)
+        .then(() => undefined),
   };
 }

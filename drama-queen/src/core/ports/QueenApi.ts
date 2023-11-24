@@ -1,4 +1,12 @@
-import { Campaign, IdAndQuestionnaireId, Nomenclature, Paradata, Questionnaire, RequiredNomenclatures, SurveyUnit } from "core/model";
+import {
+  Campaign,
+  IdAndQuestionnaireId,
+  Nomenclature,
+  Paradata,
+  Questionnaire,
+  RequiredNomenclatures,
+  SurveyUnit,
+} from "core/model";
 
 export type QueenApi = {
   getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (
@@ -12,7 +20,10 @@ export type QueenApi = {
    */
   getSurveyUnits: () => Promise<SurveyUnit[]>;
   getSurveyUnit: (idSurveyUnit: string) => Promise<SurveyUnit>;
-  putSurveyUnit: (idSurveyUnit: string, surveyUnit: SurveyUnit) => void;
+  putSurveyUnit: (
+    idSurveyUnit: string,
+    surveyUnit: SurveyUnit
+  ) => Promise<void>;
   /**
    * Endpoint in development
    * @param
@@ -21,16 +32,16 @@ export type QueenApi = {
    */
   putSurveyUnitsData: (
     surveyUnitsData: Omit<SurveyUnit, "questionnaireId">[]
-  ) => void;
+  ) => Promise<void>;
   postSurveyUnitInTemp: (
     idSurveyUnit: string,
     surveyUnit: SurveyUnit
-  ) => void;
+  ) => Promise<void>;
   getCampaigns: () => Promise<Campaign[]>;
   getQuestionnaire: (idQuestionnaire: string) => Promise<Questionnaire>;
   getRequiredNomenclaturesByCampaign: (
     idCampaign: string
   ) => Promise<RequiredNomenclatures>;
   getNomenclature: (idNomenclature: string) => Promise<Nomenclature>;
-  postParadata: (paradata: Paradata) => void;
+  postParadata: (paradata: Paradata) => Promise<void>;
 };

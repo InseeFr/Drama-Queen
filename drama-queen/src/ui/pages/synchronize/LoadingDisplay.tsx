@@ -15,9 +15,9 @@ type LoadingDisplayProps = {
 }
 
 export function LoadingDisplay(props: LoadingDisplayProps) {
+  const { syncStepTitle, progressBars } = props
   const { __ } = useTranslate();
   const { classes } = useStyles();
-  const { syncStepTitle, progressBars } = props
   return (
     <Stack spacing={3} alignItems="center">
       <Stack spacing={1} alignItems="center">
@@ -26,7 +26,7 @@ export function LoadingDisplay(props: LoadingDisplayProps) {
       </Stack>
       <Stack spacing={2}>
         {progressBars.map(bar =>
-          <Fragment key={bar.label}>
+          <Fragment key={`${bar.label}-${bar.progress}`}>
             <Stack spacing={1}>
               <Typography variant="body2" fontWeight="bold"
                 className={classes.lightText}>{bar.label}</Typography>
