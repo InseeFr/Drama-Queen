@@ -28,7 +28,7 @@
     "react-keyboard-event-handler": "^1.5.4",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.1",
     "react-shadow": "^19.0.2",
     "workbox-cacheable-response": "^6.1.1",
     "workbox-core": "^6.1.1",
@@ -54,21 +54,6 @@
       "prettier",
       "plugin:react-hooks/recommended"
     ],
-    "plugins": [
-      "prettier",
-      "jsx-a11y"
-    ],
-    "rules": {
-      "react/prop-types": [
-        "off"
-      ],
-      "prettier/prettier": [
-        1,
-        {
-          "arrowParens": "avoid"
-        }
-      ]
-    },
     "globals": {
       "fetch": true,
       "window": true,

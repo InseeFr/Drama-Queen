@@ -19,6 +19,33 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       WebkitAppearance: 'none',
       margin: '0',
     },
+
+    // button-lunatic inside Loop
+    '&.Loop .button-lunatic': {
+      marginTop: '1em',
+    },
+
+    // table
+    '& .lunatic-table': {
+      '& .lunatic-table-tr, .lunatic-table-th, .lunatic-table-td': {
+        border: '0.15em solid #555',
+        padding: '0.2em 1em',
+      },
+    },
+
+    '&.Loop': {
+      display: 'block',
+    },
+
+    '& .subsequence-lunatic': {
+      backgroundColor: 'transparent',
+      fontSize: '1.2em',
+      color: 'black',
+      display: 'block',
+      margin: '1em 0em 1em 0em',
+      fontWeight: 'bold',
+      padding: '0.5em',
+    },
     /* Firefox */
     '& input[type=text]': {
       MozAppearance: 'textfield',
