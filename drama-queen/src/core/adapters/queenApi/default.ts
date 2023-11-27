@@ -99,17 +99,17 @@ export function createApiClient(params: {
           ),
       { promise: true }
     ),
-    putSurveyUnit: (idSurveyUnit, surveyUnit) =>
+    putSurveyUnit: (surveyUnit) =>
       axiosInstance
-        .put<typeof surveyUnit>(`api/survey-unit/${idSurveyUnit}`, surveyUnit)
+        .put(`api/survey-unit/${surveyUnit.id}`, surveyUnit)
         .then(() => undefined),
     putSurveyUnitsData: (surveyUnitsData) =>
       axiosInstance
-        .put<typeof surveyUnitsData>(`/api/survey-units/data`, surveyUnitsData)
+        .put(`/api/survey-units/data`, surveyUnitsData)
         .then(() => undefined),
     postSurveyUnitInTemp: (idSurveyUnit, surveyUnit) =>
       axiosInstance
-        .post<typeof surveyUnit>(
+        .post(
           `api/survey-unit/${idSurveyUnit}/temp-zone`,
           surveyUnit
         )

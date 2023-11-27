@@ -8,8 +8,8 @@ import { useTranslate } from "hooks/useTranslate";
 type LoadingDisplayProps = {
   syncStepTitle: string,
   progressBars: {
-    progress: number | undefined,
-    label?: string
+    progress: number;
+    label: string | undefined;
   }[]
 
 }
@@ -28,8 +28,9 @@ export function LoadingDisplay(props: LoadingDisplayProps) {
         {progressBars.map(bar =>
           <Fragment key={`${bar.label}-${bar.progress}`}>
             <Stack spacing={1}>
+              {bar.label !== undefined &&
               <Typography variant="body2" fontWeight="bold"
-                className={classes.lightText}>{bar.label}</Typography>
+                className={classes.lightText}>{bar.label}</Typography>}
               <LinearProgress variant="determinate" value={bar.progress}
                 className={classes.progressBar} />
             </Stack>

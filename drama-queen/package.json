@@ -13,7 +13,6 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.6",
-    "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.33.0",
     "@types/memoizee": "^0.4.8",
@@ -28,7 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
-    "redux-clean-architecture": "^3.7.2",
+    "redux-clean-architecture": "^4.1.1",
     "tsafe": "^1.6.4",
     "tss-react": "^4.9.0",
     "zod": "^3.21.4"

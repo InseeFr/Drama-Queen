@@ -1,19 +1,35 @@
-import { createCoreFromUsecases } from "redux-clean-architecture";
-import type { GenericCreateEvt, GenericThunks } from "redux-clean-architecture";
 import { usecases } from "./usecases";
+import { createCore, type GenericCore } from "redux-clean-architecture";
+import type { Oidc } from "core/ports/Oidc";
+import type { DataStore } from "core/ports/DataStore";
+import type { QueenApi } from "core/ports/QueenApi";
 
-type CoreParams = {
+type ParamsOfBootstrapCore = {
   apiUrl: string;
   publicUrl: string;
   oidcParams:
-    | {
-        issuerUri: string;
-        clientId: string;
-      }
-    | undefined;
+  | {
+    issuerUri: string;
+    clientId: string;
+  }
+  | undefined;
 };
 
-export async function createCore(params: CoreParams) {
+type Context = {
+  paramsOfBootstrapCore: ParamsOfBootstrapCore;
+  oidc: Oidc;
+  queenApi: QueenApi;
+  dataStore: DataStore;
+};
+
+export type Core = GenericCore<typeof usecases, Context>;
+
+export type State = Core["types"]["State"];
+export type Thunks = Core["types"]["Thunks"];
+export type CreateEvt = Core["types"]["CreateEvt"];
+
+export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ core: Core; }> {
+
   const { apiUrl, publicUrl, oidcParams } = params;
 
   const oidc = await (async () => {
@@ -73,23 +89,17 @@ export async function createCore(params: CoreParams) {
     });
   })();
 
-  const core = createCoreFromUsecases({
-    thunksExtraArgument: {
-      coreParams: params,
-      oidc,
-      queenApi,
-      dataStore,
-    },
-    usecases,
+  const context: Context = {
+    paramsOfBootstrapCore: params,
+    oidc,
+    queenApi,
+    dataStore,
+  };
+
+  const { core } = createCore({
+    context,
+    usecases
   });
 
-  return core;
+  return { core };
 }
-
-type Core = Awaited<ReturnType<typeof createCore>>;
-
-export type State = ReturnType<Core["getState"]>;
-
-export type Thunks = GenericThunks<Core>;
-
-export type CreateEvt = GenericCreateEvt<Core>;

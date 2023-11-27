@@ -1,5 +1,5 @@
 import { assert } from "tsafe/assert";
-import { Thunks } from "core/setup";
+import type { Thunks } from "core/bootstrap";
 
 export const name = "userAuthentication";
 

@@ -20,10 +20,7 @@ export type QueenApi = {
    */
   getSurveyUnits: () => Promise<SurveyUnit[]>;
   getSurveyUnit: (idSurveyUnit: string) => Promise<SurveyUnit>;
-  putSurveyUnit: (
-    idSurveyUnit: string,
-    surveyUnit: SurveyUnit
-  ) => Promise<void>;
+  putSurveyUnit: (surveyUnit: SurveyUnit) => Promise<void>;
   /**
    * Endpoint in development
    * @param

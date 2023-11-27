@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 
@@ -8,29 +8,37 @@ export namespace State {
   export type NotRunning = {
     stateDescription: "not running";
   };
-  export type Running = {
-    stateDescription: "running";
-  } & (Uploading | Downloading);
 
-  type Uploading = {
-    type: "upload";
-    total: number;
-    surveyUnitCompleted: number;
-  };
+  export type Running = Running.Uploading | Running.Downloading;
 
-  type Downloading = {
-    type: "download";
-    totalSurveyUnit: number;
-    surveyUnitCompleted: number;
-    totalNomenclature: number;
-    nomenclatureCompleted: number;
-    totalSurvey: number;
-    surveyCompleted: number;
-  };
+  export namespace Running {
+
+    type Common = {
+      stateDescription: "running";
+    };
+
+    export type Uploading = Common & {
+      type: "upload";
+      total: number;
+      surveyUnitCompleted: number;
+    };
+
+    export type Downloading = Common & {
+      type: "download";
+      totalSurveyUnit: number;
+      surveyUnitCompleted: number;
+      totalNomenclature: number;
+      nomenclatureCompleted: number;
+      totalSurvey: number;
+      surveyCompleted: number;
+    };
+
+  }
+
 }
 export const name = "synchronizeData";
 
-export const { reducer, actions } = createSlice({
+export const { reducer, actions } = createUsecaseActions({
   name,
   initialState: id<State>(
     id<State.NotRunning>({
@@ -62,7 +70,7 @@ export const { reducer, actions } = createSlice({
       ),
     updateDownloadTotalSurveyUnit: (
       state,
-      { payload }: PayloadAction<{ totalSurveyUnit: number }>
+      { payload }: { payload: { totalSurveyUnit: number }; }
     ) => {
       const { totalSurveyUnit } = payload;
       assert(state.stateDescription === "running" && state.type === "download");
@@ -83,7 +91,7 @@ export const { reducer, actions } = createSlice({
     },
     setDownloadTotalSurvey: (
       state,
-      { payload }: PayloadAction<{ totalSurvey: number }>
+      { payload }: { payload: { totalSurvey: number }; }
     ) => {
       const { totalSurvey } = payload;
       assert(state.stateDescription === "running" && state.type === "download");
@@ -98,7 +106,7 @@ export const { reducer, actions } = createSlice({
     },
     setDownloadTotalNomenclature: (
       state,
-      { payload }: PayloadAction<{ totalNomenclature: number }>
+      { payload }: { payload: { totalNomenclature: number }; }
     ) => {
       const { totalNomenclature } = payload;
       assert(state.stateDescription === "running" && state.type === "download");
@@ -111,7 +119,7 @@ export const { reducer, actions } = createSlice({
         nomenclatureCompleted: state.nomenclatureCompleted + 1,
       };
     },
-    setUploadTotal: (state, { payload }: PayloadAction<{ total: number }>) => {
+    setUploadTotal: (state, { payload }: { payload: { total: number }; }) => {
       const { total } = payload;
       assert(state.stateDescription === "running" && state.type === "upload");
       return { ...state, total };

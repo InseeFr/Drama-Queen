@@ -1,4 +1,4 @@
-import { Thunks } from "core/setup";
+import type { Thunks } from "core/bootstrap";
 import { actions, name } from "./state";
 
 export const thunks = {
