@@ -1,8 +1,4 @@
-import axios, {
-  type AxiosError,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from "axios";
+import axios, { AxiosError } from "axios";
 import memoize from "memoizee";
 import type { QueenApi } from "core/ports/QueenApi";
 import {
@@ -30,12 +26,14 @@ export function createApiClient(params: {
   const { axiosInstance } = (() => {
     const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 });
 
-    const onRequest = (config: AxiosRequestConfig) => {
-      //console.info(`[request] [${JSON.stringify(config)}]`);
+    // Type issue https://github.com/axios/axios/issues/5494
+    const onRequest = (config: any) => {
       return {
-        ...(config as any),
+        ...config,
         headers: {
           ...config.headers,
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/json;charset=utf-8",
           ...(() => {
             const accessToken = getAccessToken();
 
@@ -48,28 +46,11 @@ export function createApiClient(params: {
             };
           })(),
         },
-        "Content-Type": "application/json;charset=utf-8",
-        Accept: "application/json;charset=utf-8",
       };
     };
 
-    const onRequestError = (error: AxiosError): Promise<AxiosError> => {
-      console.error(`[request error] [${JSON.stringify(error)}]`);
-      return Promise.reject(error);
-    };
+    axiosInstance.interceptors.request.use(onRequest);
 
-    const onResponse = (response: AxiosResponse): AxiosResponse => {
-      //console.info(`[response] [${JSON.stringify(response)}]`);
-      return response;
-    };
-
-    const onResponseError = (error: AxiosError) => {
-      console.error(`[response error] [${JSON.stringify(error)}]`);
-      return Promise.reject(error);
-    };
-
-    axiosInstance.interceptors.request.use(onRequest, onRequestError);
-    axiosInstance.interceptors.response.use(onResponse, onResponseError);
     return { axiosInstance };
   })();
 
@@ -81,69 +62,67 @@ export function createApiClient(params: {
           .then(({ data }) => idAndQuestionnaireIdSchema.array().parse(data)),
       { promise: true }
     ),
-    getSurveyUnits: memoize(
-      () =>
-        axiosInstance
-          .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
-          .then(({ data }) =>
-            data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit))
-          ),
-      { promise: true }
-    ),
-    getSurveyUnit: memoize(
-      (idSurveyUnit) =>
-        axiosInstance
-          .get<Omit<SurveyUnit, "id">>(`/api/survey-unit/${idSurveyUnit}`)
-          .then(({ data }) =>
-            surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
-          ),
-      { promise: true }
-    ),
+    getSurveyUnits: () =>
+      axiosInstance
+        .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
+        .then(({ data }) =>
+          data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit))
+        ),
+
+    getSurveyUnit: (idSurveyUnit) =>
+      axiosInstance
+        .get<Omit<SurveyUnit, "id">>(`/api/survey-unit/${idSurveyUnit}`)
+        .then(({ data }) =>
+          surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
+        ),
+
     putSurveyUnit: (surveyUnit) =>
       axiosInstance
-        .put(`api/survey-unit/${surveyUnit.id}`, surveyUnit)
+        .put<typeof surveyUnit>(`api/survey-unit/${surveyUnit.id}`, surveyUnit)
         .then(() => undefined),
+    // .catch((error: Error | AxiosError) => {
+    //   if (
+    //     axios.isAxiosError(error) &&
+    //     error.response &&
+    //     [400, 403, 404, 500].includes(error.response.status)
+    //   ) {
+    //     return
+    //   } else {
+    //     throw error;
+    //   }
+    // })
     putSurveyUnitsData: (surveyUnitsData) =>
       axiosInstance
         .put(`/api/survey-units/data`, surveyUnitsData)
         .then(() => undefined),
-    postSurveyUnitInTemp: (idSurveyUnit, surveyUnit) =>
+
+    postSurveyUnitInTemp: (surveyUnit) =>
       axiosInstance
-        .post(
-          `api/survey-unit/${idSurveyUnit}/temp-zone`,
-          surveyUnit
-        )
+        .post(`api/survey-unit/${surveyUnit.id}/temp-zone`, surveyUnit)
         .then(() => undefined),
-    getCampaigns: memoize(
-      () =>
-        axiosInstance
-          .get<Campaign>(`api/campaigns`)
-          .then(({ data }) => campaignSchema.array().parse(data)),
-      { promise: true }
-    ),
-    getQuestionnaire: memoize(
-      (idSurvey) =>
-        axiosInstance
-          .get<{ value: Questionnaire }>(`/api/questionnaire/${idSurvey}`)
-          .then(({ data }) => data.value),
-      { promise: true }
-    ),
-    getRequiredNomenclaturesByCampaign: memoize(
-      (idNomenclature) =>
-        axiosInstance
-          .get<RequiredNomenclatures>(
-            `/api/questionnaire/${idNomenclature}/required-nomenclatures`
-          )
-          .then(({ data }) => requiredNomenclaturesSchema.parse(data)),
-      { promise: true }
-    ),
-    getNomenclature: memoize(
-      (idNomenclature) =>
-        axiosInstance
-          .get<Nomenclature>(`/api/nomenclature/${idNomenclature}`)
-          .then(({ data }) => nomenclatureSchema.parse(data)),
-      { promise: true }
-    ),
+
+    getCampaigns: () =>
+      axiosInstance
+        .get<Campaign>(`api/campaigns`)
+        .then(({ data }) => campaignSchema.array().parse(data)),
+
+    getQuestionnaire: (idSurvey) =>
+      axiosInstance
+        .get<{ value: Questionnaire }>(`/api/questionnaire/${idSurvey}`)
+        .then(({ data }) => data.value),
+
+    getRequiredNomenclaturesByCampaign: (idNomenclature) =>
+      axiosInstance
+        .get<RequiredNomenclatures>(
+          `/api/questionnaire/${idNomenclature}/required-nomenclatures`
+        )
+        .then(({ data }) => requiredNomenclaturesSchema.parse(data)),
+
+    getNomenclature: (idNomenclature) =>
+      axiosInstance
+        .get<Nomenclature>(`/api/nomenclature/${idNomenclature}`)
+        .then(({ data }) => nomenclatureSchema.parse(data)),
+
     postParadata: (paradata) =>
       axiosInstance
         .post<typeof paradata>(`/api/paradata`, paradata)

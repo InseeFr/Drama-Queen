@@ -1,5 +1,6 @@
 import type { Thunks } from "core/bootstrap";
 import { actions, name } from "./state";
+import type { AxiosError } from "axios";
 
 export const thunks = {
   download:
@@ -37,6 +38,8 @@ export const thunks = {
        * SurveyUnit
        */
 
+      const surveyUnitSuccess: string[] = [];
+
       const prSurveyUnit = campaignsIds.map((campaignId) =>
         queenApi
           .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
@@ -51,24 +54,37 @@ export const thunks = {
                 queenApi
                   .getSurveyUnit(id)
                   .then((surveyUnit) => dataStore.updateSurveyUnit(surveyUnit))
-                  .then(() => dispatch(actions.downloadSurveyUnitCompleted()))
+                  .then(() => {
+                    surveyUnitSuccess.push(id);
+                    dispatch(actions.downloadSurveyUnitCompleted());
+                  })
               )
             );
           })
       );
 
-      const surveyUnitsArrays = (await Promise.all(prSurveyUnit)).flat();
+      await Promise.all(prSurveyUnit);
 
+      //TODO -> Save surveyUnitSuccess
       /*
        * Survey
        */
 
       const questionnaires = await Promise.all(
         questionnaireIds.map((questionnaireId) =>
-          queenApi.getQuestionnaire(questionnaireId).then((questionnaire) => {
-            dispatch(actions.downloadSurveyCompleted());
-            return questionnaire;
-          })
+          queenApi
+            .getQuestionnaire(questionnaireId)
+            .then((questionnaire) => {
+              dispatch(actions.downloadSurveyCompleted());
+              return questionnaire;
+            })
+            .catch(() => {
+              //TODO Handle error
+              console.error(
+                ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`
+              );
+              return undefined;
+            })
         )
       );
 
@@ -78,7 +94,7 @@ export const thunks = {
 
       const suggestersNames = deduplicate(
         questionnaires
-          .map((q) => q.suggesters)
+          .map((q) => q?.suggesters)
           .flat()
           .map((suggester) => suggester?.name)
       );
@@ -94,9 +110,11 @@ export const thunks = {
         suggestersNames.map((nomenclatureId) =>
           queenApi
             .getNomenclature(nomenclatureId)
-            .catch((error) => {
+            .catch(() => {
               //TODO Handle Errors
-              console.log(error);
+              console.error(
+                `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
+              );
             })
             .finally(() => dispatch(actions.downloadNomenclatureCompleted()))
         )
@@ -122,35 +140,47 @@ export const thunks = {
       try {
         const prSurveyUnits = dataStore.getAllSurveyUnits();
         const surveyUnits = await prSurveyUnits;
+        const surveyUnitsInTemp: string[] = [];
 
-        if (!surveyUnits) {
-          return;
+        if (surveyUnits) {
+          dispatch(actions.setUploadTotal({ total: surveyUnits.length ?? 0 }));
+
+          const surveyUnitPromises = surveyUnits.map((surveyUnit) =>
+            queenApi
+              .putSurveyUnit(surveyUnit)
+              .catch((error: AxiosError) => {
+                if (
+                  error.response &&
+                  [400, 403, 404, 500].includes(error.response.status)
+                ) {
+                  return queenApi
+                    .postSurveyUnitInTemp(surveyUnit)
+                    .then(() => surveyUnitsInTemp.push(surveyUnit.id));
+                } else {
+                  throw error;
+                }
+              })
+              .then((result) => {
+                return dataStore.deleteSurveyUnit(surveyUnit.id);
+              })
+              .then(() => {
+                dispatch(actions.uploadSurveyUnitCompleted());
+              })
+              .catch((error) => {
+                // TODO: Handle the error as needed -> Save LocalStorage
+                console.error(error);
+                dispatch(actions.uploadError());
+              })
+          );
+          await Promise.all(surveyUnitPromises);
         }
 
-        dispatch(actions.setUploadTotal({ total: surveyUnits.length ?? 0 }));
-
-        const surveyUnitPromises = surveyUnits.map((surveyUnit) =>
-          queenApi
-            .putSurveyUnit(surveyUnit.id, surveyUnit)
-            .then(() => dataStore.deleteSurveyUnit(surveyUnit.id))
-            .then(() => dispatch(actions.uploadSurveyUnitCompleted()))
-            .catch((error) => {
-              // TODO: Handle the error as needed -> Save LocalStorage
-              console.error(error);
-              dispatch(actions.uploadError());
-            })
-        );
-
-        await Promise.all(surveyUnitPromises);
+        dispatch(actions.uploadCompleted());
+        dispatch(thunks.download());
       } catch (error) {
         // TODO : Handle errors from prSurveyUnits
         console.error(error);
         dispatch(actions.uploadError());
-      } finally {
-        // Go to download
-        console.log("finally");
-        dispatch(actions.uploadCompleted());
-        dispatch(thunks.download());
       }
     },
 } satisfies Thunks;

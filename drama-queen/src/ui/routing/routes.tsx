@@ -26,10 +26,6 @@ export const routes: RouteObject[] = [
     element: <VisualisationMapping />
   },
   {
-    path: "/synchronize-old",
-    element: <RequiresAuthentication><SynchronizeOld /></RequiresAuthentication>
-  },
-  {
     path: "/synchronize",
     element: <RequiresAuthentication><SynchronizeData /></RequiresAuthentication>
   }

@@ -12,14 +12,16 @@ export function createApiClient(): QueenApi {
       ]),
     getSurveyUnit: (idSurveyUnit) =>
       Promise.resolve(createSUMocked({ idSu: idSurveyUnit })),
-    putSurveyUnit: (idSurveyUnit, surveyUnit) =>
-      console.log("putSurveyUnit", `id: ${idSurveyUnit}`, surveyUnit),
-    putSurveyUnitsData: (surveyUnitsData) => {
-      console.log("putSurveyUnits");
-      console.table(surveyUnitsData);
-    },
-    postSurveyUnitInTemp: (idSurveyUnit, surveyUnit) =>
-      console.log("postSurveyUnitInTemp", `id: ${idSurveyUnit}`, surveyUnit),
+    putSurveyUnit: (surveyUnit) =>
+      Promise.resolve(
+        console.log("putSurveyUnit", `id: ${surveyUnit.id}`, surveyUnit)
+      ),
+    putSurveyUnitsData: (surveyUnitsData) =>
+      Promise.resolve(console.table(surveyUnitsData)),
+    postSurveyUnitInTemp: (surveyUnit) =>
+      Promise.resolve(
+        console.log("postSurveyUnitInTemp", `id: ${surveyUnit.id}`, surveyUnit)
+      ),
     getCampaigns: () =>
       Promise.resolve([
         {
@@ -31,7 +33,8 @@ export function createApiClient(): QueenApi {
     getRequiredNomenclaturesByCampaign: () => Promise.resolve([]),
     getNomenclature: (idNomenclature) =>
       Promise.resolve([{ id: `${idNomenclature}`, label: "label" }]),
-    postParadata: (paradata) => console.log("postParadata", paradata),
+    postParadata: (paradata) =>
+      Promise.resolve(console.log("postParadata", paradata)),
   };
 }
 

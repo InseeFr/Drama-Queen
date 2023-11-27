@@ -31,7 +31,6 @@ export type QueenApi = {
     surveyUnitsData: Omit<SurveyUnit, "questionnaireId">[]
   ) => Promise<void>;
   postSurveyUnitInTemp: (
-    idSurveyUnit: string,
     surveyUnit: SurveyUnit
   ) => Promise<void>;
   getCampaigns: () => Promise<Campaign[]>;
