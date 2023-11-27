@@ -42,7 +42,7 @@ export const thunks = {
           .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
           .then((arrayOfIds) => {
             dispatch(
-              actions.setDownloadTotalSurveyUnitAndResetSurveyCompleted({
+              actions.updateDownloadTotalSurveyUnit({
                 totalSurveyUnit: arrayOfIds.length,
               })
             );
@@ -51,9 +51,7 @@ export const thunks = {
                 queenApi
                   .getSurveyUnit(id)
                   .then((surveyUnit) => dataStore.updateSurveyUnit(surveyUnit))
-                  .finally(() =>
-                    dispatch(actions.downloadSurveyUnitCompleted())
-                  )
+                  .then(() => dispatch(actions.downloadSurveyUnitCompleted()))
               )
             );
           })

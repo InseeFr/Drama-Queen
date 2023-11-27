@@ -60,13 +60,19 @@ export const { reducer, actions } = createSlice({
           surveyUnitCompleted: 0,
         })
       ),
-    setDownloadTotalSurveyUnitAndResetSurveyCompleted: (
+    updateDownloadTotalSurveyUnit: (
       state,
       { payload }: PayloadAction<{ totalSurveyUnit: number }>
     ) => {
       const { totalSurveyUnit } = payload;
       assert(state.stateDescription === "running" && state.type === "download");
-      return { ...state, totalSurveyUnit, surveyCompleted: 0 };
+      return {
+        ...state,
+        totalSurveyUnit:
+          state.totalSurveyUnit === Infinity
+            ? totalSurveyUnit
+            : state.totalSurveyUnit + totalSurveyUnit,
+      };
     },
     downloadSurveyUnitCompleted: (state) => {
       assert(state.stateDescription === "running" && state.type === "download");

@@ -21,8 +21,8 @@ export function SynchronizeData() {
   const { synchronizeData } = useCoreFunctions();
 
   useEffect(() => {
-    console.log("showProgress", showProgress)
-  }, [showProgress]);
+    console.log("surveyUnitProgress", surveyUnitProgress)
+  }, [surveyUnitProgress]);
 
   useEffect(
     () => {
