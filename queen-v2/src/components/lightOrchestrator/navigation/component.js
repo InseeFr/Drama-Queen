@@ -8,7 +8,6 @@ import {
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef, useState } from 'react';
-import { dependencies, version } from '../../../../package.json';
 
 import { IconButton } from '@material-ui/core';
 import { Apps } from '@material-ui/icons';
@@ -17,6 +16,7 @@ import D from 'i18n';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
+import { LUNATIC_VERSION, QUEEN_VERSION } from 'utils/constants';
 import { useConstCallback } from 'utils/hook/useConstCallback';
 import { useStyles } from './component.style';
 import SequenceNavigation from './sequenceNavigation';
@@ -37,7 +37,6 @@ const Navigation = ({
   const [surveyOpen, setSurveyOpen] = useState(false);
   const [stopOpen, setStopOpen] = useState(false);
   const [selectedSequence, setSelectedSequence] = useState(undefined);
-  const lunaticVersion = dependencies['@inseefr/lunatic'].replace('^', '');
 
   const offset = 1;
 
@@ -176,7 +175,7 @@ const Navigation = ({
             </div>
             <div
               className={classes.version}
-            >{`Queen : ${version} | Lunatic : ${lunaticVersion}`}</div>
+            >{`Queen : ${QUEEN_VERSION} | Lunatic : ${LUNATIC_VERSION}`}</div>
           </>
         )}
       </div>

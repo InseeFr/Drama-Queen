@@ -1,3 +1,8 @@
+import packageInfo from '../../../package.json';
+
+export const QUEEN_VERSION = packageInfo?.version;
+export const LUNATIC_VERSION = packageInfo?.dependencies['@inseefr/lunatic'].replace('^', '');
+
 export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';
 export const OIDC = 'OIDC';
