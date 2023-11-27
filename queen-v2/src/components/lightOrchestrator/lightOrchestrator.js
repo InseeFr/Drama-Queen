@@ -4,7 +4,7 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 import ButtonContinue from './buttons/continue/index';
 
 import D from 'i18n';
-import { componentHasResponse } from 'utils/components/deduceState';
+import { isSequenceOrSubsequenceComponent } from 'utils/components/deduceState';
 import { QUEEN_URL } from 'utils/constants';
 import { useConstCallback } from 'utils/hook/useConstCallback';
 import { LoopPanel } from './LoopPanel';
@@ -19,7 +19,6 @@ function noDataChange() {
 
 const preferences = ['COLLECTED'];
 const features = ['VTL', 'MD'];
-// const savingType = 'COLLECTED';
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' };
 
@@ -107,6 +106,7 @@ function LightOrchestrator({
     loopVariables = [],
     Provider,
     pageTag,
+    hasPageResponse,
   } = lunaticStateRef.current;
 
   const components = getComponents();
@@ -166,7 +166,7 @@ function LightOrchestrator({
   };
 
   const firstComponent = useMemo(() => [...components]?.[0], [components]);
-  const hasResponse = componentHasResponse(firstComponent);
+  const hasResponse = hasPageResponse() || isSequenceOrSubsequenceComponent(firstComponent);
 
   const isLastReachedPage = pager !== undefined ? checkIfLastReachedPage() : false;
   const { maxPage, page, subPage, nbSubPages, iteration, nbIterations } = pager;
