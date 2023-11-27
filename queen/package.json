@@ -55,25 +55,8 @@
       "react-app",
       "react-app/jest",
       "prettier",
-      "plugin:react-hooks/recommended",
-      "plugin:jsx-a11y/recommended",
-      "plugin:import/warnings"
+      "plugin:react-hooks/recommended"
     ],
-    "plugins": [
-      "prettier",
-      "jsx-a11y"
-    ],
-    "rules": {
-      "react/prop-types": [
-        "off"
-      ],
-      "prettier/prettier": [
-        1,
-        {
-          "arrowParens": "avoid"
-        }
-      ]
-    },
     "globals": {
       "fetch": true,
       "window": true,
