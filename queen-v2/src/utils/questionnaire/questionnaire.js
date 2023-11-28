@@ -9,7 +9,9 @@ const checkVersion = (actualVersion, expectedVersion) => {
     const [majorA, minorA, patchA] = actualVersion
       .split('.')
       .map(v => parseInt(v.split('-')[0], 10));
-    if (major === majorA && ((minorA === minor && patchA >= patch) || minorA > minor))
+
+    if (majorA > major) return { valid: true };
+    if (majorA === major && ((minorA === minor && patchA >= patch) || minorA > minor))
       return { valid: true };
     return { valid: false };
   } catch (e) {
