@@ -6,7 +6,7 @@ export type LocalStorageObject = {
 
 export type LocalSyncStorage = {
   saveObject: (object: LocalStorageObject) => void;
-  getObject: () => LocalStorageObject;
+  getObject: () => LocalStorageObject | null;
   addIdToSurveyUnitsSuccess: (id: string) => void;
   addIdToSurveyUnitsInTempZone: (id: string) => void;
   addError: (error: boolean) => void;

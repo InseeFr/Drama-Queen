@@ -3,16 +3,17 @@ import { createCore, type GenericCore } from "redux-clean-architecture";
 import type { Oidc } from "core/ports/Oidc";
 import type { DataStore } from "core/ports/DataStore";
 import type { QueenApi } from "core/ports/QueenApi";
+import type { LocalSyncStorage } from "./ports/LocalSyncStorage";
 
 type ParamsOfBootstrapCore = {
   apiUrl: string;
   publicUrl: string;
   oidcParams:
-  | {
-    issuerUri: string;
-    clientId: string;
-  }
-  | undefined;
+    | {
+        issuerUri: string;
+        clientId: string;
+      }
+    | undefined;
 };
 
 type Context = {
@@ -20,6 +21,7 @@ type Context = {
   oidc: Oidc;
   queenApi: QueenApi;
   dataStore: DataStore;
+  localSyncStorage: LocalSyncStorage;
 };
 
 export type Core = GenericCore<typeof usecases, Context>;
@@ -28,8 +30,9 @@ export type State = Core["types"]["State"];
 export type Thunks = Core["types"]["Thunks"];
 export type CreateEvt = Core["types"]["CreateEvt"];
 
-export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ core: Core; }> {
-
+export async function bootstrapCore(
+  params: ParamsOfBootstrapCore
+): Promise<{ core: Core }> {
   const { apiUrl, publicUrl, oidcParams } = params;
 
   const oidc = await (async () => {
@@ -89,16 +92,25 @@ export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ co
     });
   })();
 
+  const localSyncStorage = await (async () => {
+    const { createLocalSyncStorage } = await import(
+      "core/adapters/localSyncStorage/default"
+    );
+
+    return createLocalSyncStorage({ localStorageKey: "QUEEN_SYNC_RESULT" });
+  })();
+
   const context: Context = {
     paramsOfBootstrapCore: params,
     oidc,
     queenApi,
     dataStore,
+    localSyncStorage,
   };
 
   const { core } = createCore({
     context,
-    usecases
+    usecases,
   });
 
   return { core };
