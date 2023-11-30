@@ -54,6 +54,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     '& input[type=text]': {
       MozAppearance: 'textfield',
       marginLeft: '1em',
+      marginBottom: '1em',
       padding: '0.375rem 0 0.375rem 0.4375rem',
       minWidth: '40%',
       borderRadius: '10px',
@@ -63,6 +64,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     '& input[type=number]': {
       MozAppearance: 'textfield',
       marginLeft: '1em',
+      marginBottom: '1em',
       padding: '0.375rem 0 0.375rem 0.4375rem',
       borderRadius: '10px',
       border: '1px solid black',
@@ -133,11 +135,15 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       fontWeight: 'bold',
     },
 
-    '& fieldset legend': {
+    '& .lunatic-component fieldset legend, fieldset legend': {
       fontWeight: 'bold',
       maxWidth: '90%',
+      color: 'initial',
+      backgroundColor: 'initial',
+      fontSize: 'initial',
+      marginBottom: 'initial',
     },
-    '& .field-container': {
+    '& .lunatic-component .field-container, .field-container': {
       marginTop: '1em',
     },
     '& .lunatic-textarea textarea': {
@@ -159,6 +165,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       paddingLeft: '0.5em',
       fontSize: '100%',
       marginLeft: '1em',
+      marginBottom: '1em',
       borderRadius: '10px',
       border: `${borderInput}`,
       width: '55%',
@@ -180,20 +187,27 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         borderRadius: '15px',
       },
     },
-    '& .split-fieldset fieldset.checkbox-group': {
-      '& .checkbox-modality': {
-        display: 'inline-block',
-        width: '40%',
-        [theme.breakpoints.down('xs')]: {
-          display: 'block',
-          width: '70%',
+    '& .lunatic-component .split-fieldset fieldset.checkbox-group, .split-fieldset fieldset.checkbox-group':
+      {
+        '& .checkbox-modality': {
+          display: 'inline-block',
+          width: '40%',
+          [theme.breakpoints.down('xs')]: {
+            display: 'block',
+            width: '70%',
+          },
         },
       },
-    },
-    '& fieldset': {
+    '& .lunatic-component fieldset, fieldset': {
       padding: 0,
       margin: 0,
       border: 'none',
+
+      '& .lunatic-label': {
+        color: 'initial',
+        fontSize: 'initial',
+        marginBottom: 'initial',
+      },
 
       '& .field-container': {
         marginTop: 0,
@@ -206,10 +220,15 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         width: '70%',
         padding: '0.5em',
 
+        '& *': {
+          backgroundColor: `${backgroundColorCheckbox}`,
+        },
+
         '& .lunatic-icon': {
           display: 'none',
         },
         '& > .lunatic-input-checkbox': {
+          backgroundColor: `${backgroundColorCheckbox}`,
           display: 'block',
           alignItems: 'center',
           // padding: '0.5em 0.5em 0.5em 0.6em',
@@ -219,6 +238,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         },
 
         '& > .lunatic-input-radio': {
+          backgroundColor: `${backgroundColorCheckbox}`,
           display: 'block',
           alignItems: 'center',
           // padding: '0.5em 0.5em 0.5em 0.6em',
@@ -228,9 +248,11 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         },
         '&:hover span': {
           color: `${modalityLabelColorChecked}`,
+          backgroundColor: `inherit`,
           fontWeight: 'bold',
           '& *': {
             fontWeight: 'bold',
+            backgroundColor: `inherit`,
           },
           // TODO code-modality not provided (yet?) in lunatic-v2
           '& .code-modality': {
@@ -249,8 +271,10 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
           },
           '& span': {
             color: `${modalityLabelColorChecked}`,
+            backgroundColor: `${backgroundColorCheckboxChecked}`,
             fontWeight: 'bold',
             '& *': {
+              backgroundColor: `${backgroundColorCheckboxChecked}`,
               fontWeight: 'bold',
             },
             // TODO code-modality not provided (yet?) in lunatic-v2
@@ -263,7 +287,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         },
       },
       // TODO code-modality not provided (yet?) in lunatic-v2
-      '& .code-modality': {
+      '& span.code-modality': {
         alignSelf: 'baseline',
         position: 'relative',
         padding: '0.3em 0.5em 0.3em 0.5em',
@@ -282,6 +306,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         '&:focus + label, ': {
           // TODO code-modality not provided (yet?) in lunatic-v2
           '& .code-modality': {
+            backgroundColor: `${modalityCodeBackgroundColor}`,
             borderColor: theme.palette.declarations.main,
             borderWidth: '2px',
           },
@@ -289,10 +314,10 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       },
     },
 
-    // lunatic label
-    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number, .lunatic-dropdown, .lunatic-combo-box-container, .field-container > .field':
+    // .lunatic-component lunatic label
+    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number, .lunatic-dropdown, .lunatic-combo-box-container':
       {
-        '& > .lunatic-label': {
+        '& > .lunatic-label, label': {
           backgroundColor: 'transparent',
           fontSize: '1em',
           color: 'black',
@@ -304,7 +329,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       },
 
     // Dropdown lunatic
-    '& .lunatic-dropdown': {
+    '& .lunatic-component .lunatic-dropdown, .lunatic-dropdown': {
       display: 'block',
       width: '100%',
       marginBottom: '1.5rem',
@@ -465,12 +490,14 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     // missing response buttons css override
     // roll-back some changes when Missing override is available in lunatic-v2
     // such as shortcut and checked selectors
-    '& .missing-buttons': {
+
+    '& .lunatic-component .missing-buttons, .missing-buttons': {
       display: 'flex',
       gap: '1em',
       marginTop: 'auto',
 
       '& .button-lunatic': {
+        marginTop: 0,
         height: '100%',
       },
 
@@ -567,7 +594,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
           },
         },
     },
-    '& .lunatic-combo-box-container': {
+    '& .lunatic-component .lunatic-combo-box-container, .lunatic-combo-box-container': {
       '& .lunatic-combo-box': {
         '& .lunatic-combo-box-content': {
           width: '90%',
@@ -579,36 +606,18 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         },
       },
     },
-    '& .lunatic-combo-box-fab': {
+    '& .lunatic-component .lunatic-combo-box-fab, .lunatic-combo-box-fab': {
       right: '15em',
       top: '3.3em',
     },
-    '& .lunatic-checkbox-group-option': {
+    '& .lunatic-component .lunatic-checkbox-group-option, .lunatic-checkbox-group-option': {
       fontSize: '16px',
     },
-    '& .lunatic-radio-group-option': {
+    '& .lunatic-component .lunatic-radio-group-option, .lunatic-radio-group-option': {
       fontSize: '16px',
     },
-    // '& .lunatic-suggester-option': {
-    //   textOverflow: 'ellipsis',
-    //   whiteSpace: 'nowrap',
-    //   overflow: 'hidden',
-    //   marginBottom: '0.1em',
-    //   lineHeight: '2rem',
-    //   display: 'block',
-    //   '&. selected': {
-    //     color: 'var(--color-primary-dark)',
-    //     backgroundColor: 'var(--color-dropdown-selected)',
-    //   },
-    //   '& :hover': {
-    //     backgroundColor: 'var(--color-primary-main)',
-    //     color: 'white',
-    //   },
-    // },
 
-    // default.scss
-
-    '& .lunatic-suggester-message-error': {
+    '& .lunatic-component .lunatic-suggester-message-error, .lunatic-suggester-message-error': {
       border: 'solid 1px darkred',
       color: 'darkred',
       backgroundColor: 'tomato',
@@ -618,7 +627,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       margin: '4px 4px',
     },
 
-    '& .lunatic-suggester-default-style': {
+    '& .lunatic-component .lunatic-suggester-default-style, .lunatic-suggester-default-style': {
       '&.lunatic-suggester-container': {
         marginBottom: '10px',
 
@@ -720,7 +729,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
 
     // suggester.scss
 
-    '& .lunatic-suggester-container': {
+    '& .lunatic-component .lunatic-suggester-container, .lunatic-suggester-container': {
       position: 'relative',
       width: '100%',
 
