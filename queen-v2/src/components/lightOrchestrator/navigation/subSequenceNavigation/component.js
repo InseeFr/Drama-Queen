@@ -73,7 +73,7 @@ const SubsequenceNavigation = ({ sequence, close, setPage }) => {
                   onClick={changePage(c)}
                   onFocus={setFocus(index + offset)}
                 >
-                  {`${c.label}`}
+                  {c.label}
                 </ButtonItemMenu>
               </li>
             );
