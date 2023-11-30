@@ -37,7 +37,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       display: 'block',
     },
 
-    '& .subsequence-lunatic': {
+    '& .sequence-lunatic, .subsequence-lunatic': {
       backgroundColor: 'transparent',
       fontSize: '1.2em',
       color: 'black',
@@ -45,6 +45,10 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       margin: '1em 0em 1em 0em',
       fontWeight: 'bold',
       padding: '0.5em',
+    },
+
+    '& .subsequence-lunatic': {
+      fontSize: '1.1em',
     },
     /* Firefox */
     '& input[type=text]': {
