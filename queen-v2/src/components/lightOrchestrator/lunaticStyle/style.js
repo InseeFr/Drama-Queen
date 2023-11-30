@@ -70,6 +70,12 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       border: '1px solid black',
       backgroundColor: 'white',
     },
+    // unit for lunatic-input-number
+    '& .lunatic-input-number > span': {
+      position: 'relative',
+      left: '0.5em',
+      fontWeight: 'bold',
+    },
 
     // to replace checkbox by svg
     '& .list-icon': { position: 'absolute', marginTop: '-0.2rem' },
@@ -95,11 +101,6 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
       },
     },
 
-    '& .unit': {
-      position: 'relative',
-      left: '0.5em',
-      fontWeight: 'bold',
-    },
     '& .declaration-lunatic': {
       margin: '0.5em',
       '&.declaration-help': {
@@ -218,6 +219,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
         backgroundColor: `${backgroundColorCheckbox}`,
         marginBottom: '12px',
         width: '70%',
+        fontWeight: 'normal',
         padding: '0.5em',
 
         '& *': {
@@ -315,7 +317,7 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     },
 
     // .lunatic-component lunatic label
-    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number, .lunatic-dropdown, .lunatic-combo-box-container':
+    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number, .lunatic-dropdown, .lunatic-combo-box-container, .field-container > .field .lunatic-input':
       {
         '& > .lunatic-label, label': {
           backgroundColor: 'transparent',
