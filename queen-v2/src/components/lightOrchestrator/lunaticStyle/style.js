@@ -286,17 +286,18 @@ export const useCustomLunaticStyles = makeStyles(theme => ({
     },
 
     // lunatic label
-    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number': {
-      '& .lunatic-label': {
-        backgroundColor: 'transparent',
-        fontSize: '1em',
-        color: 'black',
-        display: 'block',
-        marginBottom: '1em',
-        fontWeight: 'bold',
-        padding: '0.5em',
+    '& .lunatic-input , .lunatic-textarea, .lunatic-input-number, .lunatic-dropdown, .lunatic-combo-box-container, .field-container > .field':
+      {
+        '& > .lunatic-label': {
+          backgroundColor: 'transparent',
+          fontSize: '1em',
+          color: 'black',
+          display: 'block',
+          marginBottom: '1em',
+          fontWeight: 'bold',
+          padding: '0.5em',
+        },
       },
-    },
 
     // Dropdown lunatic
     '& .lunatic-dropdown': {
