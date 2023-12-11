@@ -1,5 +1,5 @@
 import { useLunatic } from '@inseefr/lunatic';
-import {memo, useEffect, useMemo, useRef, useState} from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import ButtonContinue from './buttons/continue/index';
 import D from 'i18n';
 import { isSequenceOrSubsequenceComponent } from 'utils/components/deduceState';
@@ -18,7 +18,7 @@ function noDataChange() {
 
 const preferences = ['COLLECTED'];
 const features = ['VTL', 'MD'];
-const custom = { RouterLink: Link }
+const custom = { RouterLink: Link };
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' };
 
