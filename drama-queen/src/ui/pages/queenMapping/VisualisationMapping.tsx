@@ -10,7 +10,6 @@ export function VisualisationMapping() {
 
   useEffect(() => {
     isQueenV2Survey(questionnaireUrl).then((r) => {
-      console.log("response", r);
       setIsQueenV2(r);
       setIsSurveyFetched(true);
     }).catch((e) => {

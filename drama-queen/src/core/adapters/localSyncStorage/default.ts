@@ -4,8 +4,6 @@ import type {
 } from "core/ports/LocalSyncStorage";
 import { localStorageObjectSchema } from "./parser/localSyncObjectSchema";
 
-//const LOCALSTORAGE_KEY = "QUEEN_SYNC_RESULT";
-
 export function createLocalSyncStorage(params: {
   localStorageKey: string;
 }): LocalSyncStorage {
@@ -26,7 +24,7 @@ export function createLocalSyncStorage(params: {
       if (serializedData === null) {
         return null;
       }
-      return localStorageObjectSchema.parse(serializedData);
+      return localStorageObjectSchema.parse(JSON.parse(serializedData));
     } catch (error) {
       console.error("Error retrieving data from localStorage:", error);
       return null;
@@ -38,40 +36,41 @@ export function createLocalSyncStorage(params: {
     getObject: getDataFromLocalStorage,
     addIdToSurveyUnitsSuccess: (id) => {
       const existingData = getDataFromLocalStorage();
-
-      if (existingData) {
-        existingData.surveyUnitsSuccess.push(id);
-        saveDataToLocalStorage(existingData);
+      if (existingData === null) {
+        return saveDataToLocalStorage({
+          error: false,
+          surveyUnitsInTempZone: [],
+          surveyUnitsSuccess: [id],
+        });
       }
-      saveDataToLocalStorage({
-        error: false,
-        surveyUnitsInTempZone: [],
-        surveyUnitsSuccess: [id],
-      });
+      existingData.surveyUnitsSuccess.push(id);
+      saveDataToLocalStorage(existingData);
     },
     addIdToSurveyUnitsInTempZone: (id) => {
       const existingData = getDataFromLocalStorage();
 
-      if (existingData) {
-        existingData.surveyUnitsInTempZone.push(id);
-        saveDataToLocalStorage(existingData);
+      if (existingData === null) {
+        return saveDataToLocalStorage({
+          error: false,
+          surveyUnitsInTempZone: [id],
+          surveyUnitsSuccess: [],
+        });
       }
-      saveDataToLocalStorage({
-        error: false,
-        surveyUnitsInTempZone: [id],
-        surveyUnitsSuccess: [],
-      });
+
+      existingData.surveyUnitsInTempZone.push(id);
+      saveDataToLocalStorage(existingData);
     },
     addError: (error) => {
       const existingData = getDataFromLocalStorage();
-      if (existingData) {
-        saveDataToLocalStorage({ ...existingData, error: error });
+      
+      if (existingData === null) {
+        return saveDataToLocalStorage({
+          error: error,
+          surveyUnitsInTempZone: [],
+          surveyUnitsSuccess: [],
+        });
       }
-      saveDataToLocalStorage({
-        error: error,
-        surveyUnitsInTempZone: [],
-        surveyUnitsSuccess: [],
-      });
+      saveDataToLocalStorage({ ...existingData, error: error });
     },
   } satisfies LocalSyncStorage;
 }

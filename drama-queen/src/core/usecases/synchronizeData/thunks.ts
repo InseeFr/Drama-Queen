@@ -6,7 +6,8 @@ export const thunks = {
   download:
     () =>
     async (...args) => {
-      const [dispatch, getState, { queenApi, dataStore }] = args;
+      const [dispatch, getState, { queenApi, dataStore, localSyncStorage }] =
+        args;
 
       {
         const state = getState()[name];
@@ -38,8 +39,6 @@ export const thunks = {
        * SurveyUnit
        */
 
-      const surveyUnitSuccess: string[] = [];
-
       const prSurveyUnit = campaignsIds.map((campaignId) =>
         queenApi
           .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
@@ -55,7 +54,7 @@ export const thunks = {
                   .getSurveyUnit(id)
                   .then((surveyUnit) => dataStore.updateSurveyUnit(surveyUnit))
                   .then(() => {
-                    surveyUnitSuccess.push(id);
+                    localSyncStorage.addIdToSurveyUnitsSuccess(id);
                     dispatch(actions.downloadSurveyUnitCompleted());
                   })
               )
@@ -65,7 +64,6 @@ export const thunks = {
 
       await Promise.all(prSurveyUnit);
 
-      //TODO -> Save surveyUnitSuccess
       /*
        * Survey
        */
@@ -79,7 +77,6 @@ export const thunks = {
               return questionnaire;
             })
             .catch(() => {
-              //TODO Handle error
               console.error(
                 ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`
               );
@@ -111,7 +108,6 @@ export const thunks = {
           queenApi
             .getNomenclature(nomenclatureId)
             .catch(() => {
-              //TODO Handle Errors
               console.error(
                 `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
               );
@@ -125,7 +121,8 @@ export const thunks = {
   upload:
     () =>
     async (...args) => {
-      const [dispatch, getState, { dataStore, queenApi }] = args;
+      const [dispatch, getState, { dataStore, queenApi, localSyncStorage }] =
+        args;
 
       {
         const state = getState()[name];
@@ -137,10 +134,16 @@ export const thunks = {
 
       dispatch(actions.runningUpload());
 
+      //  If localStorageData exists, we refresh it; otherwise, we initialize it.
+      localSyncStorage.saveObject({
+        error: false,
+        surveyUnitsInTempZone: [],
+        surveyUnitsSuccess: [],
+      });
+
       try {
         const prSurveyUnits = dataStore.getAllSurveyUnits();
         const surveyUnits = await prSurveyUnits;
-        const surveyUnitsInTemp: string[] = [];
 
         if (surveyUnits) {
           dispatch(actions.setUploadTotal({ total: surveyUnits.length ?? 0 }));
@@ -155,31 +158,36 @@ export const thunks = {
                 ) {
                   return queenApi
                     .postSurveyUnitInTemp(surveyUnit)
-                    .then(() => surveyUnitsInTemp.push(surveyUnit.id));
-                } else {
-                  throw error;
+                    .then(() =>
+                      localSyncStorage.addIdToSurveyUnitsInTempZone(
+                        surveyUnit.id
+                      )
+                    )
+                    .catch((postError: Error) => {
+                      console.error(
+                        "Error: Unable to post surveyUnit in tempZone",
+                        postError
+                      );
+                      throw postError;
+                    });
                 }
+                throw error;
               })
-              .then((result) => {
-                return dataStore.deleteSurveyUnit(surveyUnit.id);
-              })
+              .then(() => dataStore.deleteSurveyUnit(surveyUnit.id))
               .then(() => {
                 dispatch(actions.uploadSurveyUnitCompleted());
               })
               .catch((error) => {
-                // TODO: Handle the error as needed -> Save LocalStorage
-                console.error(error);
-                dispatch(actions.uploadError());
+                console.error("Error: Unable to upload data", error);
+                throw error;
               })
           );
           await Promise.all(surveyUnitPromises);
         }
-
         dispatch(actions.uploadCompleted());
         dispatch(thunks.download());
       } catch (error) {
-        // TODO : Handle errors from prSurveyUnits
-        console.error(error);
+        localSyncStorage.addError(true);
         dispatch(actions.uploadError());
       }
     },

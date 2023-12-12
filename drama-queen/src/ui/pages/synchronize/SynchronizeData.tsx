@@ -5,7 +5,7 @@ import { useTranslate } from "hooks/useTranslate";
 import { LoadingDisplay } from "./LoadingDisplay";
 
 export function SynchronizeData() {
-  const { __ } = useTranslate();
+  const { t } = useTranslate();
 
   const {
     hideProgress,
@@ -39,10 +39,6 @@ export function SynchronizeData() {
     []
   );
 
-  useEffect(() => {
-    console.log("surveyUnitProgress", surveyUnitProgress)
-  }, [surveyUnitProgress]);
-
   if (hideProgress) {
     return null;
   }
@@ -54,23 +50,23 @@ export function SynchronizeData() {
           progress: uploadProgress,
           label: undefined
         }
-      ]} syncStepTitle={__("sync.upload")} />}
+      ]} syncStepTitle={t("sync.upload")} />}
       {isDownloading && <LoadingDisplay
         progressBars={[
           {
             progress: surveyProgress,
-            label: __('sync.download.questionnaires')
+            label: t('sync.download.questionnaires')
           },
           {
             progress: nomenclatureProgress,
-            label: __('sync.download.nomenclatures')
+            label: t('sync.download.nomenclatures')
           },
           {
             progress: surveyUnitProgress,
-            label: __('sync.download.surveyUnits')
+            label: t('sync.download.surveyUnits')
           }
         ]}
-        syncStepTitle={__('sync.download')}
+        syncStepTitle={t('sync.download')}
       />}
     </>)
 }
