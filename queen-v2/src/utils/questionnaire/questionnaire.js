@@ -19,6 +19,7 @@ const checkVersion = (actualVersion, expectedVersion) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const checkVersions = ({ enoCoreVersion, lunaticModelVersion }) => {
   const { valid: enoValid } = checkVersion(enoCoreVersion, MIN_ENO_CORE_VERSION);
   const { valid: lunaticValid } = checkVersion(lunaticModelVersion, MIN_LUNATIC_MODEL_VERSION);
