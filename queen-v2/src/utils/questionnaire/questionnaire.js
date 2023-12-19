@@ -43,15 +43,14 @@ export const checkQuestionnaire = ({
   pagination,
   missingResponse,
 }) => {
-  const { valid, error } = checkVersions({ enoCoreVersion, lunaticModelVersion });
   const paginationValid = pagination === 'question';
   const missingResponseValid = missingResponse || true; //remove "|| true" when Eno is ready (2.2.10)
   const paginationError = paginationValid ? '' : `Pagination must be "question".`;
   const missingResponseError = missingResponseValid ? '' : `Missing response must be true`;
-  if (!(valid && paginationValid && missingResponseValid)) {
+  if (paginationValid && missingResponseValid) {
     return {
       valid: false,
-      error: `Questionnaire is invalid : ${error || ''} ${paginationError} ${missingResponseError}`,
+      error: `Questionnaire is invalid : ${paginationError} ${missingResponseError}`,
     };
   }
   return { valid: true };
