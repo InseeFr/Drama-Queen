@@ -18,7 +18,8 @@ const Header = ({
   quit,
   definitiveQuit,
   setPage,
-  currentPage,
+  pageTag,
+  pager,
   overview,
   readonly,
 }) => {
@@ -29,7 +30,7 @@ const Header = ({
     return {
       ...SIMPLE_CLICK_EVENT,
       idParadataObject: `${type}-button`,
-      page: currentPage,
+      page: pageTag,
     };
   };
   const { sequence, subSequence } = hierarchy;
@@ -46,9 +47,9 @@ const Header = ({
         overview={overview}
         readonly={readonly}
         setPage={setPage}
+        pageTag={pageTag}
         quit={quit}
         definitiveQuit={definitiveQuit}
-        currentPage={currentPage}
       />
       <div className="header-item">
         <ButtonBase
@@ -66,7 +67,7 @@ const Header = ({
           <BreadcrumbQueen
             sequence={sequence}
             subsequence={subSequence}
-            currentPage={currentPage}
+            pager={pager}
             setPage={setPage}
           />
         )}

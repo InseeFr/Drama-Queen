@@ -31,7 +31,7 @@ const Navigation = ({
   overview,
   quit,
   definitiveQuit,
-  currentPage,
+  pageTag,
 }) => {
   const [open, setOpen] = useState(false);
   const [surveyOpen, setSurveyOpen] = useState(false);
@@ -207,7 +207,7 @@ const Navigation = ({
                 close={openCloseSubMenu}
                 quit={quit}
                 definitiveQuit={definitiveQuit}
-                currentPage={currentPage}
+                pageTag={pageTag}
               />
             )}
           </div>

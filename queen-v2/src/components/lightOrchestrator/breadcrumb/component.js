@@ -1,13 +1,11 @@
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getIterations } from 'utils/questionnaire';
 import { useStyles } from './component.style';
 
-const getNewPage = page => iterations => {
+const getNewPage = page => iteration => {
   if (page.includes('.')) {
-    const [root, ...rest] = page.split('.');
-    return `${root}.${rest.map((p, i) => `${p}#${iterations[i]}`).join('.')}`;
+    return `${page}#${iteration + 1}`;
   }
   return page;
 };
@@ -17,16 +15,16 @@ const hasToBlock = (prevProps, nextProps) => {
   const prevSeqId = prevProps?.sequence?.id;
   const nextSubseqId = nextProps?.subsequence?.id;
   const nextSeqId = nextProps?.sequence?.id;
-  const prevPage = prevProps?.currentPage;
-  const nextPage = nextProps?.currentPage;
+  const prevPage = `${prevProps?.pager?.page}.${prevProps?.pager?.subPage}#${prevProps?.pager?.iteration}`;
+  const nextPage = `${nextProps?.pager?.page}.${nextProps?.pager?.subPage}#${nextProps?.pager?.iteration}`;
   return prevSeqId === nextSeqId && prevSubseqId === nextSubseqId && prevPage === nextPage;
 };
 
-const BreadcrumbQueen = ({ sequence, subsequence, currentPage, setPage }) => {
+const BreadcrumbQueen = ({ sequence, subsequence, pager, setPage }) => {
   const classes = useStyles({ sequence, subsequence });
   const changePage = page => {
-    const iterations = getIterations(currentPage);
-    const newPage = getNewPage(page)(iterations);
+    const { iteration } = pager;
+    const newPage = getNewPage(page)(iteration);
     setPage(newPage);
   };
 
@@ -41,7 +39,7 @@ const BreadcrumbQueen = ({ sequence, subsequence, currentPage, setPage }) => {
         >
           {sequence.label}
         </button>
-        {subsequence && subsequence.label && (
+        {subsequence?.label && (
           <button
             className={`${classes.breadcrumbButton} ${classes.subsequenceButton}`}
             type="button"
@@ -65,7 +63,16 @@ BreadcrumbQueen.propTypes = {
     label: PropTypes.string,
     page: PropTypes.string,
   }),
-  currentPage: PropTypes.string.isRequired,
+  pager: PropTypes.shape({
+    page: PropTypes.string,
+    maxPage: PropTypes.string,
+    subPage: PropTypes.number,
+    nbSubPages: PropTypes.number,
+    iteration: PropTypes.number,
+    nbIterations: PropTypes.number,
+    lastReachedPage: PropTypes.string,
+  }),
+  setPage: PropTypes.func,
 };
 
 BreadcrumbQueen.defaultProps = {

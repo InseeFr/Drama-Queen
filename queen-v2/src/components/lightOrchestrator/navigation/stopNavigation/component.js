@@ -14,7 +14,7 @@ import KeyboardEventHandler from 'react-keyboard-event-handler';
 import { useConstCallback } from 'utils/hook/useConstCallback';
 import { useStyles } from '../component.style';
 
-const StopNavigation = React.forwardRef(({ close, quit, definitiveQuit, currentPage }, ref) => {
+const StopNavigation = React.forwardRef(({ close, quit, definitiveQuit, pageTag }, ref) => {
   const offset = 1;
   const labels = [
     {
@@ -101,7 +101,7 @@ const StopNavigation = React.forwardRef(({ close, quit, definitiveQuit, currentP
         definitive={definitive}
         quit={quit}
         definitiveQuit={definitiveQuit}
-        currentPage={currentPage}
+        pageTag={pageTag}
       />
     </>
   );

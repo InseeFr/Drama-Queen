@@ -2,14 +2,14 @@ import { IconButton, makeStyles } from '@material-ui/core';
 import React, { useRef } from 'react';
 import { SIMPLE_CLICK_EVENT, paradataHandler } from 'utils/events';
 
-import { Button } from 'components/designSystem/Button';
-import { Close } from '@material-ui/icons';
-import D from 'i18n';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Close } from '@material-ui/icons';
+import { Button } from 'components/designSystem/Button';
+import D from 'i18n';
 
 const useStyles = makeStyles(theme => ({
   closeButton: {
@@ -21,12 +21,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const StopModal = React.forwardRef(
-  ({ open, setOpen, definitive, quit, definitiveQuit, currentPage }, ref) => {
+  ({ open, setOpen, definitive, quit, definitiveQuit, pageTag }, ref) => {
     const utilInfo = type => {
       return {
         ...SIMPLE_CLICK_EVENT,
         idParadataObject: `${type}-button`,
-        page: currentPage,
+        page: pageTag,
       };
     };
 
