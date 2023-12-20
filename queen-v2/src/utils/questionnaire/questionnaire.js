@@ -78,3 +78,24 @@ export const addGlobalVariablesToData = (lunaticData = {}, globalVariables = {})
 
   return { ...lunaticData, EXTERNAL: newEXTERNAL };
 };
+
+export const countMissingResponseInComponent = component => {
+  let factor = 1;
+  // When we are Loop (not paginated), we have to compute the total of component repetition
+  if ('iterations' in component && !component.paginatedLoop) factor = component.iterations;
+  if ('components' in component && Array.isArray(component.components)) {
+    return (
+      factor *
+      component.components.reduce((total, subComponent) => {
+        return total + countMissingResponseInComponent(subComponent);
+      }, 0)
+    );
+  }
+  return component?.missingResponse?.name ? 1 : 0;
+};
+
+export const countMissingResponseInPage = (components = []) => {
+  return components.reduce((total, component) => {
+    return total + countMissingResponseInComponent(component);
+  }, 0);
+};

@@ -1,16 +1,17 @@
 import { useLunatic } from '@inseefr/lunatic';
-import { memo, useEffect, useMemo, useRef } from 'react';
-import ButtonContinue from './buttons/continue/index';
 import D from 'i18n';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { isSequenceOrSubsequenceComponent } from 'utils/components/deduceState';
 import { QUEEN_URL } from 'utils/constants';
 import { useConstCallback } from 'utils/hook/useConstCallback';
+import { countMissingResponseInPage } from 'utils/questionnaire';
 import { LoopPanel } from './LoopPanel';
+import ButtonContinue from './buttons/continue/index';
 import { ComponentDisplayer } from './componentDisplayer';
 import Header from './header';
 import { useStyles } from './lightOrchestrator.style';
 import NavBar from './navBar';
-import { Link } from 'react-router-dom';
 
 function noDataChange() {
   /**/
@@ -64,8 +65,10 @@ function LightOrchestrator({
 
   const missingStrategy = useConstCallback(() => {
     if (lunaticStateRef === undefined) return;
-    const { goNextPage } = lunaticStateRef.current;
-    goNextPage();
+    const { goNextPage, getComponents } = lunaticStateRef.current;
+    const currentComponents = getComponents();
+    // Only goNext if there is only one missing response in current page
+    if (countMissingResponseInPage(currentComponents) === 1) goNextPage();
   });
 
   lunaticStateRef.current = useLunatic(source, initialData, {
