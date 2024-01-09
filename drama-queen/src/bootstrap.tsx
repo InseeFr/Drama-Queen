@@ -5,7 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 import { createCoreProvider } from "core";
 import { RouterProvider } from "react-router-dom";
 
-const { CoreProvider } = createCoreProvider({
+const { CoreProvider, prCore } = createCoreProvider({
   "apiUrl": import.meta.env.VITE_QUEEN_API_URL,
   "publicUrl": import.meta.env.BASE_URL,
   "oidcParams": {
@@ -39,4 +39,4 @@ const mount = ({
 
 
 
-export { mount };
+export { mount, prCore };

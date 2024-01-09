@@ -12170,10 +12170,10 @@ oidc-client@^1.11.5:
     crypto-js "^4.0.0"
     serialize-javascript "^4.0.0"
 
-oidc-spa@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/oidc-spa/-/oidc-spa-2.0.3.tgz#387a6c92b2fbd097d75ca9f3fa4b10f7f5213cdc"
-  integrity sha512-pZJgjpdVr2CRGKhqQGj6z7qu1INo9/xP6HkkqIata3zXEmFrIK/zv6SCpDdFMfeIVfqQWV946FVbccUqBrUlcA==
+oidc-spa@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/oidc-spa/-/oidc-spa-3.0.3.tgz#01e524064e91615e3f2c6d6c906234fc13351787"
+  integrity sha512-yoAQHaTPw0Eb3AYLQ1ODuCfO0iboUv3agnz45QSm0LWG9o6+9mtN6g71XljrSIPR/G5g4rLria4Ke+Rq/LoJZg==
   dependencies:
     jwt-decode "^3.1.2"
     oidc-client-ts "^2.3.0"
@@ -14223,10 +14223,10 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux-clean-architecture@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/redux-clean-architecture/-/redux-clean-architecture-4.1.1.tgz#1914cee90525765648e9a52ac64e25e7c8dc6f1a"
-  integrity sha512-ZdaIM4mHoWdjkC6GNf1P3Hb/yY9n4oplxhnOZ7o2WvB2OoaV5GmBjhZsIj7llAnEh0Y92gOGPxrO9kgUO9Evuw==
+redux-clean-architecture@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/redux-clean-architecture/-/redux-clean-architecture-4.3.1.tgz#b3c0f661d3813a39f66bd0713d711974f83e1a33"
+  integrity sha512-WXbvO47tdoh4heJ26ZbfdLOKsXAz6SPCCig99ufTa5zEcm0R44+Xn/h7GYo3wBFTacHlcuv9KEbSap7TdDW1nA==
   dependencies:
     "@reduxjs/toolkit" "^1.9.6"
     minimal-polyfills "^2.2.3"

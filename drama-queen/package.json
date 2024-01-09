@@ -23,11 +23,11 @@
     "jwt-decode": "^3.1.2",
     "keycloak-js": "^21.1.2",
     "memoizee": "^0.4.15",
-    "oidc-spa": "^2.0.3",
+    "oidc-spa": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
-    "redux-clean-architecture": "^4.1.1",
+    "redux-clean-architecture": "^4.3.1",
     "tsafe": "^1.6.4",
     "tss-react": "^4.9.0",
     "zod": "^3.21.4"
