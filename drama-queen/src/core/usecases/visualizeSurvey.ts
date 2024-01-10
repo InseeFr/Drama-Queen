@@ -17,24 +17,27 @@ export const thunks = {
     (params: { questionnaireUrl: string }) =>
     async (...args): Promise<boolean> => {
       const { questionnaireUrl } = params;
-      const { lunaticModelVersion } = await axios
-        .create({
-          headers: {
-            Accept: "application/json;charset=utf-8",
-          },
-        })
-        .get<Questionnaire>(questionnaireUrl)
-        .then(({ data }) => data);
+      try {
+        const { lunaticModelVersion } = await axios
+          .get<Questionnaire>(questionnaireUrl)
+          .then(({ data }) => data);
 
-      if (lunaticModelVersion === undefined) {
-        console.info(
-          "The survey has no lunaticModelVersion field, so by default we redirect to queen v2"
+        if (lunaticModelVersion === undefined) {
+          console.info(
+            "The survey has no lunaticModelVersion field, so by default we redirect to queen v2"
+          );
+          return true;
+        }
+
+        return (
+          semverCompare(lunaticModelVersion, lunaticModelVersionBreaking) === 1
+        );
+      } catch (error) {
+        console.error(
+          "An error occured, we could not retrieve the survey, we fallback to queen v2",
+          error
         );
         return true;
       }
-
-      return (
-        semverCompare(lunaticModelVersion, lunaticModelVersionBreaking) === 1
-      );
     },
 } satisfies Thunks;
