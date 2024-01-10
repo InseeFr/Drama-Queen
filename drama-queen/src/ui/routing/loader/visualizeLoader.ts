@@ -22,14 +22,15 @@ export async function visualizeLoader({ request }: LoaderFunctionArgs) {
 
   const { visualizeSurvey } = (await prCore).functions;
   const isQueenV2 = await visualizeSurvey.isQueenV2Survey({
-    questionnaireUrl: questionnaire,
+    questionnaireUrl: decodeURIComponent(questionnaire),
   });
-  return { ...result.data, isQueenV2 };
+  return { isQueenV2 };
 }
 
 const searchParamsSchema = z.object({
   questionnaire: z.string().optional(),
-  data: z.string().optional(),
-  nomenclature: z.record(z.string()).optional(),
-  readonly: z.boolean().optional(),
+  // We just need questionnaire, not needed to parse other fields
+  // data: z.string().optional(),
+  // nomenclature: z.record(z.string()).optional(),
+  // readonly: z.boolean().optional(),
 });
