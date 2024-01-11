@@ -1,14 +1,18 @@
-import { tss } from 'tss-react/mui';
+import { tss } from 'tss-react/mui'
 
-type BreadCrumbProps = {};
+type BreadCrumbProps = {}
 
 export function BreadCrumb(props: BreadCrumbProps) {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
 
   return (
     <div className={classes.root}>
       <div aria-label="breadcrumb">
-        <button type="button" className={classes.breadcrumbButton} title={`Aller vers Séquence`}>
+        <button
+          type="button"
+          className={classes.breadcrumbButton}
+          title={`Aller vers Séquence`}
+        >
           Séquence
         </button>
         <button
@@ -20,7 +24,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 const useStyles = tss.create(() => ({
@@ -56,4 +60,4 @@ const useStyles = tss.create(() => ({
     paddingBottom: '3px',
     borderBottom: `2px solid #085394`,
   },
-}));
+}))

@@ -1,11 +1,11 @@
-import { tss } from 'tss-react/mui';
+import { tss } from 'tss-react/mui'
 
-type ComponentDisplayerProps = {};
+type ComponentDisplayerProps = {}
 
 export function ComponentDisplayer(props: ComponentDisplayerProps) {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
 
-  return <div></div>;
+  return <div></div>
 }
 
-const useStyles = tss.create(() => ({}));
+const useStyles = tss.create(() => ({}))

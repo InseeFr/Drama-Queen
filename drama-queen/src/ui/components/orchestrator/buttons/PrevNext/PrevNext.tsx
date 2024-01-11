@@ -1,9 +1,9 @@
-import { tss } from 'tss-react/mui';
-import IconButton from '@mui/material/IconButton';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { tss } from 'tss-react/mui'
+import IconButton from '@mui/material/IconButton'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
 export function PrevNext() {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
 
   return (
     <div id="buttons" className={classes.root}>
@@ -28,7 +28,7 @@ export function PrevNext() {
         <span className={classes.buttonSpan}>SUIV.</span>
       </div>
     </div>
-  );
+  )
 }
 
 const useStyles = tss.create(() => ({
@@ -55,4 +55,4 @@ const useStyles = tss.create(() => ({
     },
     fontSize: 13,
   },
-}));
+}))

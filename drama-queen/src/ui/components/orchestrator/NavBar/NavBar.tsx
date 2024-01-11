@@ -1,10 +1,10 @@
-import { tss } from 'tss-react/mui';
-import { PrevNext } from '../buttons/PrevNext/PrevNext';
+import { tss } from 'tss-react/mui'
+import { PrevNext } from '../buttons/PrevNext/PrevNext'
 
-type NavBarProps = {};
+type NavBarProps = {}
 
 export function NavBar(props: NavBarProps) {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
 
   return (
     <div className={classes.root}>
@@ -16,7 +16,7 @@ export function NavBar(props: NavBarProps) {
       </div>
       <PrevNext />
     </div>
-  );
+  )
 }
 
 const useStyles = tss.create(() => ({
@@ -41,4 +41,4 @@ const useStyles = tss.create(() => ({
     backgroundColor: 'white',
   },
   labelPage: { fontSize: '90%', marginBottom: '4px' },
-}));
+}))
