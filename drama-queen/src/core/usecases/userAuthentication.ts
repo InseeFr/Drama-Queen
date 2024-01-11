@@ -6,19 +6,16 @@ export const name = "userAuthentication";
 export const reducer = null;
 
 export const thunks = {
-  getIsUserLoggedIn:
-    () =>
-    (...args): boolean => {
-      const [, , { oidc }] = args;
-      return oidc.isUserLoggedIn;
-    },
-  login:
-    () =>
-    (...args): Promise<never> => {
+  loginIfNotLoggedIn:
+    (params: { redirectUri: string }) =>
+    async (...args) => {
+      const { redirectUri } = params;
       const [, , { oidc }] = args;
 
-      assert(!oidc.isUserLoggedIn);
+      if (oidc.isUserLoggedIn) {
+        return;
+      }
 
-      return oidc.login({ doesCurrentHrefRequiresAuth: true });
+      await oidc.login({ redirectUri });
     },
 } satisfies Thunks;

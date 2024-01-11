@@ -10,13 +10,14 @@ export declare namespace Oidc {
 
   export type NotLoggedIn = Common & {
     isUserLoggedIn: false;
-    login: (params: { doesCurrentHrefRequiresAuth: boolean }) => Promise<never>;
+    login: (params: { redirectUri: string | undefined }) => Promise<never>;
   };
 
   export type LoggedIn = Common & {
     isUserLoggedIn: true;
     renewTokens(): Promise<void>;
     getTokens: () => Tokens;
+    logout: ()=> Promise<never>;
   };
 
   export type Tokens = {

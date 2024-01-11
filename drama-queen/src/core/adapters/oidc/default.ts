@@ -8,9 +8,32 @@ export async function createOidc(params: {
 }): Promise<Oidc> {
   const { issuerUri, clientId, publicUrl } = params;
 
-  return createOidcSpa({
+  const oidc = await createOidcSpa({
     issuerUri,
     clientId,
     publicUrl,
   });
+
+  if (oidc.isUserLoggedIn) {
+    return {
+      ...oidc,
+      logout: ()=> oidc.logout({ redirectTo: "home" })
+    };
+  }
+
+  return {
+    ...oidc,
+    login: ({ redirectUri }) => {
+      if (redirectUri === undefined) {
+        return oidc.login({
+          doesCurrentHrefRequiresAuth: false,
+        });
+      } else {
+        history.pushState({}, "", redirectUri);
+        return oidc.login({
+          doesCurrentHrefRequiresAuth: true,
+        });
+      }
+    },
+  };
 }
