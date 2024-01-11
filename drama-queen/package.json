@@ -13,9 +13,11 @@
     "format:check": "npm run _format -- --list-different"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
+    "@inseefr/lunatic": "^2.7.4",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.6",
+    "@mui/icons-material": "^5.15.3",
+    "@mui/material": "^5.15.3",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.33.0",
     "@types/memoizee": "^0.4.8",
