@@ -1,35 +1,18 @@
-import { tss } from "tss-react/mui";
-import { useSearchParams } from "react-router-dom";
-import { z } from "zod";
-import { makeSearchParamsObjSchema } from "ui/tools/makeSearchParamsObjectSchema";
-import { VisualizeForm } from "./VisualizeForm";
-
-const searchParamsSchema = z.object({
-  questionnaire: z.string().optional(),
-  data: z.string().optional(),
-  nomenclature: z.record(z.string()).optional(),
-  readonly: z.boolean().optional()
-})
-
+import { useLoaderData } from 'react-router-dom'
+import { VisualizeForm } from './VisualizeForm'
+import { visualizeLoader } from 'ui/routing/loader/visualizeLoader'
 
 export function Visualize() {
+  //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
+  const params = useLoaderData() as Awaited<ReturnType<typeof visualizeLoader>>
 
-  //const { classes } = useStyles();
+  if (params !== null) {
+    return params.isQueenV2 ? (
+      <>Queen v2 orchestrator</>
+    ) : (
+      <>Queen v1 orchestrator</>
+    )
+  }
 
-  const [searchParams] = useSearchParams()
-
-  const params = makeSearchParamsObjSchema(searchParamsSchema).safeParse(searchParams)
-
-  console.log(params.success ? params.data : params.error);
-
-  return (
-    <VisualizeForm />
-  )
+  return <VisualizeForm />
 }
-
-
-const useStyles = tss.create(
-  () => ({
-
-  })
-)

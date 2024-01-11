@@ -1,13 +1,13 @@
-import axios, { AxiosError } from "axios";
-import memoize from "memoizee";
-import type { QueenApi } from "core/ports/QueenApi";
+import axios, { AxiosError } from 'axios'
+import memoize from 'memoizee'
+import type { QueenApi } from 'core/ports/QueenApi'
 import {
   campaignSchema,
   idAndQuestionnaireIdSchema,
   nomenclatureSchema,
   requiredNomenclaturesSchema,
   surveyUnitSchema,
-} from "./parserSchema";
+} from './parserSchema'
 import {
   Campaign,
   IdAndQuestionnaireId,
@@ -15,16 +15,16 @@ import {
   Questionnaire,
   RequiredNomenclatures,
   SurveyUnit,
-} from "core/model";
+} from 'core/model'
 
 export function createApiClient(params: {
-  apiUrl: string;
-  getAccessToken: () => string | undefined;
+  apiUrl: string
+  getAccessToken: () => string | undefined
 }): QueenApi {
-  const { apiUrl, getAccessToken } = params;
+  const { apiUrl, getAccessToken } = params
 
   const { axiosInstance } = (() => {
-    const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 });
+    const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 })
 
     // Type issue https://github.com/axios/axios/issues/5494
     const onRequest = (config: any) => {
@@ -32,27 +32,27 @@ export function createApiClient(params: {
         ...config,
         headers: {
           ...config.headers,
-          "Content-Type": "application/json;charset=utf-8",
-          Accept: "application/json;charset=utf-8",
+          'Content-Type': 'application/json;charset=utf-8',
+          Accept: 'application/json;charset=utf-8',
           ...(() => {
-            const accessToken = getAccessToken();
+            const accessToken = getAccessToken()
 
             if (!accessToken) {
-              return undefined;
+              return undefined
             }
 
             return {
               Authorization: `Bearer ${accessToken}`,
-            };
+            }
           })(),
         },
-      };
-    };
+      }
+    }
 
-    axiosInstance.interceptors.request.use(onRequest);
+    axiosInstance.interceptors.request.use(onRequest)
 
-    return { axiosInstance };
-  })();
+    return { axiosInstance }
+  })()
 
   return {
     getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: memoize(
@@ -71,7 +71,7 @@ export function createApiClient(params: {
 
     getSurveyUnit: (idSurveyUnit) =>
       axiosInstance
-        .get<Omit<SurveyUnit, "id">>(`/api/survey-unit/${idSurveyUnit}`)
+        .get<Omit<SurveyUnit, 'id'>>(`/api/survey-unit/${idSurveyUnit}`)
         .then(({ data }) =>
           surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
         ),
@@ -127,5 +127,5 @@ export function createApiClient(params: {
       axiosInstance
         .post<typeof paradata>(`/api/paradata`, paradata)
         .then(() => undefined),
-  };
+  }
 }

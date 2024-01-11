@@ -1,24 +1,24 @@
-import { createBrowserRouter, createMemoryRouter } from "react-router-dom";
-import { routes } from "./routes";
+import { createBrowserRouter, createMemoryRouter } from 'react-router-dom'
+import { routes } from './routes'
 
-export type RoutingStrategy = "memory" | "browser";
+export type RoutingStrategy = 'memory' | 'browser'
 
 type CreateRouterProps = {
-  strategy?: RoutingStrategy;
-  initialPathname?: string;
-};
+  strategy?: RoutingStrategy
+  initialPathname?: string
+}
 
 export function createRouter({
-  strategy = "memory",
-  initialPathname = "/",
+  strategy = 'memory',
+  initialPathname = '/',
 }: CreateRouterProps) {
-  if (strategy === "browser") {
-    return createBrowserRouter(routes, { basename: "/queen" });
+  if (strategy === 'browser') {
+    return createBrowserRouter(routes, { basename: '/queen' })
   }
 
-  const initialEntries = [initialPathname || "/"];
+  const initialEntries = [initialPathname || '/']
   return createMemoryRouter(routes, {
-    basename: "/queen",
+    basename: '/queen',
     initialEntries: initialEntries,
-  });
+  })
 }

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const variableSchema = z
   .union([
@@ -7,7 +7,7 @@ const variableSchema = z
     z.union([z.string().nullable(), z.number(), z.boolean()]).array(),
     z.boolean(),
   ])
-  .nullable();
+  .nullable()
 
 const collectedValueSchema = z.object({
   COLLECTED: variableSchema,
@@ -15,7 +15,7 @@ const collectedValueSchema = z.object({
   FORCED: variableSchema,
   INPUTED: variableSchema,
   PREVIOUS: variableSchema,
-});
+})
 
 export const surveyUnitDataSchema = z
   .object({
@@ -23,4 +23,4 @@ export const surveyUnitDataSchema = z
     EXTERNAL: z.record(variableSchema),
     COLLECTED: z.record(collectedValueSchema),
   })
-  .partial();
+  .partial()

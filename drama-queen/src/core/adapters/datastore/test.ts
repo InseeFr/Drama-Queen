@@ -1,50 +1,47 @@
 //import { DataStore } from "core/ports/DataStore";
-import { Evt } from "evt";
-import { Deferred } from "evt/tools/Deferred";
+import { Evt } from 'evt'
+import { Deferred } from 'evt/tools/Deferred'
 
 export type DataStore<T extends { id: string }> = {
-  write: (entries: T[]) => Promise<void>;
-  read: (ids: string[]) => Promise<T[]>;
-  subscribe: (callback: () => void) => void;
-};
+  write: (entries: T[]) => Promise<void>
+  read: (ids: string[]) => Promise<T[]>
+  subscribe: (callback: () => void) => void
+}
 
 export async function createDataStore<T extends { id: string }>(params: {
-  name: string;
+  name: string
 }): Promise<DataStore<T>> {
-  const { name } = params;
+  const { name } = params
   const { db } = await (async () => {
-    const dDb = new Deferred<IDBDatabase>();
+    const dDb = new Deferred<IDBDatabase>()
 
-    const DBOpenRequest = window.indexedDB.open(name);
+    const DBOpenRequest = window.indexedDB.open(name)
     DBOpenRequest.onsuccess = function () {
-      dDb.resolve(DBOpenRequest.result);
-    };
+      dDb.resolve(DBOpenRequest.result)
+    }
 
-    const db = await dDb.pr;
+    const db = await dDb.pr
 
-    return { db };
-  })();
+    return { db }
+  })()
 
-  const eventName = `datastore-${name}`;
-
+  const eventName = `datastore-${name}`
 
   return {
     read: async (ids) => {
-
-      const transaction = db.transaction(name, "readonly");
-      const objectStore = transaction.objectStore(name);
-      const promises = ids.map(id => objectStore.get(id));
-      const results = await Promise.all(promises);
-      return results.filter(result => result !== undefined) as unknown as T[];
-
+      const transaction = db.transaction(name, 'readonly')
+      const objectStore = transaction.objectStore(name)
+      const promises = ids.map((id) => objectStore.get(id))
+      const results = await Promise.all(promises)
+      return results.filter((result) => result !== undefined) as unknown as T[]
     },
-    write: async entries => {
+    write: async (entries) => {
       //TODO GPT help!
 
-      document.dispatchEvent(new Event(eventName));
+      document.dispatchEvent(new Event(eventName))
     },
     subscribe: (callback) => {
-      document.addEventListener(eventName, () => callback());
+      document.addEventListener(eventName, () => callback())
     },
-  };
+  }
 }

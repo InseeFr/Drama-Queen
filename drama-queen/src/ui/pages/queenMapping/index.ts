@@ -1,2 +1,1 @@
-export * from "./SurveyUnitMapping";
-export * from "./VisualisationMapping";
+export * from './SurveyUnitMapping'

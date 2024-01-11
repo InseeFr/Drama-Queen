@@ -1,8 +1,8 @@
 export type Nomenclature = ({
-  id: string;
-  label?: string;
+  id: string
+  label?: string
 } & {
-  [key: string]: string;
-})[];
+  [key: string]: string
+})[]
 
-export type RequiredNomenclatures = string[];
+export type RequiredNomenclatures = string[]
