@@ -1,33 +1,33 @@
-import { Oidc } from "core/ports/Oidc";
-import { id } from "tsafe/id";
+import { Oidc } from 'core/ports/Oidc'
+import { id } from 'tsafe/id'
 
 export function createOidc(params: { isUserLoggedIn: boolean }): Oidc {
   const common: Oidc.Common = {
     params: {
-      issuerUri: "",
-      clientId: "",
+      issuerUri: '',
+      clientId: '',
     },
-  };
+  }
 
   if (!params.isUserLoggedIn) {
     return id<Oidc.NotLoggedIn>({
       ...common,
       isUserLoggedIn: false,
       login: async (params: { doesCurrentHrefRequiresAuth: boolean }) => {
-        return new Promise<never>(() => {});
+        return new Promise<never>(() => {})
       },
-    });
+    })
   }
 
   return id<Oidc.LoggedIn>({
     ...common,
     isUserLoggedIn: true,
     getTokens: () => ({
-      accessToken: "",
-      idToken: "",
-      refreshToken: "",
+      accessToken: '',
+      idToken: '',
+      refreshToken: '',
       refreshTokenExpirationTime: Infinity,
     }),
-    renewTokens: () => Promise.reject("Not implemented"),
-  });
+    renewTokens: () => Promise.reject('Not implemented'),
+  })
 }

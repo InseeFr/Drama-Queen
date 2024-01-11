@@ -1,1 +1,1 @@
-export const READ_ONLY = "readonly";
+export const READ_ONLY = 'readonly'

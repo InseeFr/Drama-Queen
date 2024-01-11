@@ -1,21 +1,21 @@
-import { assert } from "tsafe/assert";
-import type { Thunks } from "core/bootstrap";
+import { assert } from 'tsafe/assert'
+import type { Thunks } from 'core/bootstrap'
 
-export const name = "userAuthentication";
+export const name = 'userAuthentication'
 
-export const reducer = null;
+export const reducer = null
 
 export const thunks = {
   loginIfNotLoggedIn:
     (params: { redirectUri: string }) =>
     async (...args) => {
-      const { redirectUri } = params;
-      const [, , { oidc }] = args;
+      const { redirectUri } = params
+      const [, , { oidc }] = args
 
       if (oidc.isUserLoggedIn) {
-        return;
+        return
       }
 
-      await oidc.login({ redirectUri });
+      await oidc.login({ redirectUri })
     },
-} satisfies Thunks;
+} satisfies Thunks

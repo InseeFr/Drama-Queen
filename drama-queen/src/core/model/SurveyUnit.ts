@@ -1,14 +1,14 @@
-import { SurveyUnitData } from "./SurveyUnitData";
+import { SurveyUnitData } from './SurveyUnitData'
 
 export type SurveyUnit = {
-  id: string;
-  questionnaireId?: string;
-  personalization?: {}[] | {};
-  data: SurveyUnitData;
-  comment?: {} | undefined;
+  id: string
+  questionnaireId?: string
+  personalization?: {}[] | {}
+  data: SurveyUnitData
+  comment?: {} | undefined
   stateData?: {
-    state: "INIT" | "COMPLETED" | "VALIDATED" | "EXTRACTED" | null;
-    date: number;
-    currentPage: string;
-  };
-};
+    state: 'INIT' | 'COMPLETED' | 'VALIDATED' | 'EXTRACTED' | null
+    date: number
+    currentPage: string
+  }
+}

@@ -1,4 +1,4 @@
 export type Campaign = {
-  id: string;
-  questionnaireIds: string[];
-};
+  id: string
+  questionnaireIds: string[]
+}

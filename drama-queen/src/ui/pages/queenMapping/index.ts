@@ -1,1 +1,1 @@
-export * from "./SurveyUnitMapping";
+export * from './SurveyUnitMapping'

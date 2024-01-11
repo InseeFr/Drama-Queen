@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
-import federation from "@originjs/vite-plugin-federation";
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
-import { VitePWA } from "vite-plugin-pwa";
+import { defineConfig } from 'vite'
+import federation from '@originjs/vite-plugin-federation'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       react(),
       federation({
-        name: "drama-queen",
+        name: 'drama-queen',
         // remotes: {
         // //This is the right way of mfe with vite module federation (but legacy queens does not use)
         // queen: {
@@ -22,64 +22,64 @@ export default defineConfig(({ command, mode }) => {
         //   externalType: "promise",
         // },
         // },
-        filename: "remoteEntry.js",
+        filename: 'remoteEntry.js',
         exposes: {
-          "./DramaIndex": "./src/bootstrap.tsx",
+          './DramaIndex': './src/bootstrap.tsx',
         },
-        shared: ["react", "react-dom", "react-router-dom"],
+        shared: ['react', 'react-dom', 'react-router-dom'],
       }),
       tsconfigPaths(),
       VitePWA({
         //Generate the external service worker for pearl
         injectRegister: false,
-        strategies: "injectManifest",
+        strategies: 'injectManifest',
         // injectManifest: {
         //   injectionPoint: undefined,
         // },
         manifest: false,
-        srcDir: "src",
-        filename: "queen-service-worker.js",
+        srcDir: 'src',
+        filename: 'queen-service-worker.js',
       }),
       VitePWA({
-        injectRegister: "auto",
-        strategies: "injectManifest",
-        srcDir: "src",
-        filename: "sw.js",
+        injectRegister: 'auto',
+        strategies: 'injectManifest',
+        srcDir: 'src',
+        filename: 'sw.js',
         includeAssets: [
-          "favicon.ico",
-          "apple-touch-icon.png",
-          "masked-icon.svg",
+          'favicon.ico',
+          'apple-touch-icon.png',
+          'masked-icon.svg',
         ],
         manifest: {
-          name: "Questionnaire",
-          short_name: "Questionnaire",
-          theme_color: "#ffffff",
-          background_color: "#ffffff",
-          display: "standalone",
-          orientation: "portrait",
-          scope: "/",
-          start_url: "/",
+          name: 'Questionnaire',
+          short_name: 'Questionnaire',
+          theme_color: '#ffffff',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          scope: '/',
+          start_url: '/',
           icons: [
             {
-              src: "/android-chrome-192x192.png",
-              sizes: "192x192",
-              type: "image/png",
+              src: '/android-chrome-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
             },
             {
-              src: "/android-chrome-256x256.png",
-              sizes: "256x256",
-              type: "image/png",
+              src: '/android-chrome-256x256.png',
+              sizes: '256x256',
+              type: 'image/png',
             },
           ],
         },
       }),
     ],
-    base: "/queen",
+    base: '/queen',
     build: {
       //   modulePreload: false,
-      target: "esnext",
+      target: 'esnext',
       minify: true,
       //   cssCodeSplit: false,
     },
-  };
-});
+  }
+})

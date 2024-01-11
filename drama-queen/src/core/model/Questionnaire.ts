@@ -1,4 +1,3 @@
+import { LunaticSource } from '@inseefr/lunatic'
 
-import { LunaticSource } from "@inseefr/lunatic";
-
-export type Questionnaire = LunaticSource;
+export type Questionnaire = LunaticSource

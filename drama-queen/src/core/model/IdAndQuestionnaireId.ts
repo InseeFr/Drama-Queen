@@ -1,4 +1,4 @@
 export type IdAndQuestionnaireId = {
-  id: string;
-  questionnaireId: string;
-};
+  id: string
+  questionnaireId: string
+}

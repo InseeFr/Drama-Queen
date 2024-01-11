@@ -1,1 +1,1 @@
-export * from "./DisplayEnvValues";
+export * from './DisplayEnvValues'
