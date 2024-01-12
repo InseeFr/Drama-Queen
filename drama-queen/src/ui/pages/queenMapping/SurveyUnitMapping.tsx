@@ -7,6 +7,11 @@ type Params = {
 }
 
 export function SurveyUnitMapping() {
+  // When this component is displayed this means that there is an Error 
+  /**
+   * I proposed to delete this component in order to make a generic error route, and that loader pass messageError directly
+   */  
+
   const { readonly, id } = useParams<Params>()
 
   return <div>Survey Unit Mapping id : {id}</div>
