@@ -12,7 +12,7 @@ export function SurveyUnitMapping() {
    * I proposed to delete this component in order to make a generic error route, and that loader pass messageError directly
    */  
 
-  const { readonly, id } = useParams<Params>()
+  const { id } = useParams<Params>()
 
   return <div>Survey Unit Mapping id : {id}</div>
 }
