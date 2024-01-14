@@ -6,7 +6,7 @@ import Preloader from 'components/shared/preloader';
 import Error from 'components/shared/Error';
 import { useRemoteData, useVisuQuery } from 'utils/hook';
 import QuestionnaireForm from './questionnaireForm';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { checkQuestionnaire, downloadDataAsJson } from 'utils/questionnaire';
 import { buildSuggesterFromNomenclatures } from 'utils/questionnaire/nomenclatures';
 

@@ -6,7 +6,7 @@ import { AppContext } from 'components/app';
 import LightOrchestrator from 'components/lightOrchestrator';
 import Error from 'components/shared/Error';
 import Preloader from 'components/shared/preloader';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import surveyUnitIdbService from 'utils/indexedbb/services/surveyUnit-idb-service';
 import QuestionnaireForm from './questionnaireForm';
 
