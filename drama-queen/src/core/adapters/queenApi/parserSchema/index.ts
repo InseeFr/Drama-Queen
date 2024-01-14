@@ -1,4 +1,4 @@
-export * from './campaingSchema'
+export * from './campaignSchema'
 export * from './nomenclatureSchema'
 export * from './paradataSchema'
 export * from './surveyUnitDataSchema'
