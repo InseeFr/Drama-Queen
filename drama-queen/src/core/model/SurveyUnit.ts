@@ -1,4 +1,4 @@
-import { SurveyUnitData } from './SurveyUnitData'
+import type { SurveyUnitData } from './SurveyUnitData'
 
 export type SurveyUnit = {
   id: string

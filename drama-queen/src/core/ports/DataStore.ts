@@ -1,4 +1,4 @@
-import { Paradata, SurveyUnit } from 'core/model'
+import type { Paradata, SurveyUnit } from 'core/model'
 
 export type DataStore = {
   updateSurveyUnit: (surveyUnit: SurveyUnit) => Promise<string>

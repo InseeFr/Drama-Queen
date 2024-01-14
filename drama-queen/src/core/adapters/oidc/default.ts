@@ -1,4 +1,4 @@
-import { Oidc } from 'core/ports/Oidc'
+import type { Oidc } from 'core/ports/Oidc'
 import { createOidc as createOidcSpa } from 'oidc-spa'
 
 export async function createOidc(params: {

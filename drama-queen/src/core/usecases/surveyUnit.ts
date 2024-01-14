@@ -1,4 +1,3 @@
-import { assert } from 'tsafe/assert'
 import type { Thunks } from 'core/bootstrap'
 
 export const name = 'surveyUnit'
