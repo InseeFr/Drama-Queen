@@ -56,7 +56,7 @@ const useStyles = tss.create(() => ({
     alignItems: 'center',
     backgroundColor: 'white',
     columnGap: '0.5em',
-    borderBottom: `${borderStyleHeader}`,
+    borderBottom: borderStyleHeader,
   },
   menuIcon: {
     position: 'relative',

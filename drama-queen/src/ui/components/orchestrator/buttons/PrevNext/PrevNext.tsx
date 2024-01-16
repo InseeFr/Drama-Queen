@@ -2,7 +2,13 @@ import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
-export function PrevNext() {
+type PrevNextProps = {
+  goPrevious: () => void
+  goNext: (payload?: {} | undefined) => void
+}
+
+export function PrevNext(props: PrevNextProps) {
+  const { goPrevious, goNext } = props
   const { classes } = useStyles()
 
   return (
@@ -11,7 +17,7 @@ export function PrevNext() {
         <IconButton
           className={`${classes.iconButton} ${classes.previousIcon}`}
           size="large"
-          // onClick={goPrevious}
+          onClick={goPrevious}
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
@@ -21,7 +27,7 @@ export function PrevNext() {
         <IconButton
           className={classes.iconButton}
           size="large"
-          // onClick={goNext}
+          onClick={goNext}
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
