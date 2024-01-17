@@ -3,12 +3,14 @@ import IconButton from '@mui/material/IconButton'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
 type PrevNextProps = {
+  isFirstPage: boolean
+  isLastPage: boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
 
 export function PrevNext(props: PrevNextProps) {
-  const { goPrevious, goNext } = props
+  const { isFirstPage, isLastPage, goPrevious, goNext } = props
   const { classes } = useStyles()
 
   return (
@@ -17,6 +19,7 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={`${classes.iconButton} ${classes.previousIcon}`}
           size="large"
+          disabled={isFirstPage}
           onClick={goPrevious}
         >
           <PlayArrowIcon fontSize="small" />
@@ -27,6 +30,7 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={classes.iconButton}
           size="large"
+          disabled={isLastPage}
           onClick={goNext}
         >
           <PlayArrowIcon fontSize="small" />

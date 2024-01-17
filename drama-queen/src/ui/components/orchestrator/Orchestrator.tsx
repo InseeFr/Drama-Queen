@@ -35,6 +35,8 @@ export function Orchestrator(props: OrchestratorProps) {
     goPreviousPage,
     goNextPage,
     goToPage,
+    isFirstPage,
+    isLastPage,
     pager,
     Provider,
   } = lunatic.useLunatic(source, data, {
@@ -54,7 +56,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const hierarchy = firstComponent?.hierarchy
 
   return (
-    <Stack>
+    <Stack className={classes.orchestrator}>
       <Header
         questionnaireTitle={questionnaireTitle}
         hierarchy={hierarchy}
@@ -74,6 +76,8 @@ export function Orchestrator(props: OrchestratorProps) {
           maxPage={maxPage}
           subPage={subPage}
           nbSubPages={nbSubPages}
+          isFirstPage={isFirstPage}
+          isLastPage={isLastPage}
           goPrevious={goPreviousPage}
           goNext={goNextPage}
         />
@@ -83,6 +87,9 @@ export function Orchestrator(props: OrchestratorProps) {
 }
 
 const useStyles = tss.create(() => ({
+  orchestrator: {
+    fontFamily: "'Gotham SSm A', 'Gotham SSm B', 'sans-serif'",
+  },
   bodyContainer: {
     position: 'absolute',
     flexDirection: 'row',

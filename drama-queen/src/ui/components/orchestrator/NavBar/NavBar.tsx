@@ -6,12 +6,23 @@ type NavBarProps = {
   maxPage: string
   subPage: number | undefined
   nbSubPages: number | undefined
+  isFirstPage: boolean
+  isLastPage: boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
 
 export function NavBar(props: NavBarProps) {
-  const { page, maxPage, subPage, nbSubPages, goPrevious, goNext } = props
+  const {
+    page,
+    maxPage,
+    subPage,
+    nbSubPages,
+    isFirstPage,
+    isLastPage,
+    goPrevious,
+    goNext,
+  } = props
   const { classes } = useStyles()
 
   const displayPages = [
@@ -46,7 +57,12 @@ export function NavBar(props: NavBarProps) {
   return (
     <div className={classes.root}>
       {displayPages.map((pageType) => displayPage(pageType))}
-      <PrevNext goPrevious={goPrevious} goNext={goNext} />
+      <PrevNext
+        isFirstPage={isFirstPage}
+        isLastPage={isLastPage}
+        goPrevious={goPrevious}
+        goNext={goNext}
+      />
     </div>
   )
 }
