@@ -1,6 +1,7 @@
 import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import { Stack, Typography } from '@mui/material'
 
 type PrevNextProps = {
   isFirstPage: boolean
@@ -14,8 +15,8 @@ export function PrevNext(props: PrevNextProps) {
   const { classes } = useStyles()
 
   return (
-    <div id="buttons" className={classes.root}>
-      <div className={classes.navigation}>
+    <Stack id="buttons" className={classes.root}>
+      <Stack>
         <IconButton
           className={`${classes.iconButton} ${classes.previousIcon}`}
           size="large"
@@ -24,9 +25,11 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <span className={classes.buttonSpan}>PREC.</span>
-      </div>
-      <div className={classes.navigation}>
+        <Typography variant="body2" align="center" color={'gray'}>
+          PREC.
+        </Typography>
+      </Stack>
+      <Stack>
         <IconButton
           className={classes.iconButton}
           size="large"
@@ -35,27 +38,18 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <span className={classes.buttonSpan}>SUIV.</span>
-      </div>
-    </div>
+        <Typography variant="body2" align="center" color={'gray'}>
+          SUIV.
+        </Typography>
+      </Stack>
+    </Stack>
   )
 }
 
 const useStyles = tss.create(() => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '0.5em',
+    gap: '1.5em',
   },
-  buttonSpan: {
-    color: '#777777',
-    fontSize: '13px',
-    display: 'block',
-    width: 'min-content',
-    margin: 'auto',
-  },
-  navigation: { textAlign: 'right' },
   previousIcon: { transform: 'rotate(180deg)' },
   iconButton: {
     backgroundColor: '#9FC5F8',
@@ -63,6 +57,5 @@ const useStyles = tss.create(() => ({
     '&:hover,&:focus': {
       backgroundColor: 'white',
     },
-    fontSize: 13,
   },
 }))
