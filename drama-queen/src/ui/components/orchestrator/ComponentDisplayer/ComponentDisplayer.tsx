@@ -17,7 +17,6 @@ export function ComponentDisplayer(props: ComponentDisplayerProps) {
   return (
     <>
       {components.map(function (component) {
-        console.log(component)
         const { id, componentType, response, storeName, ...other } = component
         const Component = lunatic[componentType]
         return (
