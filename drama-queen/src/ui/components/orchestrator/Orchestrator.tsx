@@ -1,3 +1,4 @@
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ComponentDisplayer } from './ComponentDisplayer/ComponentDisplayer'
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
@@ -26,22 +27,42 @@ export function Orchestrator(props: OrchestratorProps) {
   } = props
   const { classes } = useStyles()
   const data = questionnaireData
+  const [components, setComponents] = useState<any>([])
 
-  const { getComponents, goPreviousPage, goNextPage, pager, Provider } =
-    lunatic.useLunatic(source, data, {
-      shortcut,
-      withOverview: overview,
-    })
+  const {
+    getComponents,
+    goPreviousPage,
+    goNextPage,
+    goToPage,
+    pager,
+    Provider,
+  } = lunatic.useLunatic(source, data, {
+    shortcut,
+    withOverview: overview,
+  })
 
   const { maxPage, page, subPage, nbSubPages } = pager
 
+  const questionnaireTitle = source.label.value
+
+  useEffect(() => {
+    setComponents(getComponents())
+  }, [getComponents])
+
+  const firstComponent = components[0]
+  const hierarchy = firstComponent?.hierarchy
+
   return (
     <div className={classes.root}>
-      <Header />
+      <Header
+        questionnaireTitle={questionnaireTitle}
+        hierarchy={hierarchy}
+        goToPage={goToPage}
+      />
       <div className={classes.bodyContainer}>
         <Provider>
           <ComponentDisplayer
-            components={getComponents()}
+            components={components}
             features={features}
             readonly={false}
             savingType={savingType}

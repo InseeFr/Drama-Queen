@@ -9,9 +9,32 @@ import insee from '../../../assets/insee.png'
 import { Menu } from '../Menu/Menu'
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 
-type HeaderProps = {}
+type HeaderProps = {
+  questionnaireTitle: string
+  hierarchy?: {
+    sequence?: {
+      label: React.ReactNode
+      id: string
+      page: string
+    }
+    subSequence?:
+      | {
+          label: React.ReactNode
+          id: string
+          page: string
+        }
+      | undefined
+  }
+  goToPage: (page: {
+    page: string
+    iteration?: number | undefined
+    nbIterations?: number | undefined
+    subPage?: number | undefined
+  }) => void
+}
 
 export function Header(props: HeaderProps) {
+  const { questionnaireTitle, hierarchy, goToPage } = props
   const { classes } = useStyles()
   const [open, setOpen] = useState(false)
 
@@ -32,11 +55,12 @@ export function Header(props: HeaderProps) {
           src={insee}
           alt="Logo de L'Insee"
           className={classes.headerLogo}
+          onClick={() => goToPage({ page: '1' })}
         />
       </Button>
       <div className={classes.headerTitle}>
-        <div className={classes.questionnaireTitle}>super titre</div>
-        <BreadCrumb />
+        <div className={classes.questionnaireTitle}>{questionnaireTitle}</div>
+        <BreadCrumb hierarchy={hierarchy} goToPage={goToPage} />
       </div>
       <div className={classes.headerClose}>
         <IconButton title="Quitter" className={classes.closeIcon}>

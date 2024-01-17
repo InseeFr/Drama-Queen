@@ -1,47 +1,81 @@
+import { Breadcrumbs, Button } from '@mui/material'
 import { tss } from 'tss-react/mui'
 
-type BreadCrumbProps = {}
+type BreadCrumbProps = {
+  hierarchy?: {
+    sequence?: {
+      label: React.ReactNode
+      id: string
+      page: string
+    }
+    subSequence?:
+      | {
+          label: React.ReactNode
+          id: string
+          page: string
+        }
+      | undefined
+  }
+  goToPage: (page: {
+    page: string
+    iteration?: number | undefined
+    nbIterations?: number | undefined
+    subPage?: number | undefined
+  }) => void
+}
 
 export function BreadCrumb(props: BreadCrumbProps) {
+  const { hierarchy, goToPage } = props
   const { classes } = useStyles()
+  const { sequence, subSequence } = hierarchy ?? {}
 
   return (
-    <div className={classes.root}>
-      <div aria-label="breadcrumb">
-        <button
-          type="button"
-          className={classes.breadcrumbButton}
-          title={`Aller vers Séquence`}
+    <Breadcrumbs
+      separator={''}
+      aria-label="breadcrumb"
+      className={classes.root}
+    >
+      {sequence && (
+        <Button
+          className={`${classes.breadcrumbButton} ${
+            !subSequence ? classes.lastButton : null
+          }`}
+          title={`Aller vers la séquence ${sequence.label}`}
+          disableRipple
+          onClick={() => goToPage({ page: sequence.page })}
         >
-          Séquence
-        </button>
-        <button
-          className={`${classes.breadcrumbButton} ${classes.subsequenceButton}`}
-          type="button"
-          title={`Aller vers Sous-Séquence`}
+          {sequence.label}
+        </Button>
+      )}
+      {subSequence && (
+        <Button
+          className={`${classes.breadcrumbButton} ${classes.subsequenceButton} ${classes.lastButton}`}
+          title={`Aller vers la sous-séquence ${subSequence.label}`}
+          disableRipple
+          onClick={() => goToPage({ page: subSequence.page })}
         >
-          Sous-Séquence
-        </button>
-      </div>
-    </div>
+          {subSequence.label}
+        </Button>
+      )}
+    </Breadcrumbs>
   )
 }
 
 const useStyles = tss.create(() => ({
   root: {
-    color: 'black',
     marginTop: '0.3em',
   },
   breadcrumbButton: {
-    cursor: 'pointer',
+    color: 'black',
     backgroundColor: 'transparent',
     border: 'none',
-    textTransform: 'uppercase',
+    borderRadius: 0,
+    paddingBottom: 0,
     fontSize: '95%',
     '&:hover': {
       fontWeight: 'bold',
+      backgroundColor: 'transparent',
     },
-
     '&::before': {
       content: "'\u3009'",
       marginRight: '0.8em',
@@ -49,15 +83,9 @@ const useStyles = tss.create(() => ({
     },
   },
   subsequenceButton: {
-    '&::before': {
-      content: "'\u3009'",
-      marginRight: '0.9em',
-      fontWeight: 'bold',
-    },
-
     marginLeft: '0.8em',
-    display: 'inline',
-    paddingBottom: '3px',
+  },
+  lastButton: {
     borderBottom: `2px solid #085394`,
   },
 }))
