@@ -6,6 +6,7 @@ import { tss } from 'tss-react/mui'
 import { form } from './form'
 import { questionnaireData } from './data'
 import * as lunatic from '@inseefr/lunatic'
+import { Stack } from '@mui/material'
 
 type OrchestratorProps = {
   source: lunatic.LunaticSource
@@ -53,13 +54,13 @@ export function Orchestrator(props: OrchestratorProps) {
   const hierarchy = firstComponent?.hierarchy
 
   return (
-    <div className={classes.root}>
+    <Stack>
       <Header
         questionnaireTitle={questionnaireTitle}
         hierarchy={hierarchy}
         goToPage={goToPage}
       />
-      <div className={classes.bodyContainer}>
+      <Stack className={classes.bodyContainer}>
         <Provider>
           <ComponentDisplayer
             components={components}
@@ -76,23 +77,20 @@ export function Orchestrator(props: OrchestratorProps) {
           goPrevious={goPreviousPage}
           goNext={goNextPage}
         />
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   )
 }
 
 const useStyles = tss.create(() => ({
-  root: {
-    display: 'flex',
-    flexFlow: 'column',
-    height: '100%',
-  },
   bodyContainer: {
-    display: 'flex',
+    position: 'absolute',
     flexDirection: 'row',
-    flexGrow: 1,
     backgroundColor: '#eeeeee',
-    justifyContent: 'space-between',
     paddingTop: '60px',
+    height: '100%',
+    width: '100%',
+    bottom: 0,
+    left: 0,
   },
 }))

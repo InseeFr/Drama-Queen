@@ -8,6 +8,7 @@ import AppsIcon from '@mui/icons-material/Apps'
 import insee from '../../../assets/insee.png'
 import { Menu } from '../Menu/Menu'
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
+import { Stack, Typography } from '@mui/material'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -40,15 +41,15 @@ export function Header(props: HeaderProps) {
 
   return (
     <AppBar className={classes.root} elevation={0}>
-      <div className={classes.headerMenu}>
+      <Stack className={classes.headerMenu}>
         <IconButton
           className={classes.menuIcon}
           sx={{ color: open ? '#E30342' : 'black' }}
         >
           <AppsIcon onClick={() => setOpen(!open)} />
         </IconButton>
-        <Menu open={open} setOpen={setOpen} />
-      </div>
+      </Stack>
+      <Menu open={open} setOpen={setOpen} />
       <Button title="Retour au début du questionnaire">
         <img
           id="logo"
@@ -58,15 +59,17 @@ export function Header(props: HeaderProps) {
           onClick={() => goToPage({ page: '1' })}
         />
       </Button>
-      <div className={classes.headerTitle}>
-        <div className={classes.questionnaireTitle}>{questionnaireTitle}</div>
+      <Stack className={classes.headerTitle}>
+        <Typography className={classes.questionnaireTitle} variant="h1">
+          {questionnaireTitle}
+        </Typography>
         <BreadCrumb hierarchy={hierarchy} goToPage={goToPage} />
-      </div>
-      <div className={classes.headerClose}>
+      </Stack>
+      <Stack className={classes.headerClose}>
         <IconButton title="Quitter" className={classes.closeIcon}>
           <ExitToAppIcon />
         </IconButton>
-      </div>
+      </Stack>
     </AppBar>
   )
 }
@@ -74,7 +77,6 @@ export function Header(props: HeaderProps) {
 const borderStyleHeader = '1px solid #777777'
 const useStyles = tss.create(() => ({
   root: {
-    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -83,26 +85,21 @@ const useStyles = tss.create(() => ({
     borderBottom: borderStyleHeader,
   },
   menuIcon: {
-    position: 'relative',
-    padding: '7px',
     '& svg': { fontSize: '2em' },
   },
   headerClose: {
     marginLeft: 'auto',
-    borderLeft: `${borderStyleHeader}`,
+    borderLeft: borderStyleHeader,
     width: '60px',
-    height: '100%',
   },
   headerLogo: {
     height: '50px',
   },
   closeIcon: {
     color: 'black',
-    padding: '5px',
     '& svg': { fontSize: '2em' },
   },
   headerTitle: {
-    height: '100%',
     paddingLeft: '1em',
   },
   questionnaireTitle: {
@@ -110,11 +107,7 @@ const useStyles = tss.create(() => ({
     textTransform: 'uppercase',
     fontSize: '80%',
   },
-  breadcrumb: {
-    color: 'black',
-  },
   headerMenu: {
-    borderRight: `${borderStyleHeader}`,
-    position: 'relative',
+    borderRight: borderStyleHeader,
   },
 }))

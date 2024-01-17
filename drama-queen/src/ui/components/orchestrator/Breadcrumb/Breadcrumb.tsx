@@ -30,11 +30,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
   const { sequence, subSequence } = hierarchy ?? {}
 
   return (
-    <Breadcrumbs
-      separator={''}
-      aria-label="breadcrumb"
-      className={classes.root}
-    >
+    <Breadcrumbs separator={''} aria-label="breadcrumb">
       {sequence && (
         <Button
           className={`${classes.breadcrumbButton} ${
@@ -62,9 +58,6 @@ export function BreadCrumb(props: BreadCrumbProps) {
 }
 
 const useStyles = tss.create(() => ({
-  root: {
-    marginTop: '0.3em',
-  },
   breadcrumbButton: {
     color: 'black',
     backgroundColor: 'transparent',
