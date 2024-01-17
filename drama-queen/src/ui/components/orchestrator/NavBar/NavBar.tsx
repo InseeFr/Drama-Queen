@@ -1,5 +1,6 @@
 import { tss } from 'tss-react/mui'
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
+import { Stack, Typography } from '@mui/material'
 
 type NavBarProps = {
   page: string
@@ -42,20 +43,18 @@ export function NavBar(props: NavBarProps) {
   }) {
     if (pageType.current !== undefined) {
       return (
-        <div className={classes.page}>
-          <div className={classes.labelPage}>n° page</div>
-          <div>
-            <b>
-              {pageType.current} / {pageType.max}
-            </b>
-          </div>
-        </div>
+        <Stack className={classes.page}>
+          <Typography variant="caption">n° page</Typography>
+          <Typography variant="body2" fontWeight={'bold'}>
+            {pageType.current}/{pageType.max}
+          </Typography>
+        </Stack>
       )
     }
   }
 
   return (
-    <div className={classes.root}>
+    <Stack className={classes.root}>
       {displayPages.map((pageType) => displayPage(pageType))}
       <PrevNext
         isFirstPage={isFirstPage}
@@ -63,14 +62,12 @@ export function NavBar(props: NavBarProps) {
         goPrevious={goPrevious}
         goNext={goNext}
       />
-    </div>
+    </Stack>
   )
 }
 
 const useStyles = tss.create(() => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'flex-end',
     gap: '2em',
     paddingBottom: '2em',
@@ -79,14 +76,9 @@ const useStyles = tss.create(() => ({
     width: '60px',
   },
   page: {
-    marginTop: '0.3em',
-    paddingTop: '0.3em',
-    paddingBottom: '0.3em',
-    fontSize: '80%',
     textAlign: 'center',
     borderRadius: '5px',
     width: '57px',
     backgroundColor: 'white',
   },
-  labelPage: { fontSize: '90%', marginBottom: '4px' },
 }))
