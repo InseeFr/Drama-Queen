@@ -1,66 +1,72 @@
 import { tss } from 'tss-react/mui'
 import Button from '@mui/material/Button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
-import Drawer from '@mui/material/Drawer'
-import IconButton from '@mui/material/IconButton'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { dependencies, version } from '../../../../../package.json'
+import { Stack, Typography } from '@mui/material'
 
 type MenuProps = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  isDrawerOpen: boolean
 }
-
 export function Menu(props: MenuProps) {
-  const { open, setOpen } = props
-  const [subMenuOpen, setSubMenuOpen] = useState(false)
+  const { isDrawerOpen } = props
+  const [expanded, setExpanded] = useState(false)
   const { classes } = useStyles()
+  //TO CHANGE
   const lunaticVersion = dependencies['@inseefr/lunatic'].replace('^', '')
 
-  function openCloseMenu() {
-    setSubMenuOpen(false)
-    setOpen(!open)
-  }
+  useEffect(() => {
+    if (!isDrawerOpen) {
+      setExpanded(false)
+    }
+  }, [isDrawerOpen])
 
-  function openCloseSubMenu() {
-    setSubMenuOpen(!subMenuOpen)
-  }
+  const toggleExpandedMenu = () => setExpanded(!expanded)
 
   return (
-    <SwipeableDrawer
-      className={classes.menu}
-      open={open}
-      onClose={openCloseMenu}
-      onOpen={openCloseMenu}
-    >
-      <div className={classes.menuContainer}>
-        <div className={classes.menuPanel}>
-          <div className={classes.navigationContainer}>
-            <span className={classes.goToNavigationSpan}>Allez vers ...</span>
-            <div>
-              <IconButton onClick={openCloseSubMenu}>
-                <ChevronRightIcon />
-              </IconButton>
-            </div>
-          </div>
-          <div
-            className={classes.version}
-          >{`Queen : ${version} | Lunatic : ${lunaticVersion}`}</div>
-        </div>
-        {subMenuOpen && (
-          <div className={classes.sequenceMenu}>
-            <Button autoFocus onClick={openCloseSubMenu}>
-              <span>{'\u3008'} Retour</span>
-            </Button>
-            <div className={classes.navigationContainer}>
-              <span>test</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </SwipeableDrawer>
+    <Stack className={classes.menuContainer}>
+      <Stack className={classes.menuPanel}>
+        <Stack className={classes.navigationContainer}>
+          <Typography className={classes.goToNavigationTypography}>
+            Allez vers ...
+          </Typography>
+          <Button
+            className={classes.navigationButton}
+            autoFocus
+            size="small"
+            disableRipple
+            endIcon={<ChevronRightIcon />}
+            onClick={toggleExpandedMenu}
+          >
+            Enquête
+          </Button>
+        </Stack>
+        <Stack className={classes.version}>
+          <Typography>
+            Queen : {version} | Lunatic : {lunaticVersion}
+          </Typography>
+        </Stack>
+      </Stack>
+      {expanded && (
+        <Stack className={classes.sequenceMenu}>
+          <Button
+            className={classes.navigationButton}
+            autoFocus
+            size="small"
+            disableRipple
+            startIcon={<ChevronLeftIcon />}
+            onClick={toggleExpandedMenu}
+          >
+            Retour
+          </Button>
+          <Stack className={classes.navigationContainer}>
+            <Typography>test</Typography>
+          </Stack>
+        </Stack>
+      )}
+    </Stack>
   )
 }
 
@@ -70,31 +76,41 @@ const useStyles = tss.create(() => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  menu: {
-    zIndex: 1000,
-    '& .MuiDrawer-paper': {
-      minWidth: '250px',
-    },
-  },
+
   menuContainer: {
     display: 'flex',
     flexDirection: 'row',
     height: '100%',
-    paddingTop: '60px',
+    paddingTop: '65px',
   },
   menuPanel: {
     display: 'flex',
     flexDirection: 'column',
     width: '250px',
     justifyContent: 'space-between',
-    borderRight: '1px solid #777777',
   },
   sequenceMenu: {
     width: '375px',
     backgroundColor: '#eeeeee',
+    borderLeft: '1px solid #777777',
   },
   navigationContainer: { marginTop: '60px' },
-  goToNavigationSpan: {
+  navigationButton: {
+    textTransform: 'none',
+    justifyContent: 'flex-start',
+    color: '#085394',
+    paddingLeft: '15px',
+    borderRadius: 0,
+    '&:hover, &:focus': {
+      fontWeight: 'bold',
+      backgroundColor: '#9fc5f8',
+    },
+    '& .MuiButton-endIcon': {
+      position: 'absolute',
+      right: '10px',
+    },
+  },
+  goToNavigationTypography: {
     fontSize: '80%',
     color: '#777777',
     textTransform: 'uppercase',

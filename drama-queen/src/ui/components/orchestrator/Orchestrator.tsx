@@ -1,34 +1,20 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ComponentDisplayer } from './ComponentDisplayer/ComponentDisplayer'
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
 import { tss } from 'tss-react/mui'
 import { form } from './form'
-import { questionnaireData } from './data'
-import * as lunatic from '@inseefr/lunatic'
+import {
+  type LunaticData,
+  useLunatic,
+  LunaticComponents,
+} from '@inseefr/lunatic'
 import { Stack } from '@mui/material'
+import { useLunaticStyles } from './lunaticStyle'
 
-type OrchestratorProps = {
-  source: lunatic.LunaticSource
-  missing: boolean
-  shortcut: boolean
-  autoSuggesterLoading: boolean
-  features: lunatic.LunaticState['features']
-  savingType: lunatic.LunaticState['savingType']
-  overview: boolean
-}
+const source = form
+const data = {} as LunaticData
 
-export function Orchestrator(props: OrchestratorProps) {
-  const {
-    source = form,
-    shortcut = true,
-    features = ['VTL'],
-    savingType = 'COLLECTED',
-    overview = true,
-  } = props
+export function Orchestrator() {
   const { classes } = useStyles()
-  const data = questionnaireData
-  const [components, setComponents] = useState<any>([])
 
   const {
     getComponents,
@@ -39,21 +25,21 @@ export function Orchestrator(props: OrchestratorProps) {
     isLastPage,
     pager,
     Provider,
-  } = lunatic.useLunatic(source, data, {
-    shortcut,
-    withOverview: overview,
+    pageTag,
+  } = useLunatic(source, data, {
+    shortcut: true,
+    withOverview: true,
   })
 
   const { maxPage, page, subPage, nbSubPages } = pager
 
   const questionnaireTitle = source.label.value
 
-  useEffect(() => {
-    setComponents(getComponents())
-  }, [getComponents])
+  const components = getComponents()
+  const hierarchy = components[0]?.hierarchy
+  const { classes: lunaticClasses } = useLunaticStyles()
 
-  const firstComponent = components[0]
-  const hierarchy = firstComponent?.hierarchy
+
 
   return (
     <Stack className={classes.orchestrator}>
@@ -63,24 +49,40 @@ export function Orchestrator(props: OrchestratorProps) {
         goToPage={goToPage}
       />
       <Stack className={classes.bodyContainer}>
-        <Provider>
-          <ComponentDisplayer
-            components={components}
-            features={features}
-            readonly={false}
-            savingType={savingType}
+        <Stack className={classes.mainContainer}>
+          <Provider>
+            <LunaticComponents
+              components={components}
+              autoFocusKey={pageTag}
+              wrapper={({ children, id, componentType }) => (
+                <div
+                  className={`${lunaticClasses.lunatic} ${componentType}`}
+                  key={`component-${id}`}
+                >
+                  {children}
+                </div>
+              )}
+            />
+          </Provider>
+          <Continue
+            label={continueLabel}
+            endIcon={continueEndIcon}
+            shortCutLabel={continueShortCutLabel}
+            goToPage={continueGoToPage}
           />
-        </Provider>
-        <NavBar
-          page={page}
-          maxPage={maxPage}
-          subPage={subPage}
-          nbSubPages={nbSubPages}
-          isFirstPage={isFirstPage}
-          isLastPage={isLastPage}
-          goPrevious={goPreviousPage}
-          goNext={goNextPage}
-        />
+        </Stack>
+        <Stack className={classes.navBarContainer}>
+          <NavBar
+            page={page}
+            maxPage={maxPage}
+            subPage={subPage}
+            nbSubPages={nbSubPages}
+            isFirstPage={isFirstPage}
+            isLastPage={isLastPage}
+            goPrevious={goPreviousPage}
+            goNext={goNextPage}
+          />
+        </Stack>
       </Stack>
     </Stack>
   )
@@ -99,5 +101,15 @@ const useStyles = tss.create(() => ({
     width: '100%',
     bottom: 0,
     left: 0,
+  },
+  mainContainer: { flexGrow: 1 },
+  navBarContainer: {
+    justifyContent: 'flex-end',
+    gap: '2em',
+    paddingBottom: '2em',
+    alignItems: 'center',
+    borderLeft: '1px solid #777777',
+    width: '60px',
+    height: '100%',
   },
 }))

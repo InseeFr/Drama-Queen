@@ -1,20 +1,19 @@
 import { Breadcrumbs, Button } from '@mui/material'
+import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
 type BreadCrumbProps = {
-  hierarchy?: {
-    sequence?: {
-      label: React.ReactNode
+  hierarchy: {
+    sequence: {
+      label: ReactNode
       id: string
       page: string
     }
-    subSequence?:
-      | {
-          label: React.ReactNode
-          id: string
-          page: string
-        }
-      | undefined
+    subSequence?: {
+      label: ReactNode
+      id: string
+      page: string
+    }
   }
   goToPage: (page: {
     page: string
@@ -29,16 +28,20 @@ export function BreadCrumb(props: BreadCrumbProps) {
   const { classes } = useStyles()
   const { sequence, subSequence } = hierarchy ?? {}
 
+  const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
+  const goToSubSequencePage = () =>
+    subSequence && goToPage({ page: subSequence.page })
+
   return (
     <Breadcrumbs separator={''} aria-label="breadcrumb">
       {sequence && (
         <Button
           className={`${classes.breadcrumbButton} ${
-            !subSequence ? classes.lastButton : null
+            !subSequence && classes.lastButton
           }`}
           title={`Aller vers la séquence ${sequence.label}`}
           disableRipple
-          onClick={() => goToPage({ page: sequence.page })}
+          onClick={goToSequencePage}
         >
           {sequence.label}
         </Button>
@@ -48,7 +51,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
           className={`${classes.breadcrumbButton} ${classes.subsequenceButton} ${classes.lastButton}`}
           title={`Aller vers la sous-séquence ${subSequence.label}`}
           disableRipple
-          onClick={() => goToPage({ page: subSequence.page })}
+          onClick={goToSubSequencePage}
         >
           {subSequence.label}
         </Button>
