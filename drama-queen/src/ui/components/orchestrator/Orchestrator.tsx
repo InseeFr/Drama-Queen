@@ -50,39 +50,52 @@ export function Orchestrator() {
   }
 
   const continueGoToPage = () => {
-    if (isLastReachedPage()) {
-      goNextPage()
+    if (isLastPage) {
+      // handle case for quit
     } else {
-      const splitLastReachedPage =
-        lastReachedPage?.replace(/\./g, '#').split('#') || []
-      const formattedLastReachedPage = {
-        page: splitLastReachedPage[0],
-        subPage:
-          splitLastReachedPage[1] === undefined
-            ? undefined
-            : parseFloat(splitLastReachedPage[1]) - 1,
-        iteration:
-          splitLastReachedPage[2] === undefined
-            ? undefined
-            : parseFloat(splitLastReachedPage[2]) - 1,
+      if (isLastReachedPage()) {
+        goNextPage()
+      } else {
+        const splitLastReachedPage =
+          lastReachedPage?.replace(/\./g, '#').split('#') || []
+        const formattedLastReachedPage = {
+          page: splitLastReachedPage[0],
+          subPage:
+            splitLastReachedPage[1] === undefined
+              ? undefined
+              : parseFloat(splitLastReachedPage[1]) - 1,
+          iteration:
+            splitLastReachedPage[2] === undefined
+              ? undefined
+              : parseFloat(splitLastReachedPage[2]) - 1,
+        }
+        goToPage(formattedLastReachedPage)
       }
-      goToPage(formattedLastReachedPage)
     }
   }
 
-  const continueLabel = isLastReachedPage()
-    ? 'continuer'
-    : "suite de l'entretien"
+  const continueLabel = () => {
+    if (isLastPage) {
+      return 'valider et quitter'
+    }
+    if (isLastReachedPage()) {
+      return 'continuer'
+    }
+    return "suite de l'entretien"
+  }
 
-  const continueEndIcon = isLastReachedPage() ? (
-    <ArrowRightAltIcon />
-  ) : (
-    <SkipNext fontSize="large" />
-  )
+  const continueEndIcon = () => {
+    if (!isLastPage) {
+      if (isLastReachedPage()) {
+        return <ArrowRightAltIcon />
+      }
+      return <SkipNext fontSize="large" />
+    }
+  }
 
   const continueShortCutLabel = isLastReachedPage()
-    ? 'Alt + ENTRÉE'
-    : 'Alt + fin'
+    ? 'alt + ENTRÉE'
+    : 'alt + fin'
 
   return (
     <Stack className={classes.orchestrator}>
@@ -108,8 +121,8 @@ export function Orchestrator() {
             />
           </Provider>
           <Continue
-            label={continueLabel}
-            endIcon={continueEndIcon}
+            label={continueLabel()}
+            endIcon={continueEndIcon()}
             shortCutLabel={continueShortCutLabel}
             goToPage={continueGoToPage}
           />

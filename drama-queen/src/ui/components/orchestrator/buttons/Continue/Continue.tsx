@@ -3,7 +3,7 @@ import { tss } from 'tss-react'
 
 type ContinueProps = {
   label: string
-  endIcon: JSX.Element
+  endIcon: JSX.Element | undefined
   shortCutLabel: string
   goToPage: () => void
 }
