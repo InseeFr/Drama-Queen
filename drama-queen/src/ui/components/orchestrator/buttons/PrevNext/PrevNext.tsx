@@ -25,7 +25,11 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <Typography variant="body2" align="center" color={'gray'}>
+        <Typography
+          variant="body2"
+          align="center"
+          className={classes.buttonHelp}
+        >
           PREC.
         </Typography>
       </Stack>
@@ -38,7 +42,11 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <Typography variant="body2" align="center" color={'gray'}>
+        <Typography
+          variant="body2"
+          align="center"
+          className={classes.buttonHelp}
+        >
           SUIV.
         </Typography>
       </Stack>
@@ -58,4 +66,5 @@ const useStyles = tss.create(() => ({
       backgroundColor: 'white',
     },
   },
+  buttonHelp: { color: '#777777' },
 }))

@@ -70,10 +70,7 @@ const useStyles = tss.create(() => ({
   root: {
     justifyContent: 'flex-end',
     gap: '2em',
-    paddingBottom: '2em',
     alignItems: 'center',
-    borderLeft: '1px solid #777777',
-    width: '60px',
   },
   page: {
     textAlign: 'center',
