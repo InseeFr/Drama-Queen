@@ -6,12 +6,14 @@ import { Stack, Typography } from '@mui/material'
 type PrevNextProps = {
   isFirstPage: boolean
   isLastPage: boolean
+  isLastReachedPage: boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
 
 export function PrevNext(props: PrevNextProps) {
-  const { isFirstPage, isLastPage, goPrevious, goNext } = props
+  const { isFirstPage, isLastPage, isLastReachedPage, goPrevious, goNext } =
+    props
   const { classes } = useStyles()
 
   return (
@@ -33,11 +35,12 @@ export function PrevNext(props: PrevNextProps) {
           PREC.
         </Typography>
       </Stack>
+
       <Stack>
         <IconButton
           className={classes.iconButton}
           size="large"
-          disabled={isLastPage}
+          disabled={isLastReachedPage}
           onClick={goNext}
         >
           <PlayArrowIcon fontSize="small" />

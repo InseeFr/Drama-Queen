@@ -9,6 +9,7 @@ type NavBarProps = {
   nbSubPages: number | undefined
   isFirstPage: boolean
   isLastPage: boolean
+  isLastReachedPage: boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
@@ -21,6 +22,7 @@ export function NavBar(props: NavBarProps) {
     nbSubPages,
     isFirstPage,
     isLastPage,
+    isLastReachedPage,
     goPrevious,
     goNext,
   } = props
@@ -59,6 +61,7 @@ export function NavBar(props: NavBarProps) {
       <PrevNext
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
+        isLastReachedPage={isLastReachedPage}
         goPrevious={goPrevious}
         goNext={goNext}
       />

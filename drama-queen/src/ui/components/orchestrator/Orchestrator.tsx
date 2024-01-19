@@ -122,6 +122,7 @@ export function Orchestrator() {
             nbSubPages={nbSubPages}
             isFirstPage={isFirstPage}
             isLastPage={isLastPage}
+            isLastReachedPage={isLastReachedPage()}
             goPrevious={goPreviousPage}
             goNext={goNextPage}
           />
