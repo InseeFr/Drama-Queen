@@ -38,8 +38,6 @@ export function Header(props: HeaderProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
 
-  useEffect(() => console.log(isDrawerOpen), [isDrawerOpen])
-
   const handleDrawerToggle = (open: boolean) => setIsDrawerOpen(open)
   const handleOpen = () => setIsDrawerOpen(true)
   const handleClose = () => setIsDrawerOpen(false)
