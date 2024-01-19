@@ -9,6 +9,9 @@ import {
 } from '@inseefr/lunatic'
 import { Stack } from '@mui/material'
 import { useLunaticStyles } from './lunaticStyle'
+import { Continue } from './buttons/Continue/Continue'
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
+import { SkipNext } from '@mui/icons-material'
 
 const source = form
 const data = {} as LunaticData
@@ -31,7 +34,7 @@ export function Orchestrator() {
     withOverview: true,
   })
 
-  const { maxPage, page, subPage, nbSubPages } = pager
+  const { maxPage, page, subPage, nbSubPages, lastReachedPage } = pager
 
   const questionnaireTitle = source.label.value
 
@@ -39,7 +42,47 @@ export function Orchestrator() {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
+  const isLastReachedPage = () => {
+    if (lastReachedPage === undefined) {
+      return true
+    }
+    return pageTag === lastReachedPage
+  }
 
+  const continueGoToPage = () => {
+    if (isLastReachedPage()) {
+      goNextPage()
+    } else {
+      const splitLastReachedPage =
+        lastReachedPage?.replace(/\./g, '#').split('#') || []
+      const formattedLastReachedPage = {
+        page: splitLastReachedPage[0],
+        subPage:
+          splitLastReachedPage[1] === undefined
+            ? undefined
+            : parseFloat(splitLastReachedPage[1]) - 1,
+        iteration:
+          splitLastReachedPage[2] === undefined
+            ? undefined
+            : parseFloat(splitLastReachedPage[2]) - 1,
+      }
+      goToPage(formattedLastReachedPage)
+    }
+  }
+
+  const continueLabel = isLastReachedPage()
+    ? 'continuer'
+    : "suite de l'entretien"
+
+  const continueEndIcon = isLastReachedPage() ? (
+    <ArrowRightAltIcon />
+  ) : (
+    <SkipNext fontSize="large" />
+  )
+
+  const continueShortCutLabel = isLastReachedPage()
+    ? 'Alt + ENTRÉE'
+    : 'Alt + fin'
 
   return (
     <Stack className={classes.orchestrator}>
