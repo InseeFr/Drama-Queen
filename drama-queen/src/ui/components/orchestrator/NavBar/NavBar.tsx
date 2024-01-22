@@ -71,9 +71,9 @@ export function NavBar(props: NavBarProps) {
 
 const useStyles = tss.create(() => ({
   root: {
-    justifyContent: 'flex-end',
     gap: '2em',
     alignItems: 'center',
+    width: '60px',
   },
   page: {
     textAlign: 'center',

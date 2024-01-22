@@ -120,12 +120,14 @@ export function Orchestrator() {
               )}
             />
           </Provider>
-          <Continue
-            label={continueLabel()}
-            endIcon={continueEndIcon()}
-            shortCutLabel={continueShortCutLabel}
-            goToPage={continueGoToPage}
-          />
+          <Stack className={classes.continue}>
+            <Continue
+              label={continueLabel()}
+              endIcon={continueEndIcon()}
+              shortCutLabel={continueShortCutLabel}
+              goToPage={continueGoToPage}
+            />
+          </Stack>
         </Stack>
         <Stack className={classes.navBarContainer}>
           <NavBar
@@ -148,25 +150,30 @@ export function Orchestrator() {
 const useStyles = tss.create(() => ({
   orchestrator: {
     fontFamily: "'Gotham SSm A', 'Gotham SSm B', 'sans-serif'",
+    minHeight: '100vh',
   },
   bodyContainer: {
-    position: 'absolute',
     flexDirection: 'row',
     backgroundColor: '#eeeeee',
     paddingTop: '60px',
-    height: '100%',
-    width: '100%',
-    bottom: 0,
-    left: 0,
+    flex: 1,
   },
-  mainContainer: { flexGrow: 1 },
+  mainContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  continue: {
+    alignItems: 'end',
+    marginBottom: '1em',
+    marginRight: '4em',
+  },
   navBarContainer: {
+    position: 'relative',
     justifyContent: 'flex-end',
     gap: '2em',
     paddingBottom: '2em',
     alignItems: 'center',
     borderLeft: '1px solid #777777',
     width: '60px',
-    height: '100%',
   },
 }))
