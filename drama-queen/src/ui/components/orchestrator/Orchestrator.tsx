@@ -110,20 +110,22 @@ export function Orchestrator() {
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>
-          <Provider>
-            <LunaticComponents
-              components={components}
-              autoFocusKey={pageTag}
-              wrapper={({ children, id, componentType }) => (
-                <div
-                  className={`${lunaticClasses.lunatic} ${componentType}`}
-                  key={`component-${id}`}
-                >
-                  {children}
-                </div>
-              )}
-            />
-          </Provider>
+          <Stack className={classes.activeSection}>
+            <Provider>
+              <LunaticComponents
+                components={components}
+                autoFocusKey={pageTag}
+                wrapper={({ children, id, componentType }) => (
+                  <div
+                    className={`${lunaticClasses.lunatic} ${componentType}`}
+                    key={`component-${id}`}
+                  >
+                    {children}
+                  </div>
+                )}
+              />
+            </Provider>
+          </Stack>
           <Stack className={classes.continue}>
             <Continue
               label={continueLabel()}
@@ -151,20 +153,32 @@ export function Orchestrator() {
   )
 }
 
-const useStyles = tss.create(() => ({
+const useStyles = tss.create(({ theme }) => ({
   orchestrator: {
-    fontFamily: "'Gotham SSm A', 'Gotham SSm B', 'sans-serif'",
     minHeight: '100vh',
   },
   bodyContainer: {
     flexDirection: 'row',
-    backgroundColor: '#eeeeee',
+    backgroundColor: theme.palette.background.default,
     paddingTop: '60px',
     flex: 1,
   },
   mainContainer: {
     flexGrow: 1,
     justifyContent: 'space-between',
+  },
+  activeSection: {
+    height: '100%',
+    '& > div:first-of-type': {
+      display: 'flex',
+      height: '100%',
+    },
+    '& > div:first-of-type > div': {
+      width: '80%',
+      marginLeft: '100px',
+      marginTop: '3em',
+      flexGrow: 1,
+    },
   },
   continue: {
     alignItems: 'end',
@@ -177,7 +191,7 @@ const useStyles = tss.create(() => ({
     gap: '2em',
     paddingBottom: '2em',
     alignItems: 'center',
-    borderLeft: '1px solid #777777',
+    borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
     width: '60px',
   },
 }))

@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material'
-import { tss } from 'tss-react'
+import { tss } from 'tss-react/mui'
 
 type ContinueProps = {
   label: string
@@ -25,17 +25,17 @@ export function Continue(props: ContinueProps) {
   )
 }
 
-const useStyles = tss.create(() => ({
+const useStyles = tss.create(({ theme }) => ({
   continueWrapper: {
     alignItems: 'center',
     gap: '0.5em',
   },
   button: {
-    backgroundColor: '#085394',
-    color: '#FFFFFF',
+    backgroundColor: theme.palette.background.button.main,
+    color: theme.palette.secondary.main,
     '&:hover,&:focus': {
-      backgroundColor: '#FFFFFF',
-      color: '#085394',
+      backgroundColor: 'white',
+      color: theme.palette.primary.main,
     },
   },
 }))

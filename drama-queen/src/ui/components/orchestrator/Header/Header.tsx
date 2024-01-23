@@ -84,19 +84,16 @@ export function Header(props: HeaderProps) {
   )
 }
 
-const borderStyleHeader = '1px solid #777777'
-
-//TODO use theme color, space, border etc ...
 const useStyles = tss
   .withParams<{ isDrawerOpen: boolean }>()
-  .create(({ isDrawerOpen }) => ({
+  .create(({ theme, isDrawerOpen }) => ({
     root: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: 'white',
       columnGap: '0.5em',
-      borderBottom: borderStyleHeader,
+      borderBottom: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
     },
     menuIcon: {
       color: isDrawerOpen ? '#E30342' : 'black',
@@ -104,14 +101,13 @@ const useStyles = tss
     },
     menu: {
       zIndex: 1000,
-      fontFamily: "'Gotham SSm A', 'Gotham SSm B', sans-serif",
       '& .MuiDrawer-paper': {
         minWidth: '250px',
       },
     },
     headerClose: {
       marginLeft: 'auto',
-      borderLeft: borderStyleHeader,
+      borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
       width: '60px',
     },
     headerLogo: {
@@ -130,6 +126,6 @@ const useStyles = tss
       fontSize: '80%',
     },
     headerMenu: {
-      borderRight: borderStyleHeader,
+      borderRight: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
     },
   }))

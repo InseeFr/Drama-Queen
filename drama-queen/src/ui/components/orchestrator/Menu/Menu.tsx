@@ -70,7 +70,7 @@ export function Menu(props: MenuProps) {
   )
 }
 
-const useStyles = tss.create(() => ({
+const useStyles = tss.create(({ theme }) => ({
   menuHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -91,19 +91,19 @@ const useStyles = tss.create(() => ({
   },
   sequenceMenu: {
     width: '375px',
-    backgroundColor: '#eeeeee',
-    borderLeft: '1px solid #777777',
+    backgroundColor: theme.palette.background.default,
+    borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
   },
   navigationContainer: { marginTop: '60px' },
   navigationButton: {
     textTransform: 'none',
     justifyContent: 'flex-start',
-    color: '#085394',
+    color: theme.palette.primary.main,
     paddingLeft: '15px',
     borderRadius: 0,
     '&:hover, &:focus': {
       fontWeight: 'bold',
-      backgroundColor: '#9fc5f8',
+      backgroundColor: theme.palette.background.button.light,
     },
     '& .MuiButton-endIcon': {
       position: 'absolute',
@@ -112,13 +112,13 @@ const useStyles = tss.create(() => ({
   },
   goToNavigationTypography: {
     fontSize: '80%',
-    color: '#777777',
+    color: theme.palette.info.main,
     textTransform: 'uppercase',
     paddingLeft: '1.2em',
   },
   version: {
     backgroundColor: 'whitesmoke',
-    borderTop: '1px solid #777777',
+    borderTop: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
     position: 'relative',
     left: 0,
     bottom: 0,

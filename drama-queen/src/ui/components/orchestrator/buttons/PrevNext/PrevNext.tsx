@@ -27,11 +27,7 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.buttonHelp}
-        >
+        <Typography variant="body2" className={classes.helpLabel}>
           PREC.
         </Typography>
       </Stack>
@@ -45,11 +41,7 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.buttonHelp}
-        >
+        <Typography variant="body2" className={classes.helpLabel}>
           SUIV.
         </Typography>
       </Stack>
@@ -57,17 +49,20 @@ export function PrevNext(props: PrevNextProps) {
   )
 }
 
-const useStyles = tss.create(() => ({
+const useStyles = tss.create(({ theme }) => ({
   root: {
     gap: '1.5em',
   },
   previousIcon: { transform: 'rotate(180deg)' },
   iconButton: {
-    backgroundColor: '#9FC5F8',
+    backgroundColor: theme.palette.background.button.light,
     color: 'black',
     '&:hover,&:focus': {
       backgroundColor: 'white',
     },
   },
-  buttonHelp: { color: '#777777' },
+  helpLabel: {
+    textAlign: 'center',
+    color: theme.palette.info.main,
+  },
 }))

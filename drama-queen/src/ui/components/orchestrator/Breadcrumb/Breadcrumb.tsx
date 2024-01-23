@@ -60,11 +60,9 @@ export function BreadCrumb(props: BreadCrumbProps) {
   )
 }
 
-const useStyles = tss.create(() => ({
+const useStyles = tss.create(({ theme }) => ({
   breadcrumbButton: {
-    color: 'black',
-    backgroundColor: 'transparent',
-    border: 'none',
+    color: theme.palette.common.black,
     borderRadius: 0,
     paddingBottom: 0,
     fontSize: '95%',
@@ -82,6 +80,6 @@ const useStyles = tss.create(() => ({
     marginLeft: '0.8em',
   },
   lastButton: {
-    borderBottom: `2px solid #085394`,
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
   },
 }))
