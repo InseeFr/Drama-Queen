@@ -15,6 +15,7 @@ import { SkipNext } from '@mui/icons-material'
 
 const source = form
 const data = {} as LunaticData
+const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
 export function Orchestrator() {
   const { classes } = useStyles()
@@ -32,6 +33,9 @@ export function Orchestrator() {
   } = useLunatic(source, data, {
     shortcut: true,
     withOverview: true,
+    missing: true,
+    dontKnowButton: 'Ne sait pas',
+    missingShortcut: missingShortcut,
   })
 
   const { maxPage, page, subPage, nbSubPages, lastReachedPage } = pager
