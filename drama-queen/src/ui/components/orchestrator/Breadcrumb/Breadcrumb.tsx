@@ -3,7 +3,7 @@ import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
 type BreadCrumbProps = {
-  hierarchy: {
+  hierarchy?: {
     sequence: {
       label: ReactNode
       id: string

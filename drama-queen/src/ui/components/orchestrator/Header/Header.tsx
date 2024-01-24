@@ -13,7 +13,7 @@ import { Stack, SwipeableDrawer, Typography } from '@mui/material'
 
 type HeaderProps = {
   questionnaireTitle: string
-  hierarchy: {
+  hierarchy?: {
     sequence: {
       label: ReactNode
       id: string
