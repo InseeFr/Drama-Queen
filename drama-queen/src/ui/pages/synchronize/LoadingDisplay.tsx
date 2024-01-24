@@ -3,7 +3,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
-import { useTranslate } from 'hooks/useTranslate'
+import { useTranslate } from 'ui/hooks/useTranslate'
 
 type LoadingDisplayProps = {
   syncStepTitle: string

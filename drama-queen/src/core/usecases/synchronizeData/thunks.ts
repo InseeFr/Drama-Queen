@@ -1,6 +1,7 @@
 import type { Thunks } from 'core/bootstrap'
 import { actions, name } from './state'
-import type { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
+import type { LunaticSource } from '@inseefr/lunatic'
 
 export const thunks = {
   download:
@@ -19,104 +20,163 @@ export const thunks = {
 
       dispatch(actions.runningDownload())
 
-      /**
-       * Pre-requis
-       */
-      const campaigns = await queenApi.getCampaigns()
+      try {
+        /**
+         * First
+         */
 
-      const campaignsIds = campaigns.map(({ id }) => id) ?? []
-      const questionnaireIds = [
-        ...new Set(
-          campaigns.map(({ questionnaireIds }) => questionnaireIds).flat() ?? []
-        ),
-      ]
+        const campaigns = await queenApi.getCampaigns()
 
-      dispatch(
-        actions.setDownloadTotalSurvey({ totalSurvey: questionnaireIds.length })
-      )
+        const campaignsIds = campaigns.map(({ id }) => id) ?? []
 
-      /*
-       * SurveyUnit
-       */
+        //extract all questionnaireIds without duplicate
+        const questionnaireIds = [
+          ...new Set(
+            campaigns.map(({ questionnaireIds }) => questionnaireIds).flat() ??
+              []
+          ),
+        ]
 
-      const prSurveyUnit = campaignsIds.map((campaignId) =>
-        queenApi
-          .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
-          .then((arrayOfIds) => {
-            dispatch(
-              actions.updateDownloadTotalSurveyUnit({
-                totalSurveyUnit: arrayOfIds.length,
-              })
-            )
-            return Promise.all(
-              arrayOfIds.map(({ id }) =>
-                queenApi
-                  .getSurveyUnit(id)
-                  .then((surveyUnit) => dataStore.updateSurveyUnit(surveyUnit))
-                  .then(() => {
-                    localSyncStorage.addIdToSurveyUnitsSuccess(id)
-                    dispatch(actions.downloadSurveyUnitCompleted())
-                  })
-              )
-            )
+        dispatch(
+          actions.setDownloadTotalSurvey({
+            totalSurvey: questionnaireIds.length,
           })
-      )
+        )
 
-      await Promise.all(prSurveyUnit)
+        /*
+         * Survey
+         */
 
-      /*
-       * Survey
-       */
+        //We need surveyResults before fetchning SurveyUnit so we await.
+        const surveyResults = await Promise.all(
+          questionnaireIds.map((questionnaireId) =>
+            queenApi
+              .getQuestionnaire(questionnaireId)
+              .then((questionnaire) => {
+                dispatch(actions.downloadSurveyCompleted())
+                return {
+                  success: true as const,
+                  questionnaireId,
+                  questionnaire,
+                }
+              })
+              .catch(() => {
+                console.error(
+                  ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`
+                )
+                return {
+                  success: false as const,
+                  questionnaireId,
+                  questionnaire: undefined,
+                }
+              })
+          )
+        )
 
-      const questionnaires = await Promise.all(
-        questionnaireIds.map((questionnaireId) =>
+        const { questionnaireIdInSuccess, questionnaires } =
+          surveyResults.reduce(
+            (acc, result) => {
+              if (result.success) {
+                acc.questionnaireIdInSuccess.push(result.questionnaireId)
+                acc.questionnaires.push(result.questionnaire)
+              }
+              return acc
+            },
+            { questionnaireIdInSuccess: [], questionnaires: [] } as {
+              questionnaireIdInSuccess: string[]
+              questionnaires: LunaticSource[]
+            }
+          )
+
+        /*
+         * SurveyUnit
+         */
+
+        const prSurveyUnit = campaignsIds.map((campaignId) =>
           queenApi
-            .getQuestionnaire(questionnaireId)
-            .then((questionnaire) => {
-              dispatch(actions.downloadSurveyCompleted())
-              return questionnaire
-            })
-            .catch(() => {
-              console.error(
-                ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`
+            .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
+            .then((arrayOfIds) => {
+              dispatch(
+                actions.updateDownloadTotalSurveyUnit({
+                  totalSurveyUnit: arrayOfIds.length,
+                })
               )
-              return undefined
+              return Promise.all(
+                arrayOfIds.map(({ id }) =>
+                  queenApi
+                    .getSurveyUnit(id)
+                    .then((surveyUnit) => {
+                      dataStore.updateSurveyUnit(surveyUnit)
+                      return questionnaireIdInSuccess.includes(
+                        surveyUnit.questionnaireId
+                      )
+                    })
+                    .then((isSurveyWellDownload) => {
+                      if (isSurveyWellDownload) {
+                        localSyncStorage.addIdToSurveyUnitsSuccess(id)
+                      }
+                      dispatch(actions.downloadSurveyUnitCompleted())
+                    })
+                    .catch((error) => {
+                      if (
+                        error instanceof AxiosError &&
+                        error.response &&
+                        [400, 403, 404, 500].includes(error.response.status)
+                      ) {
+                        console.error(
+                          `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
+                          error
+                        )
+                      }
+                      throw error
+                    })
+                )
+              )
             })
         )
-      )
 
-      /*
-       * Nomenclature
-       */
+        /*
+         * Nomenclature
+         */
 
-      const suggestersNames = deduplicate(
-        questionnaires
-          .map((q) => q?.suggesters)
-          .flat()
-          .map((suggester) => suggester?.name)
-      )
-
-      dispatch(
-        actions.setDownloadTotalNomenclature({
-          totalNomenclature: suggestersNames.length,
-        })
-      )
-
-      //We don't store the data, but instead, we simply initiate the request for the service worker to cache the response
-      await Promise.all(
-        suggestersNames.map((nomenclatureId) =>
-          queenApi
-            .getNomenclature(nomenclatureId)
-            .catch(() => {
-              console.error(
-                `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
-              )
-            })
-            .finally(() => dispatch(actions.downloadNomenclatureCompleted()))
+        const suggestersNames = deduplicate(
+          questionnaires
+            .map((q) => q?.suggesters)
+            .flat()
+            .map((suggester) => suggester?.name)
         )
-      )
 
-      dispatch(actions.downloadCompleted())
+        dispatch(
+          actions.setDownloadTotalNomenclature({
+            totalNomenclature: suggestersNames.length,
+          })
+        )
+
+        //We don't store the data, but instead, we simply initiate the request for the service worker to cache the response
+        const prNomenclatures = Promise.all(
+          suggestersNames.map((nomenclatureId) =>
+            queenApi
+              .getNomenclature(nomenclatureId)
+              .catch(() => {
+                console.error(
+                  `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
+                )
+              })
+              .finally(() => dispatch(actions.downloadNomenclatureCompleted()))
+          )
+        )
+
+        //We await untill all the promises are finished
+        await Promise.all([prSurveyUnit, prNomenclatures])
+
+        dispatch(actions.downloadCompleted())
+      } catch (error) {
+        console.error(
+          'An unknown error occurred while we were fetching data so we stop the synchronization.'
+        )
+        localSyncStorage.addError(true)
+        dispatch(actions.downloadFailed())
+      }
     },
   upload:
     () =>
