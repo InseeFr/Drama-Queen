@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import { dependencies, version } from '../../../../../package.json'
 import { Stack, Typography } from '@mui/material'
 
 type MenuProps = {
@@ -14,8 +13,8 @@ export function Menu(props: MenuProps) {
   const { isDrawerOpen } = props
   const [expanded, setExpanded] = useState(false)
   const { classes } = useStyles()
-  //TO CHANGE
-  const lunaticVersion = dependencies['@inseefr/lunatic'].replace('^', '')
+
+  const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
   useEffect(() => {
     if (!isDrawerOpen) {
@@ -45,7 +44,7 @@ export function Menu(props: MenuProps) {
         </Stack>
         <Stack className={classes.version}>
           <Typography>
-            Queen : {version} | Lunatic : {lunaticVersion}
+            Queen : {APP_VERSION} | Lunatic : {lunaticVersion}
           </Typography>
         </Stack>
       </Stack>

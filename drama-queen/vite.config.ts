@@ -10,6 +10,9 @@ export default defineConfig(({ command, mode }) => {
     define: {
       // eslint-disable-next-line no-undef
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
+      LUNATIC_VERSION: JSON.stringify(
+        process.env.npm_package_dependencies__inseefr_lunatic
+      ),
     },
     plugins: [
       react(),
