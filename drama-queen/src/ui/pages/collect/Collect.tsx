@@ -7,6 +7,7 @@ export function Collect() {
     surveyUnitId: string
     questionnaireId: string
   }>();
+  //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
   const loaderData = useLoaderData() as Awaited<ReturnType<typeof collectLoader>>
 
   console.log(loaderData.isQueenV2);
