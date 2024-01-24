@@ -72,6 +72,12 @@ export function Orchestrator() {
 
   const continueBehavior = getContinueBehavior()
 
+  const getIsDisplayedContinue = () => {
+    return continueBehavior !== null
+  }
+
+  const isDisplayedContinue = getIsDisplayedContinue()
+
   const continueGoToPage = () => {
     switch (continueBehavior) {
       // TODO : handle case for quit.
@@ -142,13 +148,16 @@ export function Orchestrator() {
               />
             </Provider>
           </Stack>
+
           <Stack className={classes.continue}>
-            <Continue
-              label={continueLabel()}
-              endIcon={continueEndIcon()}
-              shortCutLabel={continueShortCutLabel}
-              goToPage={continueGoToPage}
-            />
+            {isDisplayedContinue && (
+              <Continue
+                label={continueLabel}
+                endIcon={continueEndIcon}
+                shortCutLabel={continueShortCutLabel}
+                goToPage={continueGoToPage}
+              />
+            )}
           </Stack>
         </Stack>
         <Stack className={classes.navBarContainer}>
@@ -201,6 +210,7 @@ const useStyles = tss.create(({ theme }) => ({
     alignItems: 'end',
     marginBottom: '1em',
     marginRight: '4em',
+    minHeight: '2.3em',
   },
   navBarContainer: {
     position: 'relative',
