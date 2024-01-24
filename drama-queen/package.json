@@ -13,9 +13,9 @@
     "format:check": "npm run _format -- --list-different"
   },
   "dependencies": {
-    "@inseefr/lunatic": "^2.7.4",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@inseefr/lunatic": "^2.7.13",
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
     "@tanstack/react-query": "^4.29.19",
