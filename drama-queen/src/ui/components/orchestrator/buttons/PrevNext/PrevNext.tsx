@@ -7,14 +7,23 @@ type PrevNextProps = {
   isFirstPage: boolean
   isLastPage: boolean
   isLastReachedPage: boolean
+  readonly: boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
 
 export function PrevNext(props: PrevNextProps) {
-  const { isFirstPage, isLastPage, isLastReachedPage, goPrevious, goNext } =
-    props
+  const {
+    isFirstPage,
+    isLastPage,
+    isLastReachedPage,
+    readonly,
+    goPrevious,
+    goNext,
+  } = props
   const { classes } = useStyles()
+
+  const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
 
   return (
     <Stack id="buttons" className={classes.root}>
@@ -36,7 +45,7 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={classes.iconButton}
           size="large"
-          disabled={isLastReachedPage}
+          disabled={!canGoNext}
           onClick={goNext}
         >
           <PlayArrowIcon fontSize="small" />

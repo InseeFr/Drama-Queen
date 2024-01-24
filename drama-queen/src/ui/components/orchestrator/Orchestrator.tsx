@@ -16,6 +16,7 @@ import { SkipNext } from '@mui/icons-material'
 const source = form
 const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
+const readonly = false
 
 export function Orchestrator() {
   const { classes } = useStyles()
@@ -46,60 +47,72 @@ export function Orchestrator() {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const isLastReachedPage = () => {
+  const getIsLastReachedPage = () => {
     if (lastReachedPage === undefined) {
       return true
     }
     return pageTag === lastReachedPage
   }
 
+  const isLastReachedPage = getIsLastReachedPage()
+
+  const getContinueBehavior = () => {
+    if (readonly) {
+      return isLastPage ? 'quit' : null
+    }
+    if (isLastPage) {
+      return 'saveAndQuit'
+    }
+    if (!isLastReachedPage) {
+      return 'fastForward'
+    }
+    // TODO : add condition on hasPageResponse when seq/subSeq will be handled
+    return 'continue'
+  }
+
+  const continueBehavior = getContinueBehavior()
+
   const continueGoToPage = () => {
-    if (isLastPage) {
-      // handle case for quit
-    } else {
-      if (isLastReachedPage()) {
+    switch (continueBehavior) {
+      // TODO : handle case for quit.
+      case 'quit':
+      case 'saveAndQuit':
+        break
+      case 'fastForward':
+        goToPage({ page: lastReachedPage || '' })
+        break
+      default:
         goNextPage()
-      } else {
-        const splitLastReachedPage =
-          lastReachedPage?.replace(/\./g, '#').split('#') || []
-        const formattedLastReachedPage = {
-          page: splitLastReachedPage[0],
-          subPage:
-            splitLastReachedPage[1] === undefined
-              ? undefined
-              : parseFloat(splitLastReachedPage[1]) - 1,
-          iteration:
-            splitLastReachedPage[2] === undefined
-              ? undefined
-              : parseFloat(splitLastReachedPage[2]) - 1,
-        }
-        goToPage(formattedLastReachedPage)
-      }
     }
   }
 
-  const continueLabel = () => {
-    if (isLastPage) {
-      return 'valider et quitter'
+  const getContinueLabel = () => {
+    switch (continueBehavior) {
+      case 'quit':
+        return 'quitter'
+      case 'saveAndQuit':
+        return 'valider et quitter'
+      case 'fastForward':
+        return "suite de l'entretien"
+      default:
+        return 'continuer'
     }
-    if (isLastReachedPage()) {
-      return 'continuer'
-    }
-    return "suite de l'entretien"
   }
 
-  const continueEndIcon = () => {
-    if (!isLastPage) {
-      if (isLastReachedPage()) {
-        return <ArrowRightAltIcon />
-      }
+  const continueLabel = getContinueLabel()
+
+  const getContinueEndIcon = () => {
+    if (continueBehavior === 'continue') {
+      return <ArrowRightAltIcon />
+    }
+    if (continueBehavior === 'fastForward') {
       return <SkipNext fontSize="large" />
     }
   }
 
-  const continueShortCutLabel = isLastReachedPage()
-    ? 'alt + ENTRÉE'
-    : 'alt + fin'
+  const continueEndIcon = getContinueEndIcon()
+
+  const continueShortCutLabel = isLastReachedPage ? 'alt + ENTRÉE' : 'alt + fin'
 
   return (
     <Stack className={classes.orchestrator}>
@@ -114,6 +127,9 @@ export function Orchestrator() {
             <Provider>
               <LunaticComponents
                 components={components}
+                componentProps={() => ({
+                  readOnly: readonly,
+                })}
                 autoFocusKey={pageTag}
                 wrapper={({ children, id, componentType }) => (
                   <div
@@ -143,7 +159,8 @@ export function Orchestrator() {
             nbSubPages={nbSubPages}
             isFirstPage={isFirstPage}
             isLastPage={isLastPage}
-            isLastReachedPage={isLastReachedPage()}
+            isLastReachedPage={isLastReachedPage}
+            readonly={readonly}
             goPrevious={goPreviousPage}
             goNext={goNextPage}
           />
