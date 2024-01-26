@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine3.17
+FROM nginx:stable-alpine
 ADD build /usr/share/nginx/html
 RUN rm etc/nginx/conf.d/default.conf
 # Overload nginx.conf to enable cors
