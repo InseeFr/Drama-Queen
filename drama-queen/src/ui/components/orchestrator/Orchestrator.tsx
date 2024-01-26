@@ -10,10 +10,15 @@ import {
 import { Stack } from '@mui/material'
 import { useLunaticStyles } from './lunaticStyle'
 import { Continue } from './buttons/Continue/Continue'
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-import { SkipNext } from '@mui/icons-material'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
-import { useEffect, useState } from 'react'
+import {
+  getContinueBehavior,
+  getContinueEndIcon,
+  getContinueGoToPage,
+  getContinueLabel,
+  getIsDisplayedContinue,
+  getIsLastReachedPage,
+} from 'ui/tools/functions'
 
 const source = form
 const data = {} as LunaticData
@@ -49,76 +54,22 @@ export function Orchestrator() {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const getIsLastReachedPage = () => {
-    if (lastReachedPage === undefined) {
-      return true
-    }
-    return pageTag === lastReachedPage
-  }
+  const isLastReachedPage = getIsLastReachedPage(pageTag, lastReachedPage)
 
-  const isLastReachedPage = getIsLastReachedPage()
+  const continueBehavior = getContinueBehavior(
+    readonly,
+    isLastPage,
+    isLastReachedPage
+  )
 
-  const getContinueBehavior = () => {
-    if (readonly) {
-      return isLastPage ? 'quit' : null
-    }
-    if (isLastPage) {
-      return 'saveAndQuit'
-    }
-    if (!isLastReachedPage) {
-      return 'fastForward'
-    }
-    // TODO : add condition on hasPageResponse when seq/subSeq will be handled
-    return 'continue'
-  }
+  const isDisplayedContinue = getIsDisplayedContinue(continueBehavior)
 
-  const continueBehavior = getContinueBehavior()
+  const continueGoToPage = () =>
+    getContinueGoToPage(continueBehavior, lastReachedPage, goNextPage, goToPage)
 
-  const getIsDisplayedContinue = () => {
-    return continueBehavior !== null
-  }
+  const continueLabel = getContinueLabel(continueBehavior)
 
-  const isDisplayedContinue = getIsDisplayedContinue()
-
-  const continueGoToPage = () => {
-    switch (continueBehavior) {
-      // TODO : handle case for quit.
-      case 'quit':
-      case 'saveAndQuit':
-        break
-      case 'fastForward':
-        goToPage({ page: lastReachedPage || '' })
-        break
-      default:
-        goNextPage()
-    }
-  }
-
-  const getContinueLabel = () => {
-    switch (continueBehavior) {
-      case 'quit':
-        return 'quitter'
-      case 'saveAndQuit':
-        return 'valider et quitter'
-      case 'fastForward':
-        return "suite de l'entretien"
-      default:
-        return 'continuer'
-    }
-  }
-
-  const continueLabel = getContinueLabel()
-
-  const getContinueEndIcon = () => {
-    if (continueBehavior === 'continue') {
-      return <ArrowRightAltIcon />
-    }
-    if (continueBehavior === 'fastForward') {
-      return <SkipNext fontSize="large" />
-    }
-  }
-
-  const continueEndIcon = getContinueEndIcon()
+  const continueEndIcon = getContinueEndIcon(continueBehavior)
 
   const continueShortCutKey =
     continueBehavior === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
