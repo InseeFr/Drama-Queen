@@ -12,6 +12,8 @@ import { useLunaticStyles } from './lunaticStyle'
 import { Continue } from './buttons/Continue/Continue'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import { SkipNext } from '@mui/icons-material'
+import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
+import { useEffect, useState } from 'react'
 
 const source = form
 const data = {} as LunaticData
@@ -118,7 +120,11 @@ export function Orchestrator() {
 
   const continueEndIcon = getContinueEndIcon()
 
-  const continueShortCutLabel = isLastReachedPage ? 'alt + ENTRÉE' : 'alt + fin'
+  const continueShortCutKey =
+    continueBehavior === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
+
+  const continueShortCutLabel =
+    continueBehavior === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
 
   return (
     <Stack className={classes.orchestrator}>
@@ -154,6 +160,7 @@ export function Orchestrator() {
               <Continue
                 label={continueLabel}
                 endIcon={continueEndIcon}
+                shortCutKey={continueShortCutKey}
                 shortCutLabel={continueShortCutLabel}
                 goToPage={continueGoToPage}
               />

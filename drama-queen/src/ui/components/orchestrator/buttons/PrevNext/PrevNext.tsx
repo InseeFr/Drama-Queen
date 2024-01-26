@@ -2,6 +2,8 @@ import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import { Stack, Typography } from '@mui/material'
+import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from 'ui/constants'
+import { ShortCut } from '../ShortCut/ShortCut'
 
 type PrevNextProps = {
   isFirstPage: boolean
@@ -24,6 +26,10 @@ export function PrevNext(props: PrevNextProps) {
   const { classes } = useStyles()
 
   const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
+  const canGoPrevious = !isFirstPage
+
+  const previousShortCutKey = SHORTCUT_PREVIOUS
+  const nextShortCutKey = SHORTCUT_NEXT
 
   return (
     <Stack id="buttons" className={classes.root}>
@@ -31,10 +37,16 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={`${classes.iconButton} ${classes.previousIcon}`}
           size="large"
-          disabled={isFirstPage}
+          disabled={!canGoPrevious}
           onClick={goPrevious}
         >
           <PlayArrowIcon fontSize="small" />
+          {canGoPrevious && (
+            <ShortCut
+              shortCutKey={previousShortCutKey}
+              onClickMethod={goPrevious}
+            />
+          )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
           PREC.
@@ -49,6 +61,9 @@ export function PrevNext(props: PrevNextProps) {
           onClick={goNext}
         >
           <PlayArrowIcon fontSize="small" />
+          {canGoNext && (
+            <ShortCut shortCutKey={nextShortCutKey} onClickMethod={goNext} />
+          )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
           SUIV.

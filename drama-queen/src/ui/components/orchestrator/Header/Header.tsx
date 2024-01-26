@@ -10,6 +10,8 @@ import insee from 'ui/assets/insee.png'
 import { Menu } from '../Menu/Menu'
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Stack, SwipeableDrawer, Typography } from '@mui/material'
+import { ShortCut } from '../buttons/ShortCut/ShortCut'
+import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -38,6 +40,9 @@ export function Header(props: HeaderProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
 
+  const menuShortKey = SHORCUT_MENU
+  const quitShortKey = SHORTCUT_QUIT
+
   const handleDrawerToggle = (open: boolean) => setIsDrawerOpen(open)
   const handleOpen = () => setIsDrawerOpen(true)
   const handleClose = () => setIsDrawerOpen(false)
@@ -49,6 +54,10 @@ export function Header(props: HeaderProps) {
       <Stack className={classes.headerMenu}>
         <IconButton className={classes.menuIcon}>
           <AppsIcon onClick={() => handleDrawerToggle(!isDrawerOpen)} />
+          <ShortCut
+            shortCutKey={menuShortKey}
+            onClickMethod={() => handleDrawerToggle(!isDrawerOpen)}
+          />
         </IconButton>
       </Stack>
       <SwipeableDrawer
@@ -78,6 +87,7 @@ export function Header(props: HeaderProps) {
       <Stack className={classes.headerClose}>
         <IconButton title="Quitter" className={classes.closeIcon}>
           <ExitToAppIcon />
+          {/* <ShortCut shortCutKey={quitShortKey} onClickMethod={} /> */}
         </IconButton>
       </Stack>
     </AppBar>
