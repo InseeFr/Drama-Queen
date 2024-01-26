@@ -1,28 +1,88 @@
 import { tss } from 'tss-react/mui'
 import Button from '@mui/material/Button'
 import { useEffect, useState } from 'react'
-import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Stack, Typography } from '@mui/material'
+import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
+import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
+import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
 
 type MenuProps = {
   isDrawerOpen: boolean
+  readonly: boolean
+  overview: {
+    lunaticId: string
+    page: string
+    type: string
+    label: string
+    visible: boolean
+    reached: boolean
+    children: OverviewItem[]
+  }[]
+  goToPage: (page: {
+    page: string
+    iteration?: number
+    nbIterations?: number
+    subPage?: number
+  }) => void
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 export function Menu(props: MenuProps) {
-  const { isDrawerOpen } = props
-  const [expanded, setExpanded] = useState(false)
+  const { isDrawerOpen, readonly, overview, goToPage, setIsDrawerOpen } = props
+  const [surveyOpen, setSurveyOpen] = useState(false)
+  const [stopOpen, setStopOpen] = useState(false)
+  const [sequenceOpen, setSequenceOpen] = useState(false)
+  const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
   const { classes } = useStyles()
 
   const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
+  const menuItems: Array<'Enquête' | 'Arrêt'> = readonly
+    ? ['Enquête']
+    : ['Enquête', 'Arrêt']
+
   useEffect(() => {
     if (!isDrawerOpen) {
-      setExpanded(false)
+      setSurveyOpen(false)
+      setStopOpen(false)
     }
-  }, [isDrawerOpen])
+    if (!surveyOpen) {
+      setSequenceOpen(false)
+      setSelectedSequence(undefined)
+    }
+  }, [isDrawerOpen, surveyOpen])
 
-  const toggleExpandedMenu = () => setExpanded(!expanded)
+  function toggleExpandedMenu(type: string) {
+    if (type === 'Enquête') {
+      setStopOpen(false)
+      setSurveyOpen(!surveyOpen)
+    } else if (type === 'Arrêt') {
+      setSurveyOpen(false)
+      setStopOpen(!stopOpen)
+    }
+  }
+
+  function toggleExpandedSubMenu() {
+    setSequenceOpen(!sequenceOpen)
+  }
+
+  const sequenceOnClick = (sequence: OverviewItem) => {
+    if (sequence.children.length > 0) {
+      if (!selectedSequence || selectedSequence === sequence) {
+        toggleExpandedSubMenu()
+      }
+      setSelectedSequence(sequence)
+    } else {
+      goToPage({ page: sequence.page })
+      setIsDrawerOpen(false)
+    }
+  }
+
+  const subSequenceOnClick = (component: OverviewItem) => {
+    goToPage({ page: component.page })
+    setIsDrawerOpen(false)
+  }
 
   return (
     <Stack className={classes.menuContainer}>
@@ -31,16 +91,18 @@ export function Menu(props: MenuProps) {
           <Typography className={classes.goToNavigationTypography}>
             Allez vers ...
           </Typography>
-          <Button
-            className={classes.navigationButton}
-            autoFocus
-            size="small"
-            disableRipple
-            endIcon={<ChevronRightIcon />}
-            onClick={toggleExpandedMenu}
-          >
-            Enquête
-          </Button>
+          {menuItems.map((type) => (
+            <Button
+              className={classes.navigationButton}
+              autoFocus
+              size="small"
+              disableRipple
+              endIcon={<ChevronRightIcon />}
+              onClick={() => toggleExpandedMenu(type)}
+            >
+              {type}
+            </Button>
+          ))}
         </Stack>
         <Stack className={classes.version}>
           <Typography>
@@ -48,21 +110,45 @@ export function Menu(props: MenuProps) {
           </Typography>
         </Stack>
       </Stack>
-      {expanded && (
-        <Stack className={classes.sequenceMenu}>
+      {(surveyOpen || stopOpen) && (
+        <Stack className={`${classes.expanded} ${classes.expandedMenu}`}>
           <Button
             className={classes.navigationButton}
             autoFocus
             size="small"
             disableRipple
             startIcon={<ChevronLeftIcon />}
-            onClick={toggleExpandedMenu}
+            onClick={() => toggleExpandedMenu(surveyOpen ? 'Enquête' : 'Arrêt')}
           >
             Retour
           </Button>
-          <Stack className={classes.navigationContainer}>
-            <Typography>test</Typography>
-          </Stack>
+
+          {surveyOpen && (
+            <Stack className={classes.navigationContainer}>
+              <SequenceNavigation
+                overview={overview}
+                sequenceOnClick={sequenceOnClick}
+              />
+            </Stack>
+          )}
+        </Stack>
+      )}
+      {selectedSequence && sequenceOpen && (
+        <Stack className={classes.expanded}>
+          <Button
+            className={classes.navigationButton}
+            autoFocus
+            size="small"
+            disableRipple
+            startIcon={<ChevronLeftIcon />}
+            onClick={() => toggleExpandedSubMenu()}
+          >
+            Retour
+          </Button>
+          <SubSequenceNavigation
+            sequence={selectedSequence}
+            subSequenceOnClick={subSequenceOnClick}
+          />
         </Stack>
       )}
     </Stack>
@@ -88,10 +174,12 @@ const useStyles = tss.create(({ theme }) => ({
     width: '250px',
     justifyContent: 'space-between',
   },
-  sequenceMenu: {
+  expanded: {
     width: '375px',
-    backgroundColor: theme.palette.background.default,
     borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
+  },
+  expandedMenu: {
+    backgroundColor: theme.palette.background.default,
   },
   navigationContainer: { marginTop: '60px' },
   navigationButton: {

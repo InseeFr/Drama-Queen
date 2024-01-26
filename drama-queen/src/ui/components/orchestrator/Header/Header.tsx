@@ -12,6 +12,7 @@ import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Stack, SwipeableDrawer, Typography } from '@mui/material'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
+import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -27,6 +28,16 @@ type HeaderProps = {
       page: string
     }
   }
+  readonly: boolean
+  overview: {
+    lunaticId: string
+    page: string
+    type: string
+    label: string
+    visible: boolean
+    reached: boolean
+    children: OverviewItem[]
+  }[]
   goToPage: (page: {
     page: string
     iteration?: number
@@ -36,7 +47,7 @@ type HeaderProps = {
 }
 
 export function Header(props: HeaderProps) {
-  const { questionnaireTitle, hierarchy, goToPage } = props
+  const { questionnaireTitle, hierarchy, readonly, overview, goToPage } = props
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
 
@@ -66,7 +77,13 @@ export function Header(props: HeaderProps) {
         onOpen={handleOpen}
         onClose={handleClose}
       >
-        <Menu isDrawerOpen={isDrawerOpen} />
+        <Menu
+          isDrawerOpen={isDrawerOpen}
+          readonly={readonly}
+          overview={overview}
+          goToPage={goToPage}
+          setIsDrawerOpen={setIsDrawerOpen}
+        />
       </SwipeableDrawer>
 
       <Button title="Retour au début du questionnaire">

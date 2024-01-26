@@ -1,7 +1,7 @@
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
 import { tss } from 'tss-react/mui'
-import { form } from './form'
+import { form2 } from './form'
 import {
   type LunaticData,
   useLunatic,
@@ -20,7 +20,7 @@ import {
   getIsLastReachedPage,
 } from 'ui/tools/functions'
 
-const source = form
+const source = form2
 const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 const readonly = false
@@ -38,6 +38,7 @@ export function Orchestrator() {
     pager,
     Provider,
     pageTag,
+    overview,
   } = useLunatic(source, data, {
     shortcut: true,
     withOverview: true,
@@ -82,6 +83,8 @@ export function Orchestrator() {
       <Header
         questionnaireTitle={questionnaireTitle}
         hierarchy={hierarchy}
+        readonly={readonly}
+        overview={overview}
         goToPage={goToPage}
       />
       <Stack className={classes.bodyContainer}>
