@@ -41,9 +41,7 @@ export function Menu(props: MenuProps) {
     goToPage,
     setIsDrawerOpen,
   } = props
-  const [surveyOpen, setSurveyOpen] = useState(false)
-  const [stopOpen, setStopOpen] = useState(false)
-  const [sequenceOpen, setSequenceOpen] = useState(false)
+  const [selectedMenuType, setSelectedMenuType] = useState<MenuItem>()
   const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
   const { classes } = useStyles()
 
@@ -55,35 +53,36 @@ export function Menu(props: MenuProps) {
 
   useEffect(() => {
     if (!isDrawerOpen) {
-      setSurveyOpen(false)
-      setStopOpen(false)
+      setSelectedMenuType(undefined)
     }
-    if (!surveyOpen) {
-      setSequenceOpen(false)
+    if (selectedMenuType !== 'Enquête') {
       setSelectedSequence(undefined)
     }
-  }, [isDrawerOpen, surveyOpen])
+  }, [isDrawerOpen, selectedMenuType])
 
-  function toggleExpandedMenu(type: MenuItem) {
-    if (type === 'Enquête') {
-      setStopOpen(false)
-      setSurveyOpen(!surveyOpen)
-    } else if (type === 'Arrêt') {
-      setSurveyOpen(false)
-      setStopOpen(!stopOpen)
+  const toggleExpandedMenu = (type: MenuItem) => {
+    if (selectedMenuType === type) {
+      setSelectedMenuType(undefined)
+    } else {
+      setSelectedMenuType(type)
     }
   }
 
-  function toggleExpandedSubMenu() {
-    setSequenceOpen(!sequenceOpen)
+  const toggleExpandedSubMenu = (sequence: OverviewItem) => {
+    if (selectedSequence === sequence) {
+      setSelectedSequence(undefined)
+    } else {
+      setSelectedSequence(sequence)
+    }
   }
 
   const sequenceOnClick = (sequence: OverviewItem) => {
     if (sequence.children.length > 0) {
       if (!selectedSequence || selectedSequence === sequence) {
-        toggleExpandedSubMenu()
+        toggleExpandedSubMenu(sequence)
+      } else {
+        setSelectedSequence(sequence)
       }
-      setSelectedSequence(sequence)
     } else {
       goToPage({ page: sequence.page })
       setIsDrawerOpen(false)
@@ -95,12 +94,8 @@ export function Menu(props: MenuProps) {
     setIsDrawerOpen(false)
   }
 
-  function isMenuItemOpen(type: MenuItem) {
-    if (type === 'Enquête') {
-      return surveyOpen
-    } else if (type === 'Arrêt') {
-      return stopOpen
-    }
+  const isMenuItemOpen = (type: MenuItem) => {
+    return selectedMenuType === type
   }
 
   return (
@@ -136,7 +131,7 @@ export function Menu(props: MenuProps) {
           </Typography>
         </Stack>
       </Stack>
-      {(surveyOpen || stopOpen) && (
+      {selectedMenuType && (
         <Stack className={`${classes.expanded} ${classes.expandedMenu}`}>
           <Button
             className={classes.navigationButton}
@@ -144,12 +139,12 @@ export function Menu(props: MenuProps) {
             size="small"
             disableRipple
             startIcon={<ChevronLeftIcon />}
-            onClick={() => toggleExpandedMenu(surveyOpen ? 'Enquête' : 'Arrêt')}
+            onClick={() => toggleExpandedMenu(selectedMenuType)}
           >
             Retour
           </Button>
 
-          {surveyOpen && (
+          {selectedMenuType === 'Enquête' && (
             <Stack className={classes.navigationContainer}>
               <SequenceNavigation
                 questionnaireTitle={questionnaireTitle}
@@ -161,7 +156,7 @@ export function Menu(props: MenuProps) {
           )}
         </Stack>
       )}
-      {selectedSequence && sequenceOpen && (
+      {selectedSequence && (
         <Stack className={classes.expanded}>
           <Button
             className={classes.navigationButton}
@@ -169,7 +164,7 @@ export function Menu(props: MenuProps) {
             size="small"
             disableRipple
             startIcon={<ChevronLeftIcon />}
-            onClick={() => toggleExpandedSubMenu()}
+            onClick={() => toggleExpandedSubMenu(selectedSequence)}
           >
             Retour
           </Button>

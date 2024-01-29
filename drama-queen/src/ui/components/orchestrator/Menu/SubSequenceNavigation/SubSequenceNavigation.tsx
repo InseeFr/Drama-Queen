@@ -1,6 +1,5 @@
 import { Button, Stack } from '@mui/material'
 import { tss } from 'tss-react/mui'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 
 type subSequenceNavigationProps = {
@@ -28,9 +27,9 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
         {sequence?.label}
       </Button>
       <Stack>
-        {sequence?.children.map((subSequence) => (
+        {sequence.children.map((subSequence) => (
           <Button
-            key={sequence.lunaticId}
+            key={subSequence.lunaticId}
             className={classes.navigationButton}
             size="small"
             disableRipple
