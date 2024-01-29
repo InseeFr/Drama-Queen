@@ -94,6 +94,8 @@ export function Orchestrator() {
               <LunaticComponents
                 components={components}
                 componentProps={() => ({
+                  filterDescription: false,
+                  disabled: readonly,
                   readOnly: readonly,
                 })}
                 autoFocusKey={pageTag}
