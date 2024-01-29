@@ -80,6 +80,7 @@ export function Header(props: HeaderProps) {
         <Menu
           isDrawerOpen={isDrawerOpen}
           readonly={readonly}
+          questionnaireTitle={questionnaireTitle}
           overview={overview}
           goToPage={goToPage}
           setIsDrawerOpen={setIsDrawerOpen}

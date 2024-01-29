@@ -11,6 +11,7 @@ import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNaviga
 type MenuProps = {
   isDrawerOpen: boolean
   readonly: boolean
+  questionnaireTitle: string
   overview: {
     lunaticId: string
     page: string
@@ -28,8 +29,18 @@ type MenuProps = {
   }) => void
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+type MenuItem = 'Enquête' | 'Arrêt'
+
 export function Menu(props: MenuProps) {
-  const { isDrawerOpen, readonly, overview, goToPage, setIsDrawerOpen } = props
+  const {
+    isDrawerOpen,
+    readonly,
+    questionnaireTitle,
+    overview,
+    goToPage,
+    setIsDrawerOpen,
+  } = props
   const [surveyOpen, setSurveyOpen] = useState(false)
   const [stopOpen, setStopOpen] = useState(false)
   const [sequenceOpen, setSequenceOpen] = useState(false)
@@ -38,7 +49,7 @@ export function Menu(props: MenuProps) {
 
   const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
-  const menuItems: Array<'Enquête' | 'Arrêt'> = readonly
+  const menuItems: Array<MenuItem> = readonly
     ? ['Enquête']
     : ['Enquête', 'Arrêt']
 
@@ -53,7 +64,7 @@ export function Menu(props: MenuProps) {
     }
   }, [isDrawerOpen, surveyOpen])
 
-  function toggleExpandedMenu(type: string) {
+  function toggleExpandedMenu(type: MenuItem) {
     if (type === 'Enquête') {
       setStopOpen(false)
       setSurveyOpen(!surveyOpen)
@@ -84,25 +95,40 @@ export function Menu(props: MenuProps) {
     setIsDrawerOpen(false)
   }
 
+  function isMenuItemOpen(type: MenuItem) {
+    if (type === 'Enquête') {
+      return surveyOpen
+    } else if (type === 'Arrêt') {
+      return stopOpen
+    }
+  }
+
   return (
     <Stack className={classes.menuContainer}>
       <Stack className={classes.menuPanel}>
         <Stack className={classes.navigationContainer}>
-          <Typography className={classes.goToNavigationTypography}>
+          <Typography
+            variant="overline"
+            className={classes.goToNavigationTypography}
+          >
             Allez vers ...
           </Typography>
-          {menuItems.map((type) => (
-            <Button
-              className={classes.navigationButton}
-              autoFocus
-              size="small"
-              disableRipple
-              endIcon={<ChevronRightIcon />}
-              onClick={() => toggleExpandedMenu(type)}
-            >
-              {type}
-            </Button>
-          ))}
+          <Stack>
+            {menuItems.map((type) => (
+              <Button
+                className={`${classes.navigationButton} ${
+                  isMenuItemOpen(type) && classes.itemOpen
+                }`}
+                autoFocus
+                size="small"
+                disableRipple
+                endIcon={<ChevronRightIcon />}
+                onClick={() => toggleExpandedMenu(type)}
+              >
+                {type}
+              </Button>
+            ))}
+          </Stack>
         </Stack>
         <Stack className={classes.version}>
           <Typography>
@@ -126,7 +152,9 @@ export function Menu(props: MenuProps) {
           {surveyOpen && (
             <Stack className={classes.navigationContainer}>
               <SequenceNavigation
+                questionnaireTitle={questionnaireTitle}
                 overview={overview}
+                selectedSequence={selectedSequence}
                 sequenceOnClick={sequenceOnClick}
               />
             </Stack>
@@ -145,10 +173,12 @@ export function Menu(props: MenuProps) {
           >
             Retour
           </Button>
-          <SubSequenceNavigation
-            sequence={selectedSequence}
-            subSequenceOnClick={subSequenceOnClick}
-          />
+          <Stack className={classes.navigationContainer}>
+            <SubSequenceNavigation
+              sequence={selectedSequence}
+              subSequenceOnClick={subSequenceOnClick}
+            />
+          </Stack>
         </Stack>
       )}
     </Stack>
@@ -156,21 +186,12 @@ export function Menu(props: MenuProps) {
 }
 
 const useStyles = tss.create(({ theme }) => ({
-  menuHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-
   menuContainer: {
-    display: 'flex',
     flexDirection: 'row',
     height: '100%',
     paddingTop: '65px',
   },
   menuPanel: {
-    display: 'flex',
-    flexDirection: 'column',
     width: '250px',
     justifyContent: 'space-between',
   },
@@ -181,12 +202,13 @@ const useStyles = tss.create(({ theme }) => ({
   expandedMenu: {
     backgroundColor: theme.palette.background.default,
   },
-  navigationContainer: { marginTop: '60px' },
+  navigationContainer: { gap: '1.5em', marginTop: '30px' },
   navigationButton: {
     textTransform: 'none',
     justifyContent: 'flex-start',
+    textAlign: 'left',
     color: theme.palette.primary.main,
-    paddingLeft: '15px',
+    paddingLeft: '1.2em',
     borderRadius: 0,
     '&:hover, &:focus': {
       fontWeight: 'bold',
@@ -197,14 +219,14 @@ const useStyles = tss.create(({ theme }) => ({
       right: '10px',
     },
   },
+  itemOpen: { backgroundColor: theme.palette.background.button.light },
   goToNavigationTypography: {
-    fontSize: '80%',
     color: theme.palette.info.main,
-    textTransform: 'uppercase',
     paddingLeft: '1.2em',
+    marginTop: '30px',
   },
   version: {
-    backgroundColor: 'whitesmoke',
+    backgroundColor: theme.palette.background.default,
     borderTop: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
     position: 'relative',
     left: 0,
