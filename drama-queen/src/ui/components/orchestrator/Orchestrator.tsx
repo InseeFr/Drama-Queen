@@ -1,7 +1,7 @@
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
 import { tss } from 'tss-react/mui'
-import { form2 } from './form'
+import { form } from './form'
 import {
   type LunaticData,
   useLunatic,
@@ -20,7 +20,7 @@ import {
   getIsLastReachedPage,
 } from 'ui/tools/functions'
 
-const source = form2
+const source = form
 const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 const readonly = false
@@ -39,6 +39,7 @@ export function Orchestrator() {
     Provider,
     pageTag,
     overview,
+    hasPageResponse,
   } = useLunatic(source, data, {
     shortcut: true,
     withOverview: true,
@@ -52,6 +53,7 @@ export function Orchestrator() {
   const questionnaireTitle = source.label.value
 
   const components = getComponents()
+
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
@@ -60,7 +62,8 @@ export function Orchestrator() {
   const continueBehavior = getContinueBehavior(
     readonly,
     isLastPage,
-    isLastReachedPage
+    isLastReachedPage,
+    hasPageResponse
   )
 
   const isDisplayedContinue = getIsDisplayedContinue(continueBehavior)

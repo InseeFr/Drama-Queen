@@ -14,10 +14,11 @@ export function getIsLastReachedPage(
 export function getContinueBehavior(
   readonly: boolean,
   isLastPage: boolean,
-  isLastReachedPage: boolean
+  isLastReachedPage: boolean,
+  hasPageResponse: () => boolean
 ) {
   if (readonly) {
-    return isLastPage ? 'quit' : null
+    return isLastPage ? 'quit' : undefined
   }
   if (isLastPage) {
     return 'saveAndQuit'
@@ -25,14 +26,15 @@ export function getContinueBehavior(
   if (!isLastReachedPage) {
     return 'fastForward'
   }
-  // TODO : add condition on hasPageResponse when seq/subSeq will be handled
-  return 'continue'
+  if (hasPageResponse()) {
+    return 'continue'
+  }
 }
 
 export function getIsDisplayedContinue(
   continueBehavior: ReturnType<typeof getContinueBehavior>
 ) {
-  return continueBehavior !== null
+  return continueBehavior !== undefined
 }
 
 export function getContinueGoToPage(
