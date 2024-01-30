@@ -228,6 +228,7 @@ const useStyles = tss.create(({ theme }) => ({
   itemOpen: { backgroundColor: theme.palette.background.button.light },
   goToNavigationTypography: {
     color: theme.palette.info.main,
+    lineHeight: '1.5em',
     paddingLeft: '1.2em',
     marginTop: '30px',
   },

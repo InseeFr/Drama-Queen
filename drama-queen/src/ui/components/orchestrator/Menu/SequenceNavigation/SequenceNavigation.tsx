@@ -70,6 +70,7 @@ const useStyles = tss.create(({ theme }) => ({
     justifyContent: 'flex-start',
     textAlign: 'left',
     color: theme.palette.primary.main,
+    lineHeight: '1.5em',
     paddingLeft: '1.2em',
     borderRadius: 0,
     '&:hover, &:focus': {
