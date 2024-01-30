@@ -44,10 +44,20 @@ type HeaderProps = {
     nbIterations?: number
     subPage?: number
   }) => void
+  quit: () => void
+  definitiveQuit: () => void
 }
 
 export function Header(props: HeaderProps) {
-  const { questionnaireTitle, hierarchy, readonly, overview, goToPage } = props
+  const {
+    questionnaireTitle,
+    hierarchy,
+    readonly,
+    overview,
+    goToPage,
+    quit,
+    definitiveQuit,
+  } = props
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
 
@@ -84,6 +94,8 @@ export function Header(props: HeaderProps) {
           overview={overview}
           goToPage={goToPage}
           setIsDrawerOpen={setIsDrawerOpen}
+          quit={quit}
+          definitiveQuit={definitiveQuit}
         />
       </SwipeableDrawer>
 

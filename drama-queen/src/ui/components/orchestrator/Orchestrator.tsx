@@ -26,6 +26,8 @@ const source = form
 const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 const readonly = false
+const quit = () => console.log('quit')
+const definitiveQuit = () => console.log('definitiveQuit')
 
 export function Orchestrator() {
   const { classes } = useStyles()
@@ -100,6 +102,8 @@ export function Orchestrator() {
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
+        quit={quit}
+        definitiveQuit={definitiveQuit}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>

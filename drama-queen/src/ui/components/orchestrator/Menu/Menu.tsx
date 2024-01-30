@@ -7,6 +7,7 @@ import { Stack, Typography } from '@mui/material'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
+import { StopNavigation } from './StopNavigation/StopNavigation'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -28,6 +29,8 @@ type MenuProps = {
     subPage?: number
   }) => void
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+  quit: () => void
+  definitiveQuit: () => void
 }
 
 type MenuItem = 'Enquête' | 'Arrêt'
@@ -40,6 +43,8 @@ export function Menu(props: MenuProps) {
     overview,
     goToPage,
     setIsDrawerOpen,
+    quit,
+    definitiveQuit,
   } = props
   const [selectedMenuType, setSelectedMenuType] = useState<MenuItem>()
   const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
@@ -152,6 +157,12 @@ export function Menu(props: MenuProps) {
                 selectedSequence={selectedSequence}
                 sequenceOnClick={sequenceOnClick}
               />
+            </Stack>
+          )}
+
+          {selectedMenuType === 'Arrêt' && (
+            <Stack className={classes.navigationContainer}>
+              <StopNavigation quit={quit} definitiveQuit={definitiveQuit} />
             </Stack>
           )}
         </Stack>
