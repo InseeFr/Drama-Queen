@@ -6,6 +6,10 @@ COPY nginx.conf etc/nginx/conf.d/
 
 # Copy .env file and shell script to container
 WORKDIR /usr/share/nginx/html
+
+# Add bash
+RUN apk add --no-cache bash
+
 COPY ./scripts/env.sh .
 COPY ./scripts/.env .
 
