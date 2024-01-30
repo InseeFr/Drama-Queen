@@ -13,5 +13,4 @@ COPY ./scripts/.env .
 RUN sed -i -e 's/\r$//' env.sh && sed -i -e 's/\r$//' .env && chmod +x env.sh
 
 # Start Nginx server
-ENTRYPOINT [ "/usr/share/nginx/html/env.sh" ]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/bash", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
