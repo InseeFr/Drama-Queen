@@ -1,5 +1,9 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
+import { useLunatic } from '@inseefr/lunatic'
+
+type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
+type Component = Extract<Components[number], object>
 
 export function getIsLastReachedPage(
   pageTag: string,
@@ -85,4 +89,35 @@ export function getContinueEndIcon(
   if (continueBehavior === 'fastForward') {
     return <SkipNext fontSize="large" />
   }
+}
+
+export function countMissingResponseInComponent(component: Component): number {
+  let factor = 1
+  // When we are Loop (not paginated), we have to compute the total of component repetition
+  if (
+    'iterations' in component &&
+    ('paginatedLoop'! in component ||
+      ('paginatedLoop' in component && !component.paginatedLoop))
+  ) {
+    factor = component.iterations as number
+  }
+  if ('components' in component && Array.isArray(component.components)) {
+    const components = component.components
+    return (
+      factor *
+      components.reduce((total, subComponent: any) => {
+        return total + countMissingResponseInComponent(subComponent)
+      }, 0)
+    )
+  }
+  return component?.missingResponse?.name ? 1 : 0
+}
+
+export function countMissingResponseInPage(components: Components) {
+  return components.reduce((total, component) => {
+    if (component.componentType === 'Loop') {
+      component.paginatedLoop
+    }
+    return total + countMissingResponseInComponent(component)
+  }, 0)
 }

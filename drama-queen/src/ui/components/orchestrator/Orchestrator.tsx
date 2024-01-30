@@ -19,6 +19,8 @@ import {
   getIsDisplayedContinue,
   getIsLastReachedPage,
 } from 'ui/tools/functions'
+import { useAutoNext } from 'ui/tools/useAutoNext'
+import { useRef } from 'react'
 
 const source = form
 const data = {} as LunaticData
@@ -27,6 +29,7 @@ const readonly = false
 
 export function Orchestrator() {
   const { classes } = useStyles()
+  const { onChange, ref } = useAutoNext()
 
   const {
     getComponents,
@@ -40,13 +43,21 @@ export function Orchestrator() {
     pageTag,
     overview,
     hasPageResponse,
+    getData,
   } = useLunatic(source, data, {
+    onChange: onChange,
     shortcut: true,
     withOverview: true,
     missing: true,
     dontKnowButton: 'Ne sait pas',
     missingShortcut: missingShortcut,
   })
+
+  ref.current = {
+    goNextPage,
+    getComponents,
+    getData,
+  }
 
   const { maxPage, page, subPage, nbSubPages, lastReachedPage } = pager
 
