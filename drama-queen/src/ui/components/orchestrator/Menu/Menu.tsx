@@ -8,6 +8,7 @@ import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOv
 import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
 import { StopNavigation } from './StopNavigation/StopNavigation'
+import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -114,19 +115,15 @@ export function Menu(props: MenuProps) {
             Allez vers ...
           </Typography>
           <Stack>
-            {menuItems.map((type) => (
-              <Button
-                className={`${classes.navigationButton} ${
-                  isMenuItemOpen(type) && classes.itemOpen
-                }`}
-                autoFocus
-                size="small"
-                disableRipple
+            {menuItems.map((type, index) => (
+              <MenuNavigationButton
+                key={`${type}-${index}`}
+                className={`${selectedMenuType === type && classes.itemOpen}`}
+                label={type}
                 endIcon={<ChevronRightIcon />}
+                autofocus={index === 0}
                 onClick={() => toggleExpandedMenu(type)}
-              >
-                {type}
-              </Button>
+              />
             ))}
           </Stack>
         </Stack>
@@ -138,17 +135,12 @@ export function Menu(props: MenuProps) {
       </Stack>
       {selectedMenuType && (
         <Stack className={`${classes.expanded} ${classes.expandedMenu}`}>
-          <Button
-            className={classes.navigationButton}
-            autoFocus
-            size="small"
-            disableRipple
+          <MenuNavigationButton
+            label="Retour"
             startIcon={<ChevronLeftIcon />}
+            autofocus
             onClick={() => toggleExpandedMenu(selectedMenuType)}
-          >
-            Retour
-          </Button>
-
+          />
           {selectedMenuType === 'Enquête' && (
             <Stack className={classes.navigationContainer}>
               <SequenceNavigation
@@ -169,16 +161,12 @@ export function Menu(props: MenuProps) {
       )}
       {selectedSequence && (
         <Stack className={classes.expanded}>
-          <Button
-            className={classes.navigationButton}
-            autoFocus
-            size="small"
-            disableRipple
+          <MenuNavigationButton
+            label="Retour"
             startIcon={<ChevronLeftIcon />}
+            autofocus
             onClick={() => toggleExpandedSubMenu(selectedSequence)}
-          >
-            Retour
-          </Button>
+          />
           <Stack className={classes.navigationContainer}>
             <SubSequenceNavigation
               sequence={selectedSequence}
@@ -209,22 +197,6 @@ const useStyles = tss.create(({ theme }) => ({
     backgroundColor: theme.palette.background.default,
   },
   navigationContainer: { gap: '1.5em', marginTop: '30px' },
-  navigationButton: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    color: theme.palette.primary.main,
-    paddingLeft: '1.2em',
-    borderRadius: 0,
-    '&:hover, &:focus': {
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.background.button.light,
-    },
-    '& .MuiButton-endIcon': {
-      position: 'absolute',
-      right: '10px',
-    },
-  },
   itemOpen: { backgroundColor: theme.palette.background.button.light },
   goToNavigationTypography: {
     color: theme.palette.info.main,

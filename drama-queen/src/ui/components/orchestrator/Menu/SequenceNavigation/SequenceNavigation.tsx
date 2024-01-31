@@ -2,6 +2,7 @@ import { Button, Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
+import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 
 type SequenceNavigationProps = {
   questionnaireTitle: string
@@ -40,19 +41,16 @@ export function SequenceNavigation(props: SequenceNavigationProps) {
       </Typography>
       <Stack>
         {overview.map((sequence) => (
-          <Button
+          <MenuNavigationButton
             key={sequence.lunaticId}
-            className={`${classes.navigationButton} ${
-              selectedSequence === sequence && classes.itemOpen
+            className={`${
+              selectedSequence === sequence && classes.sequenceOpen
             }`}
-            size="small"
-            disableRipple
+            label={sequence.label}
             disabled={isSequenceDisabled(sequence)}
             endIcon={getSequenceEndIcon(sequence)}
             onClick={() => sequenceOnClick(sequence)}
-          >
-            {sequence.label}
-          </Button>
+          />
         ))}
       </Stack>
     </Stack>
@@ -65,22 +63,5 @@ const useStyles = tss.create(({ theme }) => ({
     lineHeight: '1.5em',
     paddingLeft: '1.2em',
   },
-  navigationButton: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    color: theme.palette.primary.main,
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-    borderRadius: 0,
-    '&:hover, &:focus': {
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.background.button.light,
-    },
-    '& .MuiButton-endIcon': {
-      position: 'absolute',
-      right: '10px',
-    },
-  },
-  itemOpen: { backgroundColor: theme.palette.background.button.light },
+  sequenceOpen: { backgroundColor: theme.palette.background.button.light },
 }))

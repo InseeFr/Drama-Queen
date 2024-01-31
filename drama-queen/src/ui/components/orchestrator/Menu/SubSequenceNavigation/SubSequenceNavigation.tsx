@@ -1,6 +1,7 @@
 import { Button, Stack } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
+import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 
 type subSequenceNavigationProps = {
   sequence: OverviewItem
@@ -17,27 +18,19 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
 
   return (
     <Stack className={classes.navigationContainer}>
-      <Button
-        key={sequence?.lunaticId}
-        className={classes.navigationButton}
-        size="small"
-        disableRipple
+      <MenuNavigationButton
+        key={sequence.lunaticId}
+        label={sequence.label}
         onClick={() => subSequenceOnClick(sequence)}
-      >
-        {sequence.label}
-      </Button>
+      />
       <Stack>
         {sequence.children.map((subSequence) => (
-          <Button
+          <MenuNavigationButton
             key={subSequence.lunaticId}
-            className={classes.navigationButton}
-            size="small"
-            disableRipple
+            label={subSequence.label}
             disabled={isSubSequenceDisabled(subSequence)}
             onClick={() => subSequenceOnClick(subSequence)}
-          >
-            {subSequence.label}
-          </Button>
+          />
         ))}
       </Stack>
     </Stack>
@@ -46,21 +39,4 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
 
 const useStyles = tss.create(({ theme }) => ({
   navigationContainer: { gap: '1.5em' },
-  navigationButton: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    color: theme.palette.primary.main,
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-    borderRadius: 0,
-    '&:hover, &:focus': {
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.background.button.light,
-    },
-    '& .MuiButton-endIcon': {
-      position: 'absolute',
-      right: '10px',
-    },
-  },
 }))

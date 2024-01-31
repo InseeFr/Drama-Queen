@@ -2,6 +2,7 @@ import { Button, Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { StopModal } from '../StopModal/StopModal'
 import { useState } from 'react'
+import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 
 type StopNavigationProps = {
   quit: () => void
@@ -47,15 +48,11 @@ export function StopNavigation(props: StopNavigationProps) {
       </Typography>
       <Stack>
         {stopItems.map((item, index) => (
-          <Button
+          <MenuNavigationButton
             key={item.label}
-            className={classes.navigationButton}
-            size="small"
-            disableRipple
+            label={`${index + 1}. ${item.label}`}
             onClick={() => toggleModal(item.definitive, !isOpenModal)}
-          >
-            {index + 1}. {item.label}
-          </Button>
+          />
         ))}
       </Stack>
       <StopModal
@@ -74,22 +71,5 @@ const useStyles = tss.create(({ theme }) => ({
   typography: {
     lineHeight: '1.5em',
     paddingLeft: '1.2em',
-  },
-  navigationButton: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    color: theme.palette.primary.main,
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-    borderRadius: 0,
-    '&:hover, &:focus': {
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.background.button.light,
-    },
-    '& .MuiButton-endIcon': {
-      position: 'absolute',
-      right: '10px',
-    },
   },
 }))
