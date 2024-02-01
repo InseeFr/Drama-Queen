@@ -21,6 +21,7 @@ import {
 } from 'ui/tools/functions'
 import { useAutoNext } from 'ui/tools/useAutoNext'
 import { useRef } from 'react'
+import { LoopPanel } from './LoopPanel/LoopPanel'
 
 const source = form
 const data = {} as LunaticData
@@ -46,6 +47,7 @@ export function Orchestrator() {
     overview,
     hasPageResponse,
     getData,
+    loopVariables,
   } = useLunatic(source, data, {
     onChange: onChange,
     shortcut: true,
@@ -61,7 +63,8 @@ export function Orchestrator() {
     getData,
   }
 
-  const { maxPage, page, subPage, nbSubPages, lastReachedPage } = pager
+  const { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration } =
+    pager
 
   const questionnaireTitle = source.label.value
 
@@ -128,7 +131,6 @@ export function Orchestrator() {
               />
             </Provider>
           </Stack>
-
           <Stack className={classes.continue}>
             {isDisplayedContinue && (
               <Continue
@@ -140,6 +142,17 @@ export function Orchestrator() {
               />
             )}
           </Stack>
+        </Stack>
+        <Stack>
+          <LoopPanel
+            loopVariables={loopVariables}
+            page={page}
+            subPage={subPage}
+            iteration={iteration}
+            lastReachedPage={lastReachedPage}
+            getData={getData}
+            goToPage={goToPage}
+          />
         </Stack>
         <Stack className={classes.navBarContainer}>
           <NavBar
