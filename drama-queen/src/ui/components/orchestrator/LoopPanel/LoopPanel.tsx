@@ -1,4 +1,4 @@
-import { LunaticCollectedValue, useLunatic } from '@inseefr/lunatic'
+import { useLunatic } from '@inseefr/lunatic'
 import { Button, Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'

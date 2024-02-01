@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'

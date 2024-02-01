@@ -1,5 +1,4 @@
 import { tss } from 'tss-react/mui'
-import Button from '@mui/material/Button'
 import { useEffect, useState } from 'react'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'

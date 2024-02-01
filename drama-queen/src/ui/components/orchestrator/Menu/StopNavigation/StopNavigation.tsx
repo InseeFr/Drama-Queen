@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { StopModal } from '../StopModal/StopModal'
 import { useState } from 'react'
@@ -35,10 +35,8 @@ export function StopNavigation(props: StopNavigationProps) {
   ]
 
   function toggleModal(definitive: boolean, open: boolean) {
-    console.log(definitive)
     setIsOpenModal(open)
     setIsDefinitiveModal(definitive)
-    console.log(definitive)
   }
 
   return (

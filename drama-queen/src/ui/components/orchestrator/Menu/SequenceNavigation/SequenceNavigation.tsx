@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'

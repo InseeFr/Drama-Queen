@@ -1,6 +1,5 @@
 import { tss } from 'tss-react/mui'
-import { useEffect, type ReactNode } from 'react'
-import { useState, useRef } from 'react'
+import { useState, type ReactNode } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'

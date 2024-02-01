@@ -20,7 +20,6 @@ import {
   getIsLastReachedPage,
 } from 'ui/tools/functions'
 import { useAutoNext } from 'ui/tools/useAutoNext'
-import { useRef } from 'react'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 
 const source = form
