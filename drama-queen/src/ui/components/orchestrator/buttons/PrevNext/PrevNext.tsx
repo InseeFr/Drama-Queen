@@ -25,6 +25,7 @@ export function PrevNext(props: PrevNextProps) {
   } = props
   const { classes } = useStyles()
 
+  // we always display nextButton on readonly mode
   const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
   const canGoPrevious = !isFirstPage
 

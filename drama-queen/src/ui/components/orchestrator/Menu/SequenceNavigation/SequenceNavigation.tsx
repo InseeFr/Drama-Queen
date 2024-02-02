@@ -25,12 +25,14 @@ export function SequenceNavigation(props: SequenceNavigationProps) {
   const { classes } = useStyles()
 
   function getSequenceEndIcon(sequence: OverviewItem) {
+    // display endIcon only if sequence leads to a subSequences menu
     if (sequence.children.length > 0) {
       return <ChevronRightIcon />
     }
   }
 
   function isSequenceDisabled(sequence: OverviewItem) {
+    // we can only navigate to a sequence that as already been reached
     return !(sequence.reached && sequence.visible)
   }
 

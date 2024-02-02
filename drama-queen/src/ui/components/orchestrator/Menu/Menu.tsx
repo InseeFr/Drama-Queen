@@ -57,9 +57,11 @@ export function Menu(props: MenuProps) {
     : ['Enquête', 'Arrêt']
 
   useEffect(() => {
+    // prevents drawer to stay extanded when reopening it
     if (!isDrawerOpen) {
       setSelectedMenuType(undefined)
     }
+    // close the third menu panel when closing survey navigation
     if (selectedMenuType !== 'Enquête') {
       setSelectedSequence(undefined)
     }
@@ -81,26 +83,31 @@ export function Menu(props: MenuProps) {
     }
   }
 
+  // closes the menu and redirects to the first page of the sequence
+  function goToComponent(component: OverviewItem) {
+    goToPage({ page: component.page })
+    setIsDrawerOpen(false)
+  }
+
+  // click on a sequence in the second menu panel
   const sequenceOnClick = (sequence: OverviewItem) => {
+    // sequence has subsequences, clicking on it extends the menu with a third panel
     if (sequence.children.length > 0) {
       if (!selectedSequence || selectedSequence === sequence) {
         toggleExpandedSubMenu(sequence)
       } else {
         setSelectedSequence(sequence)
       }
-    } else {
-      goToPage({ page: sequence.page })
-      setIsDrawerOpen(false)
+    }
+    // sequence has no subsequence, clicking on it closes the menu and redirects to the first page of the sequence
+    else {
+      goToComponent(sequence)
     }
   }
 
+  // click on a sequence/subsequence in the third menu panel closes the menu and redirects to the first page of the sequence/subsequence
   const subSequenceOnClick = (component: OverviewItem) => {
-    goToPage({ page: component.page })
-    setIsDrawerOpen(false)
-  }
-
-  const isMenuItemOpen = (type: MenuItem) => {
-    return selectedMenuType === type
+    goToComponent(component)
   }
 
   return (

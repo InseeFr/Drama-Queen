@@ -13,6 +13,7 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
   const { classes } = useStyles()
 
   function isSubSequenceDisabled(subSequence: OverviewItem) {
+    // we can only navigate to a subSequence that as already been reached
     return !(subSequence.reached && subSequence.visible)
   }
 

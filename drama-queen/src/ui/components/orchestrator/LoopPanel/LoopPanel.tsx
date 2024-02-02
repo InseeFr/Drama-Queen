@@ -23,7 +23,9 @@ export function LoopPanel(props: LoopPanelProps) {
   }
 
   const data = getData(true)
+  // find the depending variable of the loop
   const titleVariable = loopVariables[0]
+  // get its collected value for every iteration
   const titleData = data.COLLECTED[titleVariable]?.COLLECTED as string[]
 
   // check if the first subPage of an iteration is before lastReachedPage
@@ -47,8 +49,13 @@ export function LoopPanel(props: LoopPanelProps) {
     return false
   }
 
+  // panel is disabled if you cannot reach the first subPage of the iteration
   const isDisabledButton = (iteration: number) =>
     !isIterationReachable(page, lastReachedPage, iteration)
+
+  // redirects to the first subPage of an iteration (in the same loop so "page" does not change)
+  const goToIteration = (index: number) => () =>
+    goToPage({ page: page, subPage: 0, iteration: index })
 
   return (
     <Stack className={classes.panelContainer}>
@@ -63,7 +70,7 @@ export function LoopPanel(props: LoopPanelProps) {
           disabled={isDisabledButton(index)}
           disableRipple
           endIcon={<ChevronRightIcon />}
-          onClick={() => goToPage({ page: page, subPage: 0, iteration: index })}
+          onClick={goToIteration(index)}
         >
           <Typography>{value}</Typography>
         </Button>
