@@ -1,5 +1,4 @@
-import axios, { AxiosError } from 'axios'
-import memoize from 'memoizee'
+import axios, { Axios, AxiosError } from 'axios'
 import type { QueenApi } from 'core/ports/QueenApi'
 import {
   campaignSchema,
@@ -8,7 +7,7 @@ import {
   requiredNomenclaturesSchema,
   surveyUnitSchema,
 } from './parserSchema'
-import {
+import type {
   Campaign,
   IdAndQuestionnaireId,
   Nomenclature,
@@ -24,7 +23,7 @@ export function createApiClient(params: {
   const { apiUrl, getAccessToken } = params
 
   const { axiosInstance } = (() => {
-    const axiosInstance = axios.create({ baseURL: apiUrl, timeout: 120_000 })
+    const axiosInstance = axios.create({ baseURL: apiUrl })
 
     // Type issue https://github.com/axios/axios/issues/5494
     const onRequest = (config: any) => {
@@ -55,13 +54,11 @@ export function createApiClient(params: {
   })()
 
   return {
-    getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: memoize(
-      (idCampaign) =>
-        axiosInstance
-          .get<IdAndQuestionnaireId>(`/api/campaign/${idCampaign}/survey-units`)
-          .then(({ data }) => idAndQuestionnaireIdSchema.array().parse(data)),
-      { promise: true }
-    ),
+    getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (idCampaign) =>
+      axiosInstance
+        .get<IdAndQuestionnaireId>(`/api/campaign/${idCampaign}/survey-units`)
+        .then(({ data }) => idAndQuestionnaireIdSchema.array().parse(data)),
+
     getSurveyUnits: () =>
       axiosInstance
         .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
@@ -75,7 +72,6 @@ export function createApiClient(params: {
         .then(({ data }) =>
           surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
         ),
-
     putSurveyUnit: (surveyUnit) =>
       axiosInstance
         .put<typeof surveyUnit>(`api/survey-unit/${surveyUnit.id}`, surveyUnit)

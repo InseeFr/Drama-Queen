@@ -1,6 +1,3 @@
-import { Nomenclature } from 'core/model'
-import { assert } from 'tsafe/assert'
-import type { Equals } from 'tsafe/Equals'
 import { z } from 'zod'
 
 export const nomenclatureSchema = z.array(

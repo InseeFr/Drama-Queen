@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import Preloader from 'components/shared/preloader';
 import { useGetSurveyUnit } from 'utils/hook';
 import D from 'i18n';
 import Error from 'components/shared/Error';
-import { Redirect } from 'react-router';
 import { AppContext } from 'components/app';
 
 const QueenRedirect = () => {

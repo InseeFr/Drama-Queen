@@ -1,8 +1,8 @@
-import { SurveyUnitData } from './SurveyUnitData'
+import type { SurveyUnitData } from './SurveyUnitData'
 
 export type SurveyUnit = {
   id: string
-  questionnaireId?: string
+  questionnaireId: string
   personalization?: {}[] | {}
   data: SurveyUnitData
   comment?: {} | undefined

@@ -137,5 +137,8 @@ export const { reducer, actions } = createUsecaseActions({
     downloadCompleted: (state) => {
       return state
     },
+    downloadFailed: (_state) => {
+      return { stateDescription: 'not running' }
+    },
   },
 })

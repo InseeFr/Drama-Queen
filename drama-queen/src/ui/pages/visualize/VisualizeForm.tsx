@@ -1,12 +1,11 @@
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
 import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useForm } from 'react-hook-form'
-import { useTranslate } from 'hooks/useTranslate'
+import { useTranslate } from 'ui/hooks/useTranslate'
 import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'

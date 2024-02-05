@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
-import { useTranslate } from 'hooks/useTranslate'
+import { useTranslate } from 'ui/hooks/useTranslate'
 import { LoadingDisplay } from './LoadingDisplay'
 
 export function SynchronizeData() {

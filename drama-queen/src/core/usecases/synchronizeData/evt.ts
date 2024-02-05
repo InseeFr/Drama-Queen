@@ -12,7 +12,8 @@ export const createEvt = (({ evtAction }) => {
     .attach(
       (action) =>
         action.actionName === 'uploadError' ||
-        action.actionName === 'downloadCompleted',
+        action.actionName === 'downloadCompleted' ||
+        action.actionName === 'downloadFailed',
       () => {
         evt.post({
           action: 'redirect',

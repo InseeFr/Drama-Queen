@@ -1,5 +1,5 @@
 import type { LunaticData, LunaticCollectedValue } from '@inseefr/lunatic'
-import { Equals, assert } from 'tsafe/assert'
+import { assert } from 'tsafe/assert'
 import type { Extends } from 'tsafe/Extends'
 
 type VariableType =

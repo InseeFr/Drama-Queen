@@ -1,24 +1,30 @@
 import { DisplayEnvValues } from 'ui/pages/env'
-import { SurveyUnitMapping } from 'ui/pages/queenMapping'
 import { READ_ONLY } from 'ui/constants'
 import type { RouteObject } from 'react-router-dom'
-import { SurveyMapping } from 'ui/pages/queenMapping/SuryveyMapping'
+import { Collect } from 'ui/pages/collect'
 import { SynchronizeData } from 'ui/pages/synchronize'
 import { Layout } from './Layout'
 import { Visualize } from 'ui/pages/visualize/Visualize'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import { protectedRouteLoader } from './loader/protectedLoader'
-import { visualizeLoader } from './loader/visualizeLoader'
+import {
+  protectedRouteLoader,
+  surveyUnitLoader,
+  visualizeLoader,
+  collectLoader,
+} from './loader'
+import { SurveyUnitMapping } from 'ui/pages/surveyUnit'
 
 //ReadOnly path is a bad pattern must be change (affects pearl,moog,queen)
 export const routes: RouteObject[] = [
   {
-    path: `/:${READ_ONLY}?/survey-unit/:id`,
-    element: <SurveyUnitMapping />,
+    path: '/survey-unit/:surveyUnitId',
+    Component: SurveyUnitMapping,
+    loader: surveyUnitLoader,
   },
   {
     path: `/:${READ_ONLY}?/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
-    element: <SurveyMapping />,
+    Component: Collect,
+    loader: collectLoader,
   },
 
   {
