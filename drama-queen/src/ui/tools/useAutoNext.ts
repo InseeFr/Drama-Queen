@@ -1,26 +1,21 @@
 import { useCallback, useRef } from 'react'
 import { useLunatic } from '@inseefr/lunatic'
-import {
-  countMissingResponseInComponent,
-  countMissingResponseInPage,
-} from './functions'
+import { countMissingResponseInPage } from './functions'
 
 type PartialLunatic = Pick<
   ReturnType<typeof useLunatic>,
-  'getComponents' | 'goNextPage' | 'getData'
+  'getComponents' | 'goNextPage'
 >
 
 /**
- * Creates a callback to go to the next page automatically when changing the value of a checkbox / radio
- *
- * This behaviour assumes we only have one component per page
+ * Creates a callback to go to the next page automatically when changing the value of a checkbox / radio / missing
  */
 export function useAutoNext() {
   const ref = useRef<PartialLunatic | null>(null)
 
   const onChange = useCallback((valueChange: { name: string }) => {
     if (ref.current === null) return
-    const { getComponents, goNextPage, getData } = ref.current
+    const { getComponents, goNextPage } = ref.current
 
     const variableChanged = valueChange?.name
     const components = getComponents()

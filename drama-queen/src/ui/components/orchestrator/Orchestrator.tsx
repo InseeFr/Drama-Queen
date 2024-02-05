@@ -59,7 +59,6 @@ export function Orchestrator() {
   ref.current = {
     goNextPage,
     getComponents,
-    getData,
   }
 
   const { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration } =
