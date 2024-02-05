@@ -84,7 +84,14 @@ export function Orchestrator() {
   const isDisplayedContinue = getIsDisplayedContinue(continueBehavior)
 
   const continueGoToPage = () =>
-    getContinueGoToPage(continueBehavior, lastReachedPage, goNextPage, goToPage)
+    getContinueGoToPage(
+      continueBehavior,
+      lastReachedPage,
+      goNextPage,
+      goToPage,
+      quit,
+      definitiveQuit
+    )
 
   const continueLabel = getContinueLabel(continueBehavior)
 

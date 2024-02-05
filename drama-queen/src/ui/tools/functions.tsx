@@ -50,12 +50,16 @@ export function getContinueGoToPage(
     iteration?: number | undefined
     nbIterations?: number | undefined
     subPage?: number | undefined
-  }) => void
+  }) => void,
+  quit: () => void,
+  definitiveQuit: () => void
 ) {
   switch (continueBehavior) {
-    // TODO : handle case for quit.
     case 'quit':
+      quit()
+      break
     case 'saveAndQuit':
+      definitiveQuit()
       break
     case 'fastForward':
       goToPage({ page: lastReachedPage || '' })
