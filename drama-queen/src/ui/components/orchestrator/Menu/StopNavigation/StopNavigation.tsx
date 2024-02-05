@@ -20,8 +20,6 @@ export function StopNavigation(props: StopNavigationProps) {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
 
-  const title = "Quelle est la nature de l'arrêt ?"
-
   const stopItems: StopItem[] = [
     {
       definitive: true,
@@ -42,7 +40,7 @@ export function StopNavigation(props: StopNavigationProps) {
   return (
     <Stack className={classes.navigationContainer}>
       <Typography variant="overline" className={classes.typography}>
-        {title}
+        Quelle est la nature de l'arrêt ?
       </Typography>
       <Stack>
         {stopItems.map((item, index) => (

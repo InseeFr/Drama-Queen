@@ -9,7 +9,7 @@ export function ShortCut(props: ShortCutProps) {
   const { shortCutKey, onClickMethod } = props
 
   function onClickShortCut(onClickMethod: () => void) {
-    return (keyName: string, event: KeyboardEvent) => {
+    return (_keyName: string, event: KeyboardEvent) => {
       onClickMethod()
       event.preventDefault()
     }

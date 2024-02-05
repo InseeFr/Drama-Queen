@@ -1658,10 +1658,10 @@
     snowball "^0.3.1"
     string-tokenizer "^0.0.8"
 
-"@inseefr/lunatic@^2.7.14":
-  version "2.7.14"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.7.14.tgz#a6128d79a86271e79a3096c0702718ef1788b086"
-  integrity sha512-UEA8FUUP/diZVV9GPiz3CUveEaZQLqleNIMl+rhQIjjChJoAdgvumAgHDM374rS+FDZ4KFzA3NLT8M0l0s3/Cw==
+"@inseefr/lunatic@^2.7.15":
+  version "2.7.15"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.7.15.tgz#443e67e2b09091e7a82a6d5aafd12b366bb5c3ee"
+  integrity sha512-wK8QIq3JNP5B+rZfP0YsOdWr9cg72rpQoIP+ovY73/GZshAqVNGqxcDwTEwIYEIgP86Jz/AGXQt0/bweTxvhTw==
   dependencies:
     "@inseefr/trevas" "^0.1.20"
     "@inseefr/vtl-2.0-antlr-tools" "^0.1.0"

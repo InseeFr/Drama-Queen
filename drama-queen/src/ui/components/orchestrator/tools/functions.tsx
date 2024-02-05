@@ -125,3 +125,24 @@ export function countMissingResponseInPage(components: Components) {
     return total + countMissingResponseInComponent(component)
   }, 0)
 }
+
+// check if the first subPage of an iteration is before lastReachedPage
+export function isIterationReachable(
+  currentPage: string,
+  lastReachedPage: string,
+  iteration: number
+) {
+  const numberCurrentPage = parseInt(currentPage)
+  const maxPage = parseInt(lastReachedPage.split('.')[0])
+  const maxIteration = parseInt(lastReachedPage.split('#')[1]) - 1
+  if (numberCurrentPage < maxPage) {
+    // no need to check iteration or subPage because we already reached the next page (out of the loop)
+    return true
+  }
+  // numberCurrentPage = maxPage , so we check if we already reached the iteration
+  if (iteration <= maxIteration) {
+    // no need to check subPage beacause we just want to reach the first subPage of the iteration
+    return true
+  }
+  return false
+}

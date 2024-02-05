@@ -8,7 +8,6 @@ type MenuNaviGationButtonProps = {
   startIcon?: JSX.Element
   endIcon?: JSX.Element
   autofocus?: boolean
-
   onClick: () => void
 }
 
@@ -22,11 +21,11 @@ export function MenuNavigationButton(props: MenuNaviGationButtonProps) {
     autofocus,
     onClick,
   } = props
-  const { classes } = useStyles()
+  const { classes, cx } = useStyles()
 
   return (
     <Button
-      className={`${classes.navigationButton} ${className}`}
+      className={cx(classes.navigationButton, className)}
       autoFocus={autofocus}
       size="small"
       disableRipple

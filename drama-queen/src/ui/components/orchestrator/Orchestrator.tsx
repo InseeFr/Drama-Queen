@@ -18,8 +18,8 @@ import {
   getContinueLabel,
   getIsDisplayedContinue,
   getIsLastReachedPage,
-} from 'ui/tools/functions'
-import { useAutoNext } from 'ui/tools/useAutoNext'
+} from 'ui/components/orchestrator/tools/functions'
+import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 
 const source = form

@@ -45,9 +45,9 @@ export function SequenceNavigation(props: SequenceNavigationProps) {
         {overview.map((sequence) => (
           <MenuNavigationButton
             key={sequence.lunaticId}
-            className={`${
-              selectedSequence === sequence && classes.sequenceOpen
-            }`}
+            className={
+              selectedSequence === sequence ? classes.sequenceOpen : ''
+            }
             label={sequence.label}
             disabled={isSequenceDisabled(sequence)}
             endIcon={getSequenceEndIcon(sequence)}

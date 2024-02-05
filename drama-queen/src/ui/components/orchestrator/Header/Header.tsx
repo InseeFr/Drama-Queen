@@ -115,7 +115,7 @@ export function Header(props: HeaderProps) {
       </Stack>
       <Stack className={classes.headerClose}>
         <IconButton title="Quitter" className={classes.closeIcon}>
-          <ExitToAppIcon onClick={() => quit()} />
+          <ExitToAppIcon onClick={quit} />
           <ShortCut shortCutKey={quitShortKey} onClickMethod={quit} />
         </IconButton>
       </Stack>

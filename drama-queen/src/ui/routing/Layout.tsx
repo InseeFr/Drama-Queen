@@ -10,7 +10,6 @@ export function Layout() {
       {globalStyles}
       <ThemeProvider theme={theme}>
         <Outlet />
-        {/* <AppVersion /> */}
       </ThemeProvider>
     </>
   )

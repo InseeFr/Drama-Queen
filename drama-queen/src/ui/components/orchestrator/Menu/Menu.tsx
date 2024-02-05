@@ -48,7 +48,7 @@ export function Menu(props: MenuProps) {
   } = props
   const [selectedMenuType, setSelectedMenuType] = useState<MenuItem>()
   const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
-  const { classes } = useStyles()
+  const { classes, cx } = useStyles()
 
   const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
@@ -69,18 +69,16 @@ export function Menu(props: MenuProps) {
 
   const toggleExpandedMenu = (type: MenuItem) => {
     if (selectedMenuType === type) {
-      setSelectedMenuType(undefined)
-    } else {
-      setSelectedMenuType(type)
+      return setSelectedMenuType(undefined)
     }
+    return setSelectedMenuType(type)
   }
 
   const toggleExpandedSubMenu = (sequence: OverviewItem) => {
     if (selectedSequence === sequence) {
-      setSelectedSequence(undefined)
-    } else {
-      setSelectedSequence(sequence)
+      return setSelectedSequence(undefined)
     }
+    return setSelectedSequence(sequence)
   }
 
   // closes the menu and redirects to the first page of the sequence
@@ -94,15 +92,12 @@ export function Menu(props: MenuProps) {
     // sequence has subsequences, clicking on it extends the menu with a third panel
     if (sequence.children.length > 0) {
       if (!selectedSequence || selectedSequence === sequence) {
-        toggleExpandedSubMenu(sequence)
-      } else {
-        setSelectedSequence(sequence)
+        return toggleExpandedSubMenu(sequence)
       }
+      return setSelectedSequence(sequence)
     }
     // sequence has no subsequence, clicking on it closes the menu and redirects to the first page of the sequence
-    else {
-      goToComponent(sequence)
-    }
+    goToComponent(sequence)
   }
 
   // click on a sequence/subsequence in the third menu panel closes the menu and redirects to the first page of the sequence/subsequence
@@ -124,7 +119,9 @@ export function Menu(props: MenuProps) {
             {menuItems.map((type, index) => (
               <MenuNavigationButton
                 key={`${type}-${index}`}
-                className={`${selectedMenuType === type && classes.itemOpen}`}
+                className={
+                  selectedMenuType === type ? classes.itemOpen : undefined
+                }
                 label={type}
                 endIcon={<ChevronRightIcon />}
                 autofocus={index === 0}
@@ -135,12 +132,13 @@ export function Menu(props: MenuProps) {
         </Stack>
         <Stack className={classes.version}>
           <Typography>
-            Queen : {APP_VERSION} | Lunatic : {lunaticVersion}
+            Queen : {import.meta.env.VITE_APP_VERSION} | Lunatic :{' '}
+            {lunaticVersion}
           </Typography>
         </Stack>
       </Stack>
       {selectedMenuType && (
-        <Stack className={`${classes.expanded} ${classes.expandedMenu}`}>
+        <Stack className={cx(classes.expanded, classes.expandedMenu)}>
           <MenuNavigationButton
             label="Retour"
             startIcon={<ChevronLeftIcon />}

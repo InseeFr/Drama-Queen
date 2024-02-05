@@ -25,7 +25,7 @@ type BreadCrumbProps = {
 
 export function BreadCrumb(props: BreadCrumbProps) {
   const { hierarchy, goToPage } = props
-  const { classes } = useStyles()
+  const { classes, cx } = useStyles()
   const { sequence, subSequence } = hierarchy ?? {}
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
@@ -36,9 +36,10 @@ export function BreadCrumb(props: BreadCrumbProps) {
     <Breadcrumbs separator={''} aria-label="breadcrumb">
       {sequence && (
         <Button
-          className={`${classes.breadcrumbButton} ${
+          className={cx(
+            classes.breadcrumbButton,
             !subSequence && classes.lastButton
-          }`}
+          )}
           title={`Aller vers la séquence ${sequence.label}`}
           disableRipple
           onClick={goToSequencePage}
@@ -48,7 +49,11 @@ export function BreadCrumb(props: BreadCrumbProps) {
       )}
       {subSequence && (
         <Button
-          className={`${classes.breadcrumbButton} ${classes.subsequenceButton} ${classes.lastButton}`}
+          className={cx(
+            classes.breadcrumbButton,
+            classes.subsequenceButton,
+            classes.lastButton
+          )}
           title={`Aller vers la sous-séquence ${subSequence.label}`}
           disableRipple
           onClick={goToSubSequencePage}

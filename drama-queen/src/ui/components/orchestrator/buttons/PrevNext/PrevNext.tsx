@@ -23,7 +23,7 @@ export function PrevNext(props: PrevNextProps) {
     goPrevious,
     goNext,
   } = props
-  const { classes } = useStyles()
+  const { classes, cx } = useStyles()
 
   // we always display nextButton on readonly mode
   const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
@@ -36,7 +36,7 @@ export function PrevNext(props: PrevNextProps) {
     <Stack id="buttons" className={classes.root}>
       <Stack>
         <IconButton
-          className={`${classes.iconButton} ${classes.previousIcon}`}
+          className={cx(classes.iconButton, classes.previousIcon)}
           size="large"
           disabled={!canGoPrevious}
           onClick={goPrevious}
