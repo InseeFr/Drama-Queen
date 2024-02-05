@@ -11,7 +11,7 @@ import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Stack, SwipeableDrawer, Typography } from '@mui/material'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
-import { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
+import type { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 
 type HeaderProps = {
   questionnaireTitle: string
