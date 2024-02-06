@@ -3,26 +3,18 @@ import { useEffect, useState } from 'react'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Stack, Typography } from '@mui/material'
-import type { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
 import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import type { Overview, OverviewItem } from '../lunaticType'
 
 type MenuProps = {
   isDrawerOpen: boolean
   readonly: boolean
   questionnaireTitle: string
-  overview: {
-    lunaticId: string
-    page: string
-    type: string
-    label: string
-    visible: boolean
-    reached: boolean
-    children: OverviewItem[]
-  }[]
+  overview: Overview
   goToPage: (page: {
     page: string
     iteration?: number

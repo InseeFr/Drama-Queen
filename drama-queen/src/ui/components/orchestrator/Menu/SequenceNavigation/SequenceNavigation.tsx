@@ -1,20 +1,13 @@
 import { Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import type { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
+import type { Overview, OverviewItem } from '../../lunaticType'
+
 
 type SequenceNavigationProps = {
   questionnaireTitle: string
-  overview: {
-    lunaticId: string
-    page: string
-    type: string
-    label: string
-    visible: boolean
-    reached: boolean
-    children: OverviewItem[]
-  }[]
+  overview: Overview
   selectedSequence: OverviewItem | undefined
   sequenceOnClick: (sequence: OverviewItem) => void
 }

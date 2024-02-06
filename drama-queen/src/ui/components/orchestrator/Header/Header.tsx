@@ -11,7 +11,8 @@ import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Stack, SwipeableDrawer, Typography } from '@mui/material'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
-import type { OverviewItem } from '@inseefr/lunatic/lib/src/use-lunatic/commons/getOverview'
+import type { useLunatic } from '@inseefr/lunatic'
+import type { Overview } from '../lunaticType'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -28,15 +29,7 @@ type HeaderProps = {
     }
   }
   readonly: boolean
-  overview: {
-    lunaticId: string
-    page: string
-    type: string
-    label: string
-    visible: boolean
-    reached: boolean
-    children: OverviewItem[]
-  }[]
+  overview: Overview
   goToPage: (page: {
     page: string
     iteration?: number
