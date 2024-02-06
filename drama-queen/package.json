@@ -13,9 +13,11 @@
     "format:check": "npm run _format -- --list-different"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.6",
+    "@inseefr/lunatic": "^2.7.15",
+    "@mui/icons-material": "^5.15.3",
+    "@mui/material": "^5.15.3",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.33.0",
     "@types/memoizee": "^0.4.8",
@@ -29,6 +31,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.3",
+    "react-hot-keys": "^2.7.3",
     "react-router-dom": "^6.14.1",
     "redux-clean-architecture": "^4.3.1",
     "tsafe": "^1.6.4",
@@ -36,7 +39,6 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@inseefr/lunatic": "^2.7.4",
     "@types/node": "^20.3.3",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",

@@ -1,1 +1,6 @@
 export const READ_ONLY = 'readonly'
+export const SHORTCUT_QUIT: string = 'alt+q'
+export const SHORTCUT_NEXT: string = 'alt+enter'
+export const SHORTCUT_PREVIOUS: string = 'alt+backspace'
+export const SHORTCUT_FAST_FORWARD: string = 'alt+end'
+export const SHORCUT_MENU: string = 'alt+b'

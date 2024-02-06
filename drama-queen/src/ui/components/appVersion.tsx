@@ -12,7 +12,7 @@ export const AppVersion = () => {
   )
 }
 
-const useStyles = tss.create(({ theme }) => ({
+const useStyles = tss.create(({}) => ({
   footer: {
     backgroundColor: '#f5f5f5',
     borderTop: '1px solid black',

@@ -8,8 +8,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig(({ command, mode }) => {
   return {
     define: {
-      // eslint-disable-next-line no-undef
-      APP_VERSION: JSON.stringify(process.env.npm_package_version),
+      LUNATIC_VERSION: JSON.stringify(
+        process.env.npm_package_dependencies__inseefr_lunatic
+      ),
     },
     plugins: [
       react(),
