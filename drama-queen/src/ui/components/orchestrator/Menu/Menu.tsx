@@ -8,6 +8,7 @@ import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
 import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -48,7 +49,10 @@ export function Menu(props: MenuProps) {
   } = props
   const [selectedMenuType, setSelectedMenuType] = useState<MenuItem>()
   const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
-  const { classes, cx } = useStyles()
+
+  const { classes, theme, cx } = useStyles()
+
+  const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
   const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
@@ -107,37 +111,39 @@ export function Menu(props: MenuProps) {
 
   return (
     <Stack className={classes.menuContainer}>
-      <Stack className={classes.menuPanel}>
-        <Stack className={classes.navigationContainer}>
-          <Typography
-            variant="overline"
-            className={classes.goToNavigationTypography}
-          >
-            Allez vers ...
-          </Typography>
-          <Stack>
-            {menuItems.map((type, index) => (
-              <MenuNavigationButton
-                key={`${type}-${index}`}
-                className={
-                  selectedMenuType === type ? classes.itemOpen : undefined
-                }
-                label={type}
-                endIcon={<ChevronRightIcon />}
-                autofocus={index === 0}
-                onClick={() => toggleExpandedMenu(type)}
-              />
-            ))}
+      {(!selectedMenuType || matchesMdBreackpoint) && (
+        <Stack className={classes.menuPanel}>
+          <Stack className={classes.navigationContainer}>
+            <Typography
+              variant="overline"
+              className={classes.goToNavigationTypography}
+            >
+              Allez vers ...
+            </Typography>
+            <Stack>
+              {menuItems.map((type, index) => (
+                <MenuNavigationButton
+                  key={`${type}-${index}`}
+                  className={
+                    selectedMenuType === type ? classes.itemOpen : undefined
+                  }
+                  label={type}
+                  endIcon={<ChevronRightIcon />}
+                  autofocus={index === 0}
+                  onClick={() => toggleExpandedMenu(type)}
+                />
+              ))}
+            </Stack>
+          </Stack>
+          <Stack className={classes.version}>
+            <Typography>
+              Queen : {import.meta.env.VITE_APP_VERSION} | Lunatic :{' '}
+              {lunaticVersion}
+            </Typography>
           </Stack>
         </Stack>
-        <Stack className={classes.version}>
-          <Typography>
-            Queen : {import.meta.env.VITE_APP_VERSION} | Lunatic :{' '}
-            {lunaticVersion}
-          </Typography>
-        </Stack>
-      </Stack>
-      {selectedMenuType && (
+      )}
+      {selectedMenuType && (!selectedSequence || matchesMdBreackpoint) && (
         <Stack className={cx(classes.expanded, classes.expandedMenu)}>
           <MenuNavigationButton
             label="Retour"
@@ -194,11 +200,16 @@ const useStyles = tss.create(({ theme }) => ({
     justifyContent: 'space-between',
   },
   expanded: {
-    width: '375px',
+    width: '250px',
+    [theme.breakpoints.up('lg')]: {
+      width: '375px',
+    },
     borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
   },
   expandedMenu: {
-    backgroundColor: theme.palette.background.default,
+    [theme.breakpoints.up('md')]: {
+      backgroundColor: theme.palette.background.default,
+    },
   },
   navigationContainer: { gap: '1.5em', marginTop: '30px' },
   itemOpen: { backgroundColor: theme.palette.background.button.light },
