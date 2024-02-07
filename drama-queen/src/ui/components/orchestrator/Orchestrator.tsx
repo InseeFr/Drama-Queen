@@ -1,7 +1,6 @@
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
 import { tss } from 'tss-react/mui'
-import { form } from './form'
 import {
   type LunaticData,
   useLunatic,
@@ -21,17 +20,24 @@ import {
 } from 'ui/components/orchestrator/tools/functions'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
+import type { Questionnaire, SurveyUnit } from 'core/model'
 
-const source = form
-const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
-const readonly = false
 const quit = () => console.log('quit')
 const definitiveQuit = () => console.log('definitiveQuit')
 
-export function Orchestrator() {
+type OrchestratorProps = {
+  source: Questionnaire
+  surveyUnit: SurveyUnit | undefined
+  readonly: boolean
+}
+
+export function Orchestrator(props: OrchestratorProps) {
+  const { source, surveyUnit, readonly } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
+
+  const data = surveyUnit?.data as LunaticData
 
   const {
     getComponents,

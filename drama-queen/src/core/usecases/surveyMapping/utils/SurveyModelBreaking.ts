@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { Questionnaire } from 'core/model'
+import type { Questionnaire, SurveyUnit } from 'core/model'
 
 const lunaticModelVersionBreaking = '2.2.10'
 
@@ -7,25 +7,24 @@ const semverCompare = new Intl.Collator('en', { numeric: true }).compare
 
 /**
  *
- * @param params: { questionnaireUrl : string}
- * @returns {boolean} true if this survey concerns QueenV2, false otherwise
+ * @param params: { url : string}
+ * @returns {Promise<T | undefined>} fetched data of type T or undefined if the request fails.
+ * @template T - type of data expected to be fetched : Questionnaire or SurveyUnit
  */
-export const fetchSurveyModelVersionCompatibility = async (params: {
-  questionnaireUrl: string
-}) => {
-  const { questionnaireUrl } = params
+export async function fetchUrl<T extends Questionnaire | SurveyUnit>(params: {
+  url: string
+}) {
+  const { url } = params
   try {
-    const questionnaire = await axios
-      .get<Questionnaire>(questionnaireUrl)
-      .then(({ data }) => data)
+    const response = await axios.get<T>(url)
+    const data = response.data
 
-    return isSurveyQueenV2Compatible({ questionnaire })
+    return data
   } catch (error) {
     console.error(
       'An error occured, we could not retrieve the survey, we fallback to queen v2',
       error
     )
-    return true
   }
 }
 

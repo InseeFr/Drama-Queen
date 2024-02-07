@@ -2,9 +2,10 @@ import type { Thunks } from 'core/bootstrap'
 import { makeSearchParamsObjSchema } from './utils/makeSearchParamsObjectSchema'
 import { z } from 'zod'
 import {
-  fetchSurveyModelVersionCompatibility,
+  fetchUrl,
   isSurveyQueenV2Compatible,
 } from './utils/SurveyModelBreaking'
+import type { Questionnaire, SurveyUnit } from 'core/model'
 
 export const name = 'surveyMapping'
 
@@ -25,16 +26,31 @@ export const thunks = {
         return null
       }
 
-      const { questionnaire } = result.data
+      const { questionnaire, data, readonly = false } = result.data
 
       if (!questionnaire) {
         return null
       }
 
-      const isQueenV2 = await fetchSurveyModelVersionCompatibility({
-        questionnaireUrl: decodeURIComponent(questionnaire),
+      const source = await fetchUrl<Questionnaire>({
+        url: decodeURIComponent(questionnaire),
       })
-      return { isQueenV2 }
+
+      if (source === undefined) {
+        return null
+      }
+
+      const isQueenV2 = isSurveyQueenV2Compatible({ questionnaire: source })
+
+      if (!isQueenV2) {
+        return { isQueenV2 }
+      }
+
+      const surveyUnit = await fetchUrl<SurveyUnit>({
+        url: decodeURIComponent(data || ''),
+      })
+
+      return { isQueenV2, source, surveyUnit, readonly }
     },
   retrieveQuestionnaireId:
     (params: { surveyUnitId: string }) =>
@@ -68,8 +84,7 @@ export const thunks = {
 
 const searchParamsSchema = z.object({
   questionnaire: z.string().optional(),
-  // We just need questionnaire, not needed to parse other fields
-  // data: z.string().optional(),
-  // nomenclature: z.record(z.string()).optional(),
-  // readonly: z.boolean().optional(),
+  data: z.string().optional(),
+  nomenclature: z.record(z.string()).optional(),
+  readonly: z.boolean().optional(),
 })

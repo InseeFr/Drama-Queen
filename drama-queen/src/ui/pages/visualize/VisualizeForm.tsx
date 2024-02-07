@@ -63,6 +63,7 @@ export function VisualizeForm() {
         </Stack>
         <Stack direction={'row'} alignItems="center">
           <FormControlLabel
+            {...register('readonly')}
             id="readonly"
             control={<Switch />}
             label="Lecture Seul"
