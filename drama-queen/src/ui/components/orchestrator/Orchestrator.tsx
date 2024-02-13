@@ -17,27 +17,36 @@ import {
   getContinueLabel,
   getIsDisplayedContinue,
   getIsLastReachedPage,
+  getUpdatedSurveyUnit,
+  getinitialSurveyUnit,
 } from 'ui/components/orchestrator/tools/functions'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
-import type { Questionnaire, SurveyUnit } from 'core/model'
+import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
-const quit = () => console.log('quit')
-const definitiveQuit = () => console.log('definitiveQuit')
 
 type OrchestratorProps = {
   source: Questionnaire
   surveyUnit: SurveyUnit | undefined
   readonly: boolean
+  quit: (surveyUnit: SurveyUnit) => void
+  definitiveQuit: (surveyUnit: SurveyUnit) => void
 }
 
 export function Orchestrator(props: OrchestratorProps) {
-  const { source, surveyUnit, readonly } = props
+  const { source, surveyUnit, readonly, quit, definitiveQuit } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
 
-  const data = surveyUnit?.data as LunaticData
+  // get the initial data for useLunatic
+  const initialData = surveyUnit?.data as LunaticData
+
+  // the given surveyUnit can be empty or partial, we initialize it for having the waited format
+  const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
+
+  // get the initial lastReachedPage for useLunatic
+  const initialLastReachedPage = initialSurveyUnit.stateData?.currentPage ?? '1'
 
   const {
     getComponents,
@@ -53,7 +62,8 @@ export function Orchestrator(props: OrchestratorProps) {
     hasPageResponse,
     getData,
     loopVariables,
-  } = useLunatic(source, data, {
+  } = useLunatic(source, initialData, {
+    lastReachedPage: initialLastReachedPage,
     onChange: onChange,
     shortcut: true,
     withOverview: true,
@@ -79,6 +89,45 @@ export function Orchestrator(props: OrchestratorProps) {
 
   const isLastReachedPage = getIsLastReachedPage(pageTag, lastReachedPage)
 
+  // TODO : handle state
+  function getState() {
+    return null
+  }
+
+  const orchestratorQuit = () => {
+    // get the updated data
+    const newData = getData(true) as SurveyUnitData
+    // get the updated stateData
+    const newStateData = {
+      state: getState(),
+      date: new Date().getTime(),
+      currentPage: pager.lastReachedPage ?? '1',
+    }
+    const updatedSurveyUnit = getUpdatedSurveyUnit(
+      initialSurveyUnit,
+      newData,
+      newStateData
+    )
+    quit(updatedSurveyUnit)
+  }
+
+  const orchestratorDefinitiveQuit = () => {
+    // get the updated data
+    const newData = getData(true) as SurveyUnitData
+    // get the updated currentPage, and force the state to "VALIDATED"
+    const newStateData: SurveyUnit['stateData'] = {
+      state: 'VALIDATED',
+      date: new Date().getTime(),
+      currentPage: lastReachedPage ?? '1',
+    }
+    const updatedSurveyUnit = getUpdatedSurveyUnit(
+      initialSurveyUnit,
+      newData,
+      newStateData
+    )
+    return definitiveQuit(updatedSurveyUnit)
+  }
+
   const continueBehavior = getContinueBehavior(
     readonly,
     isLastPage,
@@ -94,8 +143,8 @@ export function Orchestrator(props: OrchestratorProps) {
       lastReachedPage,
       goNextPage,
       goToPage,
-      quit,
-      definitiveQuit
+      orchestratorQuit,
+      orchestratorDefinitiveQuit
     )
 
   const continueLabel = getContinueLabel(continueBehavior)
@@ -116,8 +165,8 @@ export function Orchestrator(props: OrchestratorProps) {
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
-        quit={quit}
-        definitiveQuit={definitiveQuit}
+        quit={orchestratorQuit}
+        definitiveQuit={orchestratorDefinitiveQuit}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>

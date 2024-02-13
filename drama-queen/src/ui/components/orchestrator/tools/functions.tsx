@@ -1,6 +1,7 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { useLunatic } from '@inseefr/lunatic'
+import type { SurveyUnit } from 'core/model'
 
 type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
 type Component = Extract<Components[number], object>
@@ -145,4 +146,57 @@ export function isIterationReachable(
     return true
   }
   return false
+}
+
+export function downloadAsJson(params: { data: object; filename?: string }) {
+  const { data, filename = 'data.json' } = params
+  if (!data) {
+    console.error('No data to download.')
+    return
+  }
+  const jsonData = JSON.stringify(data, null, 2)
+  const blob = new Blob([jsonData], { type: 'application/json' })
+
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+
+  document.body.appendChild(a)
+  a.click()
+
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export function getinitialSurveyUnit(
+  partial?: Partial<SurveyUnit>
+): SurveyUnit {
+  return {
+    id: partial?.id ?? '',
+    questionnaireId: partial?.questionnaireId ?? '',
+    personalization: partial?.personalization,
+    data: partial?.data ?? {},
+    comment: partial?.comment,
+    stateData: partial?.stateData ?? {
+      state: null,
+      date: new Date().getTime(),
+      currentPage: '1',
+    },
+  }
+}
+
+export function getUpdatedSurveyUnit(
+  surveyUnit: SurveyUnit,
+  newData?: SurveyUnit['data'],
+  newStateData?: SurveyUnit['stateData']
+) {
+  const updatedData = newData ?? surveyUnit.data
+  const updatedStateData = newStateData ?? surveyUnit.stateData
+  const updatedSurveyUnit = {
+    ...surveyUnit,
+    data: updatedData,
+    stateData: updatedStateData,
+  }
+  return updatedSurveyUnit
 }
