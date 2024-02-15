@@ -1,3 +1,4 @@
+import type { QuestionnaireState } from './QuestionnaireState'
 import type { SurveyUnitData } from './SurveyUnitData'
 
 export type SurveyUnit = {
@@ -7,7 +8,7 @@ export type SurveyUnit = {
   data: SurveyUnitData
   comment?: {} | undefined
   stateData?: {
-    state: 'INIT' | 'COMPLETED' | 'VALIDATED' | 'EXTRACTED' | null
+    state: QuestionnaireState
     date: number
     currentPage: string
   }

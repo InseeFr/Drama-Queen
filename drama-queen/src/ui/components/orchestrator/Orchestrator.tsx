@@ -17,6 +17,9 @@ import {
   getContinueLabel,
   getIsDisplayedContinue,
   getIsLastReachedPage,
+  getOrchestratorDefinitiveQuit,
+  getOrchestratorQuit,
+  getStateData,
   getUpdatedSurveyUnit,
   getinitialSurveyUnit,
 } from 'ui/components/orchestrator/tools/functions'
@@ -45,6 +48,9 @@ export function Orchestrator(props: OrchestratorProps) {
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
 
+  // initialize the stateData, that will be updated
+  let stateData = initialSurveyUnit.stateData
+
   // get the initial lastReachedPage for useLunatic
   const initialLastReachedPage = initialSurveyUnit.stateData?.currentPage ?? '1'
 
@@ -61,10 +67,12 @@ export function Orchestrator(props: OrchestratorProps) {
     overview,
     hasPageResponse,
     getData,
+    getChangedData,
     loopVariables,
   } = useLunatic(source, initialData, {
     lastReachedPage: initialLastReachedPage,
     onChange: onChange,
+    trackChanges: true,
     shortcut: true,
     withOverview: true,
     missing: true,
@@ -89,44 +97,25 @@ export function Orchestrator(props: OrchestratorProps) {
 
   const isLastReachedPage = getIsLastReachedPage(pageTag, lastReachedPage)
 
-  // TODO : handle state
-  function getState() {
-    return null
-  }
-
-  const orchestratorQuit = () => {
-    // get the updated data
-    const newData = getData(true) as SurveyUnitData
-    // get the updated stateData
-    const newStateData = {
-      state: getState(),
-      date: new Date().getTime(),
-      currentPage: pager.lastReachedPage ?? '1',
-    }
-    const updatedSurveyUnit = getUpdatedSurveyUnit(
+  const orchestratorQuit = () =>
+    getOrchestratorQuit(
       initialSurveyUnit,
-      newData,
-      newStateData
+      stateData,
+      getData(true) as SurveyUnitData,
+      getChangedData(true),
+      lastReachedPage,
+      quit
     )
-    quit(updatedSurveyUnit)
-  }
 
-  const orchestratorDefinitiveQuit = () => {
-    // get the updated data
-    const newData = getData(true) as SurveyUnitData
-    // get the updated currentPage, and force the state to "VALIDATED"
-    const newStateData: SurveyUnit['stateData'] = {
-      state: 'VALIDATED',
-      date: new Date().getTime(),
-      currentPage: lastReachedPage ?? '1',
-    }
-    const updatedSurveyUnit = getUpdatedSurveyUnit(
+  const orchestratorDefinitiveQuit = () =>
+    getOrchestratorDefinitiveQuit(
       initialSurveyUnit,
-      newData,
-      newStateData
+      stateData,
+      getData(true) as SurveyUnitData,
+      getChangedData(true),
+      lastReachedPage,
+      definitiveQuit
     )
-    return definitiveQuit(updatedSurveyUnit)
-  }
 
   const continueBehavior = getContinueBehavior(
     readonly,
