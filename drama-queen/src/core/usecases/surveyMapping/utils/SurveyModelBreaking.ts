@@ -21,10 +21,7 @@ export async function fetchUrl<T extends Questionnaire | SurveyUnit>(params: {
 
     return data
   } catch (error) {
-    console.error(
-      'An error occured, we could not retrieve the survey, we fallback to queen v2',
-      error
-    )
+    console.error(`An error occured, we could not retrieve ${url}`, error)
   }
 }
 
