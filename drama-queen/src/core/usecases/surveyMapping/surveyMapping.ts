@@ -6,6 +6,7 @@ import {
   isSurveyQueenV2Compatible,
 } from './utils/SurveyModelBreaking'
 import type { Questionnaire, SurveyUnit } from 'core/model'
+import axios from 'axios'
 
 export const name = 'surveyMapping'
 
@@ -26,7 +27,12 @@ export const thunks = {
         return null
       }
 
-      const { questionnaire, data, readonly = false } = result.data
+      const {
+        questionnaire,
+        data,
+        readonly = false,
+        nomenclature,
+      } = result.data
 
       if (!questionnaire) {
         return null
@@ -50,7 +56,15 @@ export const thunks = {
         url: decodeURIComponent(data || ''),
       })
 
-      return { isQueenV2, source, surveyUnit, readonly }
+      const getReferentiel = (name: string) => {
+        return nomenclature
+          ? axios
+              .get<Array<unknown>>(decodeURIComponent(nomenclature[name]))
+              .then(({ data }) => data)
+          : Promise.reject(new Error('No nomenclature provided'))
+      }
+
+      return { isQueenV2, source, surveyUnit, readonly, getReferentiel }
     },
   retrieveQuestionnaireId:
     (params: { surveyUnitId: string }) =>

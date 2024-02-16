@@ -9,22 +9,14 @@ import { useTranslate } from 'ui/hooks/useTranslate'
 import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
+import { encodeParams } from './encodeParams'
 
-type FormValues = {
+export type FormValues = {
   questionnaire: string
   data?: string
   nomenclature?: Record<string, string>
-  readonly?: boolean
+  readonly: boolean
 }
-
-//It's not the cleaner way because we cast as string value
-const encodeParams = (data: FormValues) =>
-  Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [
-      key,
-      encodeURIComponent(`${value}`),
-    ])
-  )
 
 export function VisualizeForm() {
   const { t } = useTranslate()
@@ -56,6 +48,10 @@ export function VisualizeForm() {
             helperText={t('vizu.input.data.helper')}
           />
           <TextField
+            {...register('nomenclature', {
+              setValueAs: (value: string) =>
+                value ? (JSON.parse(value) as Record<string, string>) : null,
+            })}
             id="nomenclature-url-form"
             label={t('vizu.input.nomenclatures.label')}
             helperText={t('vizu.input.nomenclatures.helper')}

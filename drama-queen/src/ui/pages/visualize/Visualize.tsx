@@ -10,6 +10,7 @@ export function Visualize() {
   const loaderData = useLoaderData() as Awaited<
     ReturnType<typeof visualizeLoader>
   >
+
   const navigate = useNavigate()
 
   const quit = (surveyUnit: SurveyUnit) => {
@@ -25,6 +26,7 @@ export function Visualize() {
         readonly={loaderData.readonly}
         quit={quit}
         definitiveQuit={quit}
+        getReferentiel={loaderData.getReferentiel}
       />
     ) : (
       <>Queen v1 orchestrator</>
