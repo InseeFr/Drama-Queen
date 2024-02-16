@@ -4,7 +4,9 @@
   "version": "1.4.0",
   "type": "module",
   "scripts": {
+    "predev": "npx @inseefr/lunatic workers",
     "dev": "vite --port 5000 --strictPort",
+    "prebuild": "npx @inseefr/lunatic workers",
     "build": "tsc && vite build",
     "preview": "vite preview --port 5000 --strictPort",
     "serve": "vite preview --port 5000 --strictPort",

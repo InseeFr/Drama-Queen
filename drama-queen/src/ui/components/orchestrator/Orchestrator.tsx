@@ -35,10 +35,12 @@ type OrchestratorProps = {
   readonly: boolean
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
+  getReferentiel?: (name: string) => Promise<Array<unknown>>
 }
 
 export function Orchestrator(props: OrchestratorProps) {
-  const { source, surveyUnit, readonly, quit, definitiveQuit } = props
+  const { source, surveyUnit, readonly, quit, definitiveQuit, getReferentiel } =
+    props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
 
@@ -72,6 +74,9 @@ export function Orchestrator(props: OrchestratorProps) {
   } = useLunatic(source, initialData, {
     lastReachedPage: initialLastReachedPage,
     onChange: onChange,
+    getReferentiel,
+    autoSuggesterLoading: true,
+    workersBasePath: `${window.location.origin}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
