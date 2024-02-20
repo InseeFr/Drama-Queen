@@ -5,5 +5,4 @@ const injectBodyScript = (url: string) => {
 }
 export const injectLegacyEntryQueens = () => {
   injectBodyScript(`${import.meta.env.VITE_QUEEN_URL}/entry.js`)
-  injectBodyScript(`${import.meta.env.VITE_QUEEN_V2_URL}/entry.js`)
 }

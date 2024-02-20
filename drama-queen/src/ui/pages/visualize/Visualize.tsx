@@ -29,7 +29,7 @@ export function Visualize() {
         getReferentiel={loaderData.getReferentiel}
       />
     ) : (
-      <>Queen v1 orchestrator</>
+      <queen-app />
     )
   }
 
