@@ -82,14 +82,5 @@ export default defineConfig(({ command, mode }) => {
       minify: true,
       //   cssCodeSplit: false,
     },
-    server: {
-      proxy: {
-        '/api': {
-          target: 'http://localhost:5001',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
-      },
-    },
   }
 })
