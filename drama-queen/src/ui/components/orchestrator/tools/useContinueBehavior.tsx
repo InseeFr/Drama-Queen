@@ -2,6 +2,14 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
 import type { GoToPage } from '../lunaticType'
+import { useEffect, useMemo, useState } from 'react'
+
+type ContinueAction =
+  | 'continue'
+  | 'fastForward'
+  | 'quit'
+  | 'saveAndQuit'
+  | undefined
 
 type UseContinueBehaviorProps = {
   readonly: boolean
@@ -26,76 +34,76 @@ export function useContinueBehavior({
   quit,
   definitiveQuit,
 }: UseContinueBehaviorProps) {
-  const getContinueAction = () => {
-    if (readonly) {
-      return isLastPage ? 'quit' : undefined
-    }
-    if (isLastPage) {
-      return 'saveAndQuit'
-    }
-    if (!isLastReachedPage) {
-      return 'fastForward'
-    }
-    if (hasPageResponse()) {
-      return 'continue'
-    }
-  }
+  const [continueAction, setContinueAction] =
+    useState<ContinueAction>(undefined)
 
-  const continueAction = getContinueAction()
-
-  const getIsDisplayedContinue = () => {
-    return continueAction !== undefined
-  }
-
-  const getContinueLabel = () => {
-    {
-      switch (continueAction) {
-        case 'quit':
-          return 'quitter'
-        case 'saveAndQuit':
-          return 'valider et quitter'
-        case 'fastForward':
-          return "suite de l'entretien"
-        default:
-          return 'continuer'
+  useEffect(() => {
+    const calculateContinueAction = () => {
+      if (readonly) {
+        return setContinueAction(isLastPage ? 'quit' : undefined)
       }
+      if (isLastPage) {
+        return setContinueAction('saveAndQuit')
+      }
+      if (!isLastReachedPage) {
+        return setContinueAction('fastForward')
+      }
+      if (hasPageResponse()) {
+        return setContinueAction('continue')
+      }
+      return setContinueAction(undefined)
     }
-  }
+    calculateContinueAction()
+  }, [readonly, isLastReachedPage, isLastPage, hasPageResponse])
 
-  const getContinueEndIcon = () => {
+  const isDisplayedContinue = useMemo(() => {
+    return continueAction !== undefined
+  }, [continueAction])
+
+  const continueLabel = useMemo(() => {
+    switch (continueAction) {
+      case 'quit':
+        return 'quitter'
+      case 'saveAndQuit':
+        return 'valider et quitter'
+      case 'fastForward':
+        return "suite de l'entretien"
+      default:
+        return 'continuer'
+    }
+  }, [continueAction])
+
+  const continueEndIcon = useMemo(() => {
     if (continueAction === 'continue') {
       return <ArrowRightAltIcon />
     }
     if (continueAction === 'fastForward') {
       return <SkipNext fontSize="large" />
     }
-  }
+  }, [continueAction])
 
   const continueGoToPage = () => {
     switch (continueAction) {
       case 'quit':
-        quit()
-        break
+        return quit()
       case 'saveAndQuit':
-        definitiveQuit()
-        break
+        return definitiveQuit()
       case 'fastForward':
-        goToPage({ page: lastReachedPage || '' })
-        break
+        return goToPage({ page: lastReachedPage || '' })
       default:
-        goNextPage()
+        return goNextPage()
     }
   }
 
-  const isDisplayedContinue = getIsDisplayedContinue()
-  const continueLabel = getContinueLabel()
-  const continueEndIcon = getContinueEndIcon()
+  const continueShortCutKey = useMemo(() => {
+    return continueAction === 'fastForward'
+      ? SHORTCUT_FAST_FORWARD
+      : SHORTCUT_NEXT
+  }, [continueAction])
 
-  const continueShortCutKey =
-    continueAction === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
-
-  const continueShortCutLabel =
-    continueAction === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+  const continueShortCutLabel = useMemo(() => {
+    return continueAction === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+  }, [continueAction])
 
   return {
     isDisplayedContinue,
