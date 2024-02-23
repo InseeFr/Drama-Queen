@@ -2,7 +2,7 @@ import type { LunaticData } from '@inseefr/lunatic'
 import type { SurveyUnit, SurveyUnitData } from 'core/model'
 import { getStateData, getUpdatedSurveyUnit } from './functions'
 
-type useQueenNavigationProps = {
+type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
   stateData: SurveyUnit['stateData']
   newData: SurveyUnitData
@@ -22,7 +22,7 @@ export function useQueenNavigation({
   pageTag,
   quit,
   definitiveQuit,
-}: useQueenNavigationProps) {
+}: UseQueenNavigationProps) {
   const getIsLastReachedPage = () => {
     if (lastReachedPage === undefined) {
       return true
