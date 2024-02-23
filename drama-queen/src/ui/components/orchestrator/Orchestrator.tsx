@@ -19,8 +19,6 @@ import {
   getIsLastReachedPage,
   getOrchestratorDefinitiveQuit,
   getOrchestratorQuit,
-  getStateData,
-  getUpdatedSurveyUnit,
   getinitialSurveyUnit,
 } from 'ui/components/orchestrator/tools/functions'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
@@ -35,7 +33,7 @@ type OrchestratorProps = {
   readonly: boolean
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
-  getReferentiel?: (name: string) => Promise<Array<unknown>>
+  getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -45,7 +43,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const { onChange, ref } = useAutoNext()
 
   // get the initial data for useLunatic
-  const initialData = surveyUnit?.data as LunaticData
+  const initialData = surveyUnit?.data as LunaticData | undefined
 
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
@@ -73,10 +71,9 @@ export function Orchestrator(props: OrchestratorProps) {
     loopVariables,
   } = useLunatic(source, initialData, {
     lastReachedPage: initialLastReachedPage,
-    onChange: onChange,
+    onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `${window.location.origin}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
