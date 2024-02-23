@@ -7,16 +7,6 @@ import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
 type Component = Extract<Components[number], object>
 
-export function getIsLastReachedPage(
-  pageTag: string,
-  lastReachedPage: string | undefined
-) {
-  if (lastReachedPage === undefined) {
-    return true
-  }
-  return pageTag === lastReachedPage
-}
-
 export function getContinueBehavior(
   readonly: boolean,
   isLastPage: boolean,

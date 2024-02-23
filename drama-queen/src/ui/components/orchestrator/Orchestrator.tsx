@@ -16,7 +16,6 @@ import {
   getContinueGoToPage,
   getContinueLabel,
   getIsDisplayedContinue,
-  getIsLastReachedPage,
   getOrchestratorDefinitiveQuit,
   getOrchestratorQuit,
   getinitialSurveyUnit,
@@ -24,6 +23,7 @@ import {
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
+import { useQueenNavigation } from './tools/useQueenNavigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -97,27 +97,17 @@ export function Orchestrator(props: OrchestratorProps) {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const isLastReachedPage = getIsLastReachedPage(pageTag, lastReachedPage)
-
-  const orchestratorQuit = () =>
-    getOrchestratorQuit(
+  const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
+    useQueenNavigation({
       initialSurveyUnit,
       stateData,
-      getData(true) as SurveyUnitData,
-      getChangedData(true),
+      newData: getData(true) as SurveyUnitData,
+      changedData: getChangedData(true),
       lastReachedPage,
-      quit
-    )
-
-  const orchestratorDefinitiveQuit = () =>
-    getOrchestratorDefinitiveQuit(
-      initialSurveyUnit,
-      stateData,
-      getData(true) as SurveyUnitData,
-      getChangedData(true),
-      lastReachedPage,
-      definitiveQuit
-    )
+      pageTag,
+      quit,
+      definitiveQuit,
+    })
 
   const continueBehavior = getContinueBehavior(
     readonly,
