@@ -41,13 +41,16 @@ export function NavBar(props: NavBarProps) {
     },
   ]
 
-  function displayPage(pageType: {
-    current: string | number | undefined
-    max: string | number | undefined
-  }) {
+  function displayPage(
+    pageType: {
+      current: string | number | undefined
+      max: string | number | undefined
+    },
+    index: number
+  ) {
     if (pageType.current !== undefined) {
       return (
-        <Stack className={classes.page}>
+        <Stack className={classes.page} key={`displayPages-${index}`}>
           <Typography variant="caption">n° page</Typography>
           <Typography variant="body2" fontWeight={'bold'}>
             {pageType.current}/{pageType.max}
@@ -59,7 +62,7 @@ export function NavBar(props: NavBarProps) {
 
   return (
     <Stack className={classes.root}>
-      {displayPages.map((pageType) => displayPage(pageType))}
+      {displayPages.map((pageType, index) => displayPage(pageType, index))}
       <PrevNext
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
