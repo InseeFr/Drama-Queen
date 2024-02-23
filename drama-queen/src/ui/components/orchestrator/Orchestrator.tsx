@@ -9,21 +9,12 @@ import {
 import { Stack } from '@mui/material'
 import { useLunaticStyles } from './lunaticStyle'
 import { Continue } from './buttons/Continue/Continue'
-import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
-import {
-  getContinueBehavior,
-  getContinueEndIcon,
-  getContinueGoToPage,
-  getContinueLabel,
-  getIsDisplayedContinue,
-  getOrchestratorDefinitiveQuit,
-  getOrchestratorQuit,
-  getinitialSurveyUnit,
-} from 'ui/components/orchestrator/tools/functions'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
 import { useQueenNavigation } from './tools/useQueenNavigation'
+import { useContinueBehavior } from './tools/useContinueBehavior'
+import { getinitialSurveyUnit } from './tools/functions'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -109,34 +100,24 @@ export function Orchestrator(props: OrchestratorProps) {
       definitiveQuit,
     })
 
-  const continueBehavior = getContinueBehavior(
+  const {
+    isDisplayedContinue,
+    continueLabel,
+    continueEndIcon,
+    continueGoToPage,
+    continueShortCutKey,
+    continueShortCutLabel,
+  } = useContinueBehavior({
     readonly,
+    lastReachedPage,
     isLastPage,
     isLastReachedPage,
-    hasPageResponse
-  )
-
-  const isDisplayedContinue = getIsDisplayedContinue(continueBehavior)
-
-  const continueGoToPage = () =>
-    getContinueGoToPage(
-      continueBehavior,
-      lastReachedPage,
-      goNextPage,
-      goToPage,
-      orchestratorQuit,
-      orchestratorDefinitiveQuit
-    )
-
-  const continueLabel = getContinueLabel(continueBehavior)
-
-  const continueEndIcon = getContinueEndIcon(continueBehavior)
-
-  const continueShortCutKey =
-    continueBehavior === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
-
-  const continueShortCutLabel =
-    continueBehavior === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+    hasPageResponse,
+    goNextPage,
+    goToPage,
+    quit: orchestratorQuit,
+    definitiveQuit: orchestratorDefinitiveQuit,
+  })
 
   return (
     <Stack className={classes.orchestrator}>
