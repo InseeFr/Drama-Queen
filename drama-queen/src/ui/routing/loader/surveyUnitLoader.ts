@@ -6,17 +6,16 @@ export async function surveyUnitLoader({
   request,
   params,
 }: LoaderFunctionArgs) {
-  const { surveyMapping, userAuthentication } = (await prCore).functions
+  const { collectSurvey, userAuthentication } = (await prCore).functions
 
   //Protect the route
   await userAuthentication.loginIfNotLoggedIn({
     redirectUri: request.url,
   })
 
-
   const { surveyUnitId } = params
   assert(surveyUnitId !== undefined)
-  const questionnaireId = await surveyMapping.retrieveQuestionnaireId({
+  const questionnaireId = await collectSurvey.retrieveQuestionnaireId({
     surveyUnitId,
   })
 

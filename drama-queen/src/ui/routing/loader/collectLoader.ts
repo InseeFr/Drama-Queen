@@ -15,7 +15,7 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   assert(questionnaireId !== undefined)
   assert(surveyUnitId !== undefined)
 
-  const { surveyMapping } = (await prCore).functions
+  const { collectSurvey } = (await prCore).functions
 
-  return surveyMapping.collectLoader({ questionnaireId, surveyUnitId })
+  return collectSurvey.collectLoader({ questionnaireId, surveyUnitId })
 }
