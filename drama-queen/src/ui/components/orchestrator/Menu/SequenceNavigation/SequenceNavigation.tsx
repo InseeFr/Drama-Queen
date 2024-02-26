@@ -4,7 +4,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import type { Overview, OverviewItem } from '../../lunaticType'
 
-
 type SequenceNavigationProps = {
   questionnaireTitle: string
   overview: Overview

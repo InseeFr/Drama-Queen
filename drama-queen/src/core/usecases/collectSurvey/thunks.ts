@@ -34,4 +34,10 @@ export const thunks = {
         }
       )
     },
+  getReferentiel:
+    (name: string) =>
+    (...args) => {
+      const [, , { queenApi }] = args
+      return queenApi.getNomenclature(name)
+    },
 } satisfies Thunks

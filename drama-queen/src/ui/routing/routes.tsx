@@ -17,17 +17,6 @@ import { SurveyUnitMapping } from 'ui/pages/surveyUnit'
 //ReadOnly path is a bad pattern must be change (affects pearl,moog,queen)
 export const routes: RouteObject[] = [
   {
-    path: '/survey-unit/:surveyUnitId',
-    Component: SurveyUnitMapping,
-    loader: surveyUnitLoader,
-  },
-  {
-    path: `/:${READ_ONLY}?/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
-    Component: Collect,
-    loader: collectLoader,
-  },
-
-  {
     path: '/',
     Component: Layout,
     children: [
@@ -45,6 +34,16 @@ export const routes: RouteObject[] = [
         path: '/synchronize',
         Component: SynchronizeData,
         loader: protectedRouteLoader,
+      },
+      {
+        path: '/survey-unit/:surveyUnitId',
+        Component: SurveyUnitMapping,
+        loader: surveyUnitLoader,
+      },
+      {
+        path: `/:${READ_ONLY}?/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        Component: Collect,
+        loader: collectLoader,
       },
     ],
   },
