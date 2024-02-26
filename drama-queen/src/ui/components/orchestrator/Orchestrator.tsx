@@ -102,14 +102,7 @@ export function Orchestrator(props: OrchestratorProps) {
       save,
     })
 
-  const {
-    isDisplayedContinue,
-    continueLabel,
-    continueEndIcon,
-    continueGoToPage,
-    continueShortCutKey,
-    continueShortCutLabel,
-  } = useContinueBehavior({
+  const continueProps = useContinueBehavior({
     readonly,
     lastReachedPage,
     isLastPage,
@@ -156,15 +149,7 @@ export function Orchestrator(props: OrchestratorProps) {
             </Provider>
           </Stack>
           <Stack className={classes.continue}>
-            {isDisplayedContinue && (
-              <Continue
-                label={continueLabel}
-                endIcon={continueEndIcon}
-                shortCutKey={continueShortCutKey}
-                shortCutLabel={continueShortCutLabel}
-                goToPage={continueGoToPage}
-              />
-            )}
+            {continueProps.visible && <Continue {...continueProps} />}
           </Stack>
         </Stack>
         <Stack>
