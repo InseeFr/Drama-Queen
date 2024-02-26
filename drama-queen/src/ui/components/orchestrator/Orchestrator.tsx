@@ -40,7 +40,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
 
   // initialize the stateData, that will be updated
-  let stateData = initialSurveyUnit.stateData
+  const initialStateData = initialSurveyUnit.stateData
 
   // get the initial lastReachedPage for useLunatic
   const initialLastReachedPage = initialSurveyUnit.stateData?.currentPage ?? '1'
@@ -91,9 +91,9 @@ export function Orchestrator(props: OrchestratorProps) {
   const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
     useQueenNavigation({
       initialSurveyUnit,
-      stateData,
-      newData: getData(true) as SurveyUnitData,
-      changedData: getChangedData(true),
+      initialStateData,
+      data: getData(true) as SurveyUnitData,
+      changedData: getChangedData(false),
       lastReachedPage,
       pageTag,
       quit,
