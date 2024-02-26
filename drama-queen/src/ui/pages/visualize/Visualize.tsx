@@ -15,7 +15,7 @@ export function Visualize() {
 
   // function applied on when page changes
   const save = (surveyUnit: SurveyUnit) => {
-    console.log(surveyUnit.data)
+    return
   }
 
   const quit = (surveyUnit: SurveyUnit) => {
