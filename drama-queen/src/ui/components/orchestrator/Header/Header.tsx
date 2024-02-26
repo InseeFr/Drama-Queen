@@ -65,8 +65,11 @@ export function Header(props: HeaderProps) {
   return (
     <AppBar className={classes.root} elevation={0}>
       <Stack className={classes.headerMenu}>
-        <IconButton className={classes.menuIcon}>
-          <AppsIcon onClick={() => handleDrawerToggle(!isDrawerOpen)} />
+        <IconButton
+          className={classes.menuIcon}
+          onClick={() => handleDrawerToggle(!isDrawerOpen)}
+        >
+          <AppsIcon />
           <ShortCut
             shortCutKey={menuShortKey}
             onClickMethod={() => handleDrawerToggle(!isDrawerOpen)}
@@ -107,8 +110,12 @@ export function Header(props: HeaderProps) {
         <BreadCrumb hierarchy={hierarchy} goToPage={goToPage} />
       </Stack>
       <Stack className={classes.headerClose}>
-        <IconButton title="Quitter" className={classes.closeIcon}>
-          <ExitToAppIcon onClick={quit} />
+        <IconButton
+          title="Quitter"
+          className={classes.closeIcon}
+          onClick={quit}
+        >
+          <ExitToAppIcon />
           <ShortCut shortCutKey={quitShortKey} onClickMethod={quit} />
         </IconButton>
       </Stack>
