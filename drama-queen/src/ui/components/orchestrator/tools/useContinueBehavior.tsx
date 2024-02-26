@@ -49,9 +49,9 @@ export function useContinueBehavior({
     return undefined
   })()
 
-  const isDisplayedContinue = continueAction !== undefined
+  const isVisible = continueAction !== undefined
 
-  const continueGoToPage = () => {
+  const onContinue = () => {
     switch (continueAction) {
       case 'quit':
         return quit()
@@ -72,11 +72,11 @@ export function useContinueBehavior({
 
   return {
     label: getLabelFromAction(continueAction),
-    visible: isDisplayedContinue,
+    isVisible,
     endIcon: getEndIcon(continueAction),
     shortCutKey: shortCutKey,
     shortCutLabel: shortCutLabel,
-    goToPage: continueGoToPage,
+    onContinue,
   }
 }
 

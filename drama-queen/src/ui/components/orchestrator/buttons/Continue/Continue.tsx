@@ -7,18 +7,18 @@ type ContinueProps = {
   endIcon: JSX.Element | undefined
   shortCutKey: string
   shortCutLabel: string
-  goToPage: () => void
+  onContinue: () => void
 }
 
 export function Continue(props: ContinueProps) {
-  const { label, endIcon, shortCutKey, shortCutLabel, goToPage } = props
+  const { label, endIcon, shortCutKey, shortCutLabel, onContinue } = props
   const { classes } = useStyles()
 
   return (
     <Stack direction={'row'} className={classes.continueWrapper}>
-      <Button className={classes.button} endIcon={endIcon} onClick={goToPage}>
+      <Button className={classes.button} endIcon={endIcon} onClick={onContinue}>
         {label}
-        <ShortCut shortCutKey={shortCutKey} onClickMethod={goToPage} />
+        <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
       </Button>
       <Typography variant="caption" color="#777777">
         appuyer sur

@@ -12,7 +12,7 @@ import { Continue } from './buttons/Continue/Continue'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
-import { useQueenNavigation } from './tools/useQueenNavigation'
+import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
 
@@ -63,7 +63,7 @@ export function Orchestrator(props: OrchestratorProps) {
     getChangedData,
     loopVariables,
   } = useLunatic(source, initialData, {
-    lastReachedPage: initialSurveyUnit.stateData?.currentPage ?? '1',
+    lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
@@ -91,7 +91,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const { classes: lunaticClasses } = useLunaticStyles()
 
   const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
-    useQueenNavigation({
+    getQueenNavigation({
       initialSurveyUnit,
       data: getData(true) as SurveyUnitData,
       changedData: getChangedData(false),
@@ -149,7 +149,7 @@ export function Orchestrator(props: OrchestratorProps) {
             </Provider>
           </Stack>
           <Stack className={classes.continue}>
-            {continueProps.visible && <Continue {...continueProps} />}
+            {continueProps.isVisible && <Continue {...continueProps} />}
           </Stack>
         </Stack>
         <Stack>

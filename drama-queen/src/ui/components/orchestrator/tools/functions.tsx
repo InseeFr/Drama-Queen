@@ -4,7 +4,10 @@ import type { SurveyUnit } from 'core/model'
 type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
 type Component = Extract<Components[number], object>
 
-export function countMissingResponseInComponent(component: Component): number {
+/**
+ * temporary : should be handle by Lunatic
+ */
+function countMissingResponseInComponent(component: Component): number {
   let factor = 1
   // When we are Loop (not paginated), we have to compute the total of component repetition
   if (
@@ -26,6 +29,9 @@ export function countMissingResponseInComponent(component: Component): number {
   return component?.missingResponse?.name ? 1 : 0
 }
 
+/**
+ * temporary : should be handle by Lunatic
+ */
 export function countMissingResponseInPage(components: Components) {
   return components.reduce((total, component) => {
     if (component.componentType === 'Loop') {
