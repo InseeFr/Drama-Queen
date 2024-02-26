@@ -1,6 +1,5 @@
-import { useLunatic, type LunaticData } from '@inseefr/lunatic'
-import type { SurveyUnit, SurveyUnitData } from 'core/model'
-import type { QuestionnaireState } from 'core/model/QuestionnaireState'
+import { useLunatic } from '@inseefr/lunatic'
+import type { SurveyUnit } from 'core/model'
 
 type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
 type Component = Extract<Components[number], object>
@@ -93,88 +92,4 @@ export function getinitialSurveyUnit(
       currentPage: '1',
     },
   }
-}
-
-export function getUpdatedSurveyUnit(
-  surveyUnit: SurveyUnit,
-  newData?: SurveyUnit['data'],
-  newStateData?: SurveyUnit['stateData']
-) {
-  const updatedData = newData ?? surveyUnit.data
-  const updatedStateData = newStateData ?? surveyUnit.stateData
-  const updatedSurveyUnit = {
-    ...surveyUnit,
-    data: updatedData,
-    stateData: updatedStateData,
-  }
-  return updatedSurveyUnit
-}
-
-function getState(
-  previousState: QuestionnaireState,
-  hasDataChanged: boolean,
-  forcedState?: QuestionnaireState
-) {
-  // we can force a new state (used for definitiveQuit forcing "VALIDATED" state)
-  if (forcedState) {
-    return forcedState
-  }
-  // whatever the previous state, changing data updates the state into "INIT"
-  if (hasDataChanged) {
-    return 'INIT'
-  }
-  return previousState
-}
-
-export function getStateData(
-  previousStateData: SurveyUnit['stateData'],
-  changedData: LunaticData,
-  lastReachedPage: string | undefined,
-  forcedState?: QuestionnaireState
-) {
-  const newData = changedData.COLLECTED
-  const hasDataChanged = Object.keys(newData).length > 0
-  const previousState: QuestionnaireState = previousStateData?.state ?? null
-  const newState = getState(previousState, hasDataChanged, forcedState)
-
-  const newStateData: SurveyUnit['stateData'] = {
-    state: newState,
-    date: new Date().getTime(),
-    currentPage: lastReachedPage ?? '1',
-  }
-  return newStateData
-}
-
-export function getOrchestratorQuit(
-  initialSurveyUnit: SurveyUnit,
-  stateData: SurveyUnit['stateData'],
-  newData: SurveyUnitData,
-  changedData: LunaticData,
-  lastReachedPage: string | undefined,
-  quit: (surveyUnit: SurveyUnit) => void
-) {
-  stateData = getStateData(stateData, changedData, lastReachedPage)
-  const updatedSurveyUnit = getUpdatedSurveyUnit(
-    initialSurveyUnit,
-    newData,
-    stateData
-  )
-  return quit(updatedSurveyUnit)
-}
-
-export function getOrchestratorDefinitiveQuit(
-  initialSurveyUnit: SurveyUnit,
-  stateData: SurveyUnit['stateData'],
-  newData: SurveyUnitData,
-  changedData: LunaticData,
-  lastReachedPage: string | undefined,
-  definitiveQuit: (surveyUnit: SurveyUnit) => void
-) {
-  stateData = getStateData(stateData, changedData, lastReachedPage, 'VALIDATED')
-  const updatedSurveyUnit = getUpdatedSurveyUnit(
-    initialSurveyUnit,
-    newData,
-    stateData
-  )
-  return definitiveQuit(updatedSurveyUnit)
 }
