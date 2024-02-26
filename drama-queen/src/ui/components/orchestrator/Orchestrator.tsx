@@ -24,12 +24,20 @@ type OrchestratorProps = {
   readonly: boolean
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
+  save: (surveyUnit: SurveyUnit) => void
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
 }
 
 export function Orchestrator(props: OrchestratorProps) {
-  const { source, surveyUnit, readonly, quit, definitiveQuit, getReferentiel } =
-    props
+  const {
+    source,
+    surveyUnit,
+    readonly,
+    quit,
+    definitiveQuit,
+    save,
+    getReferentiel,
+  } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
 
@@ -38,12 +46,6 @@ export function Orchestrator(props: OrchestratorProps) {
 
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
-
-  // initialize the stateData, that will be updated
-  const initialStateData = initialSurveyUnit.stateData
-
-  // get the initial lastReachedPage for useLunatic
-  const initialLastReachedPage = initialSurveyUnit.stateData?.currentPage ?? '1'
 
   const {
     getComponents,
@@ -61,7 +63,7 @@ export function Orchestrator(props: OrchestratorProps) {
     getChangedData,
     loopVariables,
   } = useLunatic(source, initialData, {
-    lastReachedPage: initialLastReachedPage,
+    lastReachedPage: initialSurveyUnit.stateData?.currentPage ?? '1',
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
@@ -91,13 +93,13 @@ export function Orchestrator(props: OrchestratorProps) {
   const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
     useQueenNavigation({
       initialSurveyUnit,
-      initialStateData,
       data: getData(true) as SurveyUnitData,
       changedData: getChangedData(false),
       lastReachedPage,
       pageTag,
       quit,
       definitiveQuit,
+      save,
     })
 
   const {

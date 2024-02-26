@@ -13,6 +13,11 @@ export function Visualize() {
 
   const navigate = useNavigate()
 
+  // function applied on when page changes
+  const save = (surveyUnit: SurveyUnit) => {
+    console.log(surveyUnit.data)
+  }
+
   const quit = (surveyUnit: SurveyUnit) => {
     downloadAsJson({ data: surveyUnit })
     navigate('/visualize')
@@ -26,6 +31,7 @@ export function Visualize() {
         readonly={loaderData.readonly}
         quit={quit}
         definitiveQuit={quit}
+        save={save}
         getReferentiel={loaderData.getReferentiel}
       />
     ) : (

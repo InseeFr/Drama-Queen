@@ -1,20 +1,22 @@
 import type { LunaticData } from '@inseefr/lunatic'
 import type { SurveyUnit, SurveyUnitData } from 'core/model'
-import { getStateData, getUpdatedSurveyUnit } from './functions'
-import { useEffect, useState } from 'react'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
+import { useEffect } from 'react'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
-  initialStateData: SurveyUnit['stateData']
   data: SurveyUnitData
   changedData: LunaticData
   lastReachedPage: string | undefined
   pageTag: string
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
+  save: (surveyUnit: SurveyUnit) => void
 }
 
+/**
+ * Handle synchronization of the surveyUnit with the backend
+ */
 export function useQueenNavigation({
   initialSurveyUnit,
   data,
@@ -23,76 +25,50 @@ export function useQueenNavigation({
   pageTag,
   quit,
   definitiveQuit,
+  save,
 }: UseQueenNavigationProps) {
   const hasDataChanged = Object.keys(changedData.COLLECTED).length > 0
 
-  const [surveyUnit, setSurveyUnit] = useState<SurveyUnit>(initialSurveyUnit)
-  const [stateData, setStateData] = useState<SurveyUnit['stateData']>(
-    initialSurveyUnit.stateData
-  )
+  const isLastReachedPage =
+    lastReachedPage === undefined || pageTag === lastReachedPage
 
-  const getIsLastReachedPage = () => {
-    if (lastReachedPage === undefined) {
-      return true
+  const surveyUnitState = hasDataChanged
+    ? 'INIT'
+    : initialSurveyUnit.stateData?.state ?? null
+
+  // get the updated SurveyUnit, with possibility to force the state (used for definitive quit which forces the validation)
+  const getUpdatedSurveyUnit = (forcedState?: QuestionnaireState) => {
+    const surveyUnit = {
+      ...initialSurveyUnit,
+      data,
+      stateData: {
+        state: forcedState ?? surveyUnitState,
+        date: new Date().getTime(),
+        currentPage: lastReachedPage ?? '1',
+      },
     }
-    return pageTag === lastReachedPage
+    return surveyUnit
   }
 
-  const getState = (forcedState?: QuestionnaireState) => {
-    // we can force a new state (used for definitiveQuit forcing "VALIDATED" state)
-    if (forcedState) {
-      return forcedState
-    }
-    // whatever the previous state, changing data updates the state into "INIT"
-    if (hasDataChanged) {
-      return 'INIT'
-    }
-    return stateData?.state ?? null
-  }
-
-  const updateStateData = (forcedState?: QuestionnaireState) => {
-    const newStateData: SurveyUnit['stateData'] = {
-      state: getState(forcedState),
-      date: new Date().getTime(),
-      currentPage: lastReachedPage ?? '1',
-    }
-    setStateData(newStateData)
-  }
-
-  const updateSurveyUnit = () => {
-    const updatedSurveyUnit = {
-      ...surveyUnit,
-      data: data,
-      stateData: stateData,
-    }
-    setSurveyUnit(updatedSurveyUnit)
-    return updatedSurveyUnit
-  }
-
+  // handle updated surveyUnit when page changes
   useEffect(() => {
-    const savingTask = () => {
-      if (pageTag === undefined || lastReachedPage === undefined) {
-        return
-      }
-      updateStateData()
-      updateSurveyUnit()
+    if (pageTag === undefined || lastReachedPage === undefined) {
+      return
     }
-    savingTask()
+    const surveyUnit = getUpdatedSurveyUnit()
+    return save(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {
-    const updatedStateData = updateStateData()
-    const updatedSurveyUnit = updateSurveyUnit()
-    return quit(updatedSurveyUnit)
+    const surveyUnit = getUpdatedSurveyUnit()
+    return quit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
-    const updatedStateData = updateStateData('VALIDATED')
-    const updatedSurveyUnit = updateSurveyUnit()
-    return definitiveQuit(updatedSurveyUnit)
+    // get the updated SurveyUnit, and forces state to "VALIDATED"
+    const surveyUnit = getUpdatedSurveyUnit('VALIDATED')
+    return definitiveQuit(surveyUnit)
   }
-
-  const isLastReachedPage = getIsLastReachedPage()
 
   return {
     isLastReachedPage,
