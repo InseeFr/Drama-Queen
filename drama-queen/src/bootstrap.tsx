@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { type RoutingStrategy, createRouter } from 'ui/routing/createRouter'
-import { injectLegacyEntryQueens } from 'injectLegacyQueens'
+import { injectLegacyEntryQueen } from 'injectLegacyQueens'
 import CircularProgress from '@mui/material/CircularProgress'
 import { createCoreProvider } from 'core'
 import { RouterProvider } from 'react-router-dom'
@@ -24,7 +24,7 @@ const mount = ({
   routingStrategy?: RoutingStrategy
 }) => {
   console.log('Mount Drama Queen')
-  //injectLegacyEntryQueens();
+  injectLegacyEntryQueen()
 
   const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)

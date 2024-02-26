@@ -46,10 +46,6 @@ export const routes: RouteObject[] = [
         Component: SynchronizeData,
         loader: protectedRouteLoader,
       },
-      {
-        path: '/orchestrator',
-        Component: Orchestrator,
-      },
     ],
   },
 ]

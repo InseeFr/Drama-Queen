@@ -1,8 +1,10 @@
 import * as userAuthentication from './userAuthentication'
 import * as synchronizeData from './synchronizeData'
-import * as surveyMapping from './surveyMapping'
+import * as visualizeSurvey from './visualizeSurvey'
+import * as collectSurvey from './collectSurvey'
 export const usecases = {
   userAuthentication,
   synchronizeData,
-  surveyMapping,
+  visualizeSurvey,
+  collectSurvey,
 }

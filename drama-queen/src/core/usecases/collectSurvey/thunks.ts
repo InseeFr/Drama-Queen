@@ -1,41 +1,11 @@
 import type { Thunks } from 'core/bootstrap'
-import { makeSearchParamsObjSchema } from './utils/makeSearchParamsObjectSchema'
-import { z } from 'zod'
-import {
-  fetchSurveyModelVersionCompatibility,
-  isSurveyQueenV2Compatible,
-} from './utils/SurveyModelBreaking'
+import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
 
-export const name = 'surveyMapping'
+export const name = 'collectSurvey'
 
 export const reducer = null
 
 export const thunks = {
-  visualizeLoader:
-    (params: { requestUrl: string }) =>
-    async (...args) => {
-      const { requestUrl } = params
-      const url = new URL(requestUrl)
-      const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
-        url.searchParams
-      )
-
-      if (!result.success) {
-        console.error(result.error)
-        return null
-      }
-
-      const { questionnaire } = result.data
-
-      if (!questionnaire) {
-        return null
-      }
-
-      const isQueenV2 = await fetchSurveyModelVersionCompatibility({
-        questionnaireUrl: decodeURIComponent(questionnaire),
-      })
-      return { isQueenV2 }
-    },
   retrieveQuestionnaireId:
     (params: { surveyUnitId: string }) =>
     (...args) => {
@@ -65,11 +35,3 @@ export const thunks = {
       )
     },
 } satisfies Thunks
-
-const searchParamsSchema = z.object({
-  questionnaire: z.string().optional(),
-  // We just need questionnaire, not needed to parse other fields
-  // data: z.string().optional(),
-  // nomenclature: z.record(z.string()).optional(),
-  // readonly: z.boolean().optional(),
-})

@@ -1,7 +1,6 @@
 import { Header } from './Header/Header'
 import { NavBar } from './NavBar/NavBar'
 import { tss } from 'tss-react/mui'
-import { form } from './form'
 import {
   type LunaticData,
   useLunatic,
@@ -10,28 +9,43 @@ import {
 import { Stack } from '@mui/material'
 import { useLunaticStyles } from './lunaticStyle'
 import { Continue } from './buttons/Continue/Continue'
-import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
-import {
-  getContinueBehavior,
-  getContinueEndIcon,
-  getContinueGoToPage,
-  getContinueLabel,
-  getIsDisplayedContinue,
-  getIsLastReachedPage,
-} from 'ui/components/orchestrator/tools/functions'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
 import { LoopPanel } from './LoopPanel/LoopPanel'
+import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
+import { getQueenNavigation } from './tools/getQueenNavigation'
+import { useContinueBehavior } from './tools/useContinueBehavior'
+import { getinitialSurveyUnit } from './tools/functions'
 
-const source = form
-const data = {} as LunaticData
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
-const readonly = false
-const quit = () => console.log('quit')
-const definitiveQuit = () => console.log('definitiveQuit')
 
-export function Orchestrator() {
+type OrchestratorProps = {
+  source: Questionnaire
+  surveyUnit: SurveyUnit | undefined
+  readonly: boolean
+  quit: (surveyUnit: SurveyUnit) => void
+  definitiveQuit: (surveyUnit: SurveyUnit) => void
+  save: (surveyUnit: SurveyUnit) => void
+  getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
+}
+
+export function Orchestrator(props: OrchestratorProps) {
+  const {
+    source,
+    surveyUnit,
+    readonly,
+    quit,
+    definitiveQuit,
+    save,
+    getReferentiel,
+  } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
+
+  // get the initial data for useLunatic
+  const initialData = surveyUnit?.data as LunaticData | undefined
+
+  // the given surveyUnit can be empty or partial, we initialize it for having the waited format
+  const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
 
   const {
     getComponents,
@@ -46,9 +60,14 @@ export function Orchestrator() {
     overview,
     hasPageResponse,
     getData,
+    getChangedData,
     loopVariables,
-  } = useLunatic(source, data, {
-    onChange: onChange,
+  } = useLunatic(source, initialData, {
+    lastReachedPage: initialSurveyUnit.stateData?.currentPage,
+    onChange,
+    getReferentiel,
+    autoSuggesterLoading: true,
+    trackChanges: true,
     shortcut: true,
     withOverview: true,
     missing: true,
@@ -71,36 +90,29 @@ export function Orchestrator() {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const isLastReachedPage = getIsLastReachedPage(pageTag, lastReachedPage)
+  const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
+    getQueenNavigation({
+      initialSurveyUnit,
+      data: getData(true) as SurveyUnitData,
+      changedData: getChangedData(false),
+      lastReachedPage,
+      pageTag,
+      quit,
+      definitiveQuit,
+      save,
+    })
 
-  const continueBehavior = getContinueBehavior(
+  const continueProps = useContinueBehavior({
     readonly,
+    lastReachedPage,
     isLastPage,
     isLastReachedPage,
-    hasPageResponse
-  )
-
-  const isDisplayedContinue = getIsDisplayedContinue(continueBehavior)
-
-  const continueGoToPage = () =>
-    getContinueGoToPage(
-      continueBehavior,
-      lastReachedPage,
-      goNextPage,
-      goToPage,
-      quit,
-      definitiveQuit
-    )
-
-  const continueLabel = getContinueLabel(continueBehavior)
-
-  const continueEndIcon = getContinueEndIcon(continueBehavior)
-
-  const continueShortCutKey =
-    continueBehavior === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
-
-  const continueShortCutLabel =
-    continueBehavior === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+    hasPageResponse,
+    goNextPage,
+    goToPage,
+    quit: orchestratorQuit,
+    definitiveQuit: orchestratorDefinitiveQuit,
+  })
 
   return (
     <Stack className={classes.orchestrator}>
@@ -110,8 +122,8 @@ export function Orchestrator() {
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
-        quit={quit}
-        definitiveQuit={definitiveQuit}
+        quit={orchestratorQuit}
+        definitiveQuit={orchestratorDefinitiveQuit}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>
@@ -137,15 +149,7 @@ export function Orchestrator() {
             </Provider>
           </Stack>
           <Stack className={classes.continue}>
-            {isDisplayedContinue && (
-              <Continue
-                label={continueLabel}
-                endIcon={continueEndIcon}
-                shortCutKey={continueShortCutKey}
-                shortCutLabel={continueShortCutLabel}
-                goToPage={continueGoToPage}
-              />
-            )}
+            {continueProps.isVisible && <Continue {...continueProps} />}
           </Stack>
         </Stack>
         <Stack>
