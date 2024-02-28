@@ -1,34 +1,46 @@
+import { Stack, Typography } from '@mui/material'
 import { useCore } from 'core'
-import { useParams } from 'react-router-dom'
-import { assert } from 'tsafe'
+import type { SurveyUnit } from 'core/model'
+import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
 import type { collectLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'
+import { Error } from 'ui/components/Error/Error'
 
 export function Collect() {
-  const { questionnaireId, surveyUnitId } = useParams<{
-    surveyUnitId: string
-    questionnaireId: string
-  }>()
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
   const loaderData = useLoaderData() as Awaited<
     ReturnType<typeof collectLoader>
   >
 
+  if (loaderData.isError) {
+    return <Error message={loaderData.errorMessage} />
+  }
+
   if (!loaderData.isQueenV2) {
     return <queen-app />
   }
 
-  const { questionnaire, surveyUnit } = loaderData
-
-  //surveyUnit possibly undefined in readOnly
-  
   const { collectSurvey } = useCore().functions
 
-  const nomenclatureForLunatic = collectSurvey.getReferentiel
+  const getReferentiel = collectSurvey.getReferentiel
+
+  const save = (surveyUnit: SurveyUnit) => {
+    return
+  }
+
+  const quit = (surveyUnit: SurveyUnit) => {
+    console.log(quit)
+  }
 
   return (
-    <div>
-      Collect : {surveyUnit} with questionnaire {questionnaireId}
-    </div>
+    <Orchestrator
+      source={loaderData.questionnaire}
+      surveyUnit={loaderData.surveyUnit}
+      readonly={loaderData.isReadonly}
+      quit={quit}
+      definitiveQuit={quit}
+      save={save}
+      getReferentiel={getReferentiel}
+    />
   )
 }
