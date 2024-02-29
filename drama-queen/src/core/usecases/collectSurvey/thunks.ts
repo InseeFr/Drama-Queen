@@ -95,13 +95,14 @@ export const thunks = {
           { questionnaire },
           isRightQuestionnaireId,
         ]) => {
-          //
+          //check if there is an error to display
           const isError =
             !questionnaire ||
             !surveyUnit ||
             isReadonly === undefined ||
             !isRightQuestionnaireId
 
+          // set an error message to display
           const errorMessage = (() => {
             if (isReadonly === undefined) {
               return "Veuillez vérifier l'URL."
@@ -118,10 +119,12 @@ export const thunks = {
             return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
           })()
 
+          // only need to return other variables for QueenV1
           if (questionnaire && !isQueenV2) {
             return { isQueenV2 }
           }
 
+          // only need to return error variables for displaying it
           if (isError) {
             return { isError, errorMessage }
           }

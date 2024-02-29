@@ -11,6 +11,7 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
     redirectUri: request.url,
   })
 
+  // READ_ONLY param is variable
   const { [READ_ONLY]: readonly, questionnaireId, surveyUnitId } = params
 
   assert(questionnaireId !== undefined)
