@@ -11,8 +11,10 @@ import {
   surveyUnitLoader,
   visualizeLoader,
   collectLoader,
+  reviewLoader,
 } from './loader'
 import { SurveyUnitMapping } from 'ui/pages/surveyUnit'
+import { Review } from 'ui/pages/review/Review'
 
 //ReadOnly path is a bad pattern must be change (affects pearl,moog,queen)
 export const routes: RouteObject[] = [
@@ -41,9 +43,14 @@ export const routes: RouteObject[] = [
         loader: surveyUnitLoader,
       },
       {
-        path: `/:${READ_ONLY}?/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        path: `/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
         Component: Collect,
         loader: collectLoader,
+      },
+      {
+        path: `/${READ_ONLY}/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        Component: Review,
+        loader: reviewLoader,
       },
     ],
   },

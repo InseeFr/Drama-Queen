@@ -1,26 +1,16 @@
 import type { Thunks } from 'core/bootstrap'
-import type { SurveyUnit } from 'core/model'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
 
-export const name = 'collectSurvey'
+export const name = 'reviewSurvey'
 
 export const reducer = null
 
 export const thunks = {
-  retrieveQuestionnaireId:
-    (params: { surveyUnitId: string }) =>
-    (...args) => {
-      const [, , { dataStore }] = args
-      const { surveyUnitId } = params
-      //TODO -> reject if undefined and handle error higher
-      return dataStore
-        .getSurveyUnit(surveyUnitId)
-        .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
-    },
-  collectLoader:
+  // WARNING : initialize from what was done on collectSurvey, to update
+  reviewLoader:
     (params: { questionnaireId: string; surveyUnitId: string }) =>
     (...args) => {
-      const [, , { queenApi, dataStore }] = args
+      const [, , { queenApi }] = args
 
       const { questionnaireId, surveyUnitId } = params
 
@@ -45,7 +35,7 @@ export const thunks = {
         }
       )
 
-      const surveyUnitPromise = dataStore.getSurveyUnit(surveyUnitId)
+      const surveyUnitPromise = queenApi.getSurveyUnit(surveyUnitId)
 
       const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
         (surveyUnit) => {
@@ -110,11 +100,5 @@ export const thunks = {
           }
         }
       )
-    },
-  getReferentiel:
-    (name: string) =>
-    (...args) => {
-      const [, , { queenApi }] = args
-      return queenApi.getNomenclature(name)
     },
 } satisfies Thunks

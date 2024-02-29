@@ -1,9 +1,8 @@
 import { prCore } from 'bootstrap'
 import { type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
-import { READ_ONLY } from 'ui/constants'
 
-export async function collectLoader({ request, params }: LoaderFunctionArgs) {
+export async function reviewLoader({ request, params }: LoaderFunctionArgs) {
   const { userAuthentication } = (await prCore).functions
 
   //Protect the route
@@ -17,9 +16,9 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   assert(questionnaireId !== undefined)
   assert(surveyUnitId !== undefined)
 
-  const { collectSurvey } = (await prCore).functions
+  const { reviewSurvey } = (await prCore).functions
 
-  return collectSurvey.collectLoader({
+  return reviewSurvey.reviewLoader({
     questionnaireId,
     surveyUnitId,
   })
