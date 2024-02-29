@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios'
 import type { Thunks } from 'core/bootstrap'
 import type { SurveyUnit } from 'core/model'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
@@ -18,11 +19,15 @@ export const thunks = {
         .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
     },
   collectLoader:
-    (params: { questionnaireId: string; surveyUnitId: string }) =>
+    (params: {
+      questionnaireId: string
+      surveyUnitId: string
+      standalone: boolean
+    }) =>
     (...args) => {
       const [, , { queenApi, dataStore }] = args
 
-      const { questionnaireId, surveyUnitId } = params
+      const { questionnaireId, surveyUnitId, standalone } = params
 
       // get questionnaire from API with questionnaireId
       const questionnairePromise = queenApi
@@ -45,10 +50,96 @@ export const thunks = {
         }
       )
 
-      const surveyUnitPromise = dataStore.getSurveyUnit(surveyUnitId)
+      const getSurveyUnitAPIPromise = () => {
+        return queenApi
+          .getSurveyUnit(surveyUnitId)
+          .then((surveyUnit) => {
+            // suceeded to get surveyUnit
+            return {
+              surveyUnit,
+              surveyUnitsuccess: true,
+              surveyUnitErrorType: undefined,
+            }
+          })
+          .catch((error) => {
+            // failed to get surveyUnit
+            if (error instanceof AxiosError) {
+              // unauthorized to get surveyUnit
+              if (error.response?.status === 403) {
+                console.error(
+                  `Unauthorized access to surveyUnit ${surveyUnitId}.`,
+                  error
+                )
+                return {
+                  surveyUnit: undefined,
+                  surveyUnitsuccess: false,
+                  surveyUnitErrorType: 403,
+                }
+              }
+              // surveyUnit does not exist
+              if (error.response?.status === 404) {
+                console.error(`No data for surveyUnit ${surveyUnitId}.`, error)
+                return {
+                  surveyUnit: undefined,
+                  surveyUnitsuccess: false,
+                  surveyUnitErrorType: 404,
+                }
+              }
+              // other error cases
+              console.error(error)
+              return {
+                surveyUnit: undefined,
+                surveyUnitsuccess: false,
+                surveyUnitErrorType: undefined,
+              }
+            }
+            throw error
+          })
+      }
+
+      const getSurveyUnitIDBPromise = () => {
+        return (
+          dataStore
+            .getSurveyUnit(surveyUnitId)
+            .then((surveyUnit) => {
+              // succeeded to get surveyUnit
+              if (surveyUnit) {
+                return {
+                  surveyUnit,
+                  surveyUnitsuccess: true,
+                  surveyUnitErrorType: undefined,
+                }
+              }
+              // surveyUnit does not exist in index DB
+              return {
+                surveyUnit: undefined,
+                surveyUnitsuccess: false,
+                surveyUnitErrorType: undefined,
+              }
+            })
+            // cannot search for surveyUnit in index DB
+            .catch((error) => {
+              console.error(error)
+              return {
+                surveyUnit: undefined,
+                surveyUnitsuccess: false,
+                surveyUnitErrorType: undefined,
+              }
+            })
+        )
+      }
+
+      const surveyUnitPromise = (() => {
+        if (standalone) {
+          // get the surveyUnit from api
+          return getSurveyUnitAPIPromise()
+        }
+        // get the surveyUnit from index DB
+        return getSurveyUnitIDBPromise()
+      })()
 
       const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
-        (surveyUnit) => {
+        ({ surveyUnit }) => {
           try {
             if (surveyUnit?.questionnaireId === questionnaireId) {
               return true
@@ -70,22 +161,28 @@ export const thunks = {
         isRightQuestionnaireIdPromise,
       ]).then(
         ([
-          surveyUnit,
+          { surveyUnit, surveyUnitsuccess, surveyUnitErrorType },
           isQueenV2,
           { questionnaire },
           isRightQuestionnaireId,
         ]) => {
           //check if there is an error to display
           const isError =
-            !questionnaire || !surveyUnit || !isRightQuestionnaireId
+            !questionnaire || !surveyUnitsuccess || !isRightQuestionnaireId
 
           // set an error message to display
           const errorMessage = (() => {
             if (!questionnaire) {
               return "Le questionnaire n'existe pas."
             }
-            if (!surveyUnit) {
-              return "Il n'y a aucune donnée pour ce répondant."
+            if (!surveyUnitsuccess) {
+              if (surveyUnitErrorType === 404 || !standalone) {
+                return "Il n'y a aucune donnée pour ce répondant."
+              }
+              if (surveyUnitErrorType === 403) {
+                return "Vous n'êtes pas autorisé à accéder aux données de ce répondant."
+              }
+              return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
             }
             if (!isRightQuestionnaireId) {
               return "Il est impossible d'accéder à ce questionnaire pour ce répondant."

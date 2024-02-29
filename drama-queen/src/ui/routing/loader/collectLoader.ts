@@ -11,8 +11,10 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
     redirectUri: request.url,
   })
 
-  // READ_ONLY param is variable
   const { questionnaireId, surveyUnitId } = params
+
+  //TODO : calculate standalone
+  const standalone = false
 
   assert(questionnaireId !== undefined)
   assert(surveyUnitId !== undefined)
@@ -22,5 +24,6 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   return collectSurvey.collectLoader({
     questionnaireId,
     surveyUnitId,
+    standalone,
   })
 }
