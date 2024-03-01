@@ -116,9 +116,6 @@ export const thunks = {
               if (surveyUnitsuccess) {
                 return "Il n'y a aucune donnée pour ce répondant."
               }
-              if (!surveyUnitsuccess) {
-                return "Vous n'êtes pas autorisé à accéder aux données de ce répondant.Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-              }
               return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
             }
             if (!isRightQuestionnaireId) {
