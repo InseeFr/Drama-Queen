@@ -11,7 +11,7 @@ type UseQueenNavigationProps = {
   pageTag: string
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
-  save: (surveyUnit: SurveyUnit) => void
+  onChangePage: (surveyUnit: SurveyUnit) => void
 }
 
 /**
@@ -25,7 +25,7 @@ export function getQueenNavigation({
   pageTag,
   quit,
   definitiveQuit,
-  save,
+  onChangePage,
 }: UseQueenNavigationProps) {
   const hasDataChanged = Object.keys(changedData.COLLECTED).length > 0
 
@@ -56,7 +56,7 @@ export function getQueenNavigation({
       return
     }
     const surveyUnit = getUpdatedSurveyUnit()
-    return save(surveyUnit)
+    return onChangePage(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {

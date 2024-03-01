@@ -22,7 +22,7 @@ export function Review() {
 
   const getReferentiel = collectSurvey.getReferentiel
 
-  const saveData = (surveyUnit: SurveyUnit) => {
+  const onChangePage = (surveyUnit: SurveyUnit) => {
     return
   }
 
@@ -39,7 +39,7 @@ export function Review() {
       readonly={true}
       quit={quit}
       definitiveQuit={definitiveQuit}
-      save={saveData}
+      onChangePage={onChangePage}
       getReferentiel={getReferentiel}
     />
   )

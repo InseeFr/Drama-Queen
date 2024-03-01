@@ -24,7 +24,7 @@ type OrchestratorProps = {
   readonly: boolean
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
-  save: (surveyUnit: SurveyUnit) => void
+  onChangePage: (surveyUnit: SurveyUnit) => void
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
 }
 
@@ -35,7 +35,7 @@ export function Orchestrator(props: OrchestratorProps) {
     readonly,
     quit,
     definitiveQuit,
-    save,
+    onChangePage,
     getReferentiel,
   } = props
   const { classes } = useStyles()
@@ -100,7 +100,7 @@ export function Orchestrator(props: OrchestratorProps) {
       pageTag,
       quit,
       definitiveQuit,
-      save,
+      onChangePage,
     })
 
   const continueProps = useContinueBehavior({
