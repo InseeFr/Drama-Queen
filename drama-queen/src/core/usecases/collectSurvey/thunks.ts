@@ -214,4 +214,67 @@ export const thunks = {
       const [, , { queenApi }] = args
       return queenApi.getNomenclature(name)
     },
+  onChangePage:
+    (params: { surveyUnit: SurveyUnit; standalone: boolean }) =>
+    (...args) => {
+      const [, , { dataStore, queenApi }] = args
+
+      const { surveyUnit, standalone } = params
+
+      const updateSurveyUnitAPIPromise = () => {
+        return (
+          queenApi
+            .putSurveyUnit(surveyUnit)
+            // failed to put surveyUnit to API
+            .catch((error) => {
+              if (error instanceof AxiosError) {
+                // unauthorized to get surveyUnit
+                if (error.response?.status === 403) {
+                  console.error(
+                    `Unauthorized to update surveyUnit ${surveyUnit.id}.`,
+                    error
+                  )
+                  return
+                }
+                // surveyUnit does not exist in db
+                if (error.response?.status === 404) {
+                  console.error(
+                    `No data for surveyUnit ${surveyUnit.id}.`,
+                    error
+                  )
+                }
+                // other error cases
+                console.error(error)
+              }
+              throw error
+            })
+        )
+      }
+
+      const updateSurveyUnitIDBPromise = () => {
+        return (
+          dataStore
+            .updateSurveyUnit(surveyUnit)
+            // Dexie put method returns a Promise<string>, we need a Promise<void>
+            .then(() => {})
+            // cannot search for surveyUnit in index DB
+            .catch((error) => {
+              console.error('Error updating or inserting record:', error)
+            })
+        )
+      }
+
+      const updateSurveyUnitPromise = () => {
+        if (standalone) {
+          // update the surveyUnit into api
+          return updateSurveyUnitAPIPromise()
+        }
+        // update the surveyUnit into index DB
+        return updateSurveyUnitIDBPromise()
+      }
+
+      // update surveyUnit
+      updateSurveyUnitPromise()
+      return
+    },
 } satisfies Thunks

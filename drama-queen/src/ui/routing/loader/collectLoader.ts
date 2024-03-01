@@ -1,7 +1,6 @@
 import { prCore } from 'bootstrap'
 import { type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
-import { READ_ONLY } from 'ui/constants'
 
 export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   const { userAuthentication } = (await prCore).functions
@@ -14,7 +13,7 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   const { questionnaireId, surveyUnitId } = params
 
   //TODO : calculate standalone
-  const standalone = false
+  const standalone = true
 
   assert(questionnaireId !== undefined)
   assert(surveyUnitId !== undefined)

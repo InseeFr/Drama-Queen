@@ -22,14 +22,18 @@ export function Collect() {
 
   const { collectSurvey } = useCore().functions
 
+  //TODO : calculate standalone
+  const standalone = true
+
   const getReferentiel = collectSurvey.getReferentiel
 
-  const save = (surveyUnit: SurveyUnit) => {
+  const onChangePage = (surveyUnit: SurveyUnit) => {
+    collectSurvey.onChangePage({ surveyUnit, standalone })
     return
   }
 
   const quit = (surveyUnit: SurveyUnit) => {
-    console.log(quit)
+    onChangePage(surveyUnit)
   }
 
   return (
@@ -39,7 +43,7 @@ export function Collect() {
       readonly={false}
       quit={quit}
       definitiveQuit={quit}
-      save={save}
+      save={onChangePage}
       getReferentiel={getReferentiel}
     />
   )
