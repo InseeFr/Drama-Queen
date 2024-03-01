@@ -22,13 +22,10 @@ export function Collect() {
 
   const { collectSurvey } = useCore().functions
 
-  //TODO : calculate standalone
-  const standalone = true
-
   const getReferentiel = collectSurvey.getReferentiel
 
   const onChangePage = (surveyUnit: SurveyUnit) => {
-    collectSurvey.onChangePage({ surveyUnit, standalone })
+    collectSurvey.onChangePage(surveyUnit)
     return
   }
 

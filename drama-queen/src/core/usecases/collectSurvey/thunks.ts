@@ -19,15 +19,11 @@ export const thunks = {
         .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
     },
   collectLoader:
-    (params: {
-      questionnaireId: string
-      surveyUnitId: string
-      standalone: boolean
-    }) =>
+    (params: { questionnaireId: string; surveyUnitId: string }) =>
     (...args) => {
       const [, , { queenApi, dataStore }] = args
 
-      const { questionnaireId, surveyUnitId, standalone } = params
+      const { questionnaireId, surveyUnitId } = params
 
       // get questionnaire from API with questionnaireId
       const questionnairePromise = queenApi
@@ -50,54 +46,7 @@ export const thunks = {
         }
       )
 
-      const getSurveyUnitAPIPromise = () => {
-        return queenApi
-          .getSurveyUnit(surveyUnitId)
-          .then((surveyUnit) => {
-            // suceeded to get surveyUnit
-            return {
-              surveyUnit,
-              surveyUnitsuccess: true,
-              surveyUnitErrorType: undefined,
-            }
-          })
-          .catch((error) => {
-            // failed to get surveyUnit
-            if (error instanceof AxiosError) {
-              // unauthorized to get surveyUnit
-              if (error.response?.status === 403) {
-                console.error(
-                  `Unauthorized access to surveyUnit ${surveyUnitId}.`,
-                  error
-                )
-                return {
-                  surveyUnit: undefined,
-                  surveyUnitsuccess: false,
-                  surveyUnitErrorType: 403,
-                }
-              }
-              // surveyUnit does not exist
-              if (error.response?.status === 404) {
-                console.error(`No data for surveyUnit ${surveyUnitId}.`, error)
-                return {
-                  surveyUnit: undefined,
-                  surveyUnitsuccess: false,
-                  surveyUnitErrorType: 404,
-                }
-              }
-              // other error cases
-              console.error(error)
-              return {
-                surveyUnit: undefined,
-                surveyUnitsuccess: false,
-                surveyUnitErrorType: undefined,
-              }
-            }
-            throw error
-          })
-      }
-
-      const getSurveyUnitIDBPromise = () => {
+      const surveyUnitPromise = (() => {
         return (
           dataStore
             .getSurveyUnit(surveyUnitId)
@@ -107,14 +56,12 @@ export const thunks = {
                 return {
                   surveyUnit,
                   surveyUnitsuccess: true,
-                  surveyUnitErrorType: undefined,
                 }
               }
               // surveyUnit does not exist in index DB
               return {
                 surveyUnit: undefined,
-                surveyUnitsuccess: false,
-                surveyUnitErrorType: undefined,
+                surveyUnitsuccess: true,
               }
             })
             // cannot search for surveyUnit in index DB
@@ -123,19 +70,9 @@ export const thunks = {
               return {
                 surveyUnit: undefined,
                 surveyUnitsuccess: false,
-                surveyUnitErrorType: undefined,
               }
             })
         )
-      }
-
-      const surveyUnitPromise = (() => {
-        if (standalone) {
-          // get the surveyUnit from api
-          return getSurveyUnitAPIPromise()
-        }
-        // get the surveyUnit from index DB
-        return getSurveyUnitIDBPromise()
       })()
 
       const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
@@ -161,26 +98,26 @@ export const thunks = {
         isRightQuestionnaireIdPromise,
       ]).then(
         ([
-          { surveyUnit, surveyUnitsuccess, surveyUnitErrorType },
+          { surveyUnit, surveyUnitsuccess },
           isQueenV2,
           { questionnaire },
           isRightQuestionnaireId,
         ]) => {
           //check if there is an error to display
           const isError =
-            !questionnaire || !surveyUnitsuccess || !isRightQuestionnaireId
+            !questionnaire || !surveyUnit || !isRightQuestionnaireId
 
           // set an error message to display
           const errorMessage = (() => {
             if (!questionnaire) {
               return "Le questionnaire n'existe pas."
             }
-            if (!surveyUnitsuccess) {
-              if (surveyUnitErrorType === 404 || !standalone) {
+            if (!surveyUnit) {
+              if (surveyUnitsuccess) {
                 return "Il n'y a aucune donnée pour ce répondant."
               }
-              if (surveyUnitErrorType === 403) {
-                return "Vous n'êtes pas autorisé à accéder aux données de ce répondant."
+              if (!surveyUnitsuccess) {
+                return "Vous n'êtes pas autorisé à accéder aux données de ce répondant.Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
               }
               return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
             }
@@ -215,43 +152,11 @@ export const thunks = {
       return queenApi.getNomenclature(name)
     },
   onChangePage:
-    (params: { surveyUnit: SurveyUnit; standalone: boolean }) =>
+    (surveyUnit: SurveyUnit) =>
     (...args) => {
-      const [, , { dataStore, queenApi }] = args
+      const [, , { dataStore }] = args
 
-      const { surveyUnit, standalone } = params
-
-      const updateSurveyUnitAPIPromise = () => {
-        return (
-          queenApi
-            .putSurveyUnit(surveyUnit)
-            // failed to put surveyUnit to API
-            .catch((error) => {
-              if (error instanceof AxiosError) {
-                // unauthorized to get surveyUnit
-                if (error.response?.status === 403) {
-                  console.error(
-                    `Unauthorized to update surveyUnit ${surveyUnit.id}.`,
-                    error
-                  )
-                  return
-                }
-                // surveyUnit does not exist in db
-                if (error.response?.status === 404) {
-                  console.error(
-                    `No data for surveyUnit ${surveyUnit.id}.`,
-                    error
-                  )
-                }
-                // other error cases
-                console.error(error)
-              }
-              throw error
-            })
-        )
-      }
-
-      const updateSurveyUnitIDBPromise = () => {
+      const updateSurveyUnitPromise = () => {
         return (
           dataStore
             .updateSurveyUnit(surveyUnit)
@@ -262,15 +167,6 @@ export const thunks = {
               console.error('Error updating or inserting record:', error)
             })
         )
-      }
-
-      const updateSurveyUnitPromise = () => {
-        if (standalone) {
-          // update the surveyUnit into api
-          return updateSurveyUnitAPIPromise()
-        }
-        // update the surveyUnit into index DB
-        return updateSurveyUnitIDBPromise()
       }
 
       // update surveyUnit

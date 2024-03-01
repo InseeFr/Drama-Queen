@@ -12,9 +12,6 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
 
   const { questionnaireId, surveyUnitId } = params
 
-  //TODO : calculate standalone
-  const standalone = true
-
   assert(questionnaireId !== undefined)
   assert(surveyUnitId !== undefined)
 
@@ -23,6 +20,5 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
   return collectSurvey.collectLoader({
     questionnaireId,
     surveyUnitId,
-    standalone,
   })
 }
