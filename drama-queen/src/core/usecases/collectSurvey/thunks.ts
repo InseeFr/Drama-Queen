@@ -46,6 +46,7 @@ export const thunks = {
         }
       )
 
+      // get surveyUnit from indexDB
       const surveyUnitPromise = (() => {
         return (
           dataStore
@@ -58,7 +59,7 @@ export const thunks = {
                   surveyUnitsuccess: true,
                 }
               }
-              // surveyUnit does not exist in index DB
+              // surveyUnit does not exist
               return {
                 surveyUnit: undefined,
                 surveyUnitsuccess: true,
@@ -75,6 +76,7 @@ export const thunks = {
         )
       })()
 
+      // check if questionnaireId given in url corresponds to surveyUnit.questionnaireId
       const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
         ({ surveyUnit }) => {
           try {
@@ -113,9 +115,11 @@ export const thunks = {
               return "Le questionnaire n'existe pas."
             }
             if (!surveyUnit) {
+              // surveyUnit because does not exist in db
               if (surveyUnitsuccess) {
                 return "Il n'y a aucune donnée pour ce répondant."
               }
+              // could not search for surveyUnit in index DB
               return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
             }
             if (!isRightQuestionnaireId) {
