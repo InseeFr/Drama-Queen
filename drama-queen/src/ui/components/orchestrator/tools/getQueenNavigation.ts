@@ -1,7 +1,7 @@
 import type { LunaticData } from '@inseefr/lunatic'
 import type { SurveyUnit, SurveyUnitData } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
@@ -27,22 +27,54 @@ export function getQueenNavigation({
   definitiveQuit,
   onChangePage,
 }: UseQueenNavigationProps) {
+  // handle state to check when it changes
+  const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
+    initialSurveyUnit.stateData?.state ?? null
+  )
   const hasDataChanged = Object.keys(changedData.COLLECTED).length > 0
 
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
 
-  const surveyUnitState = hasDataChanged
-    ? 'INIT'
-    : initialSurveyUnit.stateData?.state ?? null
+  // updates the surveyUnitState and creates an event
+  const updateState = (newState: QuestionnaireState) => {
+    if (newState === 'INIT') {
+      // TODO : send event INIT
+      console.log('change state to INIT')
+    }
+    if (newState === 'COMPLETED') {
+      // TODO : send event COMPLETED
+      console.log('change state to COMPLETED')
+    }
+    if (newState === 'VALIDATED') {
+      // TODO : send event VALIDATED
+      console.log('change state to VALIDATED')
+    }
+    setSurveyUnitState(newState)
+  }
 
-  // get the updated SurveyUnit, with possibility to force the state (used for definitive quit which forces the validation)
-  const getUpdatedSurveyUnit = (forcedState?: QuestionnaireState) => {
+  const handleState = (forcedState?: QuestionnaireState) => {
+    // forcedState is used for definitiveQuit which forces the validation
+    if (forcedState) {
+      updateState(forcedState)
+      return forcedState
+    }
+    // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
+    const newState = hasDataChanged ? 'INIT' : surveyUnitState
+    // updates state only if necessary : prevents for sending too many events
+    if (newState !== surveyUnitState) {
+      updateState(newState)
+    }
+    return newState
+  }
+
+  // get the updated SurveyUnit
+  const getUpdatedSurveyUnit = (state: QuestionnaireState) => {
     const surveyUnit = {
       ...initialSurveyUnit,
       data,
       stateData: {
-        state: forcedState ?? surveyUnitState,
+        state: state,
         date: new Date().getTime(),
         currentPage: lastReachedPage ?? '1',
       },
@@ -55,18 +87,23 @@ export function getQueenNavigation({
     if (pageTag === undefined || lastReachedPage === undefined) {
       return
     }
-    const surveyUnit = getUpdatedSurveyUnit()
+    const state = handleState()
+    const surveyUnit = getUpdatedSurveyUnit(state)
     return onChangePage(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {
-    const surveyUnit = getUpdatedSurveyUnit()
+    const state = handleState()
+    const surveyUnit = getUpdatedSurveyUnit(state)
     return quit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
-    // get the updated SurveyUnit, and forces state to "VALIDATED"
-    const surveyUnit = getUpdatedSurveyUnit('VALIDATED')
+    // set the state to COMPLETED only for sending the event. Completed state should be on algorithm.
+    handleState('COMPLETED')
+    // forces the state to VALIDATED
+    const state = handleState('VALIDATED')
+    const surveyUnit = getUpdatedSurveyUnit(state)
     return definitiveQuit(surveyUnit)
   }
 
