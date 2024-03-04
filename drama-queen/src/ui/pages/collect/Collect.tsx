@@ -26,6 +26,8 @@ export function Collect() {
 
   const onChangePage = collectSurvey.onChangePage
 
+  const onChangeSurveyUnitState = collectSurvey.onChangeSurveyUnitState
+
   const quit = (surveyUnit: SurveyUnit) => {
     onChangePage(surveyUnit)
   }
@@ -39,6 +41,7 @@ export function Collect() {
       definitiveQuit={quit}
       onChangePage={onChangePage}
       getReferentiel={getReferentiel}
+      onChangeSurveyUnitState={onChangeSurveyUnitState}
     />
   )
 }

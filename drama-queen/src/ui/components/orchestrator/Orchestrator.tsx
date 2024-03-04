@@ -15,6 +15,7 @@ import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
+import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -26,6 +27,7 @@ type OrchestratorProps = {
   definitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
+  onChangeSurveyUnitState?: (newState: QuestionnaireState) => void
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -37,6 +39,7 @@ export function Orchestrator(props: OrchestratorProps) {
     definitiveQuit,
     onChangePage,
     getReferentiel,
+    onChangeSurveyUnitState = (newState: QuestionnaireState) => {},
   } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
@@ -101,6 +104,7 @@ export function Orchestrator(props: OrchestratorProps) {
       quit,
       definitiveQuit,
       onChangePage,
+      onChangeSurveyUnitState,
     })
 
   const continueProps = useContinueBehavior({

@@ -12,6 +12,7 @@ type UseQueenNavigationProps = {
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
+  onChangeSurveyUnitState: (newState: QuestionnaireState) => void
 }
 
 /**
@@ -26,6 +27,7 @@ export function getQueenNavigation({
   quit,
   definitiveQuit,
   onChangePage,
+  onChangeSurveyUnitState,
 }: UseQueenNavigationProps) {
   // handle state to check when it changes
   const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
@@ -38,18 +40,7 @@ export function getQueenNavigation({
 
   // updates the surveyUnitState and creates an event
   const updateState = (newState: QuestionnaireState) => {
-    if (newState === 'INIT') {
-      // TODO : send event INIT
-      console.log('change state to INIT')
-    }
-    if (newState === 'COMPLETED') {
-      // TODO : send event COMPLETED
-      console.log('change state to COMPLETED')
-    }
-    if (newState === 'VALIDATED') {
-      // TODO : send event VALIDATED
-      console.log('change state to VALIDATED')
-    }
+    onChangeSurveyUnitState(newState)
     setSurveyUnitState(newState)
   }
 
