@@ -28,9 +28,7 @@ export function Collect() {
 
   const onChangeSurveyUnitState = collectSurvey.onChangeSurveyUnitState
 
-  const quit = (surveyUnit: SurveyUnit) => {
-    onChangePage(surveyUnit)
-  }
+  const quit = collectSurvey.quit
 
   return (
     <Orchestrator

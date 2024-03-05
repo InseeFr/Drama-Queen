@@ -41,7 +41,7 @@ export function getQueenNavigation({
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
 
-  // updates the surveyUnitState and creates an event
+  // updates the surveyUnitState
   const updateState = (newState: QuestionnaireState) => {
     onChangeSurveyUnitState({
       surveyUnitId: initialSurveyUnit.id,
