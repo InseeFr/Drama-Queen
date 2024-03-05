@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios'
 import type { Thunks } from 'core/bootstrap'
 import type { SurveyUnit } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'

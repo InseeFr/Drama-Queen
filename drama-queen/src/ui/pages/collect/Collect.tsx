@@ -1,6 +1,4 @@
-import { Stack, Typography } from '@mui/material'
 import { useCore } from 'core'
-import type { SurveyUnit } from 'core/model'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
 import type { collectLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'

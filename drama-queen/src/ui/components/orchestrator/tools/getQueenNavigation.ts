@@ -58,7 +58,7 @@ export function getQueenNavigation({
     }
     // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
     const newState = hasDataChanged ? 'INIT' : surveyUnitState
-    // updates state only if necessary : prevents for sending too many events
+    // updates state only if necessary : prevents for calling onChangeSurveyUnitState
     if (newState !== surveyUnitState) {
       updateState(newState)
     }
@@ -96,7 +96,7 @@ export function getQueenNavigation({
   }
 
   const orchestratorDefinitiveQuit = () => {
-    // set the state to COMPLETED only for sending the event. Completed state should be on algorithm.
+    // set the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
     handleState('COMPLETED')
     // forces the state to VALIDATED
     const state = handleState('VALIDATED')
