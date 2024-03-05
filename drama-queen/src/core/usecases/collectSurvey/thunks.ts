@@ -1,7 +1,12 @@
 import { AxiosError } from 'axios'
 import type { Thunks } from 'core/bootstrap'
 import type { SurveyUnit } from 'core/model'
+import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
+import {
+  sendCloseEvent,
+  sendQuestionnaireStateChangedEvent,
+} from './eventSender'
 
 export const name = 'collectSurvey'
 
@@ -173,5 +178,34 @@ export const thunks = {
       // update surveyUnit
       updateSurveyUnitPromise()
       return
+    },
+  onChangeSurveyUnitState:
+    (params: { surveyUnitId: string; newState: QuestionnaireState }) =>
+    (...args) => {
+      const { surveyUnitId, newState } = params
+
+      // send event for changing questionnaire state
+      switch (newState) {
+        case 'INIT':
+          // event name for 'INIT' is 'STARTED'
+          return sendQuestionnaireStateChangedEvent(surveyUnitId, 'STARTED')
+        case 'COMPLETED':
+        case 'VALIDATED':
+          return sendQuestionnaireStateChangedEvent(surveyUnitId, newState)
+        default:
+          // we do nothing for the other state values
+          return
+      }
+    },
+  onQuit:
+    (surveyUnit: SurveyUnit) =>
+    (...args) => {
+      const [dispatch] = args
+
+      // we apply same treatments than when page changes
+      dispatch(thunks.onChangePage(surveyUnit))
+
+      // send event for closing Queen
+      return sendCloseEvent(surveyUnit.id)
     },
 } satisfies Thunks
