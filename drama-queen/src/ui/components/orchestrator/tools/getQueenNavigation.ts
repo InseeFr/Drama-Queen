@@ -9,8 +9,8 @@ type UseQueenNavigationProps = {
   changedData: LunaticData
   lastReachedPage: string | undefined
   pageTag: string
-  quit: (surveyUnit: SurveyUnit) => void
-  definitiveQuit: (surveyUnit: SurveyUnit) => void
+  onQuit: (surveyUnit: SurveyUnit) => void
+  onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
   onChangeSurveyUnitState: (params: {
     surveyUnitId: string
@@ -27,8 +27,8 @@ export function getQueenNavigation({
   changedData,
   lastReachedPage,
   pageTag,
-  quit,
-  definitiveQuit,
+  onQuit,
+  onDefinitiveQuit,
   onChangePage,
   onChangeSurveyUnitState,
 }: UseQueenNavigationProps) {
@@ -92,7 +92,7 @@ export function getQueenNavigation({
   const orchestratorQuit = () => {
     const state = handleState()
     const surveyUnit = getUpdatedSurveyUnit(state)
-    return quit(surveyUnit)
+    return onQuit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
@@ -101,7 +101,7 @@ export function getQueenNavigation({
     // forces the state to VALIDATED
     const state = handleState('VALIDATED')
     const surveyUnit = getUpdatedSurveyUnit(state)
-    return definitiveQuit(surveyUnit)
+    return onDefinitiveQuit(surveyUnit)
   }
 
   return {

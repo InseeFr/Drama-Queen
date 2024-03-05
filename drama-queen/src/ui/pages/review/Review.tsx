@@ -26,19 +26,17 @@ export function Review() {
     return
   }
 
-  const quit = (surveyUnit: SurveyUnit) => {
-    console.log(quit)
-  }
+  const onQuit = (surveyUnit: SurveyUnit) => {}
 
-  const definitiveQuit = (surveyUnit: SurveyUnit) => {}
+  const onDefinitiveQuit = (surveyUnit: SurveyUnit) => {}
 
   return (
     <Orchestrator
       source={loaderData.questionnaire}
       surveyUnit={loaderData.surveyUnit}
       readonly={true}
-      quit={quit}
-      definitiveQuit={definitiveQuit}
+      onQuit={onQuit}
+      onDefinitiveQuit={onDefinitiveQuit}
       onChangePage={onChangePage}
       getReferentiel={getReferentiel}
     />

@@ -18,7 +18,7 @@ export function Visualize() {
     return
   }
 
-  const quit = (surveyUnit: SurveyUnit) => {
+  const onQuit = (surveyUnit: SurveyUnit) => {
     downloadAsJson({ data: surveyUnit })
     navigate('/visualize')
   }
@@ -29,8 +29,8 @@ export function Visualize() {
         source={loaderData.source}
         surveyUnit={loaderData.surveyUnit}
         readonly={loaderData.readonly}
-        quit={quit}
-        definitiveQuit={quit}
+        onQuit={onQuit}
+        onDefinitiveQuit={onQuit}
         onChangePage={onChangePage}
         getReferentiel={loaderData.getReferentiel}
       />

@@ -28,15 +28,15 @@ export function Collect() {
 
   const onChangeSurveyUnitState = collectSurvey.onChangeSurveyUnitState
 
-  const quit = collectSurvey.quit
+  const onQuit = collectSurvey.onQuit
 
   return (
     <Orchestrator
       source={loaderData.questionnaire}
       surveyUnit={loaderData.surveyUnit}
       readonly={false}
-      quit={quit}
-      definitiveQuit={quit}
+      onQuit={onQuit}
+      onDefinitiveQuit={onQuit}
       onChangePage={onChangePage}
       getReferentiel={getReferentiel}
       onChangeSurveyUnitState={onChangeSurveyUnitState}
