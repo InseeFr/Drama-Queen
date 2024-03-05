@@ -27,7 +27,10 @@ type OrchestratorProps = {
   definitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
-  onChangeSurveyUnitState?: (newState: QuestionnaireState) => void
+  onChangeSurveyUnitState?: (params: {
+    surveyUnitId: string
+    newState: QuestionnaireState
+  }) => void
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -39,7 +42,10 @@ export function Orchestrator(props: OrchestratorProps) {
     definitiveQuit,
     onChangePage,
     getReferentiel,
-    onChangeSurveyUnitState = (newState: QuestionnaireState) => {},
+    onChangeSurveyUnitState = (params: {
+      surveyUnitId: string
+      newState: QuestionnaireState
+    }) => {},
   } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()

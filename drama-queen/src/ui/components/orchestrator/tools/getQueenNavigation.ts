@@ -12,7 +12,10 @@ type UseQueenNavigationProps = {
   quit: (surveyUnit: SurveyUnit) => void
   definitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
-  onChangeSurveyUnitState: (newState: QuestionnaireState) => void
+  onChangeSurveyUnitState: (params: {
+    surveyUnitId: string
+    newState: QuestionnaireState
+  }) => void
 }
 
 /**
@@ -40,7 +43,10 @@ export function getQueenNavigation({
 
   // updates the surveyUnitState and creates an event
   const updateState = (newState: QuestionnaireState) => {
-    onChangeSurveyUnitState(newState)
+    onChangeSurveyUnitState({
+      surveyUnitId: initialSurveyUnit.id,
+      newState: newState,
+    })
     setSurveyUnitState(newState)
   }
 
