@@ -10,7 +10,6 @@ export async function reviewLoader({ request, params }: LoaderFunctionArgs) {
     redirectUri: request.url,
   })
 
-  // READ_ONLY param is variable
   const { questionnaireId, surveyUnitId } = params
 
   assert(questionnaireId !== undefined)

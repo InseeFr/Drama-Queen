@@ -1,6 +1,3 @@
-import { Stack, Typography } from '@mui/material'
-import { useCore } from 'core'
-import type { SurveyUnit } from 'core/model'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
