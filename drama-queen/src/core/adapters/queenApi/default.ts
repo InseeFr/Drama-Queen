@@ -106,7 +106,6 @@ export function createApiClient(params: {
       axiosInstance
         .get<{ value: Questionnaire }>(`/api/questionnaire/${idSurvey}`)
         .then(({ data }) => data.value),
-
     getRequiredNomenclaturesByCampaign: (idNomenclature) =>
       axiosInstance
         .get<RequiredNomenclatures>(

@@ -5,7 +5,6 @@ import { Collect } from 'ui/pages/collect'
 import { SynchronizeData } from 'ui/pages/synchronize'
 import { Layout } from './Layout'
 import { Visualize } from 'ui/pages/visualize/Visualize'
-import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
 import {
   protectedRouteLoader,
   surveyUnitLoader,
@@ -15,12 +14,13 @@ import {
 } from './loader'
 import { SurveyUnitMapping } from 'ui/pages/surveyUnit'
 import { Review } from 'ui/pages/review/Review'
+import { ErrorPage } from 'ui/pages/Error/Error'
 
-//ReadOnly path is a bad pattern must be change (affects pearl,moog,queen)
 export const routes: RouteObject[] = [
   {
     path: '/',
     Component: Layout,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/env',

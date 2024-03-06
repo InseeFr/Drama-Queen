@@ -1,14 +1,14 @@
 import axios from 'axios'
 import type { Questionnaire, SurveyUnit } from 'core/model'
 
-const lunaticModelVersionBreaking = '2.2.10'
+const lunaticModelVersionBreaking = '2.2.2'
 
 const semverCompare = new Intl.Collator('en', { numeric: true }).compare
 
 /**
  *
  * @param {Questionnaire}
- * @returns {boolean} true if this survey concerns QueenV2, false otherwise
+ * @returns {boolean} false if this survey concerns Queen V1, true otherwise
  */
 export const isSurveyQueenV2Compatible = (params: {
   questionnaire: Questionnaire

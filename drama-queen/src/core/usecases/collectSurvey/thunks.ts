@@ -22,133 +22,54 @@ export const thunks = {
         .getSurveyUnit(surveyUnitId)
         .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
     },
-  collectLoader:
+  loader:
     (params: { questionnaireId: string; surveyUnitId: string }) =>
-    (...args) => {
+    async (...args) => {
       const [, , { queenApi, dataStore }] = args
 
       const { questionnaireId, surveyUnitId } = params
 
-      // get questionnaire from API with questionnaireId
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
-        .then((questionnaire) => {
-          return { questionnaire }
+        .catch(() => {
+          throw new Error(
+            `Impossible de récupérer le questionnaire ${questionnaireId} `
+          )
+        })
+
+      const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
+        isSurveyQueenV2Compatible({ questionnaire })
+      )
+
+      const surveyUnitPromise = dataStore
+        .getSurveyUnit(surveyUnitId)
+        .then((surveyUnit) => {
+          if (!surveyUnit) {
+            throw new Error("Il n'y a aucune donnée pour ce répondant.")
+          }
+          return surveyUnit
         })
         .catch(() => {
-          console.error(`We could not find questionnaire ${questionnaireId}`)
-          return { questionnaire: undefined }
+          throw new Error(
+            "Une erreur est survenue lors de la récupération de l'unité enquêtée."
+          )
+        })
+        .then((surveyUnit) => {
+          if (surveyUnit.questionnaireId !== questionnaireId) {
+            throw new Error(
+              `L'unité à enquêter ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}`
+            )
+          }
+          return surveyUnit
         })
 
-      // check if questionnaire is queenV2-compatible. True by default
-      const isQueenV2Promise = questionnairePromise.then(
-        ({ questionnaire }) => {
-          if (questionnaire) {
-            return isSurveyQueenV2Compatible({ questionnaire })
-          }
-          return true
-        }
-      )
-
-      // get surveyUnit from indexDB
-      const surveyUnitPromise = (() => {
-        return (
-          dataStore
-            .getSurveyUnit(surveyUnitId)
-            .then((surveyUnit) => {
-              // succeeded to get surveyUnit
-              if (surveyUnit) {
-                return {
-                  surveyUnit,
-                  surveyUnitsuccess: true,
-                }
-              }
-              // surveyUnit does not exist
-              return {
-                surveyUnit: undefined,
-                surveyUnitsuccess: true,
-              }
-            })
-            // cannot search for surveyUnit in index DB
-            .catch((error) => {
-              console.error(error)
-              return {
-                surveyUnit: undefined,
-                surveyUnitsuccess: false,
-              }
-            })
-        )
-      })()
-
-      // check if questionnaireId given in url corresponds to surveyUnit.questionnaireId
-      const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
-        ({ surveyUnit }) => {
-          try {
-            if (surveyUnit?.questionnaireId === questionnaireId) {
-              return true
-            }
-            throw new Error(
-              `Invalid questionnaireId for surveyUnit ${surveyUnitId}`
-            )
-          } catch (error) {
-            console.error(error)
-            return false
-          }
-        }
-      )
-
-      return Promise.all([
+      const [surveyUnit, isQueenV2, questionnaire] = await Promise.all([
         surveyUnitPromise,
         isQueenV2Promise,
         questionnairePromise,
-        isRightQuestionnaireIdPromise,
-      ]).then(
-        ([
-          { surveyUnit, surveyUnitsuccess },
-          isQueenV2,
-          { questionnaire },
-          isRightQuestionnaireId,
-        ]) => {
-          //check if there is an error to display
-          const isError =
-            !questionnaire || !surveyUnit || !isRightQuestionnaireId
+      ])
 
-          // set an error message to display
-          const errorMessage = (() => {
-            if (!questionnaire) {
-              return "Le questionnaire n'existe pas."
-            }
-            if (!surveyUnit) {
-              // surveyUnit because does not exist in db
-              if (surveyUnitsuccess) {
-                return "Il n'y a aucune donnée pour ce répondant."
-              }
-              // could not search for surveyUnit in index DB
-              return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-            }
-            if (!isRightQuestionnaireId) {
-              return "Il est impossible d'accéder à ce questionnaire pour ce répondant."
-            }
-            return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-          })()
-
-          // only need to return other variables for QueenV1
-          if (questionnaire && !isQueenV2) {
-            return { isQueenV2 }
-          }
-
-          // only need to return error variables for displaying it
-          if (isError) {
-            return { isError, errorMessage }
-          }
-
-          return {
-            surveyUnit,
-            questionnaire,
-            isQueenV2,
-          }
-        }
-      )
+      return { surveyUnit, isQueenV2, questionnaire }
     },
   getReferentiel:
     (name: string) =>
@@ -176,7 +97,6 @@ export const thunks = {
 
       // update surveyUnit
       updateSurveyUnitPromise()
-      return
     },
   onChangeSurveyUnitState:
     (params: { surveyUnitId: string; newState: QuestionnaireState }) =>

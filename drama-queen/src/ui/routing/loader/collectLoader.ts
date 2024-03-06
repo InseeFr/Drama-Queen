@@ -17,7 +17,7 @@ export async function collectLoader({ request, params }: LoaderFunctionArgs) {
 
   const { collectSurvey } = (await prCore).functions
 
-  return collectSurvey.collectLoader({
+  return collectSurvey.loader({
     questionnaireId,
     surveyUnitId,
   })

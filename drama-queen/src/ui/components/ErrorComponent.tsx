@@ -1,12 +1,9 @@
 import { Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 
-type ErrorProps = {
-  message: string
-}
-
-export function Error(props: ErrorProps) {
+export function ErrorComponent(props: { message: string }) {
   const { message } = props
+
   const { classes } = useStyles()
 
   return (
