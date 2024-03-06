@@ -13,13 +13,7 @@ export function Review() {
     return <queen-app />
   }
 
-  const { collectSurvey } = useCore().functions
-
-  const getReferentiel = collectSurvey.getReferentiel
-
-  const onChangePage = (surveyUnit: SurveyUnit) => {
-    return
-  }
+  const onChangePage = (surveyUnit: SurveyUnit) => {}
 
   const onQuit = (surveyUnit: SurveyUnit) => {}
 
@@ -33,7 +27,7 @@ export function Review() {
       onQuit={onQuit}
       onDefinitiveQuit={onDefinitiveQuit}
       onChangePage={onChangePage}
-      getReferentiel={getReferentiel}
+      getReferentiel={undefined}
     />
   )
 }

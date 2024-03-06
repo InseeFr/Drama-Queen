@@ -18,7 +18,7 @@ export async function reviewLoader({ request, params }: LoaderFunctionArgs) {
 
   const { reviewSurvey } = (await prCore).functions
 
-  return reviewSurvey.reviewLoader({
+  return reviewSurvey.loader({
     questionnaireId,
     surveyUnitId,
   })

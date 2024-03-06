@@ -1,104 +1,74 @@
 import type { Thunks } from 'core/bootstrap'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
+import { AxiosError } from 'axios'
 
 export const name = 'reviewSurvey'
 
 export const reducer = null
 
 export const thunks = {
-  // WARNING : initialize from what was done on collectSurvey, to update
-  reviewLoader:
+  loader:
     (params: { questionnaireId: string; surveyUnitId: string }) =>
-    (...args) => {
+    async (...args) => {
       const [, , { queenApi }] = args
 
       const { questionnaireId, surveyUnitId } = params
 
-      // get questionnaire from API with questionnaireId
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
-        .then((questionnaire) => {
-          return { questionnaire }
-        })
         .catch(() => {
-          console.error(`We could not find questionnaire ${questionnaireId}`)
-          return { questionnaire: undefined }
+          throw new Error(
+            `Impossible de récupérer le questionnaire ${questionnaireId}.`
+          )
         })
 
-      // check if questionnaire is queenV2-compatible. True by default
-      const isQueenV2Promise = questionnairePromise.then(
-        ({ questionnaire }) => {
-          if (questionnaire) {
-            return isSurveyQueenV2Compatible({ questionnaire })
-          }
-          return true
-        }
+      const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
+        isSurveyQueenV2Compatible({ questionnaire })
       )
 
-      const surveyUnitPromise = queenApi.getSurveyUnit(surveyUnitId)
-
-      const isRightQuestionnaireIdPromise = surveyUnitPromise.then(
-        (surveyUnit) => {
-          try {
-            if (surveyUnit?.questionnaireId === questionnaireId) {
-              return true
+      const surveyUnitPromise = queenApi
+        .getSurveyUnit(surveyUnitId)
+        .catch((error) => {
+          // failed to get surveyUnit
+          if (error instanceof AxiosError) {
+            // unauthorized to get surveyUnit
+            if (error.response?.status === 403) {
+              throw new Error(
+                "Vous n'êtes pas autorisé à accéder aux données de cette unité enquêtée."
+              )
             }
+            // surveyUnit does not exist
+            if (error.response?.status === 404) {
+              throw new Error(
+                "Il n'y a aucune donnée pour cette unité enquêtée."
+              )
+            }
+            // other error cases
             throw new Error(
-              `Invalid questionnaireId for surveyUnit ${surveyUnitId}`
+              "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
             )
-          } catch (error) {
-            console.error(error)
-            return false
           }
-        }
-      )
+          // unknown error
+          throw new Error(
+            "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
+          )
+        })
+        // check the association between surveyUnit and questionnaireId
+        .then((surveyUnit) => {
+          if (surveyUnit.questionnaireId !== questionnaireId) {
+            throw new Error(
+              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
+            )
+          }
+          return surveyUnit
+        })
 
-      return Promise.all([
+      const [surveyUnit, isQueenV2, questionnaire] = await Promise.all([
         surveyUnitPromise,
         isQueenV2Promise,
         questionnairePromise,
-        isRightQuestionnaireIdPromise,
-      ]).then(
-        ([
-          surveyUnit,
-          isQueenV2,
-          { questionnaire },
-          isRightQuestionnaireId,
-        ]) => {
-          //check if there is an error to display
-          const isError =
-            !questionnaire || !surveyUnit || !isRightQuestionnaireId
+      ])
 
-          // set an error message to display
-          const errorMessage = (() => {
-            if (!questionnaire) {
-              return "Le questionnaire n'existe pas."
-            }
-            if (!surveyUnit) {
-              return "Il n'y a aucune donnée pour ce répondant."
-            }
-            if (!isRightQuestionnaireId) {
-              return "Il est impossible d'accéder à ce questionnaire pour ce répondant."
-            }
-            return "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-          })()
-
-          // only need to return other variables for QueenV1
-          if (questionnaire && !isQueenV2) {
-            return { isQueenV2 }
-          }
-
-          // only need to return error variables for displaying it
-          if (isError) {
-            return { isError, errorMessage }
-          }
-
-          return {
-            surveyUnit,
-            questionnaire,
-            isQueenV2,
-          }
-        }
-      )
+      return { surveyUnit, isQueenV2, questionnaire }
     },
 } satisfies Thunks
