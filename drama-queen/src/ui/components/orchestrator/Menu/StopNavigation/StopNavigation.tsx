@@ -1,8 +1,8 @@
 import { Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
-import { StopModal } from '../StopModal/StopModal'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
+import { QuitModal } from 'ui/components/QuitModal'
 
 type StopNavigationProps = {
   quit: () => void
@@ -32,9 +32,28 @@ export function StopNavigation(props: StopNavigationProps) {
     },
   ]
 
-  function toggleModal(definitive: boolean, open: boolean) {
-    setIsOpenModal(open)
+  const quitModalTitle = isDefinitiveModal
+    ? 'Arrêt définitif'
+    : 'Arrêt provisoire'
+  const quitModalContent = isDefinitiveModal
+    ? 'Confirmez-vous l’arrêt définitif du questionnaire ?'
+    : 'Vous allez sortir du questionnaire'
+  const quitModalValidateLabel = isDefinitiveModal
+    ? "Valider l'arrêt définitif"
+    : 'Valider'
+
+  const quitModalOnOpen = (definitive: boolean) => {
+    setIsOpenModal(true)
     setIsDefinitiveModal(definitive)
+  }
+
+  const quitModalonClose = () => setIsOpenModal(false)
+
+  const quitModalValidate = () => {
+    if (isDefinitiveModal) {
+      definitiveQuit()
+    } else quit()
+    close()
   }
 
   return (
@@ -47,16 +66,18 @@ export function StopNavigation(props: StopNavigationProps) {
           <MenuNavigationButton
             key={item.label}
             label={`${index + 1}. ${item.label}`}
-            onClick={() => toggleModal(item.definitive, !isOpenModal)}
+            onClick={() => quitModalOnOpen(item.definitive)}
           />
         ))}
       </Stack>
-      <StopModal
+      <QuitModal
         isOpen={isOpenModal}
-        definitive={isDefinitiveModal}
-        toggleModal={toggleModal}
-        quit={quit}
-        definitiveQuit={definitiveQuit}
+        dialogTitle={quitModalTitle}
+        dialogContent={quitModalContent}
+        isValidation={true}
+        validateLabel={quitModalValidateLabel}
+        onClose={quitModalonClose}
+        onValidate={quitModalValidate}
       />
     </Stack>
   )

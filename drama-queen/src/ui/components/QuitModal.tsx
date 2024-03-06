@@ -11,41 +11,34 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
 
-type StopModalProps = {
+type QuitModalProps = {
   isOpen: boolean
-  definitive: boolean
-  toggleModal: (definitive: boolean, open: boolean) => void
-  quit: () => void
-  definitiveQuit: () => void
+  dialogTitle: string
+  dialogContent: string
+  isValidation: boolean
+  validateLabel: string | undefined
+  onClose: () => void
+  onValidate: (() => void) | undefined
 }
 
-export function StopModal(props: StopModalProps) {
-  const { isOpen, definitive, toggleModal, quit, definitiveQuit } = props
+export function QuitModal(props: QuitModalProps) {
+  const {
+    isOpen,
+    dialogTitle,
+    dialogContent,
+    isValidation,
+    validateLabel,
+    onClose,
+    onValidate,
+  } = props
   const { classes } = useStyles()
 
-  const dialogTitle = definitive ? 'Arrêt définitif' : 'Arrêt provisoire'
-  const dialogContent = definitive
-    ? 'Confirmez-vous l’arrêt définitif du questionnaire ?'
-    : 'Vous allez sortir du questionnaire'
-  const validateLabel = definitive ? "Valider l'arrêt définitif" : 'Valider'
-
-  const close = () => toggleModal(definitive, !isOpen)
-
-  function validate(definitive: boolean) {
-    if (definitive) {
-      definitiveQuit()
-    } else quit()
-    close()
-  }
-
-  const validateOnClick = () => validate(definitive)
-
   return (
-    <Dialog open={isOpen} onClose={close}>
+    <Dialog open={isOpen} onClose={onClose}>
       <Stack className={classes.dialogHeader}>
         <DialogTitle>{dialogTitle}</DialogTitle>
         <Stack justifyContent={'center'}>
-          <IconButton aria-label="close" onClick={close}>
+          <IconButton aria-label="close" onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Stack>
@@ -56,12 +49,14 @@ export function StopModal(props: StopModalProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button className={classes.button} onClick={close}>
+        <Button className={classes.button} onClick={onClose}>
           Annuler
         </Button>
-        <Button className={classes.button} autoFocus onClick={validateOnClick}>
-          {validateLabel}
-        </Button>
+        {isValidation && (
+          <Button className={classes.button} autoFocus onClick={onValidate}>
+            {validateLabel}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   )
