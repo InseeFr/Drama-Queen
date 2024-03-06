@@ -33,7 +33,7 @@ export const thunks = {
         .getQuestionnaire(questionnaireId)
         .catch(() => {
           throw new Error(
-            `Impossible de récupérer le questionnaire ${questionnaireId} `
+            `Impossible de récupérer le questionnaire ${questionnaireId}.`
           )
         })
 
@@ -45,7 +45,7 @@ export const thunks = {
         .getSurveyUnit(surveyUnitId)
         .then((surveyUnit) => {
           if (!surveyUnit) {
-            throw new Error("Il n'y a aucune donnée pour ce répondant.")
+            throw new Error("Il n'y a aucune donnée pour cette unité enquêtée.")
           }
           return surveyUnit
         })
@@ -57,7 +57,7 @@ export const thunks = {
         .then((surveyUnit) => {
           if (surveyUnit.questionnaireId !== questionnaireId) {
             throw new Error(
-              `L'unité à enquêter ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}`
+              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
             )
           }
           return surveyUnit
