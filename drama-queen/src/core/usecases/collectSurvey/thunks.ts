@@ -43,16 +43,16 @@ export const thunks = {
 
       const surveyUnitPromise = dataStore
         .getSurveyUnit(surveyUnitId)
+        .catch(() => {
+          throw new Error(
+            "Une erreur est survenue lors de la récupération de l'unité enquêtée."
+          )
+        })
         .then((surveyUnit) => {
           if (!surveyUnit) {
             throw new Error("Il n'y a aucune donnée pour cette unité enquêtée.")
           }
           return surveyUnit
-        })
-        .catch(() => {
-          throw new Error(
-            "Une erreur est survenue lors de la récupération de l'unité enquêtée."
-          )
         })
         .then((surveyUnit) => {
           if (surveyUnit.questionnaireId !== questionnaireId) {
