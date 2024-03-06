@@ -71,4 +71,10 @@ export const thunks = {
 
       return { surveyUnit, isQueenV2, questionnaire }
     },
+  getReferentiel:
+    (name: string) =>
+    (...args) => {
+      const [, , { queenApi }] = args
+      return queenApi.getNomenclature(name)
+    },
 } satisfies Thunks

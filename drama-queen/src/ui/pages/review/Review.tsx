@@ -1,7 +1,8 @@
+import { useCore } from 'core'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import type { reviewLoader } from 'ui/routing/loader'
+import { reviewLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'
 
 export function Review() {
@@ -12,6 +13,10 @@ export function Review() {
   if (!loaderData.isQueenV2) {
     return <queen-app />
   }
+
+  const { reviewSurvey } = useCore().functions
+
+  const getReferentiel = reviewSurvey.getReferentiel
 
   const onQuit = () => {
     setIsQuitModalOpen(true)
@@ -42,7 +47,7 @@ export function Review() {
         onQuit={onQuit}
         onDefinitiveQuit={onQuit}
         onChangePage={undefined}
-        getReferentiel={undefined}
+        getReferentiel={getReferentiel}
       />
     </>
   )
