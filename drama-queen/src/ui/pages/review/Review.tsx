@@ -16,9 +16,7 @@ export function Review() {
     return <queen-app />
   }
 
-  const onChangePage = (surveyUnit: SurveyUnit) => {}
-
-  const onQuit = (surveyUnit: SurveyUnit) => {
+  const onQuit = () => {
     setIsQuitModalOpen(true)
   }
 
@@ -46,7 +44,7 @@ export function Review() {
         readonly={true}
         onQuit={onQuit}
         onDefinitiveQuit={onQuit}
-        onChangePage={onChangePage}
+        onChangePage={undefined}
         getReferentiel={undefined}
       />
     </>

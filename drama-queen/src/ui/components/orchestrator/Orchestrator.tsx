@@ -23,14 +23,13 @@ type OrchestratorProps = {
   source: Questionnaire
   surveyUnit: SurveyUnit | undefined
   readonly: boolean
-  onQuit: (surveyUnit: SurveyUnit) => void
-  onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
-  onChangePage: (surveyUnit: SurveyUnit) => void
+  onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
+  onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
+  onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
-  onChangeSurveyUnitState?: (params: {
-    surveyUnitId: string
-    newState: QuestionnaireState
-  }) => void
+  onChangeSurveyUnitState?:
+    | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
+    | undefined
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -38,14 +37,11 @@ export function Orchestrator(props: OrchestratorProps) {
     source,
     surveyUnit,
     readonly,
-    onQuit,
-    onDefinitiveQuit,
-    onChangePage,
+    onQuit = () => {},
+    onDefinitiveQuit = () => {},
+    onChangePage = () => {},
     getReferentiel,
-    onChangeSurveyUnitState = (params: {
-      surveyUnitId: string
-      newState: QuestionnaireState
-    }) => {},
+    onChangeSurveyUnitState = () => {},
   } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
