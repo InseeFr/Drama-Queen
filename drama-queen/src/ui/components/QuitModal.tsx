@@ -49,11 +49,19 @@ export function QuitModal(props: QuitModalProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button className={classes.button} onClick={onClose}>
+        <Button
+          className={classes.button}
+          autoFocus={!isValidation}
+          onClick={onClose}
+        >
           Annuler
         </Button>
         {isValidation && (
-          <Button className={classes.button} autoFocus onClick={onValidate}>
+          <Button
+            className={classes.button}
+            autoFocus={isValidation}
+            onClick={onValidate}
+          >
             {validateLabel}
           </Button>
         )}
