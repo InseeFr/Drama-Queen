@@ -2,7 +2,7 @@ import { useCore } from 'core'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import { reviewLoader } from 'ui/routing/loader'
+import type { reviewLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'
 
 export function Review() {
