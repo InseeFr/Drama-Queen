@@ -32,20 +32,20 @@ export function VisualizeForm() {
       <Stack spacing={3} alignItems="center">
         <Stack spacing={2}>
           <Typography variant="h3" className={classes.title}>
-            {t('vizu')}
+            {t('visualizePage')}
           </Typography>
           <TextField
             {...register('questionnaire')}
             name="questionnaire"
             id="questionnaire-url-form"
-            label={t('vizu.input.survey.label')}
-            helperText={t('vizu.input.survey.helper')}
+            label={t('inputSurveyLabel')}
+            helperText={t('inputSurveyHelper')}
           />
           <TextField
             {...register('data')}
             id="data-url-form"
-            label={t('vizu.input.data.label')}
-            helperText={t('vizu.input.data.helper')}
+            label={t('inputDataLabel')}
+            helperText={t('inputDataHelper')}
           />
           <TextField
             {...register('nomenclature', {
@@ -53,8 +53,8 @@ export function VisualizeForm() {
                 value ? (JSON.parse(value) as Record<string, string>) : null,
             })}
             id="nomenclature-url-form"
-            label={t('vizu.input.nomenclatures.label')}
-            helperText={t('vizu.input.nomenclatures.helper')}
+            label={t('inputNomenclatureLabel')}
+            helperText={t('inputNomenclatureHelper')}
           />
         </Stack>
         <Stack direction={'row'} alignItems="center">
@@ -66,7 +66,7 @@ export function VisualizeForm() {
           />
         </Stack>
         <Button variant="contained" type="submit">
-          {t('vizu.button.label')}
+          {t('visualizeButtonLabel')}
         </Button>
       </Stack>
     </form>

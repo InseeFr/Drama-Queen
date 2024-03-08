@@ -21,7 +21,7 @@ export function LoadingDisplay(props: LoadingDisplayProps) {
     <Stack spacing={3} alignItems="center">
       <Stack spacing={1} alignItems="center">
         <Typography variant="h3" fontWeight="bold">
-          {t('sync')}
+          {t('synchronizationInProgress')}
         </Typography>
         <Typography variant="h6" className={classes.lightText}>
           {syncStepTitle}

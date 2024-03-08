@@ -49,7 +49,7 @@ export function SynchronizeData() {
               label: undefined,
             },
           ]}
-          syncStepTitle={t('sync.upload')}
+          syncStepTitle={t('uploadingData')}
         />
       )}
       {isDownloading && (
@@ -57,18 +57,18 @@ export function SynchronizeData() {
           progressBars={[
             {
               progress: surveyProgress,
-              label: t('sync.download.questionnaires'),
+              label: t('questionnairesProgress'),
             },
             {
               progress: nomenclatureProgress,
-              label: t('sync.download.nomenclatures'),
+              label: t('nomenclaturesProgress'),
             },
             {
               progress: surveyUnitProgress,
-              label: t('sync.download.surveyUnits'),
+              label: t('surveyUnitsProgress'),
             },
           ]}
-          syncStepTitle={t('sync.download')}
+          syncStepTitle={t('downloadingData')}
         />
       )}
     </>
