@@ -127,6 +127,7 @@ export function Orchestrator(props: OrchestratorProps) {
       <Header
         questionnaireTitle={questionnaireTitle}
         hierarchy={hierarchy}
+        iteration={iteration}
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
