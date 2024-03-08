@@ -13,6 +13,7 @@ import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 import type { useLunatic } from '@inseefr/lunatic'
 import type { Overview } from '../lunaticType'
+import { t } from 'i18n/build-dictionary'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -94,7 +95,7 @@ export function Header(props: HeaderProps) {
         />
       </SwipeableDrawer>
 
-      <Button title="Retour au début du questionnaire">
+      <Button title={t('backToQuestionnaireStart')}>
         <img
           id="logo"
           src={insee}
@@ -111,7 +112,7 @@ export function Header(props: HeaderProps) {
       </Stack>
       <Stack className={classes.headerClose}>
         <IconButton
-          title="Quitter"
+          title={t('quit')}
           className={classes.closeIcon}
           onClick={quit}
         >

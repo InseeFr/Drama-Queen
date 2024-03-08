@@ -1,6 +1,7 @@
 import type { Thunks } from 'core/bootstrap'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
 import { AxiosError } from 'axios'
+import { t } from 'i18n/build-dictionary'
 
 export const name = 'reviewSurvey'
 
@@ -17,9 +18,7 @@ export const thunks = {
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
         .catch(() => {
-          throw new Error(
-            `Impossible de récupérer le questionnaire ${questionnaireId}.`
-          )
+          throw new Error(t('questionnaireNotFound', questionnaireId))
         })
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
@@ -33,31 +32,26 @@ export const thunks = {
           if (error instanceof AxiosError) {
             // unauthorized to get surveyUnit
             if (error.response?.status === 403) {
-              throw new Error(
-                "Vous n'êtes pas autorisé à accéder aux données de cette unité enquêtée."
-              )
+              throw new Error(t('surveyUnitUnauthorized'))
             }
             // surveyUnit does not exist
             if (error.response?.status === 404) {
-              throw new Error(
-                "Il n'y a aucune donnée pour cette unité enquêtée."
-              )
+              throw new Error(t('surveyUnitNotFound', surveyUnitId))
             }
             // other error cases
-            throw new Error(
-              "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-            )
+            throw new Error(t('longUnknownError'))
           }
           // unknown error
-          throw new Error(
-            "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
-          )
+          throw new Error(t('longUnknownError'))
         })
         // check the association between surveyUnit and questionnaireId
         .then((surveyUnit) => {
           if (surveyUnit.questionnaireId !== questionnaireId) {
             throw new Error(
-              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
+              t('wrongQuestionnaire', {
+                surveyUnitId,
+                questionnaireId,
+              })
             )
           }
           return surveyUnit

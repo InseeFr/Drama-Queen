@@ -1,6 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { ShortCut } from '../ShortCut/ShortCut'
+import { t } from 'i18n/build-dictionary'
 
 type ContinueProps = {
   label: string
@@ -21,7 +22,7 @@ export function Continue(props: ContinueProps) {
         <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
       </Button>
       <Typography variant="caption" color="#777777">
-        appuyer sur
+        {t('continueHelper')}
       </Typography>
       <Typography variant="caption">{shortCutLabel}</Typography>
     </Stack>

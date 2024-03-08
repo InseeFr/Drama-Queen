@@ -2,8 +2,8 @@ import type { SurveyUnit } from 'core/model'
 
 export const errorMessage = {
   error: {
-    fr: 'erreur',
-    en: 'error',
+    fr: 'Erreur',
+    en: 'Error',
   },
   errorOccured: {
     fr: 'Une erreur est survenue',

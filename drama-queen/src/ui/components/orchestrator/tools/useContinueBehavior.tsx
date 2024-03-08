@@ -2,6 +2,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
 import type { GoToPage } from '../lunaticType'
+import { t } from 'i18n/build-dictionary'
 
 type ContinueAction =
   | 'continue'
@@ -68,7 +69,7 @@ export function useContinueBehavior({
     continueAction === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
 
   const shortCutLabel =
-    continueAction === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+    continueAction === 'fastForward' ? 'alt + fin' : t('shortCutNextLabel')
 
   return {
     label: getLabelFromAction(continueAction),
@@ -83,13 +84,13 @@ export function useContinueBehavior({
 function getLabelFromAction(action: ContinueAction): string {
   switch (action) {
     case 'quit':
-      return 'quitter'
+      return t('quit')
     case 'saveAndQuit':
-      return 'valider et quitter'
+      return t('validateAndQuit')
     case 'fastForward':
-      return "suite de l'entretien"
+      return t('fastForward')
     default:
-      return 'continuer'
+      return t('continue')
   }
 }
 

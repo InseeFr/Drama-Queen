@@ -9,6 +9,7 @@ import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { Overview, OverviewItem } from '../lunaticType'
+import { t } from 'i18n/build-dictionary'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -110,7 +111,7 @@ export function Menu(props: MenuProps) {
               variant="overline"
               className={classes.goToNavigationTypography}
             >
-              Allez vers ...
+              {t('goTo')}
             </Typography>
             <Stack>
               {menuItems.map((type, index) => (
@@ -138,7 +139,7 @@ export function Menu(props: MenuProps) {
       {selectedMenuType && (!selectedSequence || matchesMdBreackpoint) && (
         <Stack className={cx(classes.expanded, classes.expandedMenu)}>
           <MenuNavigationButton
-            label="Retour"
+            label={t('back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedMenu(selectedMenuType)}
@@ -164,7 +165,7 @@ export function Menu(props: MenuProps) {
       {selectedSequence && (
         <Stack className={classes.expanded}>
           <MenuNavigationButton
-            label="Retour"
+            label={t('back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedSubMenu(selectedSequence)}

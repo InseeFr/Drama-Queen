@@ -3,6 +3,7 @@ import { tss } from 'tss-react/mui'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import { QuitModal } from 'ui/components/QuitModal'
+import { t } from 'i18n/build-dictionary'
 
 type StopNavigationProps = {
   quit: () => void
@@ -23,24 +24,23 @@ export function StopNavigation(props: StopNavigationProps) {
   const stopItems: StopItem[] = [
     {
       definitive: true,
-      label:
-        "Arrêt définitif de l'interview (refus, impossibilité de continuer, ...)",
+      label: t('definitiveQuestionnaireStop'),
     },
     {
       definitive: false,
-      label: "Arrêt provisoire de l'interview",
+      label: t('temporaryQuestionnaireStop'),
     },
   ]
 
   const quitModalTitle = isDefinitiveModal
-    ? 'Arrêt définitif'
-    : 'Arrêt provisoire'
+    ? t('definitiveQuitTitle')
+    : t('temporaryQuitTitle')
   const quitModalContent = isDefinitiveModal
-    ? 'Confirmez-vous l’arrêt définitif du questionnaire ?'
-    : 'Vous allez sortir du questionnaire'
+    ? t('definitiveQuitContent')
+    : t('temporaryQuitContent')
   const quitModalValidateLabel = isDefinitiveModal
-    ? "Valider l'arrêt définitif"
-    : 'Valider'
+    ? t('definitiveQuitValidate')
+    : t('temporaryQuitValidate')
 
   const quitModalOnOpen = (definitive: boolean) => {
     setIsOpenModal(true)
@@ -59,7 +59,7 @@ export function StopNavigation(props: StopNavigationProps) {
   return (
     <Stack className={classes.navigationContainer}>
       <Typography variant="overline" className={classes.typography}>
-        Quelle est la nature de l'arrêt ?
+        {t('questionnaireStopNature')}
       </Typography>
       <Stack>
         {stopItems.map((item, index) => (

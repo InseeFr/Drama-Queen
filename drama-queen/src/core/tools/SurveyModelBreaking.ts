@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { Questionnaire, SurveyUnit } from 'core/model'
+import { t } from 'i18n/build-dictionary'
 
 const lunaticModelVersionBreaking = '2.2.2'
 
@@ -17,9 +18,7 @@ export const isSurveyQueenV2Compatible = (params: {
     questionnaire: { lunaticModelVersion },
   } = params
   if (lunaticModelVersion === undefined) {
-    console.info(
-      'The survey has no lunaticModelVersion field, so by default we redirect to queen v2'
-    )
+    console.info(t('lunaticModelVersionNotFound'))
     return true
   }
 

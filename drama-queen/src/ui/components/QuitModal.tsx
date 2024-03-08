@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
+import { t } from 'i18n/build-dictionary'
 
 type QuitModalProps = {
   isOpen: boolean
@@ -54,7 +55,7 @@ export function QuitModal(props: QuitModalProps) {
           autoFocus={!isValidation}
           onClick={onClose}
         >
-          Annuler
+          {t('cancel')}
         </Button>
         {isValidation && (
           <Button

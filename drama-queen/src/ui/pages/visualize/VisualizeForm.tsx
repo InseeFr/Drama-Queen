@@ -61,7 +61,7 @@ export function VisualizeForm() {
             {...register('readonly')}
             id="readonly"
             control={<Switch />}
-            label="Lecture Seul"
+            label={t('readonlyLabel')}
           />
         </Stack>
         <Button variant="contained" type="submit">

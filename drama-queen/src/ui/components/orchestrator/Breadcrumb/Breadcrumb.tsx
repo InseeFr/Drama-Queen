@@ -1,4 +1,5 @@
 import { Breadcrumbs, Button } from '@mui/material'
+import { t } from 'i18n/build-dictionary'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
@@ -40,7 +41,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
             classes.breadcrumbButton,
             !subSequence && classes.lastButton
           )}
-          title={`Aller vers la séquence ${sequence.label}`}
+          title={`${t('goToSequence')} ${sequence.label}`}
           disableRipple
           onClick={goToSequencePage}
         >
@@ -54,7 +55,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
             classes.subsequenceButton,
             classes.lastButton
           )}
-          title={`Aller vers la sous-séquence ${subSequence.label}`}
+          title={`${t('goToSubSequence')} ${subSequence.label}`}
           disableRipple
           onClick={goToSubSequencePage}
         >

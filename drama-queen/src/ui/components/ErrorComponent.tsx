@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material'
+import { t } from 'i18n/build-dictionary'
 import { tss } from 'tss-react/mui'
 
 export function ErrorComponent(props: { message: string }) {
@@ -9,7 +10,7 @@ export function ErrorComponent(props: { message: string }) {
   return (
     <Stack className={classes.errorContainer}>
       <Typography className={classes.errorTitle} variant="h3">
-        Une erreur est survenue
+        {t('errorOccured')}
       </Typography>
       <Typography className={classes.errorMessage} variant="h4">
         {message}

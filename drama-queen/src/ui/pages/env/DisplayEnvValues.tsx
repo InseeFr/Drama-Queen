@@ -1,10 +1,11 @@
 import React from 'react'
 import './env.css'
+import { t } from 'i18n/build-dictionary'
 
 export function DisplayEnvValues() {
   return (
     <div className="App">
-      <h1>Les variables d'environnements</h1>
+      <h1>{t('envVariables')}</h1>
       <div className="card">
         <p className="read-the-docs">
           {Object.entries(import.meta.env)

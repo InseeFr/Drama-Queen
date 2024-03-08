@@ -4,6 +4,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import { Stack, Typography } from '@mui/material'
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from 'ui/constants'
 import { ShortCut } from '../ShortCut/ShortCut'
+import { t } from 'i18n/build-dictionary'
 
 type PrevNextProps = {
   isFirstPage: boolean
@@ -50,7 +51,7 @@ export function PrevNext(props: PrevNextProps) {
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          PREC.
+          {t('previousHelper')}
         </Typography>
       </Stack>
 
@@ -67,7 +68,7 @@ export function PrevNext(props: PrevNextProps) {
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          SUIV.
+          {t('nextHelper')}
         </Typography>
       </Stack>
     </Stack>

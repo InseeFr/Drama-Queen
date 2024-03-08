@@ -1,3 +1,4 @@
+import { t } from 'i18n/build-dictionary'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import { ErrorComponent } from 'ui/components/ErrorComponent'
 
@@ -11,10 +12,10 @@ export function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     return (
       <ErrorComponent
-        message={`Erreur ${error.status} : 
+        message={`${t('error')} ${error.status} : 
         ${error.error?.message}`}
       />
     )
   }
-  return <ErrorComponent message="Erreur inconnue" />
+  return <ErrorComponent message={t('shortUnknownError')} />
 }

@@ -6,6 +6,7 @@ import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
 } from './eventSender'
+import { t } from 'i18n/build-dictionary'
 
 export const name = 'collectSurvey'
 
@@ -32,9 +33,7 @@ export const thunks = {
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
         .catch(() => {
-          throw new Error(
-            `Impossible de récupérer le questionnaire ${questionnaireId}.`
-          )
+          throw new Error(t('questionnaireNotFound', questionnaireId))
         })
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
@@ -44,20 +43,21 @@ export const thunks = {
       const surveyUnitPromise = dataStore
         .getSurveyUnit(surveyUnitId)
         .catch(() => {
-          throw new Error(
-            "Une erreur est survenue lors de la récupération de l'unité enquêtée."
-          )
+          throw new Error(t('surveyUnitNotRetrievable'))
         })
         .then((surveyUnit) => {
           if (!surveyUnit) {
-            throw new Error("Il n'y a aucune donnée pour cette unité enquêtée.")
+            throw new Error(t('surveyUnitNotFound', surveyUnitId))
           }
           return surveyUnit
         })
         .then((surveyUnit) => {
           if (surveyUnit.questionnaireId !== questionnaireId) {
             throw new Error(
-              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
+              t('wrongQuestionnaire', {
+                surveyUnitId,
+                questionnaireId,
+              })
             )
           }
           return surveyUnit

@@ -16,6 +16,7 @@ import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
+import { t } from 'i18n/build-dictionary'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -77,7 +78,7 @@ export function Orchestrator(props: OrchestratorProps) {
     shortcut: true,
     withOverview: true,
     missing: true,
-    dontKnowButton: 'Ne sait pas',
+    dontKnowButton: t('dontKnowButtonLabel'),
     missingShortcut: missingShortcut,
   })
 

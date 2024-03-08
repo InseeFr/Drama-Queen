@@ -7,6 +7,10 @@ export const navigationMessage = {
     fr: 'Aller vers la sous-séquence',
     en: 'Go to subsequence',
   },
+  goTo: {
+    fr: 'Aller vers ...',
+    en: 'Go to ...',
+  },
   continueHelper: {
     fr: 'appuyer sur',
     en: 'press',
@@ -71,5 +75,9 @@ export const navigationMessage = {
   dontKnowButtonLabel: {
     fr: 'Ne sait pas',
     en: "Don't know",
+  },
+  shortCutNextLabel: {
+    fr: 'alt + ENTRÉE',
+    en: 'alt + ENTER',
   },
 } as const

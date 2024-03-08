@@ -1,4 +1,5 @@
 import { useCore } from 'core'
+import { t } from 'i18n/build-dictionary'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
@@ -24,10 +25,9 @@ export function Review() {
 
   const quitModalOnClose = () => setIsQuitModalOpen(false)
 
-  const quitModalTitle = 'Sortie du questionnaire'
+  const quitModalTitle = t('reviewQuitTitle')
 
-  const quitModalContent =
-    "Si vous souhaitez sortir du questionnaire, veuillez fermer l'onglet actuel."
+  const quitModalContent = t('reviewQuitContent')
 
   return (
     <>

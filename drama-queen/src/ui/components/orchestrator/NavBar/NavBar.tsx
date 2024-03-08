@@ -1,6 +1,7 @@
 import { tss } from 'tss-react/mui'
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
 import { Stack, Typography } from '@mui/material'
+import { t } from 'i18n/build-dictionary'
 
 type NavBarProps = {
   page: string
@@ -51,7 +52,7 @@ export function NavBar(props: NavBarProps) {
     if (pageType.current !== undefined) {
       return (
         <Stack className={classes.page} key={`displayPages-${index}`}>
-          <Typography variant="caption">n° page</Typography>
+          <Typography variant="caption">{t('pageNumber')}</Typography>
           <Typography variant="body2" fontWeight={'bold'}>
             {pageType.current}/{pageType.max}
           </Typography>
