@@ -37,10 +37,10 @@ export const errorMessage = {
       `Unable to retrieve questionnaire ${questionnaireId}.`,
   },
   wrongQuestionnaire: {
-    fr: (params: { surveyUnit: SurveyUnit; questionnaireId: string }) =>
-      `L'unité enquêtée ${params.surveyUnit} n'est pas associée au questionnaire ${params.questionnaireId}.`,
-    en: (params: { surveyUnit: SurveyUnit; questionnaireId: string }) =>
-      `The survey unit ${params.surveyUnit} is not associated with the questionnaire ${params.questionnaireId}.`,
+    fr: (params: { surveyUnitId: string; questionnaireId: string }) =>
+      `L'unité enquêtée ${params.surveyUnitId} n'est pas associée au questionnaire ${params.questionnaireId}.`,
+    en: (params: { surveyUnitId: string; questionnaireId: string }) =>
+      `The survey unit ${params.surveyUnitId} is not associated with the questionnaire ${params.questionnaireId}.`,
   },
   surveyUnitUnauthorized: {
     fr: "Vous n'êtes pas autorisé à accéder aux données de cette unité enquêtée.",

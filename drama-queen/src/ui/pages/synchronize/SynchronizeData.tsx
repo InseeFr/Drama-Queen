@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
-import { useTranslate } from 'ui/hooks/useTranslate'
 import { LoadingDisplay } from './LoadingDisplay'
+import { t } from 'i18n/build-dictionary'
 
 export function SynchronizeData() {
-  const { t } = useTranslate()
-
   const {
     hideProgress,
     isUploading,

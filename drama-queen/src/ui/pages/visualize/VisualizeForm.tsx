@@ -5,11 +5,11 @@ import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useForm } from 'react-hook-form'
-import { useTranslate } from 'ui/hooks/useTranslate'
 import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
 import { encodeParams } from './encodeParams'
+import { t } from 'i18n/build-dictionary'
 
 export type FormValues = {
   questionnaire: string
@@ -19,7 +19,6 @@ export type FormValues = {
 }
 
 export function VisualizeForm() {
-  const { t } = useTranslate()
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
   const [, setSearchParams] = useSearchParams()
