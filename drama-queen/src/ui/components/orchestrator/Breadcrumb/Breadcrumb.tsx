@@ -19,16 +19,28 @@ type BreadCrumbProps = {
     }
   }
   goToPage: GoToPage
+  iteration: number | undefined
 }
 
 export function BreadCrumb(props: BreadCrumbProps) {
-  const { hierarchy, goToPage } = props
+  const { hierarchy, iteration, goToPage } = props
   const { classes, cx } = useStyles()
   const { sequence, subSequence } = hierarchy ?? {}
 
-  const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
+  // given a page inside a subsequence, return the page keeping the current iteration
+  const getPageWithIteration = (page: string) => {
+    // page inside a subsequence, and current page is in an iteration
+    if (page.includes('.') && iteration !== undefined) {
+      // return the new page for the same iteration
+      return `${page}#${iteration + 1}`
+    }
+    return page
+  }
+
+  const goToSequencePage = () =>
+    sequence && goToPage({ page: getPageWithIteration(sequence.page) })
   const goToSubSequencePage = () =>
-    subSequence && goToPage({ page: subSequence.page })
+    subSequence && goToPage({ page: getPageWithIteration(subSequence.page) })
 
   return (
     <Breadcrumbs separator={''} aria-label="breadcrumb">
