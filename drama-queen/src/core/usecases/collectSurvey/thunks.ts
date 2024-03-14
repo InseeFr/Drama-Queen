@@ -6,7 +6,9 @@ import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
 } from './eventSender'
-import { t } from 'i18n/build-dictionary'
+import { getTranslation } from 'i18n/i18n'
+
+const { t } = getTranslation('errorMessage')
 
 export const name = 'collectSurvey'
 
@@ -33,7 +35,7 @@ export const thunks = {
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
         .catch(() => {
-          throw new Error(t('questionnaireNotFound', questionnaireId))
+          throw new Error(t('questionnaireNotFound', { questionnaireId }))
         })
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
@@ -47,7 +49,7 @@ export const thunks = {
         })
         .then((surveyUnit) => {
           if (!surveyUnit) {
-            throw new Error(t('surveyUnitNotFound', surveyUnitId))
+            throw new Error(t('surveyUnitNotFound', { surveyUnitId }))
           }
           return surveyUnit
         })

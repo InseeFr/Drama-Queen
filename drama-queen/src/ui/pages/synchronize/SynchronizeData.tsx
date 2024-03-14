@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
 import { LoadingDisplay } from './LoadingDisplay'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 export function SynchronizeData() {
   const {
@@ -14,6 +14,7 @@ export function SynchronizeData() {
     surveyUnitProgress,
     uploadProgress,
   } = useCoreState('synchronizeData', 'main')
+  const { t } = useTranslation('synchronizeMessage')
 
   const { synchronizeData } = useCore().functions
 

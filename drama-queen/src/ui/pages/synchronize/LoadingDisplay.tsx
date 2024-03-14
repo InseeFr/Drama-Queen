@@ -3,7 +3,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type LoadingDisplayProps = {
   syncStepTitle: string
@@ -16,6 +16,7 @@ type LoadingDisplayProps = {
 export function LoadingDisplay(props: LoadingDisplayProps) {
   const { syncStepTitle, progressBars } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('synchronizeMessage')
   return (
     <Stack spacing={3} alignItems="center">
       <Stack spacing={1} alignItems="center">

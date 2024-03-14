@@ -9,7 +9,7 @@ import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
 import { encodeParams } from './encodeParams'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 export type FormValues = {
   questionnaire: string
@@ -22,6 +22,8 @@ export function VisualizeForm() {
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
   const [, setSearchParams] = useSearchParams()
+  const { t } = useTranslation('visualizeMessage')
+
   const onSubmit = handleSubmit((data) => {
     setSearchParams(encodeParams(data))
   })

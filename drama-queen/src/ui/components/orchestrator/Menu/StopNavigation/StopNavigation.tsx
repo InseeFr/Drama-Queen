@@ -3,7 +3,7 @@ import { tss } from 'tss-react/mui'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import { QuitModal } from 'ui/components/QuitModal'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type StopNavigationProps = {
   quit: () => void
@@ -18,6 +18,8 @@ type StopItem = {
 export function StopNavigation(props: StopNavigationProps) {
   const { quit, definitiveQuit } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
+  const { t: t2 } = useTranslation('modalMessage')
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
 
@@ -33,14 +35,14 @@ export function StopNavigation(props: StopNavigationProps) {
   ]
 
   const quitModalTitle = isDefinitiveModal
-    ? t('definitiveQuitTitle')
-    : t('temporaryQuitTitle')
+    ? t2('definitiveQuitTitle')
+    : t2('temporaryQuitTitle')
   const quitModalContent = isDefinitiveModal
-    ? t('definitiveQuitContent')
-    : t('temporaryQuitContent')
+    ? t2('definitiveQuitContent')
+    : t2('temporaryQuitContent')
   const quitModalValidateLabel = isDefinitiveModal
-    ? t('definitiveQuitValidate')
-    : t('temporaryQuitValidate')
+    ? t2('definitiveQuitValidate')
+    : t2('temporaryQuitValidate')
 
   const quitModalOnOpen = (definitive: boolean) => {
     setIsOpenModal(true)

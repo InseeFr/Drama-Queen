@@ -1,7 +1,9 @@
 import type { Thunks } from 'core/bootstrap'
 import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
 import { AxiosError } from 'axios'
-import { t } from 'i18n/build-dictionary'
+import { getTranslation } from 'i18n/i18n'
+
+const { t } = getTranslation('errorMessage')
 
 export const name = 'reviewSurvey'
 
@@ -18,7 +20,7 @@ export const thunks = {
       const questionnairePromise = queenApi
         .getQuestionnaire(questionnaireId)
         .catch(() => {
-          throw new Error(t('questionnaireNotFound', questionnaireId))
+          throw new Error(t('questionnaireNotFound', { questionnaireId }))
         })
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
@@ -36,7 +38,7 @@ export const thunks = {
             }
             // surveyUnit does not exist
             if (error.response?.status === 404) {
-              throw new Error(t('surveyUnitNotFound', surveyUnitId))
+              throw new Error(t('surveyUnitNotFound', { surveyUnitId }))
             }
             // other error cases
             throw new Error(t('longUnknownError'))

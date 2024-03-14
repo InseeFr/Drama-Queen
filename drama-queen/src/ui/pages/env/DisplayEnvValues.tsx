@@ -1,8 +1,9 @@
 import React from 'react'
 import './env.css'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 export function DisplayEnvValues() {
+  const { t } = useTranslation('envValuesMessage')
   return (
     <div className="App">
       <h1>{t('envVariables')}</h1>

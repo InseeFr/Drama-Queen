@@ -1,11 +1,13 @@
 import { Stack, Typography } from '@mui/material'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 import { tss } from 'tss-react/mui'
 
 export function ErrorComponent(props: { message: string }) {
   const { message } = props
 
   const { classes } = useStyles()
+
+  const { t } = useTranslation('errorMessage')
 
   return (
     <Stack className={classes.errorContainer}>

@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { ShortCut } from '../ShortCut/ShortCut'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type ContinueProps = {
   label: string
@@ -14,6 +14,7 @@ type ContinueProps = {
 export function Continue(props: ContinueProps) {
   const { label, endIcon, shortCutKey, shortCutLabel, onContinue } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   return (
     <Stack direction={'row'} className={classes.continueWrapper}>

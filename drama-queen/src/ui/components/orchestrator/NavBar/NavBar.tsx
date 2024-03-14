@@ -1,7 +1,7 @@
 import { tss } from 'tss-react/mui'
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
 import { Stack, Typography } from '@mui/material'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type NavBarProps = {
   page: string
@@ -30,6 +30,7 @@ export function NavBar(props: NavBarProps) {
     goNext,
   } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   const displayPages = [
     {

@@ -16,7 +16,7 @@ import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -45,6 +45,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChangeSurveyUnitState = () => {},
   } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
   const { onChange, ref } = useAutoNext()
 
   // get the initial data for useLunatic

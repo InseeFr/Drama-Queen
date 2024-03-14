@@ -1,8 +1,9 @@
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import { ErrorComponent } from 'ui/components/ErrorComponent'
 
 export function ErrorPage() {
+  const { t } = useTranslation('errorMessage')
   const error = useRouteError()
 
   if (error instanceof Error) {

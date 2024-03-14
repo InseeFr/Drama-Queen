@@ -13,7 +13,7 @@ import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 import type { useLunatic } from '@inseefr/lunatic'
 import type { Overview } from '../lunaticType'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -53,6 +53,7 @@ export function Header(props: HeaderProps) {
   } = props
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
+  const { t } = useTranslation('navigationMessage')
 
   const menuShortKey = SHORCUT_MENU
   const quitShortKey = SHORTCUT_QUIT

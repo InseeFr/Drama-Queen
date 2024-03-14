@@ -1,5 +1,5 @@
 import { useCore } from 'core'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
@@ -10,6 +10,7 @@ export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
   const loaderData = useLoaderData() as Awaited<ReturnType<typeof reviewLoader>>
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false)
+  const { t } = useTranslation('modalMessage')
 
   if (!loaderData.isQueenV2) {
     return <queen-app />

@@ -1,5 +1,5 @@
 import { Breadcrumbs, Button } from '@mui/material'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
@@ -27,6 +27,7 @@ type BreadCrumbProps = {
 export function BreadCrumb(props: BreadCrumbProps) {
   const { hierarchy, goToPage } = props
   const { classes, cx } = useStyles()
+  const { t } = useTranslation('navigationMessage')
   const { sequence, subSequence } = hierarchy ?? {}
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })

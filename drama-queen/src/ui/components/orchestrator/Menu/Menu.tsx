@@ -9,7 +9,7 @@ import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { Overview, OverviewItem } from '../lunaticType'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -51,6 +51,7 @@ export function Menu(props: MenuProps) {
   >(undefined)
 
   const { classes, theme, cx } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 

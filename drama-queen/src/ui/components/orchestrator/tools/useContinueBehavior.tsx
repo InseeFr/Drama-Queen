@@ -2,7 +2,9 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
 import type { GoToPage } from '../lunaticType'
-import { t } from 'i18n/build-dictionary'
+import { getTranslation } from 'i18n/i18n'
+
+const { t } = getTranslation('navigationMessage')
 
 type ContinueAction =
   | 'continue'

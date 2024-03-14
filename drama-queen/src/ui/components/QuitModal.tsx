@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
-import { t } from 'i18n/build-dictionary'
+import { useTranslation } from 'i18n/i18n'
 
 type QuitModalProps = {
   isOpen: boolean
@@ -33,6 +33,7 @@ export function QuitModal(props: QuitModalProps) {
     onValidate,
   } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('modalMessage')
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
