@@ -32,7 +32,7 @@ export function SynchronizeData() {
       (data) => (data.action === 'redirect' ? [data] : null),
       ctx,
       () => {
-        navigate(window.location.href)
+        navigate('/')
       }
     )
   }, [])
