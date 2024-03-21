@@ -17,7 +17,6 @@ const eventType = 'QUEEN'
 
 const sendEvent = (data: UpdateSurveyUnitData | CloseQueenData) => {
   const event = new CustomEvent(eventType, { detail: data })
-  console.log(event)
   window.dispatchEvent(event)
 }
 

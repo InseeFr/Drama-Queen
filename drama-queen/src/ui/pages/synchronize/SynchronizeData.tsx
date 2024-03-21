@@ -3,9 +3,11 @@ import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
 import { useTranslate } from 'ui/hooks/useTranslate'
 import { LoadingDisplay } from './LoadingDisplay'
+import { useNavigate } from 'react-router-dom'
 
 export function SynchronizeData() {
   const { t } = useTranslate()
+  const navigate = useNavigate()
 
   const {
     hideProgress,
@@ -30,7 +32,7 @@ export function SynchronizeData() {
       (data) => (data.action === 'redirect' ? [data] : null),
       ctx,
       () => {
-        console.log('we should redirect to ', window.location.href)
+        navigate(window.location.href)
       }
     )
   }, [])

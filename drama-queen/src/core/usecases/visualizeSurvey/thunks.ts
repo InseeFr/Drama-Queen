@@ -1,10 +1,9 @@
 import type { Thunks } from 'core/bootstrap'
 import type { Questionnaire, SurveyUnit } from 'core/model'
-import axios from 'axios'
 import { searchParamsSchema } from './parser/searchParamsSchema'
 import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSchema'
 import { fetchUrl } from 'core/tools/fetchUrl'
-import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
+import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
 
 export const name = 'visualizeSurvey'
 
@@ -44,7 +43,7 @@ export const thunks = {
         return null
       }
 
-      const isQueenV2 = isSurveyQueenV2Compatible({ questionnaire: source })
+      const isQueenV2 = isSurveyCompatibleWithQueenV2({ questionnaire: source })
 
       if (!isQueenV2) {
         return { isQueenV2 }

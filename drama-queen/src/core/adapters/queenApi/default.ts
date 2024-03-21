@@ -50,6 +50,47 @@ export function createApiClient(params: {
 
     axiosInstance.interceptors.request.use(onRequest)
 
+    axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (!(error instanceof AxiosError)) {
+          return Promise.reject(error)
+        }
+        if (!error.response) {
+          throw new AxiosError(
+            "Une erreur s'est produite lors du traitement de la requête. Veuillez réessayer plus tard."
+          )
+        }
+        const status = error.response.status
+        switch (status) {
+          case 400:
+            throw new AxiosError('Requête invalide.')
+          case 401:
+            throw new AxiosError(
+              "Vous n'êtes pas connecté. Veuillez vous connecter pour accéder à cette ressource."
+            )
+          case 403:
+            throw new AxiosError(
+              "Vous n'êtes pas autorisé à accéder aux données demandées"
+            )
+          case 404:
+            throw new AxiosError('Ressource(s) non trouvée(s).')
+            break
+          case 500:
+            throw new AxiosError('Erreur interne du serveur.')
+          case 502:
+            throw new AxiosError('Passerelle incorrecte.')
+          case 503:
+            throw new AxiosError('Service indisponible.')
+          case 504:
+            throw new AxiosError("Délai d'attente de la passerelle expiré.")
+          default:
+            throw new AxiosError(
+              "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
+            )
+        }
+      }
+    )
     return { axiosInstance }
   })()
 
@@ -76,17 +117,6 @@ export function createApiClient(params: {
       axiosInstance
         .put<typeof surveyUnit>(`api/survey-unit/${surveyUnit.id}`, surveyUnit)
         .then(() => undefined),
-    // .catch((error: Error | AxiosError) => {
-    //   if (
-    //     axios.isAxiosError(error) &&
-    //     error.response &&
-    //     [400, 403, 404, 500].includes(error.response.status)
-    //   ) {
-    //     return
-    //   } else {
-    //     throw error;
-    //   }
-    // })
     putSurveyUnitsData: (surveyUnitsData) =>
       axiosInstance
         .put(`/api/survey-units/data`, surveyUnitsData)

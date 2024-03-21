@@ -1,16 +1,15 @@
-import axios from 'axios'
-import type { Questionnaire, SurveyUnit } from 'core/model'
+import type { Questionnaire } from 'core/model'
 
 const lunaticModelVersionBreaking = '2.2.2'
 
 const semverCompare = new Intl.Collator('en', { numeric: true }).compare
 
 /**
- *
- * @param {Questionnaire}
- * @returns {boolean} false if this survey concerns Queen V1, true otherwise
+ * Checks if the survey is compatible with Queen version 2 based on lunaticModelVersion.
+ * @param {Questionnaire} params - The questionnaire object.
+ * @returns {boolean} Returns true if the survey is compatible with Queen version 2, false otherwise.
  */
-export const isSurveyQueenV2Compatible = (params: {
+export const isSurveyCompatibleWithQueenV2 = (params: {
   questionnaire: Questionnaire
 }) => {
   const {
@@ -18,7 +17,7 @@ export const isSurveyQueenV2Compatible = (params: {
   } = params
   if (lunaticModelVersion === undefined) {
     console.info(
-      'The survey has no lunaticModelVersion field, so by default we redirect to queen v2'
+      'The survey has no lunaticModelVersion field, so by default we redirect to Queen v2'
     )
     return true
   }

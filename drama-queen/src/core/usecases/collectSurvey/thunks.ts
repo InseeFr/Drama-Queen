@@ -1,7 +1,7 @@
 import type { Thunks } from 'core/bootstrap'
 import type { SurveyUnit } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
+import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
 import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
@@ -17,10 +17,16 @@ export const thunks = {
     (...args) => {
       const [, , { dataStore }] = args
       const { surveyUnitId } = params
-      //TODO -> reject if undefined and handle error higher
-      return dataStore
-        .getSurveyUnit(surveyUnitId)
-        .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
+      return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
+        if (!surveyUnit || !surveyUnit.questionnaireId) {
+          return Promise.reject(
+            new Error(
+              `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}`
+            )
+          )
+        }
+        return surveyUnit.questionnaireId
+      })
     },
   loader:
     (params: { questionnaireId: string; surveyUnitId: string }) =>
@@ -29,16 +35,10 @@ export const thunks = {
 
       const { questionnaireId, surveyUnitId } = params
 
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
-        .catch(() => {
-          throw new Error(
-            `Impossible de récupérer le questionnaire ${questionnaireId}.`
-          )
-        })
+      const questionnairePromise = queenApi.getQuestionnaire(questionnaireId)
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
-        isSurveyQueenV2Compatible({ questionnaire })
+        isSurveyCompatibleWithQueenV2({ questionnaire })
       )
 
       const surveyUnitPromise = dataStore
@@ -77,54 +77,43 @@ export const thunks = {
       const [, , { queenApi }] = args
       return queenApi.getNomenclature(name)
     },
-  onChangePage:
+  changePage:
     (surveyUnit: SurveyUnit) =>
     (...args) => {
       const [, , { dataStore }] = args
 
-      const updateSurveyUnitPromise = () => {
-        return (
-          dataStore
-            .updateSurveyUnit(surveyUnit)
-            // Dexie put method returns a Promise<string>, we need a Promise<void>
-            .then(() => {})
-            // cannot search for surveyUnit in index DB
-            .catch((error) => {
-              console.error('Error updating or inserting record:', error)
-            })
-        )
-      }
-
-      // update surveyUnit
-      updateSurveyUnitPromise()
+      dataStore.updateSurveyUnit(surveyUnit).catch((error) => {
+        console.error('Error updating or inserting record:', error)
+      })
     },
-  onChangeSurveyUnitState:
-    (params: { surveyUnitId: string; newState: QuestionnaireState }) =>
-    (...args) => {
+  changeSurveyUnitState:
+    (params: { surveyUnitId: string; newState: QuestionnaireState }) => () => {
       const { surveyUnitId, newState } = params
 
       // send event for changing questionnaire state
       switch (newState) {
         case 'INIT':
           // event name for 'INIT' is 'STARTED'
-          return sendQuestionnaireStateChangedEvent(surveyUnitId, 'STARTED')
+          sendQuestionnaireStateChangedEvent(surveyUnitId, 'STARTED')
+          break
         case 'COMPLETED':
         case 'VALIDATED':
-          return sendQuestionnaireStateChangedEvent(surveyUnitId, newState)
+          sendQuestionnaireStateChangedEvent(surveyUnitId, newState)
+          break
         default:
           // we do nothing for the other state values
-          return
+          break
       }
     },
-  onQuit:
+  quit:
     (surveyUnit: SurveyUnit) =>
     (...args) => {
       const [dispatch] = args
 
       // we apply same treatments than when page changes
-      dispatch(thunks.onChangePage(surveyUnit))
+      dispatch(thunks.changePage(surveyUnit))
 
       // send event for closing Queen
-      return sendCloseEvent(surveyUnit.id)
+      sendCloseEvent(surveyUnit.id)
     },
 } satisfies Thunks

@@ -6,12 +6,7 @@ export async function surveyUnitLoader({
   request,
   params,
 }: LoaderFunctionArgs) {
-  const { collectSurvey, userAuthentication } = (await prCore).functions
-
-  //Protect the route
-  await userAuthentication.loginIfNotLoggedIn({
-    redirectUri: request.url,
-  })
+  const { collectSurvey } = (await prCore).functions
 
   const { surveyUnitId } = params
   assert(surveyUnitId !== undefined)

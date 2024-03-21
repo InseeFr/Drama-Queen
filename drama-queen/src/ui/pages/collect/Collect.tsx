@@ -13,26 +13,20 @@ export function Collect() {
     return <queen-app />
   }
 
-  const { collectSurvey } = useCore().functions
-
-  const getReferentiel = collectSurvey.getReferentiel
-
-  const onChangePage = collectSurvey.onChangePage
-
-  const onChangeSurveyUnitState = collectSurvey.onChangeSurveyUnitState
-
-  const onQuit = collectSurvey.onQuit
+  const {
+    collectSurvey: { getReferentiel, changePage, changeSurveyUnitState, quit },
+  } = useCore().functions
 
   return (
     <Orchestrator
       source={loaderData.questionnaire}
       surveyUnit={loaderData.surveyUnit}
       readonly={false}
-      onQuit={onQuit}
-      onDefinitiveQuit={onQuit}
-      onChangePage={onChangePage}
+      onQuit={quit}
+      onDefinitiveQuit={quit}
+      onChangePage={changePage}
       getReferentiel={getReferentiel}
-      onChangeSurveyUnitState={onChangeSurveyUnitState}
+      onChangeSurveyUnitState={changeSurveyUnitState}
     />
   )
 }

@@ -12,7 +12,6 @@ import {
   collectLoader,
   reviewLoader,
 } from './loader'
-import { SurveyUnitMapping } from 'ui/pages/surveyUnit'
 import { Review } from 'ui/pages/review/Review'
 import { ErrorPage } from 'ui/pages/Error/Error'
 
@@ -39,7 +38,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: '/survey-unit/:surveyUnitId',
-        Component: SurveyUnitMapping,
+        Component: ErrorPage, // This route do not contains UI components, all things are done in loader, if not there is an error
         loader: surveyUnitLoader,
       },
       {
@@ -48,7 +47,7 @@ export const routes: RouteObject[] = [
         loader: collectLoader,
       },
       {
-        path: `/${READ_ONLY}/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        path: `/readonly/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
         Component: Review,
         loader: reviewLoader,
       },
