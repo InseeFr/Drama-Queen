@@ -1,5 +1,11 @@
 import type { Thunks } from 'core/bootstrap'
-import { isSurveyQueenV2Compatible } from 'core/tools/SurveyModelBreaking'
+import type { SurveyUnit } from 'core/model'
+import type { QuestionnaireState } from 'core/model/QuestionnaireState'
+import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
+import {
+  sendCloseEvent,
+  sendQuestionnaireStateChangedEvent,
+} from './eventSender'
 
 export const name = 'collectSurvey'
 
@@ -11,33 +17,103 @@ export const thunks = {
     (...args) => {
       const [, , { dataStore }] = args
       const { surveyUnitId } = params
-      //TODO -> reject if undefined and handle error higher
-      return dataStore
-        .getSurveyUnit(surveyUnitId)
-        .then((surveyUnit) => surveyUnit?.questionnaireId ?? null)
-    },
-  collectLoader:
-    (params: { questionnaireId: string; surveyUnitId: string }) =>
-    (...args) => {
-      const [, , { queenApi, dataStore }] = args
-      const { questionnaireId, surveyUnitId } = params
-      const surveyUnitPromise = dataStore.getSurveyUnit(surveyUnitId)
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
-        .then((questionnaire) => {
-          const isQueenV2 = isSurveyQueenV2Compatible({ questionnaire })
-          return { questionnaire, isQueenV2 }
-        })
-      return Promise.all([surveyUnitPromise, questionnairePromise]).then(
-        ([surveyUnit, { questionnaire, isQueenV2 }]) => {
-          return { surveyUnit, questionnaire, isQueenV2 }
+      return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
+        if (!surveyUnit || !surveyUnit.questionnaireId) {
+          return Promise.reject(
+            new Error(
+              `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}`
+            )
+          )
         }
+        return surveyUnit.questionnaireId
+      })
+    },
+  loader:
+    (params: { questionnaireId: string; surveyUnitId: string }) =>
+    async (...args) => {
+      const [, , { queenApi, dataStore }] = args
+
+      const { questionnaireId, surveyUnitId } = params
+
+      const questionnairePromise = queenApi.getQuestionnaire(questionnaireId)
+
+      const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
+        isSurveyCompatibleWithQueenV2({ questionnaire })
       )
+
+      const surveyUnitPromise = dataStore
+        .getSurveyUnit(surveyUnitId)
+        .catch(() => {
+          throw new Error(
+            "Une erreur est survenue lors de la récupération de l'unité enquêtée."
+          )
+        })
+        .then((surveyUnit) => {
+          if (!surveyUnit) {
+            throw new Error("Il n'y a aucune donnée pour cette unité enquêtée.")
+          }
+          return surveyUnit
+        })
+        .then((surveyUnit) => {
+          if (surveyUnit.questionnaireId !== questionnaireId) {
+            throw new Error(
+              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
+            )
+          }
+          return surveyUnit
+        })
+
+      const [surveyUnit, isQueenV2, questionnaire] = await Promise.all([
+        surveyUnitPromise,
+        isQueenV2Promise,
+        questionnairePromise,
+      ])
+
+      return { surveyUnit, isQueenV2, questionnaire }
     },
   getReferentiel:
     (name: string) =>
     (...args) => {
       const [, , { queenApi }] = args
       return queenApi.getNomenclature(name)
+    },
+  changePage:
+    (surveyUnit: SurveyUnit) =>
+    (...args) => {
+      const [, , { dataStore }] = args
+
+      dataStore.updateSurveyUnit(surveyUnit).catch((error) => {
+        console.error('Error updating or inserting record:', error)
+      })
+    },
+  changeSurveyUnitState:
+    (params: { surveyUnitId: string; newState: QuestionnaireState }) => () => {
+      const { surveyUnitId, newState } = params
+
+      // send event for changing questionnaire state
+      switch (newState) {
+        case 'INIT':
+          // event name for 'INIT' is 'STARTED'
+          sendQuestionnaireStateChangedEvent(surveyUnitId, 'STARTED')
+          break
+        case 'COMPLETED':
+        case 'VALIDATED':
+          sendQuestionnaireStateChangedEvent(surveyUnitId, newState)
+          break
+        default:
+          // we do nothing for the other state values
+          break
+      }
+    },
+  quit:
+    (surveyUnit: SurveyUnit) =>
+    (...args) => {
+      const [dispatch] = args
+
+      // we apply same treatments than when page changes
+      dispatch(thunks.changePage(surveyUnit))
+
+      // send event for closing Queen
+      sendCloseEvent(surveyUnit.id)
     },
 } satisfies Thunks

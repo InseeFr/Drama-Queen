@@ -1,14 +1,9 @@
 import { useCore } from 'core'
-import { useParams } from 'react-router-dom'
-import { assert } from 'tsafe'
+import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
 import type { collectLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'
 
 export function Collect() {
-  const { questionnaireId, surveyUnitId } = useParams<{
-    surveyUnitId: string
-    questionnaireId: string
-  }>()
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
   const loaderData = useLoaderData() as Awaited<
     ReturnType<typeof collectLoader>
@@ -18,17 +13,20 @@ export function Collect() {
     return <queen-app />
   }
 
-  const { questionnaire, surveyUnit } = loaderData
-
-  //surveyUnit possibly undefined in readOnly
-  
-  const { collectSurvey } = useCore().functions
-
-  const nomenclatureForLunatic = collectSurvey.getReferentiel
+  const {
+    collectSurvey: { getReferentiel, changePage, changeSurveyUnitState, quit },
+  } = useCore().functions
 
   return (
-    <div>
-      Collect : {surveyUnit} with questionnaire {questionnaireId}
-    </div>
+    <Orchestrator
+      source={loaderData.questionnaire}
+      surveyUnit={loaderData.surveyUnit}
+      readonly={false}
+      onQuit={quit}
+      onDefinitiveQuit={quit}
+      onChangePage={changePage}
+      getReferentiel={getReferentiel}
+      onChangeSurveyUnitState={changeSurveyUnitState}
+    />
   )
 }

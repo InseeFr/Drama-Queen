@@ -1,7 +1,7 @@
 import type { LunaticData } from '@inseefr/lunatic'
 import type { SurveyUnit, SurveyUnitData } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
@@ -9,9 +9,13 @@ type UseQueenNavigationProps = {
   changedData: LunaticData
   lastReachedPage: string | undefined
   pageTag: string
-  quit: (surveyUnit: SurveyUnit) => void
-  definitiveQuit: (surveyUnit: SurveyUnit) => void
-  save: (surveyUnit: SurveyUnit) => void
+  onQuit: (surveyUnit: SurveyUnit) => void
+  onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
+  onChangePage: (surveyUnit: SurveyUnit) => void
+  onChangeSurveyUnitState: (params: {
+    surveyUnitId: string
+    newState: QuestionnaireState
+  }) => void
 }
 
 /**
@@ -23,26 +27,51 @@ export function getQueenNavigation({
   changedData,
   lastReachedPage,
   pageTag,
-  quit,
-  definitiveQuit,
-  save,
+  onQuit,
+  onDefinitiveQuit,
+  onChangePage,
+  onChangeSurveyUnitState,
 }: UseQueenNavigationProps) {
+  // handle state to check when it changes
+  const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
+    initialSurveyUnit.stateData?.state ?? null
+  )
   const hasDataChanged = Object.keys(changedData.COLLECTED).length > 0
 
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
 
-  const surveyUnitState = hasDataChanged
-    ? 'INIT'
-    : initialSurveyUnit.stateData?.state ?? null
+  // updates the surveyUnitState
+  const updateState = (newState: QuestionnaireState) => {
+    onChangeSurveyUnitState({
+      surveyUnitId: initialSurveyUnit.id,
+      newState: newState,
+    })
+    setSurveyUnitState(newState)
+  }
 
-  // get the updated SurveyUnit, with possibility to force the state (used for definitive quit which forces the validation)
-  const getUpdatedSurveyUnit = (forcedState?: QuestionnaireState) => {
+  const handleState = (forcedState?: QuestionnaireState) => {
+    // forcedState is used for definitiveQuit which forces the validation
+    if (forcedState) {
+      updateState(forcedState)
+      return forcedState
+    }
+    // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
+    const newState = hasDataChanged ? 'INIT' : surveyUnitState
+    // updates state only if necessary : prevents for calling onChangeSurveyUnitState
+    if (newState !== surveyUnitState) {
+      updateState(newState)
+    }
+    return newState
+  }
+
+  // get the updated SurveyUnit
+  const getUpdatedSurveyUnit = (state: QuestionnaireState) => {
     const surveyUnit = {
       ...initialSurveyUnit,
       data,
       stateData: {
-        state: forcedState ?? surveyUnitState,
+        state: state,
         date: new Date().getTime(),
         currentPage: lastReachedPage ?? '1',
       },
@@ -55,19 +84,24 @@ export function getQueenNavigation({
     if (pageTag === undefined || lastReachedPage === undefined) {
       return
     }
-    const surveyUnit = getUpdatedSurveyUnit()
-    return save(surveyUnit)
+    const state = handleState()
+    const surveyUnit = getUpdatedSurveyUnit(state)
+    return onChangePage(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {
-    const surveyUnit = getUpdatedSurveyUnit()
-    return quit(surveyUnit)
+    const state = handleState()
+    const surveyUnit = getUpdatedSurveyUnit(state)
+    return onQuit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
-    // get the updated SurveyUnit, and forces state to "VALIDATED"
-    const surveyUnit = getUpdatedSurveyUnit('VALIDATED')
-    return definitiveQuit(surveyUnit)
+    // set the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
+    handleState('COMPLETED')
+    // forces the state to VALIDATED
+    const state = handleState('VALIDATED')
+    const surveyUnit = getUpdatedSurveyUnit(state)
+    return onDefinitiveQuit(surveyUnit)
   }
 
   return {

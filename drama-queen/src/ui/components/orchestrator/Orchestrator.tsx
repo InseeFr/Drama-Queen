@@ -15,6 +15,7 @@ import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
+import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -22,10 +23,13 @@ type OrchestratorProps = {
   source: Questionnaire
   surveyUnit: SurveyUnit | undefined
   readonly: boolean
-  quit: (surveyUnit: SurveyUnit) => void
-  definitiveQuit: (surveyUnit: SurveyUnit) => void
-  save: (surveyUnit: SurveyUnit) => void
+  onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
+  onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
+  onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
   getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
+  onChangeSurveyUnitState?:
+    | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
+    | undefined
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -33,10 +37,11 @@ export function Orchestrator(props: OrchestratorProps) {
     source,
     surveyUnit,
     readonly,
-    quit,
-    definitiveQuit,
-    save,
+    onQuit = () => {},
+    onDefinitiveQuit = () => {},
+    onChangePage = () => {},
     getReferentiel,
+    onChangeSurveyUnitState = () => {},
   } = props
   const { classes } = useStyles()
   const { onChange, ref } = useAutoNext()
@@ -67,6 +72,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
+    workersBasePath: `${import.meta.env.BASE_URL}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
@@ -97,9 +103,10 @@ export function Orchestrator(props: OrchestratorProps) {
       changedData: getChangedData(false),
       lastReachedPage,
       pageTag,
-      quit,
-      definitiveQuit,
-      save,
+      onQuit,
+      onDefinitiveQuit,
+      onChangePage,
+      onChangeSurveyUnitState,
     })
 
   const continueProps = useContinueBehavior({
