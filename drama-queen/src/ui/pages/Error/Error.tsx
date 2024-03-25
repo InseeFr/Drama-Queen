@@ -12,7 +12,7 @@ export function ErrorPage() {
     return (
       <ErrorComponent
         message={`Erreur ${error.status} : 
-        ${error.error?.message}`}
+        ${error.statusText}`}
       />
     )
   }

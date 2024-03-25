@@ -1,8 +1,10 @@
+import type { useLunatic } from '@inseefr/lunatic'
 import { Breadcrumbs, Button } from '@mui/material'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
 type BreadCrumbProps = {
+  //This type must be extracted from Lunatic
   hierarchy?: {
     sequence: {
       label: ReactNode
@@ -15,12 +17,7 @@ type BreadCrumbProps = {
       page: string
     }
   }
-  goToPage: (page: {
-    page: string
-    iteration?: number | undefined
-    nbIterations?: number | undefined
-    subPage?: number | undefined
-  }) => void
+  goToPage: ReturnType<typeof useLunatic>['goToPage']
 }
 
 export function BreadCrumb(props: BreadCrumbProps) {
