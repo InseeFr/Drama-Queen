@@ -1,4 +1,6 @@
-import { Stack, Typography } from '@mui/material'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+
 import { tss } from 'tss-react/mui'
 
 export function ErrorComponent(props: { message: string }) {

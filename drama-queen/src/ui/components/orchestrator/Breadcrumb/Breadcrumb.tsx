@@ -1,10 +1,11 @@
 import type { useLunatic } from '@inseefr/lunatic'
-import { Breadcrumbs, Button } from '@mui/material'
+import Button from '@mui/material/Button'
+import Breadcrumbs from '@mui/material/Breadcrumbs'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
 type BreadCrumbProps = {
-  //This type must be extracted from Lunatic
+  //This type should be extracted from lunatic
   hierarchy?: {
     sequence: {
       label: ReactNode

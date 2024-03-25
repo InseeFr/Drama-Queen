@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import type { OverviewItem } from '../../lunaticType'

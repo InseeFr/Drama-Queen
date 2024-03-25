@@ -1,6 +1,7 @@
 import { tss } from 'tss-react/mui'
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
-import { Stack, Typography } from '@mui/material'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
 type NavBarProps = {
   page: string

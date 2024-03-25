@@ -1,5 +1,7 @@
 import { useLunatic } from '@inseefr/lunatic'
-import { Button, Stack, Typography } from '@mui/material'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { isIterationReachable } from 'ui/components/orchestrator/tools/functions'

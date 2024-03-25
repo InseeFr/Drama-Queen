@@ -1,7 +1,9 @@
 import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
-import { Stack, Typography } from '@mui/material'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from 'ui/constants'
 import { ShortCut } from '../ShortCut/ShortCut'
 

@@ -6,7 +6,7 @@ import {
   useLunatic,
   LunaticComponents,
 } from '@inseefr/lunatic'
-import { Stack } from '@mui/material'
+import Stack from '@mui/material/Stack'
 import { useLunaticStyles } from './lunaticStyle'
 import { Continue } from './buttons/Continue/Continue'
 import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'

@@ -1,4 +1,6 @@
-import { Button, Stack, Typography } from '@mui/material'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { ShortCut } from '../ShortCut/ShortCut'
 
