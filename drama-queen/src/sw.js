@@ -14,10 +14,8 @@ import { createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching";
 //import { CacheFirst, NetworkFirst } from "workbox-strategies";
 
 self._QUEEN_URL = import.meta.env.VITE_QUEEN_URL;
-self._QUEEN_V2_URL = import.meta.env.VITE_QUEEN_V2_URL;
 
 importScripts(`${self._QUEEN_URL}/queen-service-worker.js`);
-importScripts(`${self._QUEEN_V2_URL}/queen-service-worker.js`);
 
 clientsClaim();
 

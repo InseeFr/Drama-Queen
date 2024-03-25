@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { type RoutingStrategy, createRouter } from 'ui/routing/createRouter'
-import { injectLegacyEntryQueen } from 'injectLegacyQueens'
+import { injectLegacyEntryQueen } from 'injectLegacyQueen'
 import CircularProgress from '@mui/material/CircularProgress'
 import { createCoreProvider } from 'core'
 import { RouterProvider } from 'react-router-dom'

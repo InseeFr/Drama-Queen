@@ -1,9 +1,7 @@
 /* eslint-disable no-restricted-globals */
 self._QUEEN_URL = import.meta.env.VITE_QUEEN_URL;
-self._QUEEN_V2_URL = import.meta.env.VITE_QUEEN_V2_URL;
 
 importScripts(`${self._QUEEN_URL}/queen-service-worker.js`);
-importScripts(`${self._QUEEN_V2_URL}/queen-service-worker.js`);
 
 const getDramaQueenUrlRegex = (url) => {
   return url

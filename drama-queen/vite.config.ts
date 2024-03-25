@@ -5,7 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({}) => {
   return {
     define: {
       LUNATIC_VERSION: JSON.stringify(
