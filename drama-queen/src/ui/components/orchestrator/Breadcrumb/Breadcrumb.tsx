@@ -1,8 +1,8 @@
-import type { useLunatic } from '@inseefr/lunatic'
 import Button from '@mui/material/Button'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
+import type { GoToPage } from '../lunaticType'
 
 type BreadCrumbProps = {
   //This type should be extracted from lunatic
@@ -18,7 +18,7 @@ type BreadCrumbProps = {
       page: string
     }
   }
-  goToPage: ReturnType<typeof useLunatic>['goToPage']
+  goToPage: GoToPage
 }
 
 export function BreadCrumb(props: BreadCrumbProps) {
