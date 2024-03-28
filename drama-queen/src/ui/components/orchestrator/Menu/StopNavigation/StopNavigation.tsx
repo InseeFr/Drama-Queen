@@ -4,6 +4,7 @@ import { tss } from 'tss-react/mui'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import { QuitModal } from 'ui/components/QuitModal'
+import { useTranslation } from 'i18n'
 
 type StopNavigationProps = {
   quit: () => void
@@ -18,30 +19,31 @@ type StopItem = {
 export function StopNavigation(props: StopNavigationProps) {
   const { quit, definitiveQuit } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
+  const { t: t2 } = useTranslation('modalMessage')
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
 
   const stopItems: StopItem[] = [
     {
       definitive: true,
-      label:
-        "Arrêt définitif de l'interview (refus, impossibilité de continuer, ...)",
+      label: t('definitiveQuestionnaireStop'),
     },
     {
       definitive: false,
-      label: "Arrêt provisoire de l'interview",
+      label: t('temporaryQuestionnaireStop'),
     },
   ]
 
   const quitModalTitle = isDefinitiveModal
-    ? 'Arrêt définitif'
-    : 'Arrêt provisoire'
+    ? t2('definitiveQuitTitle')
+    : t2('temporaryQuitTitle')
   const quitModalContent = isDefinitiveModal
-    ? 'Confirmez-vous l’arrêt définitif du questionnaire ?'
-    : 'Vous allez sortir du questionnaire'
+    ? t2('definitiveQuitContent')
+    : t2('temporaryQuitContent')
   const quitModalValidateLabel = isDefinitiveModal
-    ? "Valider l'arrêt définitif"
-    : 'Valider'
+    ? t2('definitiveQuitValidate')
+    : t2('temporaryQuitValidate')
 
   const quitModalOnOpen = (definitive: boolean) => {
     setIsOpenModal(true)
@@ -60,7 +62,7 @@ export function StopNavigation(props: StopNavigationProps) {
   return (
     <Stack className={classes.navigationContainer}>
       <Typography variant="overline" className={classes.typography}>
-        Quelle est la nature de l'arrêt ?
+        {t('questionnaireStopNature')}
       </Typography>
       <Stack>
         {stopItems.map((item, index) => (

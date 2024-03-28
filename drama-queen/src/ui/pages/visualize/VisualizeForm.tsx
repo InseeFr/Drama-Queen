@@ -5,11 +5,11 @@ import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useForm } from 'react-hook-form'
-import { useTranslate } from 'ui/hooks/useTranslate'
 import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
 import { encodeParams } from './encodeParams'
+import { useTranslation } from 'i18n'
 
 export type FormValues = {
   questionnaire: string
@@ -19,7 +19,7 @@ export type FormValues = {
 }
 
 export function VisualizeForm() {
-  const { t } = useTranslate()
+  const { t } = useTranslation('visualizeMessage')
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
   const [, setSearchParams] = useSearchParams()
@@ -32,20 +32,20 @@ export function VisualizeForm() {
       <Stack spacing={3} alignItems="center">
         <Stack spacing={2}>
           <Typography variant="h3" className={classes.title}>
-            {t('vizu')}
+            {t('visualizePage')}
           </Typography>
           <TextField
             {...register('questionnaire')}
             name="questionnaire"
             id="questionnaire-url-form"
-            label={t('vizu.input.survey.label')}
-            helperText={t('vizu.input.survey.helper')}
+            label={t('inputSurveyLabel')}
+            helperText={t('inputSurveyHelper')}
           />
           <TextField
             {...register('data')}
             id="data-url-form"
-            label={t('vizu.input.data.label')}
-            helperText={t('vizu.input.data.helper')}
+            label={t('inputDataLabel')}
+            helperText={t('inputDataHelper')}
           />
           <TextField
             {...register('nomenclature', {
@@ -53,8 +53,8 @@ export function VisualizeForm() {
                 value ? (JSON.parse(value) as Record<string, string>) : null,
             })}
             id="nomenclature-url-form"
-            label={t('vizu.input.nomenclatures.label')}
-            helperText={t('vizu.input.nomenclatures.helper')}
+            label={t('inputNomenclatureLabel')}
+            helperText={t('inputNomenclatureHelper')}
           />
         </Stack>
         <Stack direction={'row'} alignItems="center">
@@ -62,11 +62,11 @@ export function VisualizeForm() {
             {...register('readonly')}
             id="readonly"
             control={<Switch />}
-            label="Lecture Seul"
+            label={t('readonlyLabel')}
           />
         </Stack>
         <Button variant="contained" type="submit">
-          {t('vizu.button.label')}
+          {t('visualizeButtonLabel')}
         </Button>
       </Stack>
     </form>

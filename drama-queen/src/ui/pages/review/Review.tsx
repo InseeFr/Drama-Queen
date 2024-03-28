@@ -1,4 +1,5 @@
 import { useCore } from 'core'
+import { useTranslation } from 'i18n'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
@@ -9,6 +10,7 @@ export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
   const loaderData = useLoaderData() as Awaited<ReturnType<typeof reviewLoader>>
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false)
+  const { t } = useTranslation('modalMessage')
 
   if (!loaderData.isQueenV2) {
     return <queen-app />
@@ -24,10 +26,9 @@ export function Review() {
 
   const quitModalOnClose = () => setIsQuitModalOpen(false)
 
-  const quitModalTitle = 'Sortie du questionnaire'
+  const quitModalTitle = t('reviewQuitTitle')
 
-  const quitModalContent =
-    "Si vous souhaitez sortir du questionnaire, veuillez fermer l'onglet actuel."
+  const quitModalContent = t('reviewQuitContent')
 
   return (
     <>

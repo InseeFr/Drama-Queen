@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
-import { useTranslate } from 'ui/hooks/useTranslate'
 import { LoadingDisplay } from './LoadingDisplay'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'i18n'
 
 export function SynchronizeData() {
-  const { t } = useTranslate()
+  const { t } = useTranslation('synchronizeMessage')
   const navigate = useNavigate()
 
   const {
@@ -51,7 +51,7 @@ export function SynchronizeData() {
               label: undefined,
             },
           ]}
-          syncStepTitle={t('sync.upload')}
+          syncStepTitle={t('uploadingData')}
         />
       )}
       {isDownloading && (
@@ -59,18 +59,18 @@ export function SynchronizeData() {
           progressBars={[
             {
               progress: surveyProgress,
-              label: t('sync.download.questionnaires'),
+              label: t('questionnairesProgress'),
             },
             {
               progress: nomenclatureProgress,
-              label: t('sync.download.nomenclatures'),
+              label: t('nomenclaturesProgress'),
             },
             {
               progress: surveyUnitProgress,
-              label: t('sync.download.surveyUnits'),
+              label: t('surveyUnitsProgress'),
             },
           ]}
-          syncStepTitle={t('sync.download')}
+          syncStepTitle={t('downloadingData')}
         />
       )}
     </>

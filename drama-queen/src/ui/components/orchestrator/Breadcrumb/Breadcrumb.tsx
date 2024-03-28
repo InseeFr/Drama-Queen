@@ -3,6 +3,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 import type { GoToPage } from '../lunaticType'
+import { useTranslation } from 'i18n'
 
 type BreadCrumbProps = {
   //This type should be extracted from lunatic
@@ -24,6 +25,7 @@ type BreadCrumbProps = {
 export function BreadCrumb(props: BreadCrumbProps) {
   const { hierarchy, goToPage } = props
   const { classes, cx } = useStyles()
+  const { t } = useTranslation('navigationMessage')
   const { sequence, subSequence } = hierarchy ?? {}
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
@@ -38,7 +40,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
             classes.breadcrumbButton,
             !subSequence && classes.lastButton
           )}
-          title={`Aller vers la séquence ${sequence.label}`}
+          title={`${t('goToSequence')} ${sequence.label}`}
           disableRipple
           onClick={goToSequencePage}
         >
@@ -52,7 +54,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
             classes.subsequenceButton,
             classes.lastButton
           )}
-          title={`Aller vers la sous-séquence ${subSequence.label}`}
+          title={`${t('goToSubSequence')} ${subSequence.label}`}
           disableRipple
           onClick={goToSubSequencePage}
         >

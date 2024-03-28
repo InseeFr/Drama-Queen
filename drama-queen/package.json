@@ -25,6 +25,7 @@
     "dexie": "^3.2.7",
     "dexie-react-hooks": "^1.1.7",
     "evt": "^2.5.7",
+    "i18nifty": "^3.2.1",
     "jwt-decode": "^4.0.0",
     "oidc-spa": "^4.4.1",
     "react": "^18.2.0",

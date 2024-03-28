@@ -1,10 +1,12 @@
 import React from 'react'
 import './env.css'
+import { useTranslation } from 'i18n'
 
 export function DisplayEnvValues() {
+  const { t } = useTranslation('envValuesMessage')
   return (
     <div className="App">
-      <h1>Les variables d'environnements</h1>
+      <h1>{t('envVariables')}</h1>
       <div className="card">
         <p className="read-the-docs">
           {Object.entries(import.meta.env)
