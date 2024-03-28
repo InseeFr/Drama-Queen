@@ -140,7 +140,7 @@ export function Menu(props: MenuProps) {
           </Stack>
           <Stack className={classes.version}>
             <Typography>
-              Queen : {import.meta.env.VITE_APP_VERSION} | Lunatic :{' '}
+              Queen : {APP_VERSION} | Lunatic :{' '}
               {lunaticVersion}
             </Typography>
           </Stack>

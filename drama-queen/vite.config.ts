@@ -11,6 +11,7 @@ export default defineConfig(({}) => {
       LUNATIC_VERSION: JSON.stringify(
         process.env.npm_package_dependencies__inseefr_lunatic
       ),
+      APP_VERSION: JSON.stringify(process.env.npm_package_version),
     },
     plugins: [
       react(),
