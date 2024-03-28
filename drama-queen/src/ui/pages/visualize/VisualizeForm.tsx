@@ -9,7 +9,7 @@ import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
 import { encodeParams } from './encodeParams'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 export type FormValues = {
   questionnaire: string

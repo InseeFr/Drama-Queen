@@ -4,7 +4,7 @@ import { tss } from 'tss-react/mui'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import { QuitModal } from 'ui/components/QuitModal'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type StopNavigationProps = {
   quit: () => void

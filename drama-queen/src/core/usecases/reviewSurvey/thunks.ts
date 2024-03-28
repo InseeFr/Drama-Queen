@@ -1,7 +1,6 @@
 import type { Thunks } from 'core/bootstrap'
 import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
-import { AxiosError } from 'axios'
-import { getTranslation } from 'i18n/i18n'
+import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('errorMessage')
 

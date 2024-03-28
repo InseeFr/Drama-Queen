@@ -3,7 +3,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 import type { GoToPage } from '../lunaticType'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type BreadCrumbProps = {
   //This type should be extracted from lunatic

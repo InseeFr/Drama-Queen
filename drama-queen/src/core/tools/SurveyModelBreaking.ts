@@ -1,5 +1,5 @@
 import type { Questionnaire } from 'core/model'
-import { getTranslation } from 'i18n/i18n'
+import { getTranslation } from 'i18n'
 
 const lunaticModelVersionBreaking = '2.2.2'
 

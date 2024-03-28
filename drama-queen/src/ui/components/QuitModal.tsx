@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type QuitModalProps = {
   isOpen: boolean

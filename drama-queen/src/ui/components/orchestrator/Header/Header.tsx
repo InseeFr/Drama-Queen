@@ -15,7 +15,7 @@ import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 import type { useLunatic } from '@inseefr/lunatic'
 import type { Overview } from '../lunaticType'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type HeaderProps = {
   questionnaireTitle: string

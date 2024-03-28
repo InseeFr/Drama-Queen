@@ -1,6 +1,6 @@
 import React from 'react'
 import './env.css'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 export function DisplayEnvValues() {
   const { t } = useTranslation('envValuesMessage')

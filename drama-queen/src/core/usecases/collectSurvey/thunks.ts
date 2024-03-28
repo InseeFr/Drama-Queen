@@ -6,7 +6,7 @@ import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
 } from './eventSender'
-import { getTranslation } from 'i18n/i18n'
+import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('errorMessage')
 

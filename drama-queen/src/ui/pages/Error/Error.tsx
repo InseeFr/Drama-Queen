@@ -1,4 +1,4 @@
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import { ErrorComponent } from 'ui/components/ErrorComponent'
 

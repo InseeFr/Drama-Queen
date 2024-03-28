@@ -1,5 +1,5 @@
 import { useCore } from 'core'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 import { useState } from 'react'
 import { QuitModal } from 'ui/components/QuitModal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'

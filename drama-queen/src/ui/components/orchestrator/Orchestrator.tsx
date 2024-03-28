@@ -16,7 +16,7 @@ import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
 import { getinitialSurveyUnit } from './tools/functions'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 

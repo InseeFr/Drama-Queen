@@ -3,7 +3,7 @@ import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
 import { LoadingDisplay } from './LoadingDisplay'
 import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 export function SynchronizeData() {
   const { t } = useTranslation('synchronizeMessage')

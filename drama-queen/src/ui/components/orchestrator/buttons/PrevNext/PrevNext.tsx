@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from 'ui/constants'
 import { ShortCut } from '../ShortCut/ShortCut'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type PrevNextProps = {
   isFirstPage: boolean

@@ -10,7 +10,7 @@ import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { Overview, OverviewItem } from '../lunaticType'
-import { useTranslation } from 'i18n/i18n'
+import { useTranslation } from 'i18n'
 
 type MenuProps = {
   isDrawerOpen: boolean
