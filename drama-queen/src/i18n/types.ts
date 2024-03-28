@@ -7,9 +7,7 @@ import type {
   synchronizeMessage,
   visualizeMessage,
 } from './componentKeys'
-import type { fallbackLanguage } from './i18n'
-
-export type Language = 'fr' | 'en'
+import type { fallbackLanguage, Language } from './i18n'
 
 export type ErrorMessage =
   | 'error'

@@ -1,10 +1,12 @@
 import { createI18nApi, declareComponentKeys } from 'i18nifty'
-import type { ComponentKey, Language } from './types'
+import type { ComponentKey } from './types'
 export { declareComponentKeys }
 
-export const languages: Language[] = ['fr', 'en']
+const languages = ['fr', 'en'] as const
 
-export const fallbackLanguage: Language = 'fr'
+export const fallbackLanguage = 'fr'
+
+export type Language = (typeof languages)[number]
 
 export const {
   useTranslation,
