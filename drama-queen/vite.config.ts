@@ -59,16 +59,14 @@ export default defineConfig(({}) => {
           background_color: '#ffffff',
           display: 'standalone',
           orientation: 'portrait',
-          scope: '/',
-          start_url: '/',
           icons: [
             {
-              src: '/android-chrome-192x192.png',
+              src: 'android-chrome-192x192.png',
               sizes: '192x192',
               type: 'image/png',
             },
             {
-              src: '/android-chrome-256x256.png',
+              src: 'android-chrome-256x256.png',
               sizes: '256x256',
               type: 'image/png',
             },
@@ -78,10 +76,9 @@ export default defineConfig(({}) => {
     ],
     base: '/queen',
     build: {
-      //   modulePreload: false,
       target: 'esnext',
       minify: true,
-      //   cssCodeSplit: false,
+      sourcemap: true,
     },
   }
 })
