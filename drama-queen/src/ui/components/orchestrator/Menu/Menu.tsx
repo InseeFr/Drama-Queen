@@ -10,6 +10,7 @@ import { StopNavigation } from './StopNavigation/StopNavigation'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import type { Overview, OverviewItem } from '../lunaticType'
+import { useTranslation } from 'i18n/i18n'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -27,7 +28,10 @@ type MenuProps = {
   definitiveQuit: () => void
 }
 
-type MenuItem = 'Enquête' | 'Arrêt'
+type MenuItem = {
+  type: 'survey' | 'stop'
+  label: string
+}
 
 export function Menu(props: MenuProps) {
   const {
@@ -40,35 +44,41 @@ export function Menu(props: MenuProps) {
     quit,
     definitiveQuit,
   } = props
-  const [selectedMenuType, setSelectedMenuType] = useState<MenuItem>()
-  const [selectedSequence, setSelectedSequence] = useState<OverviewItem>()
+  const [selectedMenuItem, setSelectedMenuItem] = useState<
+    MenuItem | undefined
+  >(undefined)
+  const [selectedSequence, setSelectedSequence] = useState<
+    OverviewItem | undefined
+  >(undefined)
 
   const { classes, theme, cx } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
   const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
 
-  const menuItems: Array<MenuItem> = readonly
-    ? ['Enquête']
-    : ['Enquête', 'Arrêt']
+  const menuItems: MenuItem[] = [
+    { type: 'survey', label: t('surveyButton') },
+    ...(readonly ? [] : [{ type: 'stop', label: t('stopButton') } as MenuItem]),
+  ]
 
   useEffect(() => {
     // prevents drawer to stay extanded when reopening it
     if (!isDrawerOpen) {
-      setSelectedMenuType(undefined)
+      setSelectedMenuItem(undefined)
     }
     // close the third menu panel when closing survey navigation
-    if (selectedMenuType !== 'Enquête') {
+    if (selectedMenuItem?.type !== 'survey') {
       setSelectedSequence(undefined)
     }
-  }, [isDrawerOpen, selectedMenuType])
+  }, [isDrawerOpen, selectedMenuItem])
 
-  const toggleExpandedMenu = (type: MenuItem) => {
-    if (selectedMenuType === type) {
-      return setSelectedMenuType(undefined)
+  const toggleExpandedMenu = (menuItem: MenuItem) => {
+    if (selectedMenuItem?.type === menuItem.type) {
+      return setSelectedMenuItem(undefined)
     }
-    return setSelectedMenuType(type)
+    return setSelectedMenuItem(menuItem)
   }
 
   const toggleExpandedSubMenu = (sequence: OverviewItem) => {
@@ -104,26 +114,26 @@ export function Menu(props: MenuProps) {
 
   return (
     <Stack className={classes.menuContainer}>
-      {(!selectedMenuType || matchesMdBreackpoint) && (
+      {(!selectedMenuItem || matchesMdBreackpoint) && (
         <Stack className={classes.menuPanel}>
           <Stack className={classes.navigationContainer}>
             <Typography
               variant="overline"
               className={classes.goToNavigationTypography}
             >
-              Allez vers ...
+              {t('goTo')}
             </Typography>
             <Stack>
-              {menuItems.map((type, index) => (
+              {menuItems.map((menuItem, index) => (
                 <MenuNavigationButton
-                  key={`${type}-${index}`}
+                  key={`${menuItem.type}-${index}`}
                   className={
-                    selectedMenuType === type ? classes.itemOpen : undefined
+                    selectedMenuItem === menuItem ? classes.itemOpen : undefined
                   }
-                  label={type}
+                  label={menuItem.label}
                   endIcon={<ChevronRightIcon />}
                   autofocus={index === 0}
-                  onClick={() => toggleExpandedMenu(type)}
+                  onClick={() => toggleExpandedMenu(menuItem)}
                 />
               ))}
             </Stack>
@@ -136,15 +146,15 @@ export function Menu(props: MenuProps) {
           </Stack>
         </Stack>
       )}
-      {selectedMenuType && (!selectedSequence || matchesMdBreackpoint) && (
+      {selectedMenuItem && (!selectedSequence || matchesMdBreackpoint) && (
         <Stack className={cx(classes.expanded, classes.expandedMenu)}>
           <MenuNavigationButton
-            label="Retour"
+            label={t('back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
-            onClick={() => toggleExpandedMenu(selectedMenuType)}
+            onClick={() => toggleExpandedMenu(selectedMenuItem)}
           />
-          {selectedMenuType === 'Enquête' && (
+          {selectedMenuItem.type === 'survey' && (
             <Stack className={classes.navigationContainer}>
               <SequenceNavigation
                 questionnaireTitle={questionnaireTitle}
@@ -155,7 +165,7 @@ export function Menu(props: MenuProps) {
             </Stack>
           )}
 
-          {selectedMenuType === 'Arrêt' && (
+          {selectedMenuItem.type === 'stop' && (
             <Stack className={classes.navigationContainer}>
               <StopNavigation quit={quit} definitiveQuit={definitiveQuit} />
             </Stack>
@@ -165,7 +175,7 @@ export function Menu(props: MenuProps) {
       {selectedSequence && (
         <Stack className={classes.expanded}>
           <MenuNavigationButton
-            label="Retour"
+            label={t('back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedSubMenu(selectedSequence)}
