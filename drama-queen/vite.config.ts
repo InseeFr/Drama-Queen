@@ -35,9 +35,6 @@ export default defineConfig(({}) => {
         //Generate the external service worker for pearl
         injectRegister: false,
         strategies: 'injectManifest',
-        // injectManifest: {
-        //   injectionPoint: undefined,
-        // },
         manifest: false,
         srcDir: 'src',
         filename: 'queen-service-worker.js',
