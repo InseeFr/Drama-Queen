@@ -2,6 +2,9 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
 import type { GoToPage } from '../lunaticType'
+import { getTranslation } from 'i18n/i18n'
+
+const { t } = getTranslation('navigationMessage')
 
 type ContinueAction =
   | 'continue'
@@ -83,13 +86,13 @@ export function useContinueBehavior({
 function getLabelFromAction(action: ContinueAction): string {
   switch (action) {
     case 'quit':
-      return 'quitter'
+      return t('quit')
     case 'saveAndQuit':
-      return 'valider et quitter'
+      return t('validateAndQuit')
     case 'fastForward':
-      return "suite de l'entretien"
+      return t('fastForward')
     default:
-      return 'continuer'
+      return t('continue')
   }
 }
 

@@ -1,7 +1,9 @@
+import { useTranslation } from 'i18n/i18n'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import { ErrorComponent } from 'ui/components/ErrorComponent'
 
 export function ErrorPage() {
+  const { t } = useTranslation('errorMessage')
   const error = useRouteError()
 
   if (error instanceof Error) {
@@ -11,7 +13,7 @@ export function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     return (
       <ErrorComponent
-        message={`Erreur ${error.status} : 
+        message={`${t('error')} ${error.status} :
         ${error.statusText}`}
       />
     )

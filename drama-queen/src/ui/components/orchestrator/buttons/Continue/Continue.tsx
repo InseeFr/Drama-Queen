@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { ShortCut } from '../ShortCut/ShortCut'
+import { useTranslation } from 'i18n/i18n'
 
 type ContinueProps = {
   label: string
@@ -15,6 +16,7 @@ type ContinueProps = {
 export function Continue(props: ContinueProps) {
   const { label, endIcon, shortCutKey, shortCutLabel, onContinue } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   return (
     <Stack direction={'row'} className={classes.continueWrapper}>
@@ -23,7 +25,7 @@ export function Continue(props: ContinueProps) {
         <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
       </Button>
       <Typography variant="caption" color="#777777">
-        appuyer sur
+        {t('continueHelper')}
       </Typography>
       <Typography variant="caption">{shortCutLabel}</Typography>
     </Stack>

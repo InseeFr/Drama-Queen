@@ -1,6 +1,9 @@
 import type { Questionnaire } from 'core/model'
+import { getTranslation } from 'i18n/i18n'
 
 const lunaticModelVersionBreaking = '2.2.2'
+
+const { t } = getTranslation('errorMessage')
 
 const semverCompare = new Intl.Collator('en', { numeric: true }).compare
 
@@ -16,9 +19,7 @@ export const isSurveyCompatibleWithQueenV2 = (params: {
     questionnaire: { lunaticModelVersion },
   } = params
   if (lunaticModelVersion === undefined) {
-    console.info(
-      'The survey has no lunaticModelVersion field, so by default we redirect to Queen v2'
-    )
+    console.info(t('lunaticModelVersionNotFound'))
     return true
   }
 

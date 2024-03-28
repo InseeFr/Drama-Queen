@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from 'ui/constants'
 import { ShortCut } from '../ShortCut/ShortCut'
+import { useTranslation } from 'i18n/i18n'
 
 type PrevNextProps = {
   isFirstPage: boolean
@@ -26,6 +27,7 @@ export function PrevNext(props: PrevNextProps) {
     goNext,
   } = props
   const { classes, cx } = useStyles()
+  const { t } = useTranslation('navigationMessage')
 
   // we always display nextButton on readonly mode
   const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
@@ -52,7 +54,7 @@ export function PrevNext(props: PrevNextProps) {
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          PREC.
+          {t('previousHelper')}
         </Typography>
       </Stack>
 
@@ -69,7 +71,7 @@ export function PrevNext(props: PrevNextProps) {
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          SUIV.
+          {t('nextHelper')}
         </Typography>
       </Stack>
     </Stack>

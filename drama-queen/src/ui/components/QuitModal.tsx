@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
+import { useTranslation } from 'i18n/i18n'
 
 type QuitModalProps = {
   isOpen: boolean
@@ -30,6 +31,7 @@ export function QuitModal(props: QuitModalProps) {
     onValidate,
   } = props
   const { classes } = useStyles()
+  const { t } = useTranslation('modalMessage')
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -52,7 +54,7 @@ export function QuitModal(props: QuitModalProps) {
           autoFocus={!isValidation}
           onClick={onClose}
         >
-          Annuler
+          {t('cancel')}
         </Button>
         {isValidation && (
           <Button

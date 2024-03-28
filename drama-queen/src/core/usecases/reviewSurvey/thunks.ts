@@ -1,6 +1,9 @@
 import type { Thunks } from 'core/bootstrap'
 import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
 import { AxiosError } from 'axios'
+import { getTranslation } from 'i18n/i18n'
+
+const { t } = getTranslation('errorMessage')
 
 export const name = 'reviewSurvey'
 
@@ -14,8 +17,7 @@ export const thunks = {
 
       const { questionnaireId, surveyUnitId } = params
 
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
+      const questionnairePromise = queenApi.getQuestionnaire(questionnaireId)
 
       const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
         isSurveyCompatibleWithQueenV2({ questionnaire })
@@ -27,7 +29,10 @@ export const thunks = {
         .then((surveyUnit) => {
           if (surveyUnit.questionnaireId !== questionnaireId) {
             throw new Error(
-              `L'unité enquêtée ${surveyUnit.id} n'est pas associée au questionnaire ${questionnaireId}.`
+              t('wrongQuestionnaire', {
+                surveyUnitId,
+                questionnaireId,
+              })
             )
           }
           return surveyUnit
