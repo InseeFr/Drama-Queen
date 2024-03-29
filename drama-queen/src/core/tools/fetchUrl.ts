@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { handleAxiosError } from './axiosError'
 
 /**
  *
@@ -12,6 +13,7 @@ export async function fetchUrl<T>(params: { url: string }) {
     .then(({ data }) => data)
     .catch((error) => {
       console.error(`An error occured, we could not retrieve ${url}`, error)
-      throw error
+      if (!(error instanceof AxiosError)) throw error
+      throw handleAxiosError(error)
     })
 }

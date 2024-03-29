@@ -2,6 +2,15 @@ import type { Translations } from '../types'
 
 export const translations: Translations<'fr'> = {
   errorMessage: {
+    '400': 'Requête invalide.',
+    '401':
+      "Vous n'êtes pas connecté. Veuillez vous connecter pour accéder à cette ressource.",
+    '403': "Vous n'êtes pas autorisé à accéder aux données demandées",
+    '404': 'Ressource(s) non trouvée(s).',
+    '500': 'Erreur interne du serveur.',
+    '502': 'Passerelle incorrecte.',
+    '503': 'Service indisponible.',
+    '504': "Délai d'attente de la passerelle expiré.",
     error: 'Erreur',
     errorOccured: 'Une erreur est survenue',
     shortUnknownError: 'Erreur inconnue',

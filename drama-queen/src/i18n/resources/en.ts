@@ -2,6 +2,14 @@ import type { Translations } from '../types'
 
 export const translations: Translations<'en'> = {
   errorMessage: {
+    '400': 'Invalid request.',
+    '401': 'You are not logged in. Please log in to access this resource.',
+    '403': 'You are not authorized to access the requested data.',
+    '404': 'Resource(s) not found.',
+    '500': 'Internal server error.',
+    '502': 'Bad gateway.',
+    '503': 'Service unavailable.',
+    '504': 'Gateway timeout.',
     error: 'Error',
     errorOccured: 'An error has occured',
     shortUnknownError: 'Unknown error',
