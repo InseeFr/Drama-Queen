@@ -71,7 +71,6 @@ export default defineConfig(({}) => {
         },
       }),
     ],
-    base: '/queen',
     build: {
       target: 'esnext',
       minify: true,
