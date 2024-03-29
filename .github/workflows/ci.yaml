@@ -17,6 +17,7 @@ jobs:
       - name: Copy .env file for drama queen
         env:
           VITE_QUEEN_URL: ${{ vars.VITE_QUEEN_URL }}
+          VITE_QUEEN_API_URL: $${{ vars.VITE_QUEEN_API_URL }}
         run: |
           cp drama-queen/.env drama-queen/.env.build
           sed -i "s#VITE_QUEEN_URL=#VITE_QUEEN_URL=${VITE_QUEEN_URL}#" drama-queen/.env.build
