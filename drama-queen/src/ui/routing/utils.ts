@@ -64,8 +64,5 @@ export function Await<T>(props: AwaitProps<T>): JSX.Element {
   return RrdAwait(props)
 }
 
-export type LoaderData<TLoaderFn extends LoaderFunction> = Awaited<
-  ReturnType<TLoaderFn>
-> extends Response | infer D
-  ? D
-  : never
+export type LoaderData<TLoaderFn extends LoaderFunction> =
+  Awaited<ReturnType<TLoaderFn>> extends Response | infer D ? D : never

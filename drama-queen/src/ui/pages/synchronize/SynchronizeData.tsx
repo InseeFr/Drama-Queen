@@ -2,12 +2,10 @@ import { useEffect } from 'react'
 import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
 import { LoadingDisplay } from './LoadingDisplay'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'i18n'
 
 export function SynchronizeData() {
   const { t } = useTranslation('synchronizeMessage')
-  const navigate = useNavigate()
 
   const {
     hideProgress,
@@ -32,7 +30,8 @@ export function SynchronizeData() {
       (data) => (data.action === 'redirect' ? [data] : null),
       ctx,
       () => {
-        navigate('/')
+        // This is hacky, if anyone has a better solution let's contribute :)
+        ;(window.location as any) = window.location.origin
       }
     )
   }, [])
