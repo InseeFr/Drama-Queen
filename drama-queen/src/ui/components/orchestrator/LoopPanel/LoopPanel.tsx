@@ -22,19 +22,19 @@ export function LoopPanel(props: LoopPanelProps) {
     props
   const { classes, cx } = useStyles()
 
-  if (!loopVariables[0] || !lastReachedPage) {
+  if (!loopVariables[0] || !lastReachedPage || !data.COLLECTED) {
     return null
   }
 
   // find the depending variable of the loop
   const titleVariable = loopVariables[0]
 
-  if (!data.COLLECTED) {
-    return null
-  }
-
   // get its collected value for every iteration
   const titleData = data.COLLECTED[titleVariable]?.COLLECTED as unknown[]
+
+  if (!titleData) {
+    return null
+  }
 
   // panel is disabled if you cannot reach the first subPage of the iteration
   const isDisabledButton = (iteration: number) =>
