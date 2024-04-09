@@ -102,7 +102,7 @@ export function Orchestrator(props: OrchestratorProps) {
     getQueenNavigation({
       initialSurveyUnit,
       data: getData(true) as SurveyUnitData,
-      changedData: getChangedData(false),
+      getChangedData: getChangedData,
       lastReachedPage,
       pageTag,
       onQuit,

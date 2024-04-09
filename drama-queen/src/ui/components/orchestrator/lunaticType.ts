@@ -7,3 +7,4 @@ export type Overview = ReturnType<typeof useLunatic>['overview']
 export type OverviewItem = ItemOf<Overview>
 
 export type GoToPage = ReturnType<typeof useLunatic>['goToPage']
+export type GetChangedData = ReturnType<typeof useLunatic>['getChangedData']
