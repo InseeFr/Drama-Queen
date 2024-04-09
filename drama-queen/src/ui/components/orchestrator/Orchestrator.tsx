@@ -66,7 +66,6 @@ export function Orchestrator(props: OrchestratorProps) {
     pageTag,
     overview,
     hasPageResponse,
-    getData,
     getChangedData,
     loopVariables,
   } = useLunatic(source, initialData, {
@@ -98,17 +97,21 @@ export function Orchestrator(props: OrchestratorProps) {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
-    getQueenNavigation({
-      initialSurveyUnit,
-      getChangedData: getChangedData,
-      lastReachedPage,
-      pageTag,
-      onQuit,
-      onDefinitiveQuit,
-      onChangePage,
-      onChangeSurveyUnitState,
-    })
+  const {
+    isLastReachedPage,
+    surveyUnitData,
+    orchestratorQuit,
+    orchestratorDefinitiveQuit,
+  } = getQueenNavigation({
+    initialSurveyUnit,
+    getChangedData: getChangedData,
+    lastReachedPage,
+    pageTag,
+    onQuit,
+    onDefinitiveQuit,
+    onChangePage,
+    onChangeSurveyUnitState,
+  })
 
   const continueProps = useContinueBehavior({
     readonly,
@@ -167,7 +170,7 @@ export function Orchestrator(props: OrchestratorProps) {
             subPage={subPage}
             iteration={iteration}
             lastReachedPage={lastReachedPage}
-            getData={getData}
+            data={surveyUnitData}
             goToPage={goToPage}
           />
         </Stack>

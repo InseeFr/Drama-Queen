@@ -164,6 +164,7 @@ export function getQueenNavigation({
 
   return {
     isLastReachedPage,
+    surveyUnitData,
     orchestratorQuit,
     orchestratorDefinitiveQuit,
   }

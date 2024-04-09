@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { isIterationReachable } from 'ui/components/orchestrator/tools/functions'
+import type { SurveyUnitData } from 'core/model'
 
 type LoopPanelProps = {
   loopVariables: string[]
@@ -12,12 +13,12 @@ type LoopPanelProps = {
   subPage: number | undefined
   iteration: number | undefined
   lastReachedPage: string | undefined
-  getData: ReturnType<typeof useLunatic>['getData']
+  data: SurveyUnitData
   goToPage: ReturnType<typeof useLunatic>['goToPage']
 }
 
 export function LoopPanel(props: LoopPanelProps) {
-  const { loopVariables, page, iteration, lastReachedPage, getData, goToPage } =
+  const { loopVariables, page, iteration, lastReachedPage, data, goToPage } =
     props
   const { classes, cx } = useStyles()
 
@@ -25,9 +26,13 @@ export function LoopPanel(props: LoopPanelProps) {
     return null
   }
 
-  const data = getData(true)
   // find the depending variable of the loop
   const titleVariable = loopVariables[0]
+
+  if (!data.COLLECTED) {
+    return null
+  }
+
   // get its collected value for every iteration
   const titleData = data.COLLECTED[titleVariable]?.COLLECTED as unknown[]
 
