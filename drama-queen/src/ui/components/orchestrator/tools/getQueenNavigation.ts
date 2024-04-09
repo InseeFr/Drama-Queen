@@ -1,4 +1,3 @@
-import type { LunaticData } from '@inseefr/lunatic'
 import type { SurveyUnit, SurveyUnitData } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { useEffect, useState } from 'react'
@@ -6,7 +5,6 @@ import type { GetChangedData } from '../lunaticType'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
-  data: SurveyUnitData
   lastReachedPage: string | undefined
   pageTag: string
   getChangedData: GetChangedData
@@ -24,7 +22,6 @@ type UseQueenNavigationProps = {
  */
 export function getQueenNavigation({
   initialSurveyUnit,
-  data,
   lastReachedPage,
   pageTag,
   getChangedData,
@@ -38,8 +35,47 @@ export function getQueenNavigation({
     initialSurveyUnit.stateData?.state ?? null
   )
 
+  const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
+    initialSurveyUnit.data
+  )
+
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
+
+  const getHasDataChanged = (changedData: SurveyUnitData) => {
+    if (changedData.COLLECTED) {
+      return Object.keys(changedData.COLLECTED).length > 0
+    }
+    return false
+  }
+
+  // get full data using changedData
+  const getFullData = (
+    currentData: SurveyUnitData,
+    changedData: SurveyUnitData
+  ): SurveyUnitData => {
+    return {
+      CALCULATED: { ...currentData.CALCULATED, ...changedData.CALCULATED },
+      EXTERNAL: { ...currentData.EXTERNAL, ...changedData.EXTERNAL },
+      COLLECTED: { ...currentData.COLLECTED, ...changedData.COLLECTED },
+    }
+  }
+
+  const handleData = () => {
+    const changedData = getChangedData(true) as SurveyUnitData
+    const hasDataChanged = getHasDataChanged(changedData)
+
+    // get updated data
+    const newData = hasDataChanged
+      ? getFullData(surveyUnitData, changedData)
+      : surveyUnitData
+    setSurveyUnitData(newData)
+
+    return {
+      hasDataChanged: hasDataChanged,
+      data: newData,
+    }
+  }
 
   // updates the surveyUnitState
   const updateState = (newState: QuestionnaireState) => {
@@ -48,10 +84,6 @@ export function getQueenNavigation({
       newState: newState,
     })
     setSurveyUnitState(newState)
-  }
-
-  const getHasDataChanged = (changedData: LunaticData) => {
-    return Object.keys(changedData.COLLECTED).length > 0
   }
 
   const handleState = (
@@ -73,7 +105,10 @@ export function getQueenNavigation({
   }
 
   // get the updated SurveyUnit
-  const getUpdatedSurveyUnit = (state: QuestionnaireState) => {
+  const getUpdatedSurveyUnit = (
+    state: QuestionnaireState,
+    data: SurveyUnitData
+  ) => {
     const surveyUnit = {
       ...initialSurveyUnit,
       data,
@@ -91,35 +126,39 @@ export function getQueenNavigation({
     if (pageTag === undefined || lastReachedPage === undefined) {
       return
     }
-    // get the updated data since last page change
-    const changedData = getChangedData(true)
-    const hasDataChanged = getHasDataChanged(changedData)
+    // get updated data
+    const { hasDataChanged, data } = handleData()
 
+    // get updated state
     const state = handleState(hasDataChanged)
-    const surveyUnit = getUpdatedSurveyUnit(state)
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onChangePage(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {
-    // get the updated data since last page change
-    const changedData = getChangedData(true)
-    const hasDataChanged = getHasDataChanged(changedData)
+    // get updated data
+    const { hasDataChanged, data } = handleData()
+
+    // get updated state
     const state = handleState(hasDataChanged)
-    const surveyUnit = getUpdatedSurveyUnit(state)
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onQuit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
-    // get the updated data since last page change
-    const changedData = getChangedData(true)
-    const hasDataChanged = getHasDataChanged(changedData)
-    // calculates the new state
+    // get updated data
+    const { hasDataChanged, data } = handleData()
+
+    // get updated state
     handleState(hasDataChanged)
     // forces the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
     handleState(false, 'COMPLETED')
     // forces the state to VALIDATED
     const state = handleState(false, 'VALIDATED')
-    const surveyUnit = getUpdatedSurveyUnit(state)
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onDefinitiveQuit(surveyUnit)
   }
 

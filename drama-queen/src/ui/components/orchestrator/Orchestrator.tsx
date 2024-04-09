@@ -101,7 +101,6 @@ export function Orchestrator(props: OrchestratorProps) {
   const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
     getQueenNavigation({
       initialSurveyUnit,
-      data: getData(true) as SurveyUnitData,
       getChangedData: getChangedData,
       lastReachedPage,
       pageTag,
