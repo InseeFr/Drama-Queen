@@ -143,7 +143,7 @@ const Synchronize = () => {
                     current={current === 'survey-units'}
                   />
                 )}
-                {!!externalResourceProgress && (
+                {current === 'external' && (
                   <SimpleLabelProgress
                     label={D.waitingLoadingExternalResources}
                     value={externalResourceProgress}

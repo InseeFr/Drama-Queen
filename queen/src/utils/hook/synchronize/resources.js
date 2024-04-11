@@ -1,4 +1,4 @@
-import { getPercent } from 'utils';
+import { chunk, getPercent } from 'utils';
 import {
   CAMPAIGN_WITH_SOUND_KEYWORD,
   EXTERNAL_RESOURCES_BASE_URL,
@@ -141,32 +141,35 @@ export const useSpecialResourcesInCache = updateProgress => {
 
   const getAllResourcesFromManifest = async manifest => {
     // Add capmi url in resources's url
-    const transformManifest = Object.entries(manifest).map(([resourceName, resourceUrl]) => {
-      return [resourceName, `${EXTERNAL_RESOURCES_BASE_URL}/${resourceUrl}`];
+    const transformManifest = Object.entries(manifest).map(([, resourceUrl]) => {
+      return `${EXTERNAL_RESOURCES_BASE_URL}/${resourceUrl}`;
     });
     let i = 0;
 
     // Filter resources from manifest to avoid useless requests in order speed up synchronisation
     // We keep only resources that are not in cache
-    const transformManifestFiltered = await asyncFilter(
-      transformManifest,
-      async ([, resourceUrl]) => {
-        const cacheResponse = await caches.match(resourceUrl);
-        return !(cacheResponse && cacheResponse.ok);
-      }
-    );
+    const transformManifestFiltered = await asyncFilter(transformManifest, async resourceUrl => {
+      const cacheResponse = await caches.match(resourceUrl);
+      return !(cacheResponse && cacheResponse.ok);
+    });
+
+    const transformManifestFilteredChunked = chunk(transformManifestFiltered, 10);
 
     updateProgress(0);
-    await (transformManifestFiltered || []).reduce(async (previousPromise, [, resourceUrl]) => {
+    await (transformManifestFilteredChunked || []).reduce(async (previousPromise, subManifest) => {
       await previousPromise;
 
-      const putExternalResourceInCache = async () => {
-        await getSpecialResource(resourceUrl);
+      const putSubManifestInCache = async () => {
+        await Promise.allSettled(
+          subManifest.map(async resourceUrl => {
+            await getSpecialResource(resourceUrl);
+          })
+        );
       };
 
       i += 1;
-      updateProgress(getPercent(i, transformManifest.length));
-      return putExternalResourceInCache();
+      updateProgress(getPercent(i, transformManifestFilteredChunked.length));
+      return putSubManifestInCache();
     }, Promise.resolve());
     updateProgress(100);
   };
