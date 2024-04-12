@@ -38,9 +38,9 @@
     "workbox-strategies": "^6.1.1"
   },
   "scripts": {
-    "prestart": "npx @inseefr/lunatic@2.7.21 workers",
+    "prestart": "npx @inseefr/lunatic@2.7.21",
     "start": "cross-env PORT=5002 craco start",
-    "prebuild": "npx @inseefr/lunatic@2.7.21 workers",
+    "prebuild": "npx @inseefr/lunatic@2.7.21",
     "build": "craco build && npm run post-build",
     "post-build": "node ./configuration/build/build-sw.js && node ./configuration/build/manage-public-url.js && copy-and-watch configuration/files/* build",
     "test": "craco test",
