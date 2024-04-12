@@ -1,5 +1,6 @@
 import D from 'i18n';
 import { useState } from 'react';
+import { getPercent } from 'utils';
 import { useAPI, useAsyncValue } from 'utils/hook';
 import {
   areExternalResourcesNeeded,
