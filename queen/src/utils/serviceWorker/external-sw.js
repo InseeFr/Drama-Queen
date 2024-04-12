@@ -3,6 +3,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.1/workbox
 const { CacheableResponsePlugin } = workbox.cacheableResponse;
 const { registerRoute } = workbox.routing;
 const { NetworkFirst, CacheFirst } = workbox.strategies;
+const { RangeRequestsPlugin } = workbox.rangeRequests;
 
 const getQueenUrlRegex = url => {
   return url.replace('http', '^http').concat('/(.*)((.js)|(.png)|(.svg))');
