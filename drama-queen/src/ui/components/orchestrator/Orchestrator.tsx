@@ -138,41 +138,41 @@ export function Orchestrator(props: OrchestratorProps) {
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>
-          <Stack className={classes.activeSection}>
-            <Provider>
-              <LunaticComponents
-                components={components}
-                componentProps={() => ({
-                  filterDescription: false,
-                  disabled: readonly,
-                  readOnly: readonly,
-                })}
-                autoFocusKey={pageTag}
-                wrapper={({ children, id, componentType }) => (
-                  <div
-                    className={`${lunaticClasses.lunatic} ${componentType}`}
-                    key={`component-${id}`}
-                  >
-                    {children}
-                  </div>
-                )}
-              />
-            </Provider>
+          <Stack className={classes.centerSection}>
+            <Stack className={classes.activeSection}>
+              <Provider>
+                <LunaticComponents
+                  components={components}
+                  componentProps={() => ({
+                    filterDescription: false,
+                    disabled: readonly,
+                    readOnly: readonly,
+                  })}
+                  autoFocusKey={pageTag}
+                  wrapper={({ children, id, componentType }) => (
+                    <div
+                      className={`${lunaticClasses.lunatic} ${componentType}`}
+                      key={`component-${id}`}
+                    >
+                      {children}
+                    </div>
+                  )}
+                />
+              </Provider>
+            </Stack>
+            <LoopPanel
+              loopVariables={loopVariables}
+              page={page}
+              subPage={subPage}
+              iteration={iteration}
+              lastReachedPage={lastReachedPage}
+              data={surveyUnitData}
+              goToPage={goToPage}
+            />
           </Stack>
           <Stack className={classes.continue}>
             {continueProps.isVisible && <Continue {...continueProps} />}
           </Stack>
-        </Stack>
-        <Stack>
-          <LoopPanel
-            loopVariables={loopVariables}
-            page={page}
-            subPage={subPage}
-            iteration={iteration}
-            lastReachedPage={lastReachedPage}
-            data={surveyUnitData}
-            goToPage={goToPage}
-          />
         </Stack>
         <Stack className={classes.navBarContainer}>
           <NavBar
@@ -204,10 +204,15 @@ const useStyles = tss.create(({ theme }) => ({
     flex: 1,
   },
   mainContainer: {
-    flexGrow: 1,
+    flex: 1,
+  },
+  centerSection: {
+    flexDirection: 'row',
+    flex: 1,
     justifyContent: 'space-between',
   },
   activeSection: {
+    flex: 1,
     height: '100%',
     '& > div:first-of-type': {
       display: 'flex',
