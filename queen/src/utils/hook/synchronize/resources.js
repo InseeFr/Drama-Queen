@@ -116,6 +116,12 @@ export const areExternalResourcesNeeded = async (
 };
 
 export const useSpecialResourcesInCache = updateProgress => {
+  const updatePercent = value => {
+    updateProgress(g => ({ ...g, percent: value }));
+  };
+  const updateStep = value => {
+    updateProgress(g => ({ ...g, step: value }));
+  };
   // Return all available gide bundle questionnaire list of {id, cacheName}
   const getExternalQuestionnaires = async () => {
     const {
@@ -139,7 +145,7 @@ export const useSpecialResourcesInCache = updateProgress => {
     return manifest;
   };
 
-  const getAllResourcesFromManifest = async manifest => {
+  const getAllResourcesFromManifest = async (manifest, cacheName) => {
     // Add capmi url in resources's url
     const transformManifest = Object.entries(manifest).map(([, resourceUrl]) => {
       return `${EXTERNAL_RESOURCES_BASE_URL}/${resourceUrl}`;
@@ -148,30 +154,30 @@ export const useSpecialResourcesInCache = updateProgress => {
 
     // Filter resources from manifest to avoid useless requests in order speed up synchronisation
     // We keep only resources that are not in cache
-    const transformManifestFiltered = await asyncFilter(transformManifest, async resourceUrl => {
-      const cacheResponse = await caches.match(resourceUrl);
-      return !(cacheResponse && cacheResponse.ok);
-    });
+    const cacheForManifest = await caches.open(cacheName);
+    const transformManifestFiltered = cacheForManifest
+      ? await asyncFilter(transformManifest, async resourceUrl => {
+          const cacheResponse = await cacheForManifest.match(resourceUrl);
+          return !(cacheResponse && cacheResponse.ok);
+        })
+      : [...transformManifest];
 
     const transformManifestFilteredChunked = chunk(transformManifestFiltered, 10);
 
-    updateProgress(0);
+    updatePercent(0);
     await (transformManifestFilteredChunked || []).reduce(async (previousPromise, subManifest) => {
       await previousPromise;
 
       const putSubManifestInCache = async () => {
-        await Promise.allSettled(
-          subManifest.map(async resourceUrl => {
-            await getSpecialResource(resourceUrl);
-          })
-        );
+        const cacheForManifest = await caches.open(cacheName);
+        await cacheForManifest.addAll(subManifest);
       };
 
       i += 1;
-      updateProgress(getPercent(i, transformManifestFilteredChunked.length));
+      updatePercent(getPercent(i, transformManifestFilteredChunked.length));
       return putSubManifestInCache();
     }, Promise.resolve());
-    updateProgress(100);
+    updatePercent(100);
   };
 
   const getAndCleanExternalResources = async (listOfCampaigns, listOfExternalQuestionnaires) => {
@@ -188,18 +194,20 @@ export const useSpecialResourcesInCache = updateProgress => {
 
     // (1) Retrive all needed external questionnaire's resources : all questionnaire described by needed list
     // (1.1) Merge all manifest files
-    const mergedManifest = await needed.reduce(async (previousPromise, { id }) => {
-      const finalManifest = await previousPromise;
-      const newManifest = await getManifestResources(id);
-      const transformManifest = Object.fromEntries(
-        Object.entries(newManifest).map(([resourceName, resourceUrl]) => {
-          return [`${id}-${resourceName}`, resourceUrl];
-        })
-      );
-      return { ...finalManifest, ...transformManifest };
-    }, {});
-    // (1.2) Retrieve all resources from mergedManifest
-    await getAllResourcesFromManifest(mergedManifest);
+
+    let i = 0;
+    await needed.reduce(async (previousPromise, { id, cacheName }) => {
+      await previousPromise;
+
+      const getManifestInCache = async () => {
+        const newManifest = await getManifestResources(id);
+        await getAllResourcesFromManifest(newManifest, cacheName);
+      };
+
+      i += 1;
+      updateStep(`${i}/${needed.length}`);
+      return getManifestInCache();
+    }, Promise.resolve());
 
     // (2) Delete cache for all no needed questionnaire : all questionnaire described by noNeeded list
     await noNeeded.reduce(async (previousPromise, { cacheName }) => {

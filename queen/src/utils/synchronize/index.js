@@ -1,6 +1,5 @@
 import D from 'i18n';
 import { useState } from 'react';
-import { getPercent } from 'utils';
 import { useAPI, useAsyncValue } from 'utils/hook';
 import {
   areExternalResourcesNeeded,
@@ -36,7 +35,10 @@ export const useSynchronisation = () => {
   const [campaignProgress, setCampaignProgress] = useState(null);
   const [resourceProgress, setResourceProgress] = useState(0);
   const [surveyUnitProgress, setSurveyUnitProgress] = useState(0);
-  const [externalResourceProgress, setExternalResourceProgress] = useState(0);
+  const [externalResourceProgress, setExternalResourceProgress] = useState({
+    step: '0/0',
+    percent: 0,
+  });
   const [current, setCurrent] = useState(null);
 
   const sendData = useSendSurveyUnits(setSendingProgress);
