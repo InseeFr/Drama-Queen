@@ -1,6 +1,6 @@
 {
   "name": "queen-v2",
-  "version": "1.1.32",
+  "version": "1.1.33",
   "description": "Web application for the management of questionnaires powered by Lunatic",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@axa-fr/react-oidc-context": "^3.1.6",
     "@craco/craco": "7.0.0",
-    "@inseefr/lunatic": "^2.7.21",
+    "@inseefr/lunatic": "2.7.22",
     "@inseefr/trevas": "^0.1.16",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
@@ -38,9 +38,9 @@
     "workbox-strategies": "^6.1.1"
   },
   "scripts": {
-    "prestart": "npx @inseefr/lunatic@2.7.21",
+    "prestart": "npx @inseefr/lunatic@2.7.22",
     "start": "cross-env PORT=5002 craco start",
-    "prebuild": "npx @inseefr/lunatic@2.7.21",
+    "prebuild": "npx @inseefr/lunatic@2.7.22",
     "build": "craco build && npm run post-build",
     "post-build": "node ./configuration/build/build-sw.js && node ./configuration/build/manage-public-url.js && copy-and-watch configuration/files/* build",
     "test": "craco test",
