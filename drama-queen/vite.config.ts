@@ -13,6 +13,7 @@ export default defineConfig(({}) => {
       ),
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
     },
+    base: `${process.env.VITE_BASE_URL}`,
     plugins: [
       react(),
       federation({
