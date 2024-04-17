@@ -13,7 +13,6 @@ import Typography from '@mui/material/Typography'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
-import type { useLunatic } from '@inseefr/lunatic'
 import type { Overview } from '../lunaticType'
 import { useTranslation } from 'i18n'
 
@@ -98,13 +97,12 @@ export function Header(props: HeaderProps) {
         />
       </SwipeableDrawer>
 
-      <Button title={t('backToQuestionnaireStart')}>
+      <Button title={t('backToQuestionnaireStart')} onClick={goToFirstPage}>
         <img
           id="logo"
           src={insee}
           alt="Logo de L'Insee"
           className={classes.headerLogo}
-          onClick={goToFirstPage}
         />
       </Button>
       <Stack className={classes.headerTitle}>
