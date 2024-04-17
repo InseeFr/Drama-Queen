@@ -4,6 +4,7 @@
 import type { Oidc } from 'core/ports/Oidc'
 
 interface ImportMetaEnv {
+  readonly VITE_BASE_URL: string
   readonly VITE_QUEEN_URL: string
   readonly VITE_QUEEN_V2_URL: string
   readonly VITE_QUEEN_API_URL: string

@@ -74,7 +74,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `${import.meta.env.BASE_URL}/workers`,
+    workersBasePath: `${import.meta.env.VITE_BASE_URL}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
