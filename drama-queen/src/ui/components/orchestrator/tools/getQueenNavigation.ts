@@ -1,4 +1,4 @@
-import type { SurveyUnit, SurveyUnitData } from 'core/model'
+import type { CollectedValues, SurveyUnit, SurveyUnitData } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { useEffect, useState } from 'react'
 import type { GetChangedData } from '../lunaticType'
@@ -61,13 +61,53 @@ export function getQueenNavigation({
     }
   }
 
+  // remove null data from COLLECTED data
+  const removeNullCollectedData = (
+    data: SurveyUnitData = {}
+  ): SurveyUnitData => {
+    const { COLLECTED } = data || {}
+
+    if (!COLLECTED) {
+      return data
+    }
+
+    const newCollected: typeof COLLECTED = Object.entries(COLLECTED).reduce(
+      (acc: typeof COLLECTED, [variableName, content]) => {
+        // Reduce each content object to remove null values
+        const cleanedContent: CollectedValues = Object.entries(content).reduce(
+          (accContent, [type, value]) => {
+            // If the value is not null, we keep it
+            if (value !== null) {
+              accContent[type as keyof CollectedValues] = value
+            }
+            return accContent
+          },
+          {} as CollectedValues
+        )
+
+        // if the variable content is not empty, we keep it
+        if (Object.keys(cleanedContent).length > 0) {
+          acc[variableName] = cleanedContent
+        }
+
+        return acc
+      },
+      {}
+    )
+
+    return {
+      ...data,
+      COLLECTED: newCollected,
+    }
+  }
+
   const handleData = () => {
     const changedData = getChangedData(true) as SurveyUnitData
     const hasDataChanged = getHasDataChanged(changedData)
 
     // get updated data
     const newData = hasDataChanged
-      ? getFullData(surveyUnitData, changedData)
+      ? getFullData(surveyUnitData, removeNullCollectedData(changedData))
       : surveyUnitData
     setSurveyUnitData(newData)
 

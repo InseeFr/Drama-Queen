@@ -9,7 +9,7 @@ type VariableType =
   | (string | null | number | boolean)[]
   | null
 
-type CollectedValues = Record<
+export type CollectedValues = Record<
   'COLLECTED' | 'EDITED' | 'FORCED' | 'INPUTED' | 'PREVIOUS',
   VariableType
 >
