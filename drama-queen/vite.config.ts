@@ -35,7 +35,6 @@ export default defineConfig({
       computedEnv: () => ({
         APP_VERSION: process.env.npm_package_version,
       }),
-      injectWorkers: ['queen-service-worker.js'],
     }),
     VitePWA({
       //Generate the external service worker for pearl
