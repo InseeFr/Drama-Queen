@@ -4,7 +4,7 @@
   "version": "2.0.0-rc.10",
   "type": "module",
   "scripts": {
-    "prepare": "vite-envs update-types",
+    "postinstall": "vite-envs update-types",
     "predev": "workers",
     "dev": "vite --port 5000 --strictPort",
     "prebuild": "workers",

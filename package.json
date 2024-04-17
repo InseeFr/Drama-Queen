@@ -8,7 +8,6 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "build:drama-queen": "lerna run build --scope 'drama-queen'",
     "build:queen": "lerna run build --scope 'queen'",
     "serve:drama-queen": "lerna run serve --scope 'drama-queen'",
     "dev:drama-queen": "lerna run dev --scope 'drama-queen'",
