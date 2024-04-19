@@ -31,6 +31,7 @@ type HeaderProps = {
       page: string
     }
   }
+  iteration: number | undefined
   readonly: boolean
   overview: Overview
   goToPage: (page: {
@@ -47,6 +48,7 @@ export function Header(props: HeaderProps) {
   const {
     questionnaireTitle,
     hierarchy,
+    iteration,
     readonly,
     overview,
     goToPage,
@@ -111,7 +113,11 @@ export function Header(props: HeaderProps) {
         <Typography className={classes.questionnaireTitle} variant="h1">
           {questionnaireTitle}
         </Typography>
-        <BreadCrumb hierarchy={hierarchy} goToPage={goToPage} />
+        <BreadCrumb
+          hierarchy={hierarchy}
+          iteration={iteration}
+          goToPage={goToPage}
+        />
       </Stack>
       <Stack className={classes.headerClose}>
         <IconButton
