@@ -84,11 +84,7 @@ export function getQueenNavigation({
           },
           {} as CollectedValues
         )
-
-        // if the variable content is not empty, we keep it
-        if (Object.keys(cleanedContent).length > 0) {
-          acc[variableName] = cleanedContent
-        }
+        acc[variableName] = cleanedContent
 
         return acc
       },
