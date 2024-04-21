@@ -15,7 +15,7 @@
     "@craco/craco": "^6.4.0",
     "@inseefr/lunatic": "0.3.9-experimental",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.0.0",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/styles": "^4.11.3",
     "@testing-library/jest-dom": "^4.2.4",
