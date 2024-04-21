@@ -14,7 +14,7 @@
     "@axa-fr/react-oidc-context": "^3.1.6",
     "@craco/craco": "^6.4.0",
     "@inseefr/lunatic": "0.3.9-experimental",
-    "@material-ui/core": "^4.11.3",
+    "@mui/material": "^5.0.0",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/styles": "^4.11.3",
