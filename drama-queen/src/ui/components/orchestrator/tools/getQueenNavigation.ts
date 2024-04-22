@@ -1,14 +1,13 @@
-import type { LunaticData } from '@inseefr/lunatic'
-import type { SurveyUnit, SurveyUnitData } from 'core/model'
+import type { CollectedValues, SurveyUnit, SurveyUnitData } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { useEffect, useState } from 'react'
+import type { GetChangedData } from '../lunaticType'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
-  data: SurveyUnitData
-  changedData: LunaticData
   lastReachedPage: string | undefined
   pageTag: string
+  getChangedData: GetChangedData
   onQuit: (surveyUnit: SurveyUnit) => void
   onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
   onChangePage: (surveyUnit: SurveyUnit) => void
@@ -23,10 +22,9 @@ type UseQueenNavigationProps = {
  */
 export function getQueenNavigation({
   initialSurveyUnit,
-  data,
-  changedData,
   lastReachedPage,
   pageTag,
+  getChangedData,
   onQuit,
   onDefinitiveQuit,
   onChangePage,
@@ -36,10 +34,84 @@ export function getQueenNavigation({
   const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
     initialSurveyUnit.stateData?.state ?? null
   )
-  const hasDataChanged = Object.keys(changedData.COLLECTED).length > 0
+
+  const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
+    initialSurveyUnit.data
+  )
 
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
+
+  const getHasDataChanged = (changedData: SurveyUnitData) => {
+    if (changedData.COLLECTED) {
+      return Object.keys(changedData.COLLECTED).length > 0
+    }
+    return false
+  }
+
+  // get full data using changedData
+  const getFullData = (
+    currentData: SurveyUnitData,
+    changedData: SurveyUnitData
+  ): SurveyUnitData => {
+    return {
+      CALCULATED: { ...currentData.CALCULATED, ...changedData.CALCULATED },
+      EXTERNAL: { ...currentData.EXTERNAL, ...changedData.EXTERNAL },
+      COLLECTED: { ...currentData.COLLECTED, ...changedData.COLLECTED },
+    }
+  }
+
+  // remove null data from COLLECTED data
+  const removeNullCollectedData = (
+    data: SurveyUnitData = {}
+  ): SurveyUnitData => {
+    const { COLLECTED } = data || {}
+
+    if (!COLLECTED) {
+      return data
+    }
+
+    const newCollected: typeof COLLECTED = Object.entries(COLLECTED).reduce(
+      (acc: typeof COLLECTED, [variableName, content]) => {
+        // Reduce each content object to remove null values
+        const cleanedContent: CollectedValues = Object.entries(content).reduce(
+          (accContent, [type, value]) => {
+            // If the value is not null, we keep it
+            if (value !== null) {
+              accContent[type as keyof CollectedValues] = value
+            }
+            return accContent
+          },
+          {} as CollectedValues
+        )
+        acc[variableName] = cleanedContent
+
+        return acc
+      },
+      {}
+    )
+
+    return {
+      ...data,
+      COLLECTED: newCollected,
+    }
+  }
+
+  const handleData = () => {
+    const changedData = getChangedData(true) as SurveyUnitData
+    const hasDataChanged = getHasDataChanged(changedData)
+
+    // get updated data
+    const newData = hasDataChanged
+      ? getFullData(surveyUnitData, removeNullCollectedData(changedData))
+      : surveyUnitData
+    setSurveyUnitData(newData)
+
+    return {
+      hasDataChanged: hasDataChanged,
+      data: newData,
+    }
+  }
 
   // updates the surveyUnitState
   const updateState = (newState: QuestionnaireState) => {
@@ -50,7 +122,10 @@ export function getQueenNavigation({
     setSurveyUnitState(newState)
   }
 
-  const handleState = (forcedState?: QuestionnaireState) => {
+  const handleState = (
+    hasDataChanged: boolean,
+    forcedState?: QuestionnaireState
+  ) => {
     // forcedState is used for definitiveQuit which forces the validation
     if (forcedState) {
       updateState(forcedState)
@@ -66,7 +141,10 @@ export function getQueenNavigation({
   }
 
   // get the updated SurveyUnit
-  const getUpdatedSurveyUnit = (state: QuestionnaireState) => {
+  const getUpdatedSurveyUnit = (
+    state: QuestionnaireState,
+    data: SurveyUnitData
+  ) => {
     const surveyUnit = {
       ...initialSurveyUnit,
       data,
@@ -84,28 +162,45 @@ export function getQueenNavigation({
     if (pageTag === undefined || lastReachedPage === undefined) {
       return
     }
-    const state = handleState()
-    const surveyUnit = getUpdatedSurveyUnit(state)
+    // get updated data
+    const { hasDataChanged, data } = handleData()
+
+    // get updated state
+    const state = handleState(hasDataChanged)
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onChangePage(surveyUnit)
   }, [pageTag, lastReachedPage])
 
   const orchestratorQuit = () => {
-    const state = handleState()
-    const surveyUnit = getUpdatedSurveyUnit(state)
+    // get updated data
+    const { hasDataChanged, data } = handleData()
+
+    // get updated state
+    const state = handleState(hasDataChanged)
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onQuit(surveyUnit)
   }
 
   const orchestratorDefinitiveQuit = () => {
-    // set the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
-    handleState('COMPLETED')
+    // get updated data
+    const { hasDataChanged, data } = handleData()
+
+    // get updated state
+    handleState(hasDataChanged)
+    // forces the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
+    handleState(false, 'COMPLETED')
     // forces the state to VALIDATED
-    const state = handleState('VALIDATED')
-    const surveyUnit = getUpdatedSurveyUnit(state)
+    const state = handleState(false, 'VALIDATED')
+
+    const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onDefinitiveQuit(surveyUnit)
   }
 
   return {
     isLastReachedPage,
+    surveyUnitData,
     orchestratorQuit,
     orchestratorDefinitiveQuit,
   }

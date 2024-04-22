@@ -66,7 +66,6 @@ export function Orchestrator(props: OrchestratorProps) {
     pageTag,
     overview,
     hasPageResponse,
-    getData,
     getChangedData,
     loopVariables,
   } = useLunatic(source, initialData, {
@@ -74,7 +73,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `${import.meta.env.BASE_URL}/workers`,
+    workersBasePath: `${import.meta.env.VITE_BASE_URL}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
@@ -98,18 +97,21 @@ export function Orchestrator(props: OrchestratorProps) {
   const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const { isLastReachedPage, orchestratorQuit, orchestratorDefinitiveQuit } =
-    getQueenNavigation({
-      initialSurveyUnit,
-      data: getData(true) as SurveyUnitData,
-      changedData: getChangedData(false),
-      lastReachedPage,
-      pageTag,
-      onQuit,
-      onDefinitiveQuit,
-      onChangePage,
-      onChangeSurveyUnitState,
-    })
+  const {
+    isLastReachedPage,
+    surveyUnitData,
+    orchestratorQuit,
+    orchestratorDefinitiveQuit,
+  } = getQueenNavigation({
+    initialSurveyUnit,
+    getChangedData: getChangedData,
+    lastReachedPage,
+    pageTag,
+    onQuit,
+    onDefinitiveQuit,
+    onChangePage,
+    onChangeSurveyUnitState,
+  })
 
   const continueProps = useContinueBehavior({
     readonly,
@@ -128,6 +130,7 @@ export function Orchestrator(props: OrchestratorProps) {
       <Header
         questionnaireTitle={questionnaireTitle}
         hierarchy={hierarchy}
+        iteration={iteration}
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
@@ -164,7 +167,7 @@ export function Orchestrator(props: OrchestratorProps) {
               subPage={subPage}
               iteration={iteration}
               lastReachedPage={lastReachedPage}
-              getData={getData}
+              data={surveyUnitData}
               goToPage={goToPage}
             />
           </Stack>
