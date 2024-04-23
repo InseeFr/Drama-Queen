@@ -1,13 +1,13 @@
-import { createRoot } from 'react-dom/client'
-import { type RoutingStrategy, createRouter } from 'ui/routing/createRouter'
-import { injectLegacyEntryQueen } from 'injectLegacyQueen'
 import CircularProgress from '@mui/material/CircularProgress'
 import { createCoreProvider } from 'core'
+import { injectLegacyEntryQueen } from 'injectLegacyQueen'
+import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
+import { createRouter, type RoutingStrategy } from 'ui/routing/createRouter'
 
 const { CoreProvider, prCore } = createCoreProvider({
   apiUrl: import.meta.env.VITE_QUEEN_API_URL,
-  publicUrl: import.meta.env.VITE_BASE_URL,
+  publicUrl: import.meta.env.BASE_URL,
   oidcParams: {
     issuerUri: import.meta.env.VITE_OIDC_ISSUER,
     clientId: import.meta.env.VITE_OIDC_CLIENT_ID,
