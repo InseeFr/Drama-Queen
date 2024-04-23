@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
 import federation from '@originjs/vite-plugin-federation'
 import react from '@vitejs/plugin-react'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig(({}) => {
@@ -13,7 +13,6 @@ export default defineConfig(({}) => {
       ),
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
     },
-    base: `${process.env.VITE_BASE_URL}`,
     plugins: [
       react(),
       federation({

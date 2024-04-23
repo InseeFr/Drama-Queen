@@ -1,22 +1,22 @@
-import { Header } from './Header/Header'
-import { NavBar } from './NavBar/NavBar'
-import { tss } from 'tss-react/mui'
 import {
-  type LunaticData,
-  useLunatic,
   LunaticComponents,
+  useLunatic,
+  type LunaticData,
 } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
-import { useLunaticStyles } from './lunaticStyle'
-import { Continue } from './buttons/Continue/Continue'
-import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
-import { LoopPanel } from './LoopPanel/LoopPanel'
-import type { Questionnaire, SurveyUnit, SurveyUnitData } from 'core/model'
-import { getQueenNavigation } from './tools/getQueenNavigation'
-import { useContinueBehavior } from './tools/useContinueBehavior'
-import { getinitialSurveyUnit } from './tools/functions'
+import type { Questionnaire, SurveyUnit } from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { useTranslation } from 'i18n'
+import { tss } from 'tss-react/mui'
+import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
+import { Header } from './Header/Header'
+import { LoopPanel } from './LoopPanel/LoopPanel'
+import { NavBar } from './NavBar/NavBar'
+import { Continue } from './buttons/Continue/Continue'
+import { useLunaticStyles } from './lunaticStyle'
+import { getinitialSurveyUnit } from './tools/functions'
+import { getQueenNavigation } from './tools/getQueenNavigation'
+import { useContinueBehavior } from './tools/useContinueBehavior'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -73,7 +73,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `${import.meta.env.VITE_BASE_URL}/workers`,
+    workersBasePath: `/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
