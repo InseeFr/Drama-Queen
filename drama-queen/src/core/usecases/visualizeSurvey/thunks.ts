@@ -1,5 +1,9 @@
 import type { Thunks } from 'core/bootstrap'
-import type { Questionnaire, SurveyUnit } from 'core/model'
+import type {
+  Questionnaire,
+  SurveyUnit,
+  WrappedQuestionnaire,
+} from 'core/model'
 import { searchParamsSchema } from './parser/searchParamsSchema'
 import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSchema'
 import { fetchUrl } from 'core/tools/fetchUrl'
@@ -35,15 +39,35 @@ export const thunks = {
         return null
       }
 
-      const source = await fetchUrl<Questionnaire>({
+      // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
+      // We must accept it and unwrap it
+      const fetchedSource = await fetchUrl<
+        Questionnaire | WrappedQuestionnaire
+      >({
         url: questionnaire,
       })
 
-      if (source === undefined) {
+      if (fetchedSource === undefined) {
         return null
       }
 
-      const isQueenV2 = isSurveyCompatibleWithQueenV2({ questionnaire: source })
+      const isWrappedQuestionnaire = (
+        source: Questionnaire | WrappedQuestionnaire
+      ): source is WrappedQuestionnaire => {
+        return (
+          typeof source === 'object' &&
+          Object.keys(source).length === 1 &&
+          'value' in source
+        )
+      }
+
+      const source = isWrappedQuestionnaire(fetchedSource)
+        ? fetchedSource.value
+        : fetchedSource
+
+      const isQueenV2 = isSurveyCompatibleWithQueenV2({
+        questionnaire: source,
+      })
 
       if (!isQueenV2) {
         return { isQueenV2 }
