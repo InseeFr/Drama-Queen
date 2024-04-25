@@ -11,22 +11,18 @@ const log = {
 
 log.blue(`MFE manage env for remote (micro-frontend)`)
 
-const nameOfMfeEnv = 'mfeEnv.js'
+const nameOfMfeEnv = 'swEnv.js'
 const entryScriptPath = path.resolve(
   `${process.cwd()}/dist/assets/${process.argv[2]}`
 )
-const swEnvScriptPath = path.resolve(`${process.cwd()}/dist/swEnv.js`)
-const mfeEnvScriptPath = path.resolve(
-  `${process.cwd()}/dist/assets/${nameOfMfeEnv}`
-)
+const swEnvScriptPath = path.resolve(`${process.cwd()}/dist/${nameOfMfeEnv}`)
 
 const isSwEnvScriptExists = fs.existsSync(swEnvScriptPath)
 const isEntryScriptExists = fs.existsSync(entryScriptPath)
 
 if (isSwEnvScriptExists && isEntryScriptExists) {
-  fs.copyFileSync(swEnvScriptPath, mfeEnvScriptPath)
   const entryContent = fs.readFileSync(entryScriptPath).toString('utf-8')
-  const newEntryContent = `import "./${nameOfMfeEnv}";${entryContent}`
+  const newEntryContent = `import "../${nameOfMfeEnv}";${entryContent}`
   fs.writeFileSync(entryScriptPath, Buffer.from(newEntryContent, 'utf8'))
   log.green(`✓ Added env file inside ${entryScriptPath}`)
 } else {
