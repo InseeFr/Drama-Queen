@@ -20,5 +20,4 @@ USER $NGINX_USER_ID
 EXPOSE 8080
 
 # Start Nginx server
-ENTRYPOINT ["/usr/share/nginx/html/vite-envs.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT sh -c "/usr/share/nginx/html/vite-envs.sh && nginx -g 'daemon off;'"
