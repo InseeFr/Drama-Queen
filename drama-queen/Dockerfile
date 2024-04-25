@@ -14,8 +14,6 @@ COPY --chown=$NGINX_USER:$NGINX_USER dist /usr/share/nginx/html
 # Copy nginx configuration
 RUN rm etc/nginx/conf.d/default.conf
 COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf etc/nginx/conf.d/
-
-COPY --chown=$NGINX_USER:$NGINX_USER entrypoint.sh /entrypoint.sh
 RUN chmod 755 /usr/share/nginx/html/vite-envs.sh
 
 USER $NGINX_USER_ID
