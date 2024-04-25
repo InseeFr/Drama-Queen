@@ -1,21 +1,20 @@
-import { tss } from 'tss-react/mui'
-import { useState, type ReactNode } from 'react'
+import AppsIcon from '@mui/icons-material/Apps'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import AppsIcon from '@mui/icons-material/Apps'
-import insee from 'ui/assets/insee.png'
-import { Menu } from '../Menu/Menu'
-import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
-import { ShortCut } from '../buttons/ShortCut/ShortCut'
-import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
-import type { useLunatic } from '@inseefr/lunatic'
-import type { Overview } from '../lunaticType'
+import Typography from '@mui/material/Typography'
 import { useTranslation } from 'i18n'
+import { useState, type ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
+import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
+import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
+import { Menu } from '../Menu/Menu'
+import { ShortCut } from '../buttons/ShortCut/ShortCut'
+import type { Overview } from '../lunaticType'
+import { DYNAMIC_PUBLIC_URL } from 'core'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -103,7 +102,7 @@ export function Header(props: HeaderProps) {
       <Button title={t('backToQuestionnaireStart')}>
         <img
           id="logo"
-          src={insee}
+          src={`${DYNAMIC_PUBLIC_URL}/assets/insee.png`}
           alt="Logo de L'Insee"
           className={classes.headerLogo}
           onClick={goToFirstPage}

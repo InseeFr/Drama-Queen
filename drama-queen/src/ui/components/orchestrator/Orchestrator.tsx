@@ -17,6 +17,7 @@ import { useLunaticStyles } from './lunaticStyle'
 import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useContinueBehavior } from './tools/useContinueBehavior'
+import { DYNAMIC_PUBLIC_URL } from 'core'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -73,7 +74,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `/workers`,
+    workersBasePath: `${DYNAMIC_PUBLIC_URL}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
