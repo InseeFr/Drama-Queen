@@ -26,7 +26,7 @@ const isEntryScriptExists = fs.existsSync(entryScriptPath)
 if (isSwEnvScriptExists && isEntryScriptExists) {
   fs.copyFileSync(swEnvScriptPath, mfeEnvScriptPath)
   const entryContent = fs.readFileSync(entryScriptPath).toString('utf-8')
-  const newEntryContent = `import './${nameOfMfeEnv}';${entryContent}`
+  const newEntryContent = `import "./${nameOfMfeEnv}";${entryContent}`
   fs.writeFileSync(entryScriptPath, Buffer.from(newEntryContent, 'utf8'))
   log.green(`✓ Added env file inside ${entryScriptPath}`)
 } else {
