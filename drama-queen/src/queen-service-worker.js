@@ -1,5 +1,15 @@
 /* eslint-disable no-restricted-globals */
-importScripts(`swEnv.js`)
+/**
+ * self._DRAMAQUEEN_URL has to be defined by parent app, like Pearl-Jam
+ * Actally, functions as (registerRoute,NetworkFirst, NetworkFirst, etc) from workbox as imported by legacy queen.
+ * When we will remove legacy queen, we have to add these functions like this
+    | importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js');
+    | const { CacheableResponsePlugin } = workbox.cacheableResponse;
+    | const { registerRoute } = workbox.routing;
+    | const { NetworkFirst, CacheFirst } = workbox.strategies;
+ */
+
+importScripts(`${self._DRAMAQUEEN_URL}/swEnv.js`)
 self._QUEEN_URL = self.__VITE_ENVS.VITE_QUEEN_URL
 
 importScripts(`${self._QUEEN_URL}/queen-service-worker.js`)

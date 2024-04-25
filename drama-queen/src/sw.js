@@ -7,7 +7,7 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-//import { CacheableResponsePlugin } from "workbox-cacheable-response";
+import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
@@ -16,7 +16,8 @@ import { CacheFirst, NetworkFirst } from 'workbox-strategies'
 importScripts(`swEnv.js`)
 self._QUEEN_URL = self.__VITE_ENVS.VITE_QUEEN_URL
 
-importScripts(`${self._QUEEN_URL}/queen-service-worker.js`)
+// Don't load external service-worker if _QUEEN_URL is not defined
+if (self._QUEEN_URL) importScripts(`${self._QUEEN_URL}/queen-service-worker.js`)
 
 clientsClaim()
 

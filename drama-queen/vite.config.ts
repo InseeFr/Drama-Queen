@@ -43,7 +43,6 @@ export default defineConfig({
       shared: ['react', 'react-dom', 'react-router-dom'],
     }),
     tsconfigPaths(),
-
     VitePWA({
       //Generate the external service worker for pearl
       injectRegister: false,
