@@ -8,6 +8,7 @@
     "dev": "vite --port 5000 --strictPort",
     "prebuild": "workers",
     "build": "tsc && vite build",
+    "postbuild": "node build/remote-env.cjs remoteEntry.js",
     "preview": "vite preview --port 5000 --strictPort",
     "serve": "vite preview --port 5000 --strictPort",
     "_format": "prettier '**/*.{ts,tsx,json,md}'",
