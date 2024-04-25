@@ -6,7 +6,7 @@ export const AppVersion = () => {
   return (
     <div className={classes.footer}>
       <Typography variant="body1" color="textSecondary">
-        Drama Queen version {APP_VERSION}
+        Drama Queen version {import.meta.env.APP_VERSION}
       </Typography>
     </div>
   )
