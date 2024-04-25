@@ -51,6 +51,11 @@ export default defineConfig({
       manifest: false,
       srcDir: 'src',
       filename: 'queen-service-worker.js',
+      // main file is 2.14 MB, and default value is 2.09 MB, so we adjust maximumFileSizeToCacheInBytes to cache all needed files
+      // https://vite-pwa-org.netlify.app/guide/faq#missing-assets-from-sw-precache-manifest
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 2500000,
+      },
     }),
     VitePWA({
       injectRegister: 'auto',
@@ -77,6 +82,11 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
+      },
+      // main file is 2.14 MB, and default value is 2.09 MB, so we adjust maximumFileSizeToCacheInBytes in order to cache all needed files
+      // https://vite-pwa-org.netlify.app/guide/faq#missing-assets-from-sw-precache-manifest
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 3000000,
       },
     }),
   ],

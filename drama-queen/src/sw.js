@@ -10,8 +10,8 @@
 //import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import { clientsClaim } from 'workbox-core'
 import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
-//import { registerRoute } from "workbox-routing";
-//import { CacheFirst, NetworkFirst } from "workbox-strategies";
+import { registerRoute } from 'workbox-routing'
+import { CacheFirst, NetworkFirst } from 'workbox-strategies'
 
 importScripts(`swEnv.js`)
 self._QUEEN_URL = self.__VITE_ENVS.VITE_QUEEN_URL
