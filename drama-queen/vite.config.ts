@@ -85,7 +85,7 @@ export default defineConfig({
       // main file is 2.14 MB, and default value is 2.09 MB, so we adjust maximumFileSizeToCacheInBytes in order to cache all needed files
       // https://vite-pwa-org.netlify.app/guide/faq#missing-assets-from-sw-precache-manifest
       injectManifest: {
-        maximumFileSizeToCacheInBytes: 3000000,
+        maximumFileSizeToCacheInBytes: 2500000,
       },
     }),
   ],
