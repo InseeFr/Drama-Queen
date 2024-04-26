@@ -92,47 +92,49 @@ export const thunks = {
          * SurveyUnit
          */
 
-        const prSurveyUnit = campaignsIds.map((campaignId) =>
-          queenApi
-            .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
-            .then((arrayOfIds) => {
-              dispatch(
-                actions.updateDownloadTotalSurveyUnit({
-                  totalSurveyUnit: arrayOfIds.length,
-                })
-              )
-              return Promise.all(
-                arrayOfIds.map(({ id }) =>
-                  queenApi
-                    .getSurveyUnit(id)
-                    .then((surveyUnit) => {
-                      dataStore.updateSurveyUnit(surveyUnit)
-                      return questionnaireIdInSuccess.includes(
-                        surveyUnit.questionnaireId
-                      )
-                    })
-                    .then((isSurveyWellDownload) => {
-                      if (isSurveyWellDownload) {
-                        localSyncStorage.addIdToSurveyUnitsSuccess(id)
-                      }
-                      dispatch(actions.downloadSurveyUnitCompleted())
-                    })
-                    .catch((error) => {
-                      if (
-                        error instanceof AxiosError &&
-                        error.response &&
-                        [400, 403, 404, 500].includes(error.response.status)
-                      ) {
-                        console.error(
-                          `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
-                          error
-                        )
-                      }
-                      throw error
-                    })
+        const prSurveyUnit = await Promise.all(
+          campaignsIds.map((campaignId) =>
+            queenApi
+              .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
+              .then((arrayOfIds) => {
+                dispatch(
+                  actions.updateDownloadTotalSurveyUnit({
+                    totalSurveyUnit: arrayOfIds.length,
+                  })
                 )
-              )
-            })
+                return Promise.all(
+                  arrayOfIds.map(({ id }) =>
+                    queenApi
+                      .getSurveyUnit(id)
+                      .then((surveyUnit) => {
+                        dataStore.updateSurveyUnit(surveyUnit)
+                        return questionnaireIdInSuccess.includes(
+                          surveyUnit.questionnaireId
+                        )
+                      })
+                      .then((isSurveyWellDownload) => {
+                        if (isSurveyWellDownload) {
+                          localSyncStorage.addIdToSurveyUnitsSuccess(id)
+                        }
+                        dispatch(actions.downloadSurveyUnitCompleted())
+                      })
+                      .catch((error) => {
+                        if (
+                          error instanceof AxiosError &&
+                          error.response &&
+                          [400, 403, 404, 500].includes(error.response.status)
+                        ) {
+                          console.error(
+                            `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
+                            error
+                          )
+                        }
+                        throw error
+                      })
+                  )
+                )
+              })
+          )
         )
 
         /*
@@ -162,7 +164,9 @@ export const thunks = {
                   `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
                 )
               })
-              .finally(() => dispatch(actions.downloadNomenclatureCompleted()))
+              .finally(() => {
+                dispatch(actions.downloadNomenclatureCompleted())
+              })
           )
         )
 
