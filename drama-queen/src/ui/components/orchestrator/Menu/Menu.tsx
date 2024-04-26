@@ -1,16 +1,16 @@
-import { tss } from 'tss-react/mui'
-import { useEffect, useState } from 'react'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
-import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
-import { StopNavigation } from './StopNavigation/StopNavigation'
-import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import type { Overview, OverviewItem } from '../lunaticType'
 import { useTranslation } from 'i18n'
+import { useEffect, useState } from 'react'
+import { tss } from 'tss-react/mui'
+import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
+import type { Overview, OverviewItem } from '../lunaticType'
+import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
+import { StopNavigation } from './StopNavigation/StopNavigation'
+import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -56,7 +56,7 @@ export function Menu(props: MenuProps) {
 
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
-  const lunaticVersion = LUNATIC_VERSION.replace(/^\^/, '')
+  const lunaticVersion = import.meta.env.LUNATIC_VERSION.replace(/^\^/, '')
 
   const menuItems: MenuItem[] = [
     { type: 'survey', label: t('surveyButton') },
@@ -140,7 +140,7 @@ export function Menu(props: MenuProps) {
           </Stack>
           <Stack className={classes.version}>
             <Typography>
-              Queen : {APP_VERSION} | Lunatic : {lunaticVersion}
+              Queen : {import.meta.env.APP_VERSION} | Lunatic : {lunaticVersion}
             </Typography>
           </Stack>
         </Stack>
