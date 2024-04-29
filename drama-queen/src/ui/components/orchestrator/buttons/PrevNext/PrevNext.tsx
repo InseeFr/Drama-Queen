@@ -9,32 +9,16 @@ import { ShortCut } from '../ShortCut/ShortCut'
 import { useTranslation } from 'i18n'
 
 type PrevNextProps = {
-  isFirstPage: boolean
-  isLastPage: boolean
-  isLastReachedPage: boolean
-  readonly: boolean
-  hasPageResponse: () => boolean
-  goPrevious: () => void
-  goNext: (payload?: {} | undefined) => void
+  isPreviousEnabled: boolean
+  isNextEnabled: boolean
+  onPrevious: () => void
+  onNext: () => void
 }
 
 export function PrevNext(props: PrevNextProps) {
-  const {
-    isFirstPage,
-    isLastPage,
-    isLastReachedPage,
-    readonly,
-    hasPageResponse,
-    goPrevious,
-    goNext,
-  } = props
+  const { isPreviousEnabled, isNextEnabled, onPrevious, onNext } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
-
-  const canGoNext =
-    ((!isLastReachedPage && hasPageResponse()) || readonly) && !isLastPage
-
-  const canGoPrevious = !isFirstPage
 
   const previousShortCutKey = SHORTCUT_PREVIOUS
   const nextShortCutKey = SHORTCUT_NEXT
@@ -45,14 +29,14 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={cx(classes.iconButton, classes.previousIcon)}
           size="large"
-          disabled={!canGoPrevious}
-          onClick={goPrevious}
+          disabled={!isPreviousEnabled}
+          onClick={onPrevious}
         >
           <PlayArrowIcon fontSize="small" />
-          {canGoPrevious && (
+          {isPreviousEnabled && (
             <ShortCut
               shortCutKey={previousShortCutKey}
-              onClickMethod={goPrevious}
+              onClickMethod={onPrevious}
             />
           )}
         </IconButton>
@@ -65,12 +49,12 @@ export function PrevNext(props: PrevNextProps) {
         <IconButton
           className={classes.iconButton}
           size="large"
-          disabled={!canGoNext}
-          onClick={goNext}
+          disabled={!isNextEnabled}
+          onClick={onNext}
         >
           <PlayArrowIcon fontSize="small" />
-          {canGoNext && (
-            <ShortCut shortCutKey={nextShortCutKey} onClickMethod={goNext} />
+          {isNextEnabled && (
+            <ShortCut shortCutKey={nextShortCutKey} onClickMethod={onNext} />
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>

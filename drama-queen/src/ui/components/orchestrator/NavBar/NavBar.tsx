@@ -9,13 +9,10 @@ type NavBarProps = {
   maxPage: string
   subPage: number | undefined
   nbSubPages: number | undefined
-  isFirstPage: boolean
-  isLastPage: boolean
-  isLastReachedPage: boolean
-  readonly: boolean
-  hasPageResponse: () => boolean
-  goPrevious: () => void
-  goNext: (payload?: {} | undefined) => void
+  isPreviousEnabled: boolean
+  isNextEnabled: boolean
+  onPrevious: () => void
+  onNext: () => void
 }
 
 export function NavBar(props: NavBarProps) {
@@ -24,13 +21,10 @@ export function NavBar(props: NavBarProps) {
     maxPage,
     subPage,
     nbSubPages,
-    isFirstPage,
-    isLastPage,
-    isLastReachedPage,
-    readonly,
-    hasPageResponse,
-    goPrevious,
-    goNext,
+    isPreviousEnabled,
+    isNextEnabled,
+    onPrevious,
+    onNext,
   } = props
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
@@ -69,13 +63,10 @@ export function NavBar(props: NavBarProps) {
     <Stack className={classes.root}>
       {displayPages.map((pageType, index) => displayPage(pageType, index))}
       <PrevNext
-        isFirstPage={isFirstPage}
-        isLastPage={isLastPage}
-        isLastReachedPage={isLastReachedPage}
-        readonly={readonly}
-        hasPageResponse={hasPageResponse}
-        goPrevious={goPrevious}
-        goNext={goNext}
+        isPreviousEnabled={isPreviousEnabled}
+        isNextEnabled={isNextEnabled}
+        onPrevious={onPrevious}
+        onNext={onNext}
       />
     </Stack>
   )
