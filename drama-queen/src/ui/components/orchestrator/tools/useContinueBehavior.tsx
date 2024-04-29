@@ -43,11 +43,8 @@ export function useContinueBehavior({
     if (isLastPage) {
       return 'saveAndQuit'
     }
-    if (!isLastReachedPage) {
-      return 'fastForward'
-    }
     if (hasPageResponse()) {
-      return 'continue'
+      return isLastReachedPage ? 'continue' : 'fastForward'
     }
     return undefined
   })()
