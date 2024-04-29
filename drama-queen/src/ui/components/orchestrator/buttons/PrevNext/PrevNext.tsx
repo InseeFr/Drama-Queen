@@ -13,6 +13,7 @@ type PrevNextProps = {
   isLastPage: boolean
   isLastReachedPage: boolean
   readonly: boolean
+  hasPageResponse: () => boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
@@ -23,14 +24,16 @@ export function PrevNext(props: PrevNextProps) {
     isLastPage,
     isLastReachedPage,
     readonly,
+    hasPageResponse,
     goPrevious,
     goNext,
   } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 
-  // we always display nextButton on readonly mode
-  const canGoNext = (!isLastReachedPage || readonly) && !isLastPage
+  const canGoNext =
+    ((!isLastReachedPage && hasPageResponse()) || readonly) && !isLastPage
+
   const canGoPrevious = !isFirstPage
 
   const previousShortCutKey = SHORTCUT_PREVIOUS

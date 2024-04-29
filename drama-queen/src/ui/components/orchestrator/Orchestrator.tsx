@@ -186,6 +186,7 @@ export function Orchestrator(props: OrchestratorProps) {
             isLastPage={isLastPage}
             isLastReachedPage={isLastReachedPage}
             readonly={readonly}
+            hasPageResponse={hasPageResponse}
             goPrevious={goPreviousPage}
             goNext={goNextPage}
           />

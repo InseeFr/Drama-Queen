@@ -13,6 +13,7 @@ type NavBarProps = {
   isLastPage: boolean
   isLastReachedPage: boolean
   readonly: boolean
+  hasPageResponse: () => boolean
   goPrevious: () => void
   goNext: (payload?: {} | undefined) => void
 }
@@ -27,6 +28,7 @@ export function NavBar(props: NavBarProps) {
     isLastPage,
     isLastReachedPage,
     readonly,
+    hasPageResponse,
     goPrevious,
     goNext,
   } = props
@@ -71,6 +73,7 @@ export function NavBar(props: NavBarProps) {
         isLastPage={isLastPage}
         isLastReachedPage={isLastReachedPage}
         readonly={readonly}
+        hasPageResponse={hasPageResponse}
         goPrevious={goPrevious}
         goNext={goNext}
       />
