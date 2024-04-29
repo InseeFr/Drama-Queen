@@ -1,7 +1,7 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
-import type { GoToPage } from '../lunaticType'
+import type { GoNextPage, GoPreviousPage, GoToPage } from '../lunaticType'
 import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('navigationMessage')
@@ -13,29 +13,33 @@ type ContinueAction =
   | 'saveAndQuit'
   | undefined
 
-type UseContinueBehaviorProps = {
+type UseNavigationButtonsProps = {
   readonly: boolean
   lastReachedPage: string | undefined
+  isFirstPage: boolean
   isLastPage: boolean
   isLastReachedPage: boolean
   hasPageResponse: () => boolean
-  goNextPage: (payload?: {} | undefined) => void
+  goPreviousPage: GoPreviousPage
+  goNextPage: GoNextPage
   goToPage: GoToPage
   quit: () => void
   definitiveQuit: () => void
 }
 
-export function useContinueBehavior({
+export function useNavigationButtons({
   readonly,
   lastReachedPage,
+  isFirstPage,
   isLastPage,
   isLastReachedPage,
   hasPageResponse,
+  goPreviousPage,
   goNextPage,
   goToPage,
   quit,
   definitiveQuit,
-}: UseContinueBehaviorProps) {
+}: UseNavigationButtonsProps) {
   const continueAction = (() => {
     if (readonly) {
       return isLastPage ? 'quit' : undefined
@@ -43,16 +47,13 @@ export function useContinueBehavior({
     if (isLastPage) {
       return 'saveAndQuit'
     }
-    if (!isLastReachedPage) {
-      return 'fastForward'
-    }
     if (hasPageResponse()) {
-      return 'continue'
+      return isLastReachedPage ? 'continue' : 'fastForward'
     }
     return undefined
   })()
 
-  const isVisible = continueAction !== undefined
+  const isContinueVisible = continueAction !== undefined
 
   const onContinue = () => {
     switch (continueAction) {
@@ -67,19 +68,28 @@ export function useContinueBehavior({
     }
   }
 
-  const shortCutKey =
+  const continueShortCutKey =
     continueAction === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
 
-  const shortCutLabel =
+  const continueShortCutLabel =
     continueAction === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
 
+  const isPreviousEnabled = !isFirstPage
+
+  const isNextEnabled =
+    ((!isLastReachedPage && hasPageResponse()) || readonly) && !isLastPage
+
   return {
-    label: getLabelFromAction(continueAction),
-    isVisible,
-    endIcon: getEndIcon(continueAction),
-    shortCutKey: shortCutKey,
-    shortCutLabel: shortCutLabel,
-    onContinue,
+    continueProps: {
+      label: getLabelFromAction(continueAction),
+      isVisible: isContinueVisible,
+      endIcon: getEndIcon(continueAction),
+      shortCutKey: continueShortCutKey,
+      shortCutLabel: continueShortCutLabel,
+      onContinue,
+    },
+    previousProps: { isPreviousEnabled, onPrevious: goPreviousPage },
+    nextProps: { isNextEnabled, onNext: goNextPage },
   }
 }
 

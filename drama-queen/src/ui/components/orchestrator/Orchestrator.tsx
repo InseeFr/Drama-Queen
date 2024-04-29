@@ -16,8 +16,8 @@ import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
-import { useContinueBehavior } from './tools/useContinueBehavior'
 import { DYNAMIC_PUBLIC_URL } from 'core'
+import { useNavigationButtons } from './tools/useNavigationButtons'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -114,12 +114,14 @@ export function Orchestrator(props: OrchestratorProps) {
     onChangeSurveyUnitState,
   })
 
-  const continueProps = useContinueBehavior({
+  const { continueProps, previousProps, nextProps } = useNavigationButtons({
     readonly,
     lastReachedPage,
+    isFirstPage,
     isLastPage,
     isLastReachedPage,
     hasPageResponse,
+    goPreviousPage,
     goNextPage,
     goToPage,
     quit: orchestratorQuit,
@@ -182,12 +184,10 @@ export function Orchestrator(props: OrchestratorProps) {
             maxPage={maxPage}
             subPage={subPage}
             nbSubPages={nbSubPages}
-            isFirstPage={isFirstPage}
-            isLastPage={isLastPage}
-            isLastReachedPage={isLastReachedPage}
-            readonly={readonly}
-            goPrevious={goPreviousPage}
-            goNext={goNextPage}
+            isPreviousEnabled={previousProps.isPreviousEnabled}
+            isNextEnabled={nextProps.isNextEnabled}
+            onPrevious={previousProps.onPrevious}
+            onNext={nextProps.onNext}
           />
         </Stack>
       </Stack>
