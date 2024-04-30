@@ -40,15 +40,18 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       {
         backgroundColor: 'transparent',
         color: 'black',
+        fontSize: '1.2em',
         display: 'block',
         margin: '1em 0em 1em 0em',
         fontWeight: 'bold',
         padding: '0.5em',
       },
 
-    '& .subsequence-lunatic': {
+    // TEMP fix until lunatic v3, add :  .lunatic-component > .subsequence-lunatic
+    '& .subsequence-lunatic, .lunatic-component > .subsequence-lunatic': {
       fontSize: '1.1em',
     },
+
     /* Firefox */
     '& input[type=text]': {
       MozAppearance: 'textfield',
