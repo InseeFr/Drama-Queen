@@ -1,5 +1,8 @@
+import type { LunaticState } from '@inseefr/lunatic'
 import type { QuestionnaireState } from './QuestionnaireState'
 import type { SurveyUnitData } from './SurveyUnitData'
+
+export type PageTag = LunaticState['pageTag']
 
 export type SurveyUnit = {
   id: string
@@ -10,6 +13,6 @@ export type SurveyUnit = {
   stateData?: {
     state: QuestionnaireState
     date: number
-    currentPage: string
+    currentPage: PageTag
   }
 }

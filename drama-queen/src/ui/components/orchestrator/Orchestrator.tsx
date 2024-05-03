@@ -16,8 +16,8 @@ import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
-import { DYNAMIC_PUBLIC_URL } from 'core'
 import { useNavigationButtons } from './tools/useNavigationButtons'
+import type { GetReferentiel } from './lunaticType'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -28,7 +28,7 @@ type OrchestratorProps = {
   onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
   onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
   onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
-  getReferentiel: ((name: string) => Promise<Array<unknown>>) | undefined
+  getReferentiel: GetReferentiel
   onChangeSurveyUnitState?:
     | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
     | undefined
@@ -74,7 +74,6 @@ export function Orchestrator(props: OrchestratorProps) {
     onChange,
     getReferentiel,
     autoSuggesterLoading: true,
-    workersBasePath: `${DYNAMIC_PUBLIC_URL}/workers`,
     trackChanges: true,
     shortcut: true,
     withOverview: true,
@@ -95,7 +94,6 @@ export function Orchestrator(props: OrchestratorProps) {
 
   const components = getComponents()
 
-  const hierarchy = components[0]?.hierarchy
   const { classes: lunaticClasses } = useLunaticStyles()
 
   const {

@@ -1,13 +1,16 @@
-import type { useLunatic } from '@inseefr/lunatic'
+import type { LunaticState, LunaticOptions } from '@inseefr/lunatic'
 
 type ItemOf<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never
 
-export type Overview = ReturnType<typeof useLunatic>['overview']
+export type Overview = LunaticState['overview']
 export type OverviewItem = ItemOf<Overview>
 
-export type GoToPage = ReturnType<typeof useLunatic>['goToPage']
-export type GoPreviousPage = ReturnType<typeof useLunatic>['goPreviousPage']
-export type GoNextPage = ReturnType<typeof useLunatic>['goNextPage']
+export type GoToPage = LunaticState['goToPage']
+export type GoPreviousPage = LunaticState['goPreviousPage']
+export type GoNextPage = LunaticState['goNextPage']
 
-export type GetChangedData = ReturnType<typeof useLunatic>['getChangedData']
+export type GetChangedData = LunaticState['getChangedData']
+
+export type GetReferentiel = LunaticOptions['getReferentiel']
+export type Nomenclature = Awaited<ReturnType<NonNullable<GetReferentiel>>>

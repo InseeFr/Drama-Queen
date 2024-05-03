@@ -1,5 +1,6 @@
 import type { Thunks } from 'core/bootstrap'
 import type {
+  Nomenclature,
   Questionnaire,
   SurveyUnit,
   WrappedQuestionnaire,
@@ -80,7 +81,7 @@ export const thunks = {
         : undefined
 
       const getReferentiel = nomenclature
-        ? (name: string) => fetchUrl<unknown[]>({ url: nomenclature[name] })
+        ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
         : undefined
 
       return { isQueenV2, source, surveyUnit, readonly, getReferentiel }

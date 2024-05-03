@@ -1,5 +1,5 @@
 import { useLunatic } from '@inseefr/lunatic'
-import type { SurveyUnit } from 'core/model'
+import type { PageTag, SurveyUnit } from 'core/model'
 
 type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
 type Component = Extract<Components[number], object>
@@ -43,18 +43,17 @@ export function countMissingResponseInPage(components: Components) {
 
 // check if the first subPage of an iteration is before lastReachedPage
 export function isIterationReachable(
-  currentPage: string,
-  lastReachedPage: string,
+  currentPage: number,
+  lastReachedPage: PageTag,
   iteration: number
 ) {
-  const numberCurrentPage = parseInt(currentPage)
   const maxPage = parseInt(lastReachedPage.split('.')[0])
   const maxIteration = parseInt(lastReachedPage.split('#')[1]) - 1
-  if (numberCurrentPage < maxPage) {
+  if (currentPage < maxPage) {
     // no need to check iteration or subPage because we already reached the next page (out of the loop)
     return true
   }
-  // numberCurrentPage = maxPage , so we check if we already reached the iteration
+  // currentPage = maxPage , so we check if we already reached the iteration
   if (iteration <= maxIteration) {
     // no need to check subPage beacause we just want to reach the first subPage of the iteration
     return true

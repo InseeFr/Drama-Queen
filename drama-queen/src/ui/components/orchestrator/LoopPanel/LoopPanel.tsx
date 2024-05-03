@@ -5,14 +5,14 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { isIterationReachable } from 'ui/components/orchestrator/tools/functions'
-import type { SurveyUnitData } from 'core/model'
+import type { PageTag, SurveyUnitData } from 'core/model'
 
 type LoopPanelProps = {
   loopVariables: string[]
-  page: string
+  page: number
   subPage: number | undefined
   iteration: number | undefined
-  lastReachedPage: string | undefined
+  lastReachedPage: PageTag | undefined
   data: SurveyUnitData
   goToPage: ReturnType<typeof useLunatic>['goToPage']
 }

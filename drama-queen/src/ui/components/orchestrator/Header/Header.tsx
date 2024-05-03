@@ -13,7 +13,7 @@ import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
-import type { Overview } from '../lunaticType'
+import type { GoToPage, Overview } from '../lunaticType'
 import { DYNAMIC_PUBLIC_URL } from 'core'
 
 type HeaderProps = {
@@ -33,12 +33,7 @@ type HeaderProps = {
   iteration: number | undefined
   readonly: boolean
   overview: Overview
-  goToPage: (page: {
-    page: string
-    iteration?: number
-    nbIterations?: number
-    subPage?: number
-  }) => void
+  goToPage: GoToPage
   quit: () => void
   definitiveQuit: () => void
 }
