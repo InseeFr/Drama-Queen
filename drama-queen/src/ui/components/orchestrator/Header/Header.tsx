@@ -7,29 +7,17 @@ import Stack from '@mui/material/Stack'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'i18n'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { tss } from 'tss-react/mui'
 import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
-import type { GoToPage, Overview } from '../lunaticType'
+import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
 import { DYNAMIC_PUBLIC_URL } from 'core'
 
 type HeaderProps = {
   questionnaireTitle: string
-  hierarchy?: {
-    sequence: {
-      label: ReactNode
-      id: string
-      page: string
-    }
-    subSequence?: {
-      label: ReactNode
-      id: string
-      page: string
-    }
-  }
   iteration: number | undefined
   readonly: boolean
   overview: Overview
@@ -41,7 +29,6 @@ type HeaderProps = {
 export function Header(props: HeaderProps) {
   const {
     questionnaireTitle,
-    hierarchy,
     iteration,
     readonly,
     overview,
@@ -61,6 +48,11 @@ export function Header(props: HeaderProps) {
   const handleClose = () => setIsDrawerOpen(false)
 
   const goToFirstPage = () => goToPage({ page: '1' })
+
+  const currentSequence = findCurrentOverviewItem(overview)
+  const currentSubSequence = currentSequence
+    ? findCurrentOverviewItem(currentSequence.children)
+    : undefined
 
   return (
     <AppBar className={classes.root} elevation={0}>
@@ -108,7 +100,8 @@ export function Header(props: HeaderProps) {
           {questionnaireTitle}
         </Typography>
         <BreadCrumb
-          hierarchy={hierarchy}
+          sequence={currentSequence}
+          subSequence={currentSubSequence}
           iteration={iteration}
           goToPage={goToPage}
         />
@@ -125,6 +118,12 @@ export function Header(props: HeaderProps) {
       </Stack>
     </AppBar>
   )
+}
+
+function findCurrentOverviewItem(
+  overviewItems: OverviewItem[]
+): OverviewItem | undefined {
+  return overviewItems.find((item) => item.current)
 }
 
 const useStyles = tss

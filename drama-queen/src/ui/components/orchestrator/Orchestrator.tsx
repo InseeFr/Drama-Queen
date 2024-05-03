@@ -130,7 +130,6 @@ export function Orchestrator(props: OrchestratorProps) {
     <Stack className={classes.orchestrator}>
       <Header
         questionnaireTitle={questionnaireTitle}
-        hierarchy={hierarchy}
         iteration={iteration}
         readonly={readonly}
         overview={overview}

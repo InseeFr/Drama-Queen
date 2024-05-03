@@ -2,47 +2,40 @@ import Button from '@mui/material/Button'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-import type { GoToPage } from '../lunaticType'
+import type { GoToPage, OverviewItem } from '../lunaticType'
 import { useTranslation } from 'i18n'
+import type { PageTag } from 'core/model'
 
 type BreadCrumbProps = {
-  //This type should be extracted from lunatic
-  hierarchy?: {
-    sequence: {
-      label: ReactNode
-      id: string
-      page: string
-    }
-    subSequence?: {
-      label: ReactNode
-      id: string
-      page: string
-    }
-  }
-  goToPage: GoToPage
+  sequence: OverviewItem | undefined
+  subSequence: OverviewItem | undefined
   iteration: number | undefined
+  goToPage: GoToPage
 }
 
 export function BreadCrumb(props: BreadCrumbProps) {
-  const { hierarchy, iteration, goToPage } = props
+  const { sequence, subSequence, iteration, goToPage } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
-  const { sequence, subSequence } = hierarchy ?? {}
 
   // given a page inside a subsequence, return the page keeping the current iteration
-  const getPageWithIteration = (page: string) => {
-    // page inside a subsequence, and current page is in an iteration
-    if (page.includes('.') && iteration !== undefined) {
-      // return the new page for the same iteration
-      return `${page}#${iteration + 1}`
-    }
-    return page
-  }
+  // const getPageWithIteration = (page: PageTag): PageTag => {
+  //   // page inside a subsequence, and current page is in an iteration
+  //   if (page.includes('.') && iteration !== undefined) {
+  //     // return the new page for the same iteration
+  //     return `${page}#${iteration + 1}` as PageTag
+  //   }
+  //   return page
+  // }
 
-  const goToSequencePage = () =>
-    sequence && goToPage({ page: getPageWithIteration(sequence.page) })
+  // const goToSequencePage = () =>
+  //   sequence && goToPage({ page: getPageWithIteration(sequence.page) })
+  // const goToSubSequencePage = () =>
+  //   subSequence && goToPage({ page: getPageWithIteration(subSequence.page) })
+
+  const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
   const goToSubSequencePage = () =>
-    subSequence && goToPage({ page: getPageWithIteration(subSequence.page) })
+    subSequence && goToPage({ page: subSequence.page })
 
   return (
     <Breadcrumbs separator={''} aria-label="breadcrumb">
