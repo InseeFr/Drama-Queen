@@ -119,8 +119,13 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       fontSize: '.9em',
     },
 
+    // declarations
+    '& .declarations-lunatic': {
+      padding: '0.5em',
+      fontSize: '92%',
+    },
     '& .declaration-lunatic': {
-      margin: '0.5em',
+      marginBottom: '1em',
       '&.declaration-help': {
         color: theme.palette.declarations.help,
       },
@@ -134,16 +139,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         color: theme.palette.declarations.instruction,
       },
     },
-    '& .label-description': {
-      color: theme.palette.declarations.main,
-      marginTop: '1em',
-      fontWeight: 'normal',
-      fontSize: '92%',
-      '&.declaration-help, &.HELP': {
-        color: theme.palette.declarations.help,
-      },
-      display: 'table',
-    },
+
     '& .label-top label': {
       fontWeight: 'bold',
     },
