@@ -91,16 +91,21 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       width: '18px',
     },
 
-    '& .datepicker-lunatic': {
-      fontSize: '100%',
-      marginLeft: '1em',
-      borderRadius: '10px',
-      border: `${borderInput}`,
-      padding: '5px',
-      '&:focus': {
-        outline: 'none',
-        boxShadow: `0 0 5px ${theme.palette.declarations.main}`,
-      },
+    // datepicker
+    '& .lunaticDatepickerFields': {
+      display: 'flex',
+      gap: '1rem',
+    },
+    '.lunaticDatepickerField input': {
+      width: '3.5em',
+    },
+    '.lunaticDatepickerFieldLarge input': {
+      width: '4.5em',
+    },
+    '.lunaticDatepickerHint': {
+      display: 'block',
+      fontWeight: 400,
+      fontSize: '.9em',
     },
 
     '& .declaration-lunatic': {
