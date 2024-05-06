@@ -108,6 +108,17 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       fontSize: '.9em',
     },
 
+    // duration
+    '.duration-fields': {
+      display: 'flex',
+      gap: '1rem',
+    },
+    '.input-field': {
+      display: 'block',
+      fontWeight: 400,
+      fontSize: '.9em',
+    },
+
     '& .declaration-lunatic': {
       margin: '0.5em',
       '&.declaration-help': {
