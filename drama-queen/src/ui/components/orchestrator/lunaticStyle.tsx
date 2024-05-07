@@ -36,20 +36,17 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       display: 'block',
     },
 
-    // TEMP fix until lunatic v3, add :  .lunatic-component > .subsequence-lunatic
-    '& .sequence-lunatic, .subsequence-lunatic, .lunatic-component > .subsequence-lunatic':
-      {
-        backgroundColor: 'transparent',
-        color: 'black',
-        fontSize: '1.2em',
-        display: 'block',
-        margin: '1em 0em 1em 0em',
-        fontWeight: 'bold',
-        padding: '0.5em',
-      },
+    '& .sequence-lunatic, .subsequence-lunatic': {
+      backgroundColor: 'transparent',
+      color: 'black',
+      fontSize: '1.2em',
+      display: 'block',
+      margin: '1em 0em 1em 0em',
+      fontWeight: 'bold',
+      padding: '0.5em',
+    },
 
-    // TEMP fix until lunatic v3, add :  .lunatic-component > .subsequence-lunatic
-    '& .subsequence-lunatic, .lunatic-component > .subsequence-lunatic': {
+    '& .subsequence-lunatic': {
       fontSize: '1.1em',
     },
 
@@ -93,7 +90,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     // datepicker
-    '& .lunaticDatepickerFields': {
+    '.lunaticDatepickerFields': {
       display: 'flex',
       gap: '1rem',
     },
@@ -142,12 +139,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     '& .label-top label': {
-      fontWeight: 'bold',
-    },
-    '& .lunatic-dropdown-label': {
-      fontWeight: 'bold',
-    },
-    '& .checkbox-boolean-modality label': {
       fontWeight: 'bold',
     },
 
@@ -204,31 +195,10 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       },
     },
 
-    '& .lunatic-component .split-fieldset fieldset.checkbox-group, .split-fieldset fieldset.checkbox-group':
-      {
-        '& .checkbox-modality': {
-          display: 'inline-block',
-          width: '40%',
-          [theme.breakpoints.down('xs')]: {
-            display: 'block',
-            width: '70%',
-          },
-        },
-      },
     '& .lunatic-component fieldset, fieldset': {
       padding: 0,
       margin: 0,
       border: 'none',
-
-      '& .lunatic-label': {
-        color: 'initial',
-        fontSize: 'initial',
-        marginBottom: 'initial',
-      },
-
-      '& .field-container': {
-        marginTop: 0,
-      },
 
       // checkbox & radio
       '& .checkbox-modality, & .radio-modality': {
