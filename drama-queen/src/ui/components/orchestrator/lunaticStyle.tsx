@@ -26,6 +26,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
 
     // table
     '& .lunatic-table': {
+      margin: '1em',
+      borderCollapse: 'collapse',
       '& .lunatic-table-tr, .lunatic-table-th, .lunatic-table-td': {
         border: '0.15em solid #555',
         padding: '0.2em 1em',
