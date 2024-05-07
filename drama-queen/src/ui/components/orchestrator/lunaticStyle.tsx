@@ -262,6 +262,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           position: 'relative',
           // right: '1.3em',
           // width: '92%',
+        '& .lunatic-input-radio, .lunatic-input-checkbox': {
         },
         '&:hover span': {
           color: `${modalityLabelColorChecked}`,
