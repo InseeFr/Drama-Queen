@@ -5,6 +5,7 @@ const backgroundColorCheckbox = '#d6d6d6'
 const modalityLabelColorChecked = '#1d63a0'
 const modalityCodeBackgroundColor = 'white'
 const borderInput = '1px solid #767676'
+const disabledColor = '#dcdcdc'
 
 export const useLunaticStyles = tss.create(({ theme }) => ({
   lunatic: {
@@ -303,165 +304,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         },
       },
 
-    // Dropdown lunatic
-    '& .lunatic-component .lunatic-dropdown, .lunatic-dropdown': {
-      display: 'block',
-      width: '100%',
-      marginBottom: '1.5rem',
-      '&:focus': {
-        outline: 'none',
-      },
-
-      '&.label-left': {
-        display: 'flex',
-        flexDirection: 'row',
-      },
-
-      '&.label-right': {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-      },
-
-      '&.label-top': {
-        display: 'flex',
-        flexDirection: 'column',
-      },
-
-      '&.label-bottom': {
-        display: 'flex',
-        flexDirection: 'column-reverse',
-      },
-
-      '& .lunatic-dropdown-label': {
-        opacity: 1,
-      },
-
-      '& .lunatic-dropdown-container': {
-        ul: {
-          paddingInlineStart: '0px',
-          fontSize: '1rem',
-        },
-        position: 'relative',
-        height: '2em',
-        width: '100%',
-        zIndex: 1,
-
-        '&.focused': {
-          zIndex: 2,
-        },
-        '&:focus': {
-          outline: 'none',
-        },
-
-        '& .lunatic-combo-box-panel': {
-          // background-color: var(--color-very-very-light);
-          borderColor: 'white',
-          left: 0,
-          top: 0,
-          width: '100%',
-          height: 'auto',
-          position: 'absolute',
-          '&.visible': {
-            // border-radius: 0 0 16px 16px;
-            height: 'auto',
-          },
-
-          '&.disabled': {
-            backgroundColor: 'var(--color-disabled)',
-          },
-
-          '& .lunatic-dropdown-input': {
-            borderBottom: '1px solid var(--color-primary-dark)',
-            padding: '6px 0 7px',
-            input: {
-              margin: '0px 25px 0px 0px',
-              width: 'calc(100% - 37px)',
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
-              height: '2em',
-              border: 'none',
-              outline: 'none',
-              textAlign: 'left',
-              cursor: 'inherit',
-            },
-            '&:hover': {
-              cursor: 'pointer',
-              borderBottom: '2px solid var(--color-primary-main)',
-            },
-            '&.focused': {
-              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-              boxShadow: '12px 0 rgba(0, 0, 0, 0.05)',
-            },
-          },
-
-          '& .lunatic-icon': {
-            cursor: 'pointer',
-            '&:focus': {
-              outline: 'none',
-            },
-          },
-
-          '& .lunatic-transition': {
-            // visibility: hidden;
-            // overflow-y: hidden;
-            opacity: 0,
-
-            '&:focus': {
-              outline: 'none',
-            },
-
-            '&.visible': {
-              visibility: 'visible',
-              opacity: 1,
-              transition: 'opacity var(--dropdown-transition-time) ease-out',
-            },
-
-            '& .lunatic-dropdown-panel-container': {
-              boxShadow:
-                '0px 3px 3px -2px rgba(0, 0, 0, 0.9), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)',
-
-              '& .lunatic-combo-box-panel': {
-                backgroundColor: 'white',
-                margin: '0 0 12px 0',
-                borderRadius: '4px',
-                zIndex: 3,
-                paddingTop: '3px',
-                listStyle: 'none',
-                '&:focus': {
-                  outline: 'none',
-                },
-                maxHeight: '100px',
-                overflowY: 'auto',
-              },
-            },
-
-            /** options style */
-            '& .lunatic-dropdown-option': {
-              paddingLeft: '10px',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              color: 'black',
-              lineHeight: '2rem',
-              display: 'block',
-              '&.lunatic-dropdown-option-active': {
-                color: 'var(--color-primary-dark)',
-                backgroundColor: 'var(--color-dropdown-active)',
-              },
-              '&.lunatic-dropdown-option-selected': {
-                backgroundColor: 'var(--color-dropdown-selected)',
-              },
-
-              '& .lunatic-prefix': {
-                color: 'var(--color-prefix)',
-                fontWeight: 'bold',
-              },
-            },
-          },
-        },
-      },
-    },
     // missing response buttons css override
     // roll-back some changes when Missing override is available in lunatic-v2
     // such as shortcut and checked selectors
@@ -572,226 +414,119 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           },
         },
     },
-    '& .lunatic-component .lunatic-combo-box-container, .lunatic-combo-box-container':
-      {
-        '& .lunatic-combo-box': {
-          '& .lunatic-combo-box-content': {
-            width: '90%',
-            marginTop: '1em',
-            '$.focused': {
-              width: '90%',
-              marginTop: '1em',
-            },
-          },
-        },
-      },
-    '& .lunatic-component .lunatic-combo-box-fab, .lunatic-combo-box-fab': {
-      right: '15em',
-      top: '3.3em',
-    },
 
-    '& .lunatic-component .lunatic-suggester-message-error, .lunatic-suggester-message-error':
-      {
-        border: 'solid 1px darkred',
-        color: 'darkred',
-        backgroundColor: 'tomato',
-        display: 'inline-block',
-        borderRadius: `${borderInput}`,
-        padding: '4px 8px',
-        margin: '4px 4px',
-      },
-
-    '& .lunatic-component .lunatic-suggester-default-style, .lunatic-suggester-default-style':
-      {
-        '&.lunatic-suggester-container': {
-          marginBottom: '10px',
-
-          '& .lunatic-suggester': {
-            minHeight: '30px',
-            minWidth: '260px',
-            width: '100%',
-            '& .lunatic-suggester-content': {
-              '&.focused': {
-                '& .lunatic-suggester-selection': {},
-              },
-              '& .lunatic-suggester-selection': {
-                borderRadius: '5px',
-                border: '2px solid var(--color-primary-dark)',
-                backgroundColor: 'white',
-                '&:hover': {
-                  borderColor: 'var(--color-primary-main)',
-                },
-                '& .lunatic-suggester-input': {
-                  height: '34',
-                  lineHeight: '34px',
-                  fontSize: '15px',
-                  paddingLeft: '4px',
-                  fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                  // TODO FIX PLACEHOLDER
-                  '&::placeholderList': {
-                    color: 'gray',
-                    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                    fontSize: '15px',
-                    lineHeight: '34px',
-                    verticalAlign: 'middle',
-                    fontWeight: 'normal',
-                  },
-                },
-                '& .lunatic-suggester-selected': {
-                  height: '34px',
-                  lineHeight: '34px',
-                  backgroundColor: 'white',
-                  borderRadius: '5px',
-                  paddingLeft: '4px',
-                  fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                  '& .placeholderList': {
-                    display: 'block',
-                    color: 'gray',
-                    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                    fontSize: '15px',
-                    lineHeight: '34px',
-                    verticalAlign: 'middle',
-                    fontWeight: 'normal',
-                  },
-                  '& .selection': {
-                    display: 'block',
-                    lineHeight: '34px',
-                    fontSize: '15px',
-                  },
-                  '&.disabled': {
-                    backgroundColor: 'var(--color-disabled)',
-                  },
-                },
-              },
-
-              /* */
-              '& .lunatic-suggester-panel': {
-                fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                height: '0',
-                opacity: '0',
-                backgroundColor: 'white',
-                transition:
-                  'opacity 267ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 178ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-                '&.expended': {
-                  border: 'solid 1px var(--color-primary-light)',
-                  opacity: '1',
-                  minHeight: '30px',
-                  height: 'max-content',
-                  boxShadow: '0 2px 2px grey',
-                  borderRadius: '4px',
-                },
-                '& .lunatic-suggester-option': {
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  marginBottom: '0.1em',
-                  lineHeight: '2rem',
-                  display: 'block',
-                  '&.selected': {
-                    color: 'var(--color-primary-dark)',
-                    backgroundColor: 'var(--color-dropdown-selected)',
-                  },
-                  '&:hover': {
-                    backgroundColor: 'var(--color-primary-main)',
-                    color: 'white',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-
-    // suggester.scss
-
-    '& .lunatic-component .lunatic-suggester-container, .lunatic-suggester-container':
-      {
+    // suggester & dropdown
+    ' .lunatic-combo-box-container': {
+      '&.default-style': {
         position: 'relative',
-        width: '100%',
+        marginBottom: '10px',
+        '.lunatic-combo-box': {
+          minHeight: '30px',
+          minWidth: '260px',
+          width: '100%',
+          '& .lunatic-combo-box-content': {
+            width: '70%',
 
-        '& .lunatic-suggester-fab': {
-          position: 'absolute',
-          right: '4px',
-          top: '8px',
-          zIndex: '0',
+            '.lunatic-combo-box-selection': {
+              height: '34px',
+              lineHeight: '34px',
+              fontSize: '15px',
+              borderRadius: '10px',
+              border: '1px solid black',
+              backgroundColor: 'white',
+              '& .placeholder': {
+                color: 'gray',
+                fontSize: '15px',
+              },
+              '& > .placeholder, >.selection': {
+                paddingLeft: '4px',
+              },
+              '.lunatic-combo-box-input': {
+                height: '34px',
+                lineHeight: '34px',
+                fontSize: '15px',
+                textIndent: '4px',
+                margin: 0,
+                padding: 0,
+                width: '100%',
+                border: '1px solid black',
+                '&::placeholder': {
+                  fontSize: '15px',
+                  fontFamily: "'Gotham SSm A','Gotham SSm B',sans-serif",
+                },
+              },
 
-          '&.focused ': {
-            zIndex: '1',
+              '.lunatic-combo-box-selected': {
+                paddingLeft: '4px',
+
+                '&.disabled': {
+                  backgroundColor: `${disabledColor}`,
+                },
+              },
+            },
+
+            '.lunatic-combo-box-panel': {
+              paddingTop: '5px',
+              textIndent: '10px',
+              backgroundColor: 'white',
+              '&.expanded': {
+                margin: 0,
+                padding: 0,
+                listStyle: 'none',
+                border: 'solid 1px',
+                minHeight: '30px',
+                maxHeight: '50vh',
+                overflow: 'auto',
+                boxShadow: '0 2px 2px grey',
+                borderRadius: '4px',
+              },
+
+              '.lunatic-combo-box-option, .lunatic-dropdown-option': {
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                marginBottom: '0.1em',
+                lineHeight: '2rem',
+                display: 'block',
+                '&.selected': {
+                  color: `${theme.palette.primary.main}`,
+                  backgroundColor: '#eaeaea',
+                },
+                '&:hover': {
+                  backgroundColor: `${theme.palette.primary.main}`,
+                  color: 'white',
+                  cursor: 'pointer',
+                },
+              },
+            },
           },
+        },
 
-          '& .lunatic-icon': {
-            '& svg': {
+        '.lunatic-combo-box-fab': {
+          position: 'absolute',
+          top: '60px',
+          left: '70.5%',
+          backgroundColor: `${theme.palette.background.button.main}`,
+          borderRadius: '50%',
+          border: 'none',
+          width: '20px',
+          height: '20px',
+          margin: 0,
+          padding: 0,
+          cursor: 'pointer',
+
+          '.lunatic-icon': {
+            display: 'flex',
+            alignItems: 'center',
+            svg: {
               fill: 'white',
               width: '16px',
               height: '16px',
-            },
-          },
-        },
-        '& .lunatic-suggester': {
-          position: 'relative',
-          zIndex: 0,
-
-          '&:focus': {
-            outline: 'none',
-          },
-
-          '&.focused': {
-            zIndex: '1',
-          },
-
-          '& .lunatic-suggester-content': {
-            position: 'absolute',
-            width: ' 100%',
-
-            '& .lunatic-suggester-selection': {
-              position: 'relative',
-              '& .lunatic-suggester-input': {
-                border: 'none',
-                margin: '0',
-                padding: '0',
-                backgroundColor: 'transparent',
-
-                '&:focus': {
-                  outline: 'none',
-                },
-
-                width: '100%',
-                /* */
-              },
-
-              '& .lunatic-suggester-selected': {
-                position: 'absolute',
-                top: '0',
-                whiteSpace: 'nowrap',
-                overflowX: 'hidden',
-                width: '100%',
-                height: '100%',
-                display: 'none',
-                '&.displayed': {
-                  display: 'block',
-                },
-              },
-            },
-
-            '& ul,li,div,span': {
-              margin: '0',
-              padding: '0',
-              border: 'none',
-              lineHeight: '1em',
-              listStyle: 'none',
-            },
-
-            '& .lunatic-suggester-panel': {
-              '&:focus': {
-                outline: 'none',
-              },
-              '& .lunatic-suggester-option': {
-                whiteSpace: 'nowrap',
-                // @include preventSelect();
-              },
+              margin: 'auto',
             },
           },
         },
       },
+    },
   },
 }))
