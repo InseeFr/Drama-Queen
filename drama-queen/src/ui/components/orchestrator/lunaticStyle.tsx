@@ -198,11 +198,11 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     '&.CheckboxOne, &.Radio': {
-      // TODO code-modality not provided (yet?) in lunatic-v2
       '& .code-modality': {
         borderRadius: '15px',
       },
     },
+
     '& .lunatic-component .split-fieldset fieldset.checkbox-group, .split-fieldset fieldset.checkbox-group':
       {
         '& .checkbox-modality': {
@@ -228,51 +228,30 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       '& .field-container': {
         marginTop: 0,
       },
+
+      // checkbox & radio
       '& .checkbox-modality, & .radio-modality': {
         borderRadius: '5px',
         border: `1px solid ${borderColorCheckbox}`,
         backgroundColor: `${backgroundColorCheckbox}`,
         marginBottom: '12px',
         width: '70%',
-        fontWeight: 'normal',
         padding: '0.5em',
-
-        '& *': {
-          backgroundColor: `${backgroundColorCheckbox}`,
-        },
 
         '& .lunatic-icon': {
           display: 'none',
         },
-        '& > .lunatic-input-checkbox': {
-          backgroundColor: `${backgroundColorCheckbox}`,
-          display: 'block',
-          alignItems: 'center',
-          // padding: '0.5em 0.5em 0.5em 0.6em',
-          position: 'relative',
-          // right: '1.3em',
-          // width: '92%',
+
+        '& .lunatic-input-radio, .lunatic-input-checkbox': {
+          '& > .lunatic-label': {
+            display: 'flex',
+            gap: '0.5em',
+            alignItems: 'center',
+          },
         },
 
-        '& > .lunatic-input-radio': {
-          backgroundColor: `${backgroundColorCheckbox}`,
-          display: 'block',
-          alignItems: 'center',
-          // padding: '0.5em 0.5em 0.5em 0.6em',
-          position: 'relative',
-          // right: '1.3em',
-          // width: '92%',
-        '& .lunatic-input-radio, .lunatic-input-checkbox': {
-        },
         '&:hover span': {
-          color: `${modalityLabelColorChecked}`,
-          backgroundColor: `inherit`,
           fontWeight: 'bold',
-          '& *': {
-            fontWeight: 'bold',
-            backgroundColor: `inherit`,
-          },
-          // TODO code-modality not provided (yet?) in lunatic-v2
           '& .code-modality': {
             color: `${modalityCodeBackgroundColor}`,
             backgroundColor: theme.palette.declarations.main,
@@ -288,14 +267,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
             content: "'✓'",
           },
           '& span': {
-            color: `${modalityLabelColorChecked}`,
-            backgroundColor: theme.palette.background.button.light,
-            fontWeight: 'bold',
             '& *': {
-              backgroundColor: theme.palette.background.button.light,
               fontWeight: 'bold',
             },
-            // TODO code-modality not provided (yet?) in lunatic-v2
             '& .code-modality': {
               color: `${modalityCodeBackgroundColor}`,
               backgroundColor: theme.palette.declarations.main,
@@ -304,31 +278,14 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           },
         },
       },
-      // TODO code-modality not provided (yet?) in lunatic-v2
-      '& span.code-modality': {
-        alignSelf: 'baseline',
-        position: 'relative',
+      '& .code-modality': {
         padding: '0.3em 0.5em 0.3em 0.5em',
-        color: theme.palette.common.black,
         fontWeight: 'bold',
         border: `1px solid ${borderColorCheckbox}`,
         backgroundColor: `${modalityCodeBackgroundColor}`,
         borderRadius: '5px',
         marginRight: '1em',
         height: 'min-content',
-      },
-
-      '& .checkbox-lunatic, .radio-lunatic': {
-        opacity: 0,
-
-        '&:focus + label, ': {
-          // TODO code-modality not provided (yet?) in lunatic-v2
-          '& .code-modality': {
-            backgroundColor: `${modalityCodeBackgroundColor}`,
-            borderColor: theme.palette.declarations.main,
-            borderWidth: '2px',
-          },
-        },
       },
     },
 
@@ -632,14 +589,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       right: '15em',
       top: '3.3em',
     },
-    '& .lunatic-component .lunatic-checkbox-group-option, .lunatic-checkbox-group-option':
-      {
-        fontSize: '16px',
-      },
-    '& .lunatic-component .lunatic-radio-group-option, .lunatic-radio-group-option':
-      {
-        fontSize: '16px',
-      },
 
     '& .lunatic-component .lunatic-suggester-message-error, .lunatic-suggester-message-error':
       {
