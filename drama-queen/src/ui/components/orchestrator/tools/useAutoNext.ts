@@ -25,9 +25,10 @@ export function useAutoNext() {
       countMissingResponseInPage(components) === 1 &&
       // The value changed is a "don't know / refusal" response, or the current component is a radio or checkbox
       (variableChanged.includes('_MISSING') ||
-        ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
-          firstComponent.componentType
-        ))
+        (firstComponent.componentType &&
+          ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
+            firstComponent.componentType
+          )))
     ) {
       goNextPage()
     }
