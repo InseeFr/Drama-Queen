@@ -1,8 +1,5 @@
-import { useLunatic } from '@inseefr/lunatic'
 import type { PageTag, SurveyUnit } from 'core/model'
-
-type Components = ReturnType<ReturnType<typeof useLunatic>['getComponents']>
-type Component = Extract<Components[number], object>
+import type { Component, Components } from '../lunaticType'
 
 /**
  * temporary : should be handle by Lunatic
@@ -26,7 +23,9 @@ function countMissingResponseInComponent(component: Component): number {
       }, 0)
     )
   }
-  return component?.missingResponse?.name ? 1 : 0
+  return 'missingResponse' in component && component?.missingResponse?.name
+    ? 1
+    : 0
 }
 
 /**

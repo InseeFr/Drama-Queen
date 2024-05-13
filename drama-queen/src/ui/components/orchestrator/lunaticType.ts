@@ -14,3 +14,6 @@ export type GetChangedData = LunaticState['getChangedData']
 
 export type GetReferentiel = LunaticOptions['getReferentiel']
 export type Nomenclature = Awaited<ReturnType<NonNullable<GetReferentiel>>>
+
+export type Components = ReturnType<LunaticState['getComponents']>
+export type Component = Components[number]
