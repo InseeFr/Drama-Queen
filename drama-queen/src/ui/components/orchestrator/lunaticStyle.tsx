@@ -203,7 +203,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       border: 'none',
 
       // checkbox & radio
-      '& .checkbox-modality, & .radio-modality': {
+      '& .lunatic-input-checkbox, & .lunatic-input-checkbox': {
         borderRadius: '5px',
         border: `1px solid ${borderColorCheckbox}`,
         backgroundColor: `${backgroundColorCheckbox}`,
@@ -211,19 +211,17 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         width: '70%',
         padding: '0.5em',
 
-        '& .lunatic-icon': {
+        '& .lunatic-input-checkbox__icon': {
           display: 'none',
         },
 
-        '& .lunatic-input-radio, .lunatic-input-checkbox': {
-          '& > .lunatic-label': {
-            display: 'flex',
-            gap: '0.5em',
-            alignItems: 'center',
-          },
+        '& > .lunatic-label': {
+          display: 'flex',
+          gap: '0.5em',
+          alignItems: 'center',
         },
 
-        '&:hover span': {
+        '&:hover': {
           fontWeight: 'bold',
           '& .code-modality': {
             color: `${modalityCodeBackgroundColor}`,
@@ -232,22 +230,20 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           },
         },
 
-        '&.checked': {
+        '&[aria-checked=true]': {
           backgroundColor: theme.palette.background.button.light,
           borderColor: `${modalityLabelColorChecked}`,
+          '& *': {
+            fontWeight: 'bold',
+          },
           '& label::after': {
             marginLeft: 'auto',
             content: "'✓'",
           },
-          '& span': {
-            '& *': {
-              fontWeight: 'bold',
-            },
-            '& .code-modality': {
-              color: `${modalityCodeBackgroundColor}`,
-              backgroundColor: theme.palette.declarations.main,
-              borderColor: theme.palette.declarations.main,
-            },
+          '& .code-modality': {
+            color: `${modalityCodeBackgroundColor}`,
+            backgroundColor: theme.palette.declarations.main,
+            borderColor: theme.palette.declarations.main,
           },
         },
       },
