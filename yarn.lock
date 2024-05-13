@@ -1781,10 +1781,10 @@
     remove-accents "^0.4.2"
     sass "^1.32.2"
 
-"@inseefr/lunatic@3.0.0-rc.32":
-  version "3.0.0-rc.32"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.0.0-rc.32.tgz#a72ed2bbcbce536ec66040b76925ea022a9bf740"
-  integrity sha512-89yUShRfe5SQJ8pNYB8vPe0rRZVevfrTxLgTCoBv+wAX69Ik8c4eP7Mb8mBK4f4yh+OcTx5ukLlh8f38E5lyYw==
+"@inseefr/lunatic@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.0.0.tgz#e259a85076635b50eff7c237dc86afcb7f60af4f"
+  integrity sha512-yeOujy8aO8/mD/1aLGhz02Gp/b79HXRwzjf5dRkb2hT49XOCcVB/tyy3CmTw1P+gQIFGTRGOE0uToD49d1ZGyQ==
   dependencies:
     "@inseefr/trevas" "^0.1.21"
     "@inseefr/vtl-2.0-antlr-tools" "^0.3.2"
@@ -1795,10 +1795,10 @@
     react-error-boundary "^4.0.13"
     react-markdown "^9.0.1"
     react-number-format "^5.3.4"
-    react-tooltip "^5.26.3"
+    react-tooltip "^5.26.4"
     remark-breaks "^4.0.0"
     remark-emoji "^4.0.1"
-    sass "^1.75.0"
+    sass "^1.76.0"
 
 "@inseefr/trevas@^0.1.14":
   version "0.1.20"
@@ -14736,7 +14736,7 @@ react-tooltip@^4.2.15:
     prop-types "^15.8.1"
     uuid "^7.0.3"
 
-react-tooltip@^5.26.3:
+react-tooltip@^5.26.4:
   version "5.26.4"
   resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.26.4.tgz#9e350f2a1c859201ccdc3b15d17e0a01e88c0a0f"
   integrity sha512-5WyDrsfw1+6qNVSr3IjqElqJ+cCwE8+44b+HpJ8qRLv7v0a3mcKf8wvv+NfgALFS6QpksGFqTLV2JQ60c+okZQ==
@@ -15512,10 +15512,10 @@ sass@^1.32.2:
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
 
-sass@^1.75.0:
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.76.0.tgz#fe15909500735ac154f0dc7386d656b62b03987d"
-  integrity sha512-nc3LeqvF2FNW5xGF1zxZifdW3ffIz5aBb7I7tSvOoNu7z1RQ6pFt9MBuiPtjgaI62YWrM/txjWlOCFiGtf2xpw==
+sass@^1.76.0:
+  version "1.77.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.77.1.tgz#018cdfb206afd14724030c02e9fefd8f30a76cd0"
+  integrity sha512-OMEyfirt9XEfyvocduUIOlUSkWOXS/LAt6oblR/ISXCTukyavjex+zQNm51pPCOiFKY1QpWvEH1EeCkgyV3I6w==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
