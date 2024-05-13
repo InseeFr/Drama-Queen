@@ -17,17 +17,9 @@ export function SequenceNavigation(props: SequenceNavigationProps) {
     props
   const { classes } = useStyles()
 
-  function getSequenceEndIcon(sequence: OverviewItem) {
-    // display endIcon only if sequence leads to a subSequences menu
-    if (sequence.children.length > 0) {
-      return <ChevronRightIcon />
-    }
-  }
-
-  function isSequenceDisabled(sequence: OverviewItem) {
-    // we can only navigate to a sequence that as already been reached
-    return !(sequence.reached && sequence.visible)
-  }
+  // display endIcon only if sequence leads to a subSequences menu
+  const getSequenceEndIcon = (sequence: OverviewItem) =>
+    sequence.children.length > 0 ? <ChevronRightIcon /> : undefined
 
   return (
     <Stack className={classes.navigationContainer}>
@@ -36,13 +28,14 @@ export function SequenceNavigation(props: SequenceNavigationProps) {
       </Typography>
       <Stack>
         {overview.map((sequence) => (
+          // we can only navigate to a sequence that has already been reached
           <MenuNavigationButton
-            key={sequence.lunaticId}
+            key={sequence.id}
             className={
               selectedSequence === sequence ? classes.sequenceOpen : ''
             }
             label={sequence.label}
-            disabled={isSequenceDisabled(sequence)}
+            disabled={!sequence.reached}
             endIcon={getSequenceEndIcon(sequence)}
             onClick={() => sequenceOnClick(sequence)}
           />
