@@ -1,6 +1,5 @@
 import type { Thunks } from 'core/bootstrap'
 import type {
-  Nomenclature,
   Questionnaire,
   SurveyUnit,
   WrappedQuestionnaire,
@@ -9,6 +8,7 @@ import { searchParamsSchema } from './parser/searchParamsSchema'
 import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSchema'
 import { fetchUrl } from 'core/tools/fetchUrl'
 import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
+import type { Nomenclature } from 'ui/components/orchestrator/lunaticType'
 
 export const name = 'visualizeSurvey'
 
