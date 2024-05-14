@@ -1,5 +1,6 @@
 import type { QueenApi } from 'core/ports/QueenApi'
 import { surveySample } from './mockData/surveySample'
+import type { SurveyUnit } from 'core/model'
 
 export function createApiClient(): QueenApi {
   return {
@@ -38,7 +39,10 @@ export function createApiClient(): QueenApi {
   }
 }
 
-function createSUMocked(props: { idSu?: string; idCampaign?: string }) {
+function createSUMocked(props: {
+  idSu?: string
+  idCampaign?: string
+}): SurveyUnit {
   const { idSu = 'su1', idCampaign = 'campaign1' } = props
   return {
     id: `idSU:${idSu}`,
@@ -59,7 +63,7 @@ function createSUMocked(props: { idSu?: string; idCampaign?: string }) {
     },
     stateData: {
       date: 1,
-      currentPage: '',
+      currentPage: '0',
       state: null,
     },
     comment: {},

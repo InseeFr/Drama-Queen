@@ -1,133 +1,182 @@
 import type { Questionnaire } from 'core/model/Questionnaire'
 
 export const surveySample = {
-  id: 'lk9s32o5',
-  modele: 'TESTQUESTI',
-  enoCoreVersion: '2.4.3',
-  lunaticModelVersion: '2.3.2',
-  generatingDate: '19-07-2023 15:49:59',
-  missing: true,
-  pagination: 'question',
-  maxPage: '4',
-  label: { value: 'Test Questionnaire', type: 'VTL|MD' },
-  components: [
-    {
-      id: 'lk9s5zal',
-      componentType: 'Sequence',
-      page: '1',
-      label: { value: '"I - " || "Séquence1"', type: 'VTL|MD' },
-      declarations: [
-        {
-          id: 'lk9s5zal-lk9sorcs',
-          declarationType: 'HELP',
-          position: 'AFTER_QUESTION_TEXT',
-          label: {
-            value: '"Une déclaration de séquence"',
-            type: 'VTL|MD',
-          },
-        },
-      ],
-      conditionFilter: { value: 'true', type: 'VTL' },
-      hierarchy: {
-        sequence: {
-          id: 'lk9s5zal',
-          page: '1',
-          label: { value: '"I - " || "Séquence1"', type: 'VTL|MD' },
-        },
-      },
-    },
-    {
-      id: 'lk9sncn6',
-      componentType: 'Input',
-      mandatory: false,
-      page: '2',
-      maxLength: 249,
-      label: { value: '"➡ 1. " || "Une question"', type: 'VTL|MD' },
-      conditionFilter: { value: 'true', type: 'VTL' },
-      hierarchy: {
-        sequence: {
-          id: 'lk9s5zal',
-          page: '1',
-          label: { value: '"I - " || "Séquence1"', type: 'VTL|MD' },
-        },
-      },
-      missingResponse: { name: 'Q1_MISSING' },
-      bindingDependencies: ['Q1_MISSING', 'Q1'],
-      response: { name: 'Q1' },
-    },
-    {
-      id: 'COMMENT-SEQ',
-      componentType: 'Sequence',
-      page: '3',
-      label: { value: '"Commentaire"', type: 'VTL|MD' },
-      conditionFilter: { value: 'true', type: 'VTL' },
-      hierarchy: {
-        sequence: {
-          id: 'COMMENT-SEQ',
-          page: '3',
-          label: { value: '"Commentaire"', type: 'VTL|MD' },
-        },
-      },
-    },
-    {
-      id: 'COMMENT-QUESTION',
-      componentType: 'Textarea',
-      mandatory: false,
-      page: '4',
-      maxLength: 2000,
-      label: {
-        value:
-          '"Avez-vous des remarques concernant l\'enquête ou des commentaires ?"',
-        type: 'VTL|MD',
-      },
-      conditionFilter: { value: 'true', type: 'VTL' },
-      hierarchy: {
-        sequence: {
-          id: 'COMMENT-SEQ',
-          page: '3',
-          label: { value: '"Commentaire"', type: 'VTL|MD' },
-        },
-      },
-      bindingDependencies: ['COMMENT_QE'],
-      response: { name: 'COMMENT_QE' },
-    },
-  ],
+  componentType: 'Questionnaire',
   variables: [
     {
       variableType: 'COLLECTED',
+      values: {
+        COLLECTED: null,
+        EDITED: null,
+        FORCED: null,
+        INPUTTED: null,
+        PREVIOUS: null,
+      },
+      name: 'INPUT',
+    },
+    {
+      variableType: 'COLLECTED',
+      values: {
+        COLLECTED: null,
+        EDITED: null,
+        FORCED: null,
+        INPUTTED: null,
+        PREVIOUS: null,
+      },
       name: 'COMMENT_QE',
-      values: {
-        PREVIOUS: null,
-        COLLECTED: null,
-        FORCED: null,
-        EDITED: null,
-        INPUTED: null,
-      },
     },
     {
       variableType: 'COLLECTED',
-      name: 'Q1',
       values: {
-        PREVIOUS: null,
         COLLECTED: null,
-        FORCED: null,
         EDITED: null,
-        INPUTED: null,
+        FORCED: null,
+        INPUTTED: null,
+        PREVIOUS: null,
       },
+      name: 'INPUT_MISSING',
     },
     {
       variableType: 'COLLECTED',
-      name: 'Q1_MISSING',
       values: {
-        PREVIOUS: null,
         COLLECTED: null,
-        FORCED: null,
         EDITED: null,
-        INPUTED: null,
+        FORCED: null,
+        INPUTTED: null,
+        PREVIOUS: null,
       },
+      name: 'COMMENT_QE_MISSING',
     },
   ],
-  cleaning: {},
-  missingBlock: { Q1_MISSING: ['Q1'], Q1: ['Q1_MISSING'] },
+  components: [
+    {
+      componentType: 'Sequence',
+      hierarchy: {
+        sequence: {
+          id: 'lw65iawq',
+          page: '1',
+          label: {
+            type: 'VTL|MD',
+            value: '"I - " || "Séquence 1"',
+          },
+        },
+      },
+      conditionFilter: {
+        type: 'VTL',
+        value: 'true',
+      },
+      id: 'lw65iawq',
+      page: '1',
+      label: {
+        type: 'VTL|MD',
+        value: '"I - " || "Séquence 1"',
+      },
+      declarations: [
+        {
+          declarationType: 'HELP',
+          id: 'lw65geez',
+          label: {
+            type: 'VTL|MD',
+            value: '"Une déclaration de séquence"',
+          },
+          position: 'AFTER_QUESTION_TEXT',
+        },
+      ],
+    },
+    {
+      componentType: 'Input',
+      missingResponse: {
+        name: 'INPUT_MISSING',
+      },
+      response: {
+        name: 'INPUT',
+      },
+      hierarchy: {
+        sequence: {
+          id: 'lw65iawq',
+          page: '1',
+          label: {
+            type: 'VTL|MD',
+            value: '"I - " || "Séquence 1"',
+          },
+        },
+      },
+      conditionFilter: {
+        type: 'VTL',
+        value: 'true',
+      },
+      id: 'lw6574kk',
+      page: '2',
+      label: {
+        type: 'VTL|MD',
+        value: '"➡ 1. " || "Question input"',
+      },
+      mandatory: false,
+      maxLength: 40,
+    },
+    {
+      componentType: 'Sequence',
+      hierarchy: {
+        sequence: {
+          id: 'COMMENT-SEQ',
+          page: '3',
+          label: {
+            type: 'VTL|MD',
+            value: '"Commentaire"',
+          },
+        },
+      },
+      conditionFilter: {
+        type: 'VTL',
+        value: 'true',
+      },
+      id: 'COMMENT-SEQ',
+      page: '3',
+      label: {
+        type: 'VTL|MD',
+        value: '"Commentaire"',
+      },
+    },
+    {
+      componentType: 'Textarea',
+      missingResponse: {
+        name: 'COMMENT_QE_MISSING',
+      },
+      response: {
+        name: 'COMMENT_QE',
+      },
+      conditionFilter: {
+        type: 'VTL',
+        value: 'true',
+      },
+      id: 'COMMENT-QUESTION',
+      page: '4',
+      label: {
+        type: 'VTL|MD',
+        value:
+          '"➡ 2. " || "Avez-vous des remarques concernant l\'enquête ou des commentaires ?"',
+      },
+      mandatory: false,
+      maxLength: 2000,
+    },
+  ],
+  pagination: 'question',
   resizing: {},
+  missingBlock: {
+    INPUT: ['INPUT_MISSING'],
+    INPUT_MISSING: ['INPUT'],
+    COMMENT_QE: ['COMMENT_QE_MISSING'],
+    COMMENT_QE_MISSING: ['COMMENT_QE'],
+  },
+  label: {
+    type: 'VTL|MD',
+    value: 'Questionnaire simple',
+  },
+  lunaticModelVersion: '3.8.0',
+  modele: 'QUESTSIMPL',
+  enoCoreVersion: '3.21.1-SNAPSHOT',
+  generatingDate: '14-05-2024 08:34:15',
+  missing: true,
+  id: 'lw6534qt',
+  maxPage: '4',
 } as Questionnaire
