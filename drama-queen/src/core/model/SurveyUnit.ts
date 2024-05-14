@@ -10,9 +10,11 @@ export type SurveyUnit = {
   personalization?: {}[] | {}
   data: SurveyUnitData
   comment?: {} | undefined
-  stateData?: {
-    state: QuestionnaireState
-    date: number
-    currentPage: PageTag
-  }
+  stateData?:
+    | {
+        state: QuestionnaireState
+        date: number
+        currentPage: PageTag
+      }
+    | undefined
 }
