@@ -3,6 +3,7 @@ import SkipNext from '@mui/icons-material/SkipNext'
 import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
 import type { GoNextPage, GoPreviousPage, GoToPage } from '../lunaticType'
 import { getTranslation } from 'i18n'
+import type { PageTag } from 'core/model'
 
 const { t } = getTranslation('navigationMessage')
 
@@ -15,7 +16,7 @@ type ContinueAction =
 
 type UseNavigationButtonsProps = {
   readonly: boolean
-  lastReachedPage: string | undefined
+  lastReachedPage: PageTag | undefined
   isFirstPage: boolean
   isLastPage: boolean
   isLastReachedPage: boolean
@@ -62,7 +63,7 @@ export function useNavigationButtons({
       case 'saveAndQuit':
         return definitiveQuit()
       case 'fastForward':
-        return goToPage({ page: lastReachedPage || '' })
+        return goToPage({ page: lastReachedPage || '1' })
       default:
         return goNextPage()
     }
