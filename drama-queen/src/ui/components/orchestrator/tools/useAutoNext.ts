@@ -23,14 +23,19 @@ export function useAutoNext() {
     ) => {
       if (ref.current === null) return
       const { getComponents, goNextPage } = ref.current
-      const variablesChanged = valueChange[0].name
       const components = getComponents()
       const firstComponent = components[0]
+      // at least one missing value has been selected
+      const hasMissingValue = valueChange.some(
+        (variable) =>
+          variable.name.includes('_MISSING') &&
+          ['DK', 'RF'].includes(variable.value)
+      )
       if (
         // There is only one "don't know / refusal" variable on the page
         countMissingResponseInPage(components) === 1 &&
-        // The value changed is a "don't know / refusal" response, or the current component is a radio or checkbox
-        (variablesChanged.includes('_MISSING') ||
+        // One of the values changed is a "don't know / refusal" response, or the current component is a radio or checkbox
+        (hasMissingValue ||
           (firstComponent.componentType &&
             ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
               firstComponent.componentType
