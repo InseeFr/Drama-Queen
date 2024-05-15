@@ -1,10 +1,8 @@
 import Button from '@mui/material/Button'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
-import { type ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 import type { GoToPage, OverviewItem } from '../lunaticType'
 import { useTranslation } from 'i18n'
-import type { PageTag } from 'core/model'
 
 type BreadCrumbProps = {
   sequence: OverviewItem | undefined
@@ -17,21 +15,6 @@ export function BreadCrumb(props: BreadCrumbProps) {
   const { sequence, subSequence, iteration, goToPage } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
-
-  // given a page inside a subsequence, return the page keeping the current iteration
-  // const getPageWithIteration = (page: PageTag): PageTag => {
-  //   // page inside a subsequence, and current page is in an iteration
-  //   if (page.includes('.') && iteration !== undefined) {
-  //     // return the new page for the same iteration
-  //     return `${page}#${iteration + 1}` as PageTag
-  //   }
-  //   return page
-  // }
-
-  // const goToSequencePage = () =>
-  //   sequence && goToPage({ page: getPageWithIteration(sequence.page) })
-  // const goToSubSequencePage = () =>
-  //   subSequence && goToPage({ page: getPageWithIteration(subSequence.page) })
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
   const goToSubSequencePage = () =>
