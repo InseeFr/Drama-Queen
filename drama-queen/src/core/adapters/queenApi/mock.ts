@@ -63,7 +63,7 @@ function createSUMocked(props: {
     },
     stateData: {
       date: 1,
-      currentPage: '0',
+      currentPage: '1',
       state: null,
     },
     comment: {},
