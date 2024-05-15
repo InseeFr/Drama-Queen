@@ -5,7 +5,6 @@ export const nomenclatureSchema = z.array(
     .object({
       id: z.string(),
       label: z.string(),
-      value: z.string(),
     })
     .catchall(z.string())
 )

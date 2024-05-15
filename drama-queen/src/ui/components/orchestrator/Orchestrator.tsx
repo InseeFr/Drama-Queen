@@ -17,7 +17,7 @@ import { useLunaticStyles } from './lunaticStyle'
 import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useNavigationButtons } from './tools/useNavigationButtons'
-import type { GetReferentiel } from './lunaticType'
+import type { GetReferentiel, Nomenclature } from './lunaticType'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -28,7 +28,7 @@ type OrchestratorProps = {
   onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
   onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
   onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
-  getReferentiel: GetReferentiel
+  getReferentiel: ((name: string) => Promise<Nomenclature>) | undefined
   onChangeSurveyUnitState?:
     | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
     | undefined
@@ -72,7 +72,7 @@ export function Orchestrator(props: OrchestratorProps) {
   } = useLunatic(source, initialData, {
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     onChange,
-    getReferentiel,
+    getReferentiel: getReferentiel as GetReferentiel, // TEMP : force type waiting for Nomenclature type got from Lunatic (see lunaticType file)
     autoSuggesterLoading: true,
     trackChanges: true,
     shortcut: true,

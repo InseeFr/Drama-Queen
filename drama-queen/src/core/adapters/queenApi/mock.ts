@@ -33,7 +33,7 @@ export function createApiClient(): QueenApi {
     getQuestionnaire: (_idSurvey) => Promise.resolve(surveySample),
     getRequiredNomenclaturesByCampaign: () => Promise.resolve([]),
     getNomenclature: (idNomenclature) =>
-      Promise.resolve([{ id: `${idNomenclature}`, label: 'label', value: '' }]),
+      Promise.resolve([{ id: `${idNomenclature}`, label: 'label' }]),
     postParadata: (paradata) =>
       Promise.resolve(console.log('postParadata', paradata)),
   }

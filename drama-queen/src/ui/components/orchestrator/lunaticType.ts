@@ -13,7 +13,15 @@ export type GoNextPage = LunaticState['goNextPage']
 export type GetChangedData = LunaticState['getChangedData']
 
 export type GetReferentiel = LunaticOptions['getReferentiel']
-export type Nomenclature = Awaited<ReturnType<NonNullable<GetReferentiel>>>
+
+// TEMP: Nomenclature should be type used by Lunatic, but it needed to be changed because awaiting too much variables
+// export type Nomenclature = Awaited<ReturnType<NonNullable<GetReferentiel>>>
+export type Nomenclature = ({
+  id: string
+  label?: string
+} & {
+  [key: string]: string
+})[]
 
 export type Components = ReturnType<LunaticState['getComponents']>
 export type Component = Components[number]
