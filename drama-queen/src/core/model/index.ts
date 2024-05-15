@@ -1,4 +1,4 @@
-export * from './Campaing'
+export * from './Campaign'
 export * from './Nomenclature'
 export * from './Paradata'
 export * from './Questionnaire'

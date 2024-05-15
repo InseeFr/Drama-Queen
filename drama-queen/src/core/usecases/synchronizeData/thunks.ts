@@ -1,7 +1,7 @@
 import type { Thunks } from 'core/bootstrap'
 import { actions, name } from './state'
 import { AxiosError } from 'axios'
-import type { LunaticSource } from '@inseefr/lunatic'
+import type { Questionnaire } from 'core/model'
 
 export const thunks = {
   download:
@@ -84,7 +84,7 @@ export const thunks = {
             },
             { questionnaireIdInSuccess: [], questionnaires: [] } as {
               questionnaireIdInSuccess: string[]
-              questionnaires: LunaticSource[]
+              questionnaires: Questionnaire[]
             }
           )
 

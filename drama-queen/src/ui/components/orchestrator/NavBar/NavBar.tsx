@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography'
 import { useTranslation } from 'i18n'
 
 type NavBarProps = {
-  page: string
-  maxPage: string
+  page: number
+  maxPage: number
   subPage: number | undefined
   nbSubPages: number | undefined
   isPreviousEnabled: boolean
@@ -42,8 +42,8 @@ export function NavBar(props: NavBarProps) {
 
   function displayPage(
     pageType: {
-      current: string | number | undefined
-      max: string | number | undefined
+      current: number | undefined
+      max: number | undefined
     },
     index: number
   ) {

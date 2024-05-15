@@ -4,9 +4,7 @@
   "version": "2.0.0-rc.17",
   "type": "module",
   "scripts": {
-    "predev": "workers",
     "dev": "vite --port 5000 --strictPort",
-    "prebuild": "workers",
     "build": "tsc && vite build",
     "postbuild": "node build/remote-env.cjs remoteEntry.js",
     "preview": "vite preview --port 5000 --strictPort",
@@ -18,7 +16,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@inseefr/lunatic": "^2.7.23",
+    "@inseefr/lunatic": "^3.0.1",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@types/memoizee": "^0.4.11",

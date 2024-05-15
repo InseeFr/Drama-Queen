@@ -1,12 +1,17 @@
-import type { CollectedValues, SurveyUnit, SurveyUnitData } from 'core/model'
+import type {
+  CollectedValues,
+  PageTag,
+  SurveyUnit,
+  SurveyUnitData,
+} from 'core/model'
 import type { QuestionnaireState } from 'core/model/QuestionnaireState'
 import { useEffect, useState } from 'react'
 import type { GetChangedData } from '../lunaticType'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
-  lastReachedPage: string | undefined
-  pageTag: string
+  lastReachedPage: PageTag | undefined
+  pageTag: PageTag
   getChangedData: GetChangedData
   onQuit: (surveyUnit: SurveyUnit) => void
   onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
@@ -144,7 +149,7 @@ export function getQueenNavigation({
   const getUpdatedSurveyUnit = (
     state: QuestionnaireState,
     data: SurveyUnitData
-  ) => {
+  ): SurveyUnit => {
     const surveyUnit = {
       ...initialSurveyUnit,
       data,

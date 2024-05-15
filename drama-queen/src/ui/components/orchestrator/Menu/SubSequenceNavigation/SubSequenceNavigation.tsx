@@ -12,24 +12,20 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
   const { sequence, subSequenceOnClick } = props
   const { classes } = useStyles()
 
-  function isSubSequenceDisabled(subSequence: OverviewItem) {
-    // we can only navigate to a subSequence that as already been reached
-    return !(subSequence.reached && subSequence.visible)
-  }
-
   return (
     <Stack className={classes.navigationContainer}>
       <MenuNavigationButton
-        key={sequence.lunaticId}
+        key={sequence.id}
         label={sequence.label}
         onClick={() => subSequenceOnClick(sequence)}
       />
       <Stack>
         {sequence.children.map((subSequence) => (
+          // we can only navigate to a subSequence that has already been reached
           <MenuNavigationButton
-            key={subSequence.lunaticId}
+            key={subSequence.id}
             label={subSequence.label}
-            disabled={isSubSequenceDisabled(subSequence)}
+            disabled={!subSequence.reached}
             onClick={() => subSequenceOnClick(subSequence)}
           />
         ))}

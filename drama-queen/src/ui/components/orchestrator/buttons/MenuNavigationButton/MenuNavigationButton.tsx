@@ -1,9 +1,10 @@
 import Button from '@mui/material/Button'
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 
 type MenuNaviGationButtonProps = {
   className?: string
-  label: string
+  label: string | ReactNode
   disabled?: boolean
   startIcon?: JSX.Element
   endIcon?: JSX.Element

@@ -7,7 +7,7 @@ import { useTranslation } from 'i18n'
 import { useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
-import type { Overview, OverviewItem } from '../lunaticType'
+import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
 import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'
 import { StopNavigation } from './StopNavigation/StopNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation/SubSequenceNavigation'
@@ -17,12 +17,7 @@ type MenuProps = {
   readonly: boolean
   questionnaireTitle: string
   overview: Overview
-  goToPage: (page: {
-    page: string
-    iteration?: number
-    nbIterations?: number
-    subPage?: number
-  }) => void
+  goToPage: GoToPage
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
   quit: () => void
   definitiveQuit: () => void
