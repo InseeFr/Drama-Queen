@@ -1,8 +1,7 @@
-import type { LunaticState } from '@inseefr/lunatic'
 import type { QuestionnaireState } from './QuestionnaireState'
 import type { SurveyUnitData } from './SurveyUnitData'
 
-export type PageTag = LunaticState['pageTag']
+export type PageTag = `${number}.${number}#${number}` | `${number}`
 
 export type SurveyUnit = {
   id: string
