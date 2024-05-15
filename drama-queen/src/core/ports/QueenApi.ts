@@ -1,12 +1,12 @@
 import type {
   Campaign,
   IdAndQuestionnaireId,
+  Nomenclature,
   Paradata,
   Questionnaire,
   RequiredNomenclatures,
   SurveyUnit,
 } from 'core/model'
-import type { Nomenclature } from 'ui/components/orchestrator/lunaticType'
 
 export type QueenApi = {
   getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (

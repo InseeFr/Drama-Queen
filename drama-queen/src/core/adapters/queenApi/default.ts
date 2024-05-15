@@ -10,12 +10,12 @@ import {
 import type {
   Campaign,
   IdAndQuestionnaireId,
+  Nomenclature,
   Questionnaire,
   RequiredNomenclatures,
   SurveyUnit,
 } from 'core/model'
 import { handleAxiosError } from 'core/tools/axiosError'
-import type { Nomenclature } from 'ui/components/orchestrator/lunaticType'
 
 export function createApiClient(params: {
   apiUrl: string
