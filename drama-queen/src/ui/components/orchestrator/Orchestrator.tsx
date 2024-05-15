@@ -90,7 +90,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration } =
     pager
 
-  const questionnaireTitle = source.label.value
+  const questionnaireTitle = source.label ? source.label.value : ''
 
   const components = getComponents()
 
