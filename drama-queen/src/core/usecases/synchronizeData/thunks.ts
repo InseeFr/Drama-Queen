@@ -47,7 +47,7 @@ export const thunks = {
          * Survey
          */
 
-        //We need surveyResults before fetchning SurveyUnit so we await.
+        //We need surveyResults before fetching SurveyUnit so we await.
         const surveyResults = await Promise.all(
           questionnaireIds.map((questionnaireId) =>
             queenApi
@@ -128,6 +128,7 @@ export const thunks = {
                             `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
                             error
                           )
+                          return
                         }
                         throw error
                       })
@@ -159,9 +160,10 @@ export const thunks = {
           suggestersNames.map((nomenclatureId) =>
             queenApi
               .getNomenclature(nomenclatureId)
-              .catch(() => {
+              .catch((error) => {
                 console.error(
-                  `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`
+                  `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`,
+                  error
                 )
               })
               .finally(() => {
@@ -176,7 +178,8 @@ export const thunks = {
         dispatch(actions.downloadCompleted())
       } catch (error) {
         console.error(
-          'An unknown error occurred while we were fetching data so we stop the synchronization.'
+          'An unknown error occurred while we were fetching data so we stop the synchronization.',
+          error
         )
         localSyncStorage.addError(true)
         dispatch(actions.downloadFailed())
