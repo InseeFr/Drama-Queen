@@ -1,7 +1,7 @@
 import type { Questionnaire } from 'core/model'
 import { getTranslation } from 'i18n'
 
-const lunaticModelVersionBreaking = '2.2.2'
+const lunaticModelVersionBreaking = '2.2.10'
 
 const { t } = getTranslation('errorMessage')
 
