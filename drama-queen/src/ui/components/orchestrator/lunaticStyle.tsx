@@ -36,19 +36,25 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
 
     '&.Loop': {
       display: 'block',
+      // tempory add selector '& .field' for avoiding lunatic css overload in loops
+      '& .field': {
+        display: 'block',
+      },
     },
 
-    '& .sequence-lunatic, .subsequence-lunatic': {
-      backgroundColor: 'transparent',
-      color: 'black',
-      fontSize: '1.2em',
-      display: 'block',
-      margin: '1em 0em 1em 0em',
-      fontWeight: 'bold',
-      padding: '0.5em',
-    },
-
-    '& .subsequence-lunatic': {
+    // temporary add ".field > .subsequence-lunatic" for avoiding lunatic css overload in loops
+    '& .sequence-lunatic, .subsequence-lunatic, .field > .subsequence-lunatic':
+      {
+        backgroundColor: 'transparent',
+        color: 'black',
+        fontSize: '1.2em',
+        display: 'block',
+        margin: '1em 0em 1em 0em',
+        fontWeight: 'bold',
+        padding: '0.5em',
+      },
+    // temporary add ".field > .subsequence-lunatic" for avoiding lunatic css overload  in loops
+    '& .subsequence-lunatic, .field > .subsequence-lunatic': {
       fontSize: '1.1em',
     },
 
@@ -126,17 +132,26 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
     '& .declaration-lunatic': {
       marginBottom: '1em',
+      // temporary precize fontStyle/fontSize in every declaration type for avoiding lunatic css overload in loops
       '&.declaration-help': {
         color: theme.palette.declarations.help,
+        fontStyle: 'normal',
+        fontSize: '100%',
       },
       '&.declaration-instruction': {
         color: theme.palette.declarations.instruction,
+        fontStyle: 'normal',
+        fontSize: '100%',
       },
       '&.declaration-statement': {
         color: theme.palette.declarations.instruction,
+        fontStyle: 'normal',
+        fontSize: '100%',
       },
       '&.declaration-codecard': {
         color: theme.palette.declarations.instruction,
+        fontStyle: 'normal',
+        fontSize: '100%',
       },
     },
 
@@ -298,6 +313,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           borderRadius: '4px',
           lineHeight: 1.75,
           fontSize: '0.875rem',
+          fontWeight: 'normal', // temporary precise fontWeight for avoiding lunatic css overload
           width: '170px',
           textAlign: 'left',
 
