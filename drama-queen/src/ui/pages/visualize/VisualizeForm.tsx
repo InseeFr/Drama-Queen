@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { tss } from 'tss-react/mui'
 
 import { useSearchParams } from 'react-router-dom'
-import { encodeParams } from './encodeParams'
+import { getSearchParams } from './getSearchParams'
 import { useTranslation } from 'i18n'
 
 export type FormValues = {
@@ -24,7 +24,7 @@ export function VisualizeForm() {
   const { register, handleSubmit } = useForm<FormValues>()
   const [, setSearchParams] = useSearchParams()
   const onSubmit = handleSubmit((data) => {
-    setSearchParams(encodeParams(data))
+    setSearchParams(getSearchParams(data))
   })
 
   return (
