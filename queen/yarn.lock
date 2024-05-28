@@ -8,9 +8,7 @@
   integrity sha512-3JOd6g+BALysWS8LNf0qdB8ltR651H/RCLAvUmfS0LIHwHO579XfjZUIZbURYiAZrcbp1CBAq4QZ2YwKNQZ1hw==
 
 "@axa-fr/react-oidc-context@^3.1.6":
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/@axa-fr/react-oidc-context/-/react-oidc-context-3.1.6.tgz#fbcd254f9d3029a51144e01fab7d8f69141d4e33"
-  integrity sha512-xG/lX+VUIP7URndf7TigVYmUjsZ97tukwAAs2d10O0RitKquPbt1ZjmK6Xulg1ztUBC94eAtjELXql16VZptWw==
+  version "3.1.7"
   dependencies:
     "@axa-fr/react-oidc-core" "^3.1.6"
     prop-types "^15.7.2"
