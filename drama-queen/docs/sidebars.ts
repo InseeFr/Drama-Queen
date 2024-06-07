@@ -15,12 +15,12 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
-      label: 'Catégorie 1',
+      label: 'Composants',
       link: {
         type: 'generated-index',
       },
       collapsed: false,
-      items: ['test/testPage'],
+      items: ['components/testPage'],
     },
   ],
 }

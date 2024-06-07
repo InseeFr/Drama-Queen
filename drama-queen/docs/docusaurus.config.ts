@@ -1,35 +1,31 @@
+// @ts-check
+// `@type` JSDoc annotations allow editor autocompletion and type checking
+// (when paired with `@ts-check`).
+// There are various equivalent ways to declare your Docusaurus config.
+// See: https://docusaurus.io/docs/api/docusaurus-config
+
 import { themes as prismThemes } from 'prism-react-renderer'
 import type { Config } from '@docusaurus/types'
-import type * as Preset from '@docusaurus/preset-classic'
 
 const config: Config = {
   markdown: {
     mermaid: true,
   },
-  themes: ['@docusaurus/theme-mermaid'],
-  title: '@inseefr/Drama-Queen',
-  tagline: '',
-  favicon: 'img/favicon.ico',
+  title: 'Drama-Queen',
+  tagline: `Orchestrateur enquêteur de la filière d'enquête de l'Insee`,
+  favicon: '/img/favicon.ico',
+
   // Set the production url of your site here
   url: 'https://inseefr.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: 'Drama-Queen/docs',
-  plugins: [
-    './src/plugins/lunaticFixesPlugin.ts',
-    [
-      require.resolve('@cmfcmf/docusaurus-search-local'),
-      {
-        indexBlog: false,
-      },
-    ],
-  ],
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'InseeFr', // Usually your GitHub org/user name.
   projectName: 'Drama-Queen', // Usually your repo name.
-  trailingSlash: false,
+
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
@@ -43,93 +39,86 @@ const config: Config = {
 
   presets: [
     [
-      '@docusaurus/preset-classic',
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
       {
-        theme: {
-          customCss: ['./src/css/custom.css'],
-        },
         docs: {
           sidebarPath: './sidebars.ts',
+          routeBasePath: '/',
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/InseeFr/Drama-Queen/tree/2.1/drama-queen/docs',
-          routeBasePath: '/',
-          remarkPlugins: [
-            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
-          ],
         },
         blog: false,
-        pages: {
-          remarkPlugins: [
-            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
-          ],
+        theme: {
+          customCss: './src/css/custom.css',
         },
-      } satisfies Preset.Options,
+      },
     ],
   ],
 
-  themeConfig: {
-    image: 'img/clipboard.png',
-    navbar: {
-      title: 'Drama-Queen',
-      logo: {
-        alt: 'Drama-Queen',
-        src: '/img/clipboard.png',
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    {
+      // Replace with your project's social card
+      image: '/img/clipboard.png',
+      navbar: {
+        title: 'Drama-Queen',
+        logo: {
+          alt: 'Drama-Queen',
+          src: '/img/clipboard.png',
+        },
+        items: [
+          {
+            type: 'docSidebar',
+            sidebarId: 'docs',
+            label: 'Documentation',
+          },
+          {
+            to: 'changelog',
+            label: 'Changelog',
+          },
+          {
+            href: 'https://github.com/InseeFr/Drama-Queen',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
       },
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'docs',
-          label: 'Documentation',
-        },
-        {
-          to: 'changelog',
-          label: 'Changelog',
-        },
-        {
-          href: 'https://github.com/InseeFr/Drama-Queen',
-          label: 'GitHub',
-          position: 'right',
-        },
-        {
-          type: 'search',
-          position: 'right',
-        },
-      ],
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Docs',
+            items: [
+              {
+                label: 'Documentation',
+                to: '/',
+              },
+            ],
+          },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Github',
+                href: 'https://github.com/InseeFr/Drama-Queen',
+              },
+              {
+                label: 'Issues',
+                href: 'https://github.com/InseeFr/Drama-Queen/issues',
+              },
+            ],
+          },
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} InseeFr. Built with Docusaurus.`,
+      },
+      prism: {
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
+      },
     },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Documentation',
-              to: '/',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Github',
-              href: 'https://github.com/InseeFr/Drama-Queen',
-            },
-            {
-              label: 'Issues',
-              href: 'https://github.com/InseeFr/Drama-Queen/issues',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} InseeFr. Built with Docusaurus.`,
-    },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-      additionalLanguages: ['json', 'bash'],
-    },
-  } satisfies Preset.ThemeConfig,
 }
 
 export default config
