@@ -20,7 +20,7 @@ const sidebars: SidebarsConfig = {
         type: 'generated-index',
       },
       collapsed: false,
-      items: ['components/testPage'],
+      items: [],
     },
   ],
 }
