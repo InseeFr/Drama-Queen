@@ -78,6 +78,7 @@ const sidebars: SidebarsConfig = {
     },
     'pagination',
     'synchronize',
+    'visualize',
     {
       type: 'category',
       label: 'Fonctionnalités transverses',
