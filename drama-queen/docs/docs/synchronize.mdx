@@ -1,0 +1,50 @@
+# Synchronisation
+
+Dans un contexte de collecte, l'application Queen doit pouvoir fonctionner en étant offline. Il est donc nécessaire de pouvoir effectuer, via une action de l'utilisateur, une synchronisation pour récupérer les données localement et les mettre à jour dans l'api questionnaire.
+
+La synchronisation pousse d'abord les données locales de l'utilisateur dans l'api, avant de récupérer les nouvelles données.
+Cela assure que les données conservées sont bien celles modifiées en local par l'utilisateur.
+
+## Processus de synchronisation
+
+- envoi de toutes les unités enquêtées stockées localement
+- récupération de la liste des campagnes pour lesquelles l'utilisateur au moins une unité enquêtée qui lui est affectée
+- récupération du modèle de questionnaire pour chacune de ces campagnes
+- récupération, en parallèle :
+  - des unités enquêtées pour chacune de ces campagnes
+  - des nomenclatures pour chacun de ces modèles de questionnaire
+
+## Gestion des erreurs
+
+| Action                                                                                                                                    | Type d'erreur      | Conséquence                                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Récupération<ul><li>d'une campagne</li><li>d'un modèle de questionnaire</li><li>d'une unité enquêtée</li><li>d'une nomenclature</li></ul> | format non reconnu | Arrêt de la synchronisation                                                                                        |
+| Récupération d'une unité enquêtée                                                                                                         | 400, 403, 404, 500 | Unité non récupérée, poursuite de la synchronisation                                                               |
+| Envoi d'une unité enquêtée                                                                                                                | 400, 403, 404, 500 | Unité non mise à jour, suppression de l'unité en locale (déplacée en "temp zone"), poursuite de la synchronisation |
+
+## Appels Api
+
+### Campagnes
+
+| Type | Route            | Description                                      | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | ---------------- | ------------------------------------------------ | ------------------------- | ------------------ |
+| GET  | `/api/campaigns` | Récupère la liste des campagnes de l'utilisateur | oui                       | `json {}`          |
+
+### Modèles de questionnaire
+
+| Type | Route                            | Description                                 | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | -------------------------------- | ------------------------------------------- | ------------------------- | ------------------ |
+| GET  | `/api/questionnaire/${surveyId}` | Récupère le modèle de questionnaire Lunatic | oui                       | `json {}`          |
+
+### Unités enquêtées
+
+| Type | Route                               | Description               | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | ----------------------------------- | ------------------------- | ------------------------- | ------------------ |
+| GET  | `/api/survey-unit/${surveyUnit.id}` | Récupère l'unité enquêtée | oui                       | `json {}`          |
+| PUT  | `/api/survey-unit/${surveyUnitId}`  | Envoie l'unité enquêtée   | oui                       | `json {}`          |
+
+### Nomenclatures
+
+| Type | Route                                 | Description              | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | ------------------------------------- | ------------------------ | ------------------------- | ------------------ |
+| GET  | `/api/nomenclature/${nomenclatureId}` | Récupère la nomenclature | oui                       | `json {}`          |
