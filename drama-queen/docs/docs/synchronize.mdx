@@ -32,16 +32,16 @@ Cela assure que les données conservées sont bien celles modifiées en local pa
 
 ### Modèles de questionnaire
 
-| Type | Route                            | Description                                 | Sécurisé par Bearer token | Exemple de réponse |
-| ---- | -------------------------------- | ------------------------------------------- | ------------------------- | ------------------ |
-| GET  | `/api/questionnaire/${surveyId}` | Récupère le modèle de questionnaire Lunatic | oui                       | `json {}`          |
+| Type | Route                                   | Description                                 | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | --------------------------------------- | ------------------------------------------- | ------------------------- | ------------------ |
+| GET  | `/api/questionnaire/${questionnaireId}` | Récupère le modèle de questionnaire Lunatic | oui                       | `json {}`          |
 
 ### Unités enquêtées
 
-| Type | Route                               | Description               | Sécurisé par Bearer token | Exemple de réponse |
-| ---- | ----------------------------------- | ------------------------- | ------------------------- | ------------------ |
-| GET  | `/api/survey-unit/${surveyUnit.id}` | Récupère l'unité enquêtée | oui                       | `json {}`          |
-| PUT  | `/api/survey-unit/${surveyUnitId}`  | Envoie l'unité enquêtée   | oui                       | `json {}`          |
+| Type | Route                              | Description               | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | ---------------------------------- | ------------------------- | ------------------------- | ------------------ |
+| GET  | `/api/survey-unit/${surveyUnitId}` | Récupère l'unité enquêtée | oui                       | `json {}`          |
+| PUT  | `/api/survey-unit/${surveyUnitId}` | Envoie l'unité enquêtée   | oui                       | `json {}`          |
 
 ### Nomenclatures
 

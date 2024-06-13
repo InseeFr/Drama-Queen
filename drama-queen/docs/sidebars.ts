@@ -77,7 +77,9 @@ const sidebars: SidebarsConfig = {
       ],
     },
     'synchronize',
+    'collect',
     'visualize',
+    'review',
     {
       type: 'category',
       label: 'Orchestration de questionnaire',
