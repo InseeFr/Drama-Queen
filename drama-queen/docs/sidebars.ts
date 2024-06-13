@@ -76,9 +76,18 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
-    'pagination',
     'synchronize',
     'visualize',
+    {
+      type: 'category',
+      label: 'Orchestration de questionnaire',
+      link: {
+        description: "Fonctionnalités de l'orchestrateur",
+        type: 'generated-index',
+      },
+      collapsed: true,
+      items: ['orchestrator/pagination', 'orchestrator/navigation'],
+    },
     {
       type: 'category',
       label: 'Fonctionnalités transverses',
