@@ -1781,10 +1781,10 @@
     remove-accents "^0.4.2"
     sass "^1.32.2"
 
-"@inseefr/lunatic@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.0.6.tgz#dddccee88287e2b09e9299f98d1b1784ec38a647"
-  integrity sha512-vykWWZXXMUwOBNkof5kI7tluMvM4L2moj/QRMTNe1PL8NB8S2z6PpsEKY2ZHBX6b62jR7zZ9u1/CE1uu/+AeoQ==
+"@inseefr/lunatic@^3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.0.9.tgz#e0970189514d0dfeb0ecd6f8761d6cb90ac1acbc"
+  integrity sha512-cbVVLcTpxlownz7DYbIGUbnZWdUGo6JmWn6KsJ5iZC2Cqg3m3ohKhDOYYnnjtjsFZxsfEamWuZiQcibFNJpLNg==
   dependencies:
     "@inseefr/trevas" "^0.1.21"
     "@inseefr/vtl-2.0-antlr-tools" "^0.3.2"
