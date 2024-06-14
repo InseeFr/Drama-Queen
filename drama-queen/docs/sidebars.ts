@@ -88,7 +88,11 @@ const sidebars: SidebarsConfig = {
         type: 'generated-index',
       },
       collapsed: true,
-      items: ['orchestrator/pagination', 'orchestrator/navigation'],
+      items: [
+        'orchestrator/pagination',
+        'orchestrator/navigation',
+        'orchestrator/dataHandling',
+      ],
     },
     {
       type: 'category',
