@@ -13,72 +13,10 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 const sidebars: SidebarsConfig = {
   docs: [
     'intro',
-    {
-      type: 'category',
-      label: 'Composants',
-      link: {
-        type: 'generated-index',
-        description:
-          'Les composants proposés par la filière (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)',
-      },
-      collapsed: false,
-      items: [
-        {
-          type: 'category',
-          label: 'Le balisage',
-          link: {
-            description:
-              "Ces composants offrent des indications visuelles pour aider l'utilisateur à s'orienter dans le formulaire",
-            type: 'generated-index',
-          },
-          collapsed: true,
-          items: [
-            'components/decorations/sequence',
-            'components/decorations/declaration',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Les champs de saisie et leur affichage',
-          link: {
-            description:
-              'Cette partie décrit les différents composants proposés dans Stromae DSFR pour saisir des informations (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic',
-            type: 'generated-index',
-          },
-          collapsed: true,
-          items: [
-            'components/fields/input',
-            'components/fields/inputNumber',
-            'components/fields/date',
-            'components/fields/duration',
-            'components/fields/dropdown',
-            'components/fields/suggester',
-            'components/fields/radio',
-            'components/fields/checkboxGroup',
-            'components/fields/table',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Les agrégateurs',
-          link: {
-            description:
-              "Quelques composants permettant d'agréger des informations complexes (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)",
-            type: 'generated-index',
-          },
-          collapsed: true,
-          items: [
-            'components/aggregators/pairwise',
-            'components/aggregators/roundabout',
-            'components/aggregators/rosterForLoop',
-          ],
-        },
-      ],
-    },
-    'synchronize',
     'collect',
     'visualize',
     'review',
+    'synchronize',
     {
       type: 'category',
       label: 'Orchestration de questionnaire',
@@ -91,6 +29,68 @@ const sidebars: SidebarsConfig = {
         'orchestrator/pagination',
         'orchestrator/navigation',
         'orchestrator/dataHandling',
+        {
+          type: 'category',
+          label: 'Composants',
+          link: {
+            type: 'generated-index',
+            description:
+              'Les composants proposés par la filière (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)',
+          },
+          collapsed: false,
+          items: [
+            {
+              type: 'category',
+              label: 'Le balisage',
+              link: {
+                description:
+                  "Ces composants offrent des indications visuelles pour aider l'utilisateur à s'orienter dans le formulaire",
+                type: 'generated-index',
+              },
+              collapsed: true,
+              items: [
+                'orchestrator/components/decorations/sequence',
+                'orchestrator/components/decorations/declaration',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Les champs de saisie et leur affichage',
+              link: {
+                description:
+                  'Cette partie décrit les différents composants proposés dans Stromae DSFR pour saisir des informations (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic',
+                type: 'generated-index',
+              },
+              collapsed: true,
+              items: [
+                'orchestrator/components/fields/input',
+                'orchestrator/components/fields/inputNumber',
+                'orchestrator/components/fields/date',
+                'orchestrator/components/fields/duration',
+                'orchestrator/components/fields/dropdown',
+                'orchestrator/components/fields/suggester',
+                'orchestrator/components/fields/radio',
+                'orchestrator/components/fields/checkboxGroup',
+                'orchestrator/components/fields/table',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Les agrégateurs',
+              link: {
+                description:
+                  "Quelques composants permettant d'agréger des informations complexes (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)",
+                type: 'generated-index',
+              },
+              collapsed: true,
+              items: [
+                'orchestrator/components/aggregators/pairwise',
+                'orchestrator/components/aggregators/roundabout',
+                'orchestrator/components/aggregators/rosterForLoop',
+              ],
+            },
+          ],
+        },
       ],
     },
     {
