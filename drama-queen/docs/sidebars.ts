@@ -35,7 +35,6 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/decorations/sequence',
             'components/decorations/declaration',
-            'components/decorations/global-index',
           ],
         },
         {
