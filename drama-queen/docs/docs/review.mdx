@@ -1,6 +1,7 @@
 # Relecture de questionnaire
 
 Le mode de relecture de questionnaire est celui utilisé pour relire le contenu du questionnaire d'une unité enquêtée à partir des données fournies par l'api.
+
 Le questionnaire est en lecture seule, et aucune persistance ne s'effectue.
 
 ## Récupération des ressources
@@ -24,4 +25,4 @@ Au chargement du questionnaire, une page d'erreur explicite s'affiche dans les c
 - une des ressources récupérées ne respecte pas le format attendu
 - le modèle de questionnaire n'a pas pu être récupéré (non authentifié, non habilité, questionnaire inexistant)
 - l'unité enquêtée n'a pas pu être récupérée (non authentifié, non habilité, unité inexistante)
-- l'unité enquêtée `idSurveyUnit` n'est pas associée au modèle de questionnaire `questionnaireId`
+- l'unité enquêtée `surveyUnitId` n'est pas associée au modèle de questionnaire `questionnaireId`

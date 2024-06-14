@@ -1,6 +1,6 @@
 # Mode de collecte
 
-Le mode de collecte est celui utilisé pour faire passer le questionnement auprès d'un enquêté dans un contexte réel de collecte.
+Le mode de collecte est celui utilisé pour faire passer le questionnement auprès d'un enquêté dans un contexte réel de collecte.  
 Il doit pouvoir fonctionner en étant offline, la communication ne se jamais directement avec l'api mais uniquement avec l'indexDB du navigateur en local.
 
 Pré-requis : avoir effectué une [synchronisation](synchronize.mdx) pour disposer des données associées à l'utilisateur (questionnaires, unité enquêtées, nomenclatures) localement
@@ -18,11 +18,11 @@ Au chargement du questionnaire, une page d'erreur explicite s'affiche dans les c
 - une des ressources récupérées ne respecte pas le format attendu
 - l'unité enquêtée n'a pas pu être récupérée
 - le modèle de questionnaire n'a pas pu être récupéré
-- l'unité enquêtée `idSurveyUnit` n'est pas associée au modèle de questionnaire `questionnaireId`
+- l'unité enquêtée `surveyUnitId` n'est pas associée au modèle de questionnaire `questionnaireId`
 
 ## Persistance
 
 La persistance des données s'effectue à chaque changement de page du questionnaire, quel que soit le moyen de navigation.
 
-La mise à jour de l'unité enquêtée se fait alors dans l'indexDB du navigateur.
+La mise à jour de l'unité enquêtée se fait alors dans l'indexDB du navigateur.  
 C'est lors de la prochaine synchronisation que ces données locales seront poussées dans l'api.
