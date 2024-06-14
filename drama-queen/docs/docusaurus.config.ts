@@ -22,10 +22,9 @@ const config: Config = {
   baseUrl: 'Drama-Queen/docs',
 
   // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
   organizationName: 'InseeFr', // Usually your GitHub org/user name.
   projectName: 'Drama-Queen', // Usually your repo name.
-
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
