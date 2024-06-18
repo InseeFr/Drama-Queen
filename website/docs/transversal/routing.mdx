@@ -1,0 +1,37 @@
+# Routage de l'application
+
+## Routes sécurisées
+
+### Synchronisation
+
+Permet la synchronisation entre les données locales et l'api dans le contexte de collecte.
+
+`/synchronize`
+
+### Affichage de l'unité enquêtée
+
+Permet de renvoyer vers le lien d'affichage du questionnaire d'une unité enquêtée `surveyUnitId`
+
+`/survey-unit/${surveyUnitId}`
+
+### Affichage du questionnaire en collecte
+
+Affiche le questionnaire `questionnaireId` pour l'unité enquêtée `surveyUnitId`, dans un contexte de collecte.
+
+`/questionnaire/${questionnaireId}/survey-unit/${surveyUnitId}`
+
+### Affichage du questionnaire en relecture
+
+Affiche le questionnaire `questionnaireId` pour l'unité enquêtée `surveyUnitId`, dans un contexte de relecture.
+
+`/readonly/questionnaire/${questionnaireId}/survey-unit/${surveyUnitId}`
+
+## Routes libre (sans authentification)
+
+### Visualisation de questionnaire
+
+Permet la visualisation de questionnaire.
+
+`/visualize`
+
+Exemple : `/visualize?questionnaire=...&data=...&nomenclatures={}&readonly=false`
