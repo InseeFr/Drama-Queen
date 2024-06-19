@@ -191,6 +191,7 @@ const useStyles = tss.create(({ theme }) => ({
     flexDirection: 'row',
     height: '100%',
     paddingTop: '65px',
+    overflowY: 'auto',
   },
   menuPanel: {
     width: '250px',
@@ -202,6 +203,7 @@ const useStyles = tss.create(({ theme }) => ({
       width: '375px',
     },
     borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
+    overflowY: 'auto',
   },
   expandedMenu: {
     [theme.breakpoints.up('md')]: {
