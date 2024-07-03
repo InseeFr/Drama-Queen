@@ -9,7 +9,9 @@ export const idAndQuestionnaireIdSchema = z.object({
 
 // PageTag being literal type, zod currently does not support it we need to force the type with a refine
 const stateDataSchema = z.object({
-  state: z.enum(['INIT', 'COMPLETED', 'VALIDATED', 'EXTRACTED']).nullable(),
+  state: z
+    .enum(['INIT', 'COMPLETED', 'VALIDATED', 'TOEXTRACT', 'EXTRACTED'])
+    .nullable(),
   date: z.number().int().min(0), //Should be improve when zod support unix timestamp
   currentPage: z.string().refine(
     (val): val is PageTag => {
