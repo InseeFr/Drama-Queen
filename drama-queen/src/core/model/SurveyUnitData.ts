@@ -9,9 +9,11 @@ type VariableType =
   | (string | null | number | boolean)[]
   | null
 
-export type CollectedValues = Record<
-  'COLLECTED' | 'EDITED' | 'FORCED' | 'INPUTED' | 'PREVIOUS',
-  VariableType
+export type CollectedValues = Partial<
+  Record<
+    'COLLECTED' | 'EDITED' | 'FORCED' | 'INPUTED' | 'PREVIOUS',
+    VariableType
+  >
 >
 
 //Extends because we are more specific (lunatic use unknown)

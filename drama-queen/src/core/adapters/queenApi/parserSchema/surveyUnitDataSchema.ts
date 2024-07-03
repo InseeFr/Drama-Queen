@@ -9,13 +9,15 @@ const variableSchema = z
   ])
   .nullable()
 
-const collectedValueSchema = z.object({
-  COLLECTED: variableSchema,
-  EDITED: variableSchema,
-  FORCED: variableSchema,
-  INPUTED: variableSchema,
-  PREVIOUS: variableSchema,
-})
+const collectedValueSchema = z
+  .object({
+    COLLECTED: variableSchema,
+    EDITED: variableSchema,
+    FORCED: variableSchema,
+    INPUTED: variableSchema,
+    PREVIOUS: variableSchema,
+  })
+  .partial()
 
 export const surveyUnitDataSchema = z
   .object({
