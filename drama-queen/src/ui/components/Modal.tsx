@@ -10,67 +10,57 @@ import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
 import { useTranslation } from 'i18n'
 
-type QuitModalProps = {
+type ModalProps = {
   isOpen: boolean
   dialogTitle: string
   dialogContent: string
-  isValidation: boolean
-  validateLabel: string | undefined
+  buttons: {
+    label: string
+    onClick: () => void
+    autoFocus: boolean
+  }[]
   onClose: () => void
-  onValidate: (() => void) | undefined
 }
 
-export function QuitModal(props: QuitModalProps) {
-  const {
-    isOpen,
-    dialogTitle,
-    dialogContent,
-    isValidation,
-    validateLabel,
-    onClose,
-    onValidate,
-  } = props
+export function Modal(props: ModalProps) {
+  const { isOpen, dialogTitle, dialogContent, buttons, onClose } = props
   const { classes } = useStyles()
   const { t } = useTranslation('modalMessage')
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <Stack className={classes.dialogHeader}>
-        <DialogTitle>{dialogTitle}</DialogTitle>
-        <Stack justifyContent={'center'}>
-          <IconButton aria-label="close" onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
+      <Stack className={classes.dialog}>
+        <Stack className={classes.dialogHeader}>
+          <DialogTitle>{dialogTitle}</DialogTitle>
+          <Stack justifyContent={'center'}>
+            <IconButton aria-label="close" onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Stack>
         </Stack>
+        <DialogContent dividers>
+          <DialogContentText id="alert-dialog-description">
+            {dialogContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {buttons.map((button) => (
+            <Button
+              className={classes.button}
+              autoFocus={button.autoFocus}
+              onClick={button.onClick}
+            >
+              {button.label}
+            </Button>
+          ))}
+        </DialogActions>
       </Stack>
-      <DialogContent dividers>
-        <DialogContentText id="alert-dialog-description">
-          {dialogContent}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          className={classes.button}
-          autoFocus={!isValidation}
-          onClick={onClose}
-        >
-          {t('cancel')}
-        </Button>
-        {isValidation && (
-          <Button
-            className={classes.button}
-            autoFocus={isValidation}
-            onClick={onValidate}
-          >
-            {validateLabel}
-          </Button>
-        )}
-      </DialogActions>
     </Dialog>
   )
 }
 
 const useStyles = tss.create(({ theme }) => ({
+  dialog: { backgroundColor: theme.palette.background.default },
   dialogHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
