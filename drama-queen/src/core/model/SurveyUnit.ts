@@ -6,7 +6,7 @@ export type PageTag = `${number}.${number}#${number}` | `${number}`
 export type SurveyUnit = {
   id: string
   questionnaireId: string
-  personalization?: {}[] | {}
+  personalization?: {}[] | {} | undefined
   data: SurveyUnitData
   comment?: {} | undefined
   stateData?:

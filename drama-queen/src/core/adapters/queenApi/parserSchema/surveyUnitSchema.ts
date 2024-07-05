@@ -30,8 +30,8 @@ const stateDataSchema = z.object({
 export const surveyUnitSchema = z.object({
   id: z.string(),
   questionnaireId: z.string(),
-  personalization: z.union([z.object({}).array(), z.object({})]),
+  personalization: z.union([z.object({}).array(), z.object({})]).optional(),
   data: surveyUnitDataSchema,
-  comment: z.object({}), // not implemented yet, only present in test data
+  comment: z.object({}).optional(), // not implemented yet, only present in test data
   stateData: stateDataSchema.optional(),
 })
