@@ -144,14 +144,12 @@ export function Orchestrator(props: OrchestratorProps) {
 
   const { continueProps, previousProps, nextProps } = useNavigationButtons({
     readonly,
-    lastReachedPage,
     isFirstPage,
     isLastPage,
     isLastReachedPage,
     hasPageResponse,
     goPreviousPage,
     goNextPage,
-    goToPage,
     quit: orchestratorQuit,
     definitiveQuit: orchestratorDefinitiveQuit,
   })
