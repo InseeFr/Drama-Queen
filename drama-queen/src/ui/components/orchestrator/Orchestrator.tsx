@@ -18,6 +18,8 @@ import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useNavigationButtons } from './tools/useNavigationButtons'
 import type { GetReferentiel } from './lunaticType'
+import { Modal } from '../Modal'
+import { useState } from 'react'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -47,6 +49,7 @@ export function Orchestrator(props: OrchestratorProps) {
   } = props
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
+  const { t: t2 } = useTranslation('modalMessage')
   const { onChange, ref } = useAutoNext()
 
   // get the initial data for useLunatic
@@ -54,6 +57,32 @@ export function Orchestrator(props: OrchestratorProps) {
 
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
+
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
+    !readonly && initialSurveyUnit.stateData?.currentPage !== '1'
+  )
+  const welcomeModalTitle = t2('welcomeModalTitle')
+  const welcomeModalContent = t2('welcomeModalContent')
+
+  const welcomeModalOnClose = () => setIsWelcomeModalOpen(false)
+
+  const welcomeModalGoBack = () => {
+    goToPage({ page: initialSurveyUnit.stateData?.currentPage ?? '1' })
+    setIsWelcomeModalOpen(false)
+  }
+
+  const welcomeModalButtons = [
+    {
+      label: t2('welcomeModalFirstPage'),
+      onClick: welcomeModalOnClose,
+      autoFocus: false,
+    },
+    {
+      label: t2('welcomeModalGoBack'),
+      onClick: welcomeModalGoBack,
+      autoFocus: false,
+    },
+  ]
 
   const {
     getComponents,
@@ -106,6 +135,7 @@ export function Orchestrator(props: OrchestratorProps) {
     getChangedData: getChangedData,
     lastReachedPage,
     pageTag,
+    isWelcomeModalOpen,
     onQuit,
     onDefinitiveQuit,
     onChangePage,
@@ -188,6 +218,13 @@ export function Orchestrator(props: OrchestratorProps) {
           />
         </Stack>
       </Stack>
+      <Modal
+        isOpen={isWelcomeModalOpen}
+        dialogTitle={welcomeModalTitle}
+        dialogContent={welcomeModalContent}
+        buttons={welcomeModalButtons}
+        onClose={welcomeModalOnClose}
+      />
     </Stack>
   )
 }

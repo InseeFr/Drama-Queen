@@ -39,6 +39,11 @@ export const translations: Translations<'en'> = {
     definitiveQuitContent:
       'Do you confirm the definitive stop of the questionnaire ?',
     definitiveQuitValidate: 'Confirm definitive stop',
+    welcomeModalTitle: 'Welcome',
+    welcomeModalContent:
+      'You have already started filling out the questionnaire. Would you like to resume where you left off or return to the first page ?',
+    welcomeModalFirstPage: 'Return to the first page',
+    welcomeModalGoBack: 'Resume where I left off',
     cancel: 'Cancel',
   },
   navigationMessage: {
