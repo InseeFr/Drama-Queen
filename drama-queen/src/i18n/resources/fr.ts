@@ -40,6 +40,11 @@ export const translations: Translations<'fr'> = {
     definitiveQuitContent:
       'Confirmez-vous l’arrêt définitif du questionnaire ?',
     definitiveQuitValidate: "Valider l'arrêt définitif",
+    welcomeModalTitle: 'Bienvenue',
+    welcomeModalContent:
+      'Vous avez déjà commencé à renseigner le questionnaire. Souhaitez-vous reprendre là où vous en étiez ou revenir à la première page ?',
+    welcomeModalFirstPage: 'Revenir à la première page',
+    welcomeModalGoBack: "Reprendre là où j'en étais",
     cancel: 'Annuler',
   },
   navigationMessage: {

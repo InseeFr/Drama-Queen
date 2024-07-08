@@ -1,7 +1,7 @@
 import { useCore } from 'core'
 import { useTranslation } from 'i18n'
 import { useState } from 'react'
-import { QuitModal } from 'ui/components/QuitModal'
+import { Modal } from 'ui/components/Modal'
 import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
 import type { reviewLoader } from 'ui/routing/loader'
 import { useLoaderData } from 'ui/routing/utils'
@@ -30,16 +30,22 @@ export function Review() {
 
   const quitModalContent = t('reviewQuitContent')
 
+  const quitModalButtons = [
+    {
+      label: t('cancel'),
+      onClick: quitModalOnClose,
+      autoFocus: false,
+    },
+  ]
+
   return (
     <>
-      <QuitModal
+      <Modal
         isOpen={isQuitModalOpen}
         dialogTitle={quitModalTitle}
         dialogContent={quitModalContent}
-        isValidation={false}
-        validateLabel={undefined}
+        buttons={quitModalButtons}
         onClose={quitModalOnClose}
-        onValidate={undefined}
       />
       <Orchestrator
         source={loaderData.questionnaire}

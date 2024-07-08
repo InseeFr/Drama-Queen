@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { useState } from 'react'
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
-import { QuitModal } from 'ui/components/QuitModal'
+import { Modal } from 'ui/components/Modal'
 import { useTranslation } from 'i18n'
 
 type StopNavigationProps = {
@@ -21,7 +21,7 @@ export function StopNavigation(props: StopNavigationProps) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
   const { t: t2 } = useTranslation('modalMessage')
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [isQuitOpenModal, setIsQuitOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
 
   const stopItems: StopItem[] = [
@@ -46,11 +46,11 @@ export function StopNavigation(props: StopNavigationProps) {
     : t2('temporaryQuitValidate')
 
   const quitModalOnOpen = (definitive: boolean) => {
-    setIsOpenModal(true)
+    setIsQuitOpenModal(true)
     setIsDefinitiveModal(definitive)
   }
 
-  const quitModalonClose = () => setIsOpenModal(false)
+  const quitModalOnClose = () => setIsQuitOpenModal(false)
 
   const quitModalValidate = () => {
     if (isDefinitiveModal) {
@@ -58,6 +58,19 @@ export function StopNavigation(props: StopNavigationProps) {
     } else quit()
     close()
   }
+
+  const quitModalButtons = [
+    {
+      label: t2('cancel'),
+      onClick: quitModalOnClose,
+      autoFocus: false,
+    },
+    {
+      label: quitModalValidateLabel,
+      onClick: quitModalValidate,
+      autoFocus: true,
+    },
+  ]
 
   return (
     <Stack className={classes.navigationContainer}>
@@ -73,14 +86,12 @@ export function StopNavigation(props: StopNavigationProps) {
           />
         ))}
       </Stack>
-      <QuitModal
-        isOpen={isOpenModal}
+      <Modal
+        isOpen={isQuitOpenModal}
         dialogTitle={quitModalTitle}
         dialogContent={quitModalContent}
-        isValidation={true}
-        validateLabel={quitModalValidateLabel}
-        onClose={quitModalonClose}
-        onValidate={quitModalValidate}
+        buttons={quitModalButtons}
+        onClose={quitModalOnClose}
       />
     </Stack>
   )

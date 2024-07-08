@@ -41,6 +41,10 @@ export type ModalMessage =
   | 'definitiveQuitTitle'
   | 'definitiveQuitContent'
   | 'definitiveQuitValidate'
+  | 'welcomeModalTitle'
+  | 'welcomeModalContent'
+  | 'welcomeModalFirstPage'
+  | 'welcomeModalGoBack'
   | 'cancel'
 
 export type NavigationMessage =

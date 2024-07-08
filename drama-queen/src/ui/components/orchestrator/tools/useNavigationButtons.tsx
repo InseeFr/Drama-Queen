@@ -7,37 +7,28 @@ import type { PageTag } from 'core/model'
 
 const { t } = getTranslation('navigationMessage')
 
-type ContinueAction =
-  | 'continue'
-  | 'fastForward'
-  | 'quit'
-  | 'saveAndQuit'
-  | undefined
+type ContinueAction = 'continue' | 'quit' | 'saveAndQuit' | undefined
 
 type UseNavigationButtonsProps = {
   readonly: boolean
-  lastReachedPage: PageTag | undefined
   isFirstPage: boolean
   isLastPage: boolean
   isLastReachedPage: boolean
   hasPageResponse: () => boolean
   goPreviousPage: GoPreviousPage
   goNextPage: GoNextPage
-  goToPage: GoToPage
   quit: () => void
   definitiveQuit: () => void
 }
 
 export function useNavigationButtons({
   readonly,
-  lastReachedPage,
   isFirstPage,
   isLastPage,
   isLastReachedPage,
   hasPageResponse,
   goPreviousPage,
   goNextPage,
-  goToPage,
   quit,
   definitiveQuit,
 }: UseNavigationButtonsProps) {
@@ -49,7 +40,7 @@ export function useNavigationButtons({
       return 'saveAndQuit'
     }
     if (hasPageResponse()) {
-      return isLastReachedPage ? 'continue' : 'fastForward'
+      return 'continue'
     }
     return undefined
   })()
@@ -62,18 +53,14 @@ export function useNavigationButtons({
         return quit()
       case 'saveAndQuit':
         return definitiveQuit()
-      case 'fastForward':
-        return goToPage({ page: lastReachedPage || '1' })
       default:
         return goNextPage()
     }
   }
 
-  const continueShortCutKey =
-    continueAction === 'fastForward' ? SHORTCUT_FAST_FORWARD : SHORTCUT_NEXT
+  const continueShortCutKey = SHORTCUT_NEXT
 
-  const continueShortCutLabel =
-    continueAction === 'fastForward' ? 'alt + fin' : 'alt + ENTRÉE'
+  const continueShortCutLabel = 'alt + ENTRÉE'
 
   const isPreviousEnabled = !isFirstPage
 
@@ -100,8 +87,6 @@ function getLabelFromAction(action: ContinueAction): string {
       return t('quit')
     case 'saveAndQuit':
       return t('validateAndQuit')
-    case 'fastForward':
-      return t('fastForward')
     default:
       return t('continue')
   }
@@ -110,9 +95,6 @@ function getLabelFromAction(action: ContinueAction): string {
 function getEndIcon(action: ContinueAction) {
   if (action === 'continue') {
     return <ArrowRightAltIcon />
-  }
-  if (action === 'fastForward') {
-    return <SkipNext fontSize="large" />
   }
   return undefined
 }

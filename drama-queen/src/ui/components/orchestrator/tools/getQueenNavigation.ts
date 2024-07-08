@@ -12,6 +12,7 @@ type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
   lastReachedPage: PageTag | undefined
   pageTag: PageTag
+  isWelcomeModalOpen: boolean
   getChangedData: GetChangedData
   onQuit: (surveyUnit: SurveyUnit) => void
   onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
@@ -29,6 +30,7 @@ export function getQueenNavigation({
   initialSurveyUnit,
   lastReachedPage,
   pageTag,
+  isWelcomeModalOpen,
   getChangedData,
   onQuit,
   onDefinitiveQuit,
@@ -39,7 +41,6 @@ export function getQueenNavigation({
   const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
     initialSurveyUnit.stateData?.state ?? null
   )
-
   const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
     initialSurveyUnit.data
   )
@@ -156,7 +157,7 @@ export function getQueenNavigation({
       stateData: {
         state: state,
         date: new Date().getTime(),
-        currentPage: lastReachedPage ?? '1',
+        currentPage: pageTag ?? '1',
       },
     }
     return surveyUnit
@@ -164,7 +165,11 @@ export function getQueenNavigation({
 
   // handle updated surveyUnit when page changes
   useEffect(() => {
-    if (pageTag === undefined || lastReachedPage === undefined) {
+    if (
+      pageTag === undefined ||
+      lastReachedPage === undefined ||
+      isWelcomeModalOpen
+    ) {
       return
     }
     // get updated data
@@ -175,7 +180,7 @@ export function getQueenNavigation({
 
     const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onChangePage(surveyUnit)
-  }, [pageTag, lastReachedPage])
+  }, [pageTag, lastReachedPage, isWelcomeModalOpen])
 
   const orchestratorQuit = () => {
     // get updated data
