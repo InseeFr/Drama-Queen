@@ -19,23 +19,41 @@ type ModalProps = {
     onClick: () => void
     autoFocus: boolean
   }[]
+  mandatory?: boolean
   onClose: () => void
 }
 
 export function Modal(props: ModalProps) {
-  const { isOpen, dialogTitle, dialogContent, buttons, onClose } = props
+  const {
+    isOpen,
+    dialogTitle,
+    dialogContent,
+    buttons,
+    mandatory = false,
+    onClose,
+  } = props
   const { classes } = useStyles()
   const { t } = useTranslation('modalMessage')
 
+  const handleClose = (event: any, reason: string) => {
+    if (mandatory && ['backdropClick', 'escapeKeyDown'].includes(reason)) {
+      event.preventDefault()
+      return
+    }
+    onClose()
+  }
+
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={handleClose}>
       <Stack className={classes.dialog}>
         <Stack className={classes.dialogHeader}>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <Stack justifyContent={'center'}>
-            <IconButton aria-label="close" onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
+            {!mandatory && (
+              <IconButton aria-label="close" onClick={onClose}>
+                <CloseIcon />
+              </IconButton>
+            )}
           </Stack>
         </Stack>
         <DialogContent dividers>

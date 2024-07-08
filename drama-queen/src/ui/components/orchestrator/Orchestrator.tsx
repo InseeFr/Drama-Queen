@@ -80,7 +80,7 @@ export function Orchestrator(props: OrchestratorProps) {
     {
       label: t2('welcomeModalGoBack'),
       onClick: welcomeModalGoBack,
-      autoFocus: false,
+      autoFocus: true,
     },
   ]
 
@@ -221,6 +221,7 @@ export function Orchestrator(props: OrchestratorProps) {
         dialogTitle={welcomeModalTitle}
         dialogContent={welcomeModalContent}
         buttons={welcomeModalButtons}
+        mandatory
         onClose={welcomeModalOnClose}
       />
     </Stack>
