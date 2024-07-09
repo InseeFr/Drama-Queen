@@ -1,5 +1,13 @@
 # Navigation
 
+## Reprise de questionnaire
+
+Lors de l'ouverture d'un questionnaire, une pop-up peut être proposée à l'utilisateur, afin de choisir s'il veut revenir sur la première page ou retourner directement à la page sur laquelle il se trouvait avant fermeture du questionnaire.
+Cette pop-up est uniquement présente si les conditions suivantes sont respectées :
+
+- l'orchestrateur est en mode écriture (collecte ou visualisation)
+- l'état de questionnaire de l'unité est défini, et sa page courante n'est pas la première page (currentPage = '1') ([cf. état du questionnaire](./dataHandling#état-du-questionnaire))
+
 ## Navigation par page
 
 ### Précédent / Suivant
@@ -12,15 +20,12 @@ Il est actif sur toutes les pages du questionnaire sauf la première.
 Le bouton `Suivant` permet de naviguer vers la page suivante.  
 En mode de relecture, le bouton est actif sur toutes les pages du questionnaire sauf la dernière page, à condition que la page contienne une réponse. En mode écriture (collecte ou visualisation), il n'est actif que sur les pages qui précèdent la dernière page atteinte.
 
-### Continuer / Suite de l'entretien
+### Continuer
 
-Les boutons `Continuer` et `Suite de l'entretien` sont présents uniquement en mode écriture, sur la partie centrale basse de l'écran.
+Le bouton `Continuer` est présent uniquement en mode écriture, sur la partie centrale basse de l'écran.
 
-Le bouton `Continuer`, comme le bouton `Suivant`, permet de naviguer vers la page suivante.  
-Il n'est affiché que en mode écriture sur la dernière page atteinte, à condition que la page contienne une réponse.
-
-Le bouton `Suite de l'entretien` permet de revenir directement à la dernière page atteinte, lorsque l'on est revenu en arrière.  
-Il n'est affiché que en mode écriture sur les pages qui précèdent la dernière page atteinte, à condition que la page contienne une réponse.
+Comme le bouton `Suivant`, il permet de naviguer vers la page suivante.
+Il n'est affiché que en mode écriture, à condition que la page contienne une réponse.
 
 ## Navigation par séquence / sous-séquence
 
@@ -28,7 +33,7 @@ Dans l'en-tête de la page, on retrouve un fil d'Ariane avec la séquence et la 
 Ces deux éléments sont cliquables et permettent de naviguer directement vers la première page de la séquence (resp. sous-séquence).
 
 Dans le menu de gauche, dans la rubrique "Enquête", on retrouve la structure du questionnaire avec ses séquences / sous-séquences , y compris pour les différentes itérations d'une boucle.  
-Dès lors que la première page d'une séquence ou sous-séquence a été atteinte, il est alors possible de sélectionner cette séquence ou sous-séquence dans le menu pour naviguer directement vers sa première page.
+Dès lors que la première page d'une séquence ou sous-séquence se situe avant la page courante, il est alors possible de sélectionner cette séquence ou sous-séquence dans le menu pour naviguer directement vers sa première page.
 
 ## Navigation par itération de boucle
 
