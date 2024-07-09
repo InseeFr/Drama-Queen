@@ -1,1 +1,96 @@
-Changelog à venir...
+
+### 2.1.6
+
+#### Nouvelles fonctionnalités
+
+- ajout d'une pop-up à l'ouverture du questionnaire, proposant de revenir à la première page ou reprendre à la page courante avant la fermeture
+- les champs de réponse de type "nombre" sont capables d'afficher une unité "dynamique" calculée par une expression VTL. Ajouté par Lunatic 3.1.2
+
+#### Modifications
+
+- menu : la navigation vers une séquence/sous-séquence est désormais possible uniquement si sa première page se trouve avant la page courante. Elle était auparavant disponible si sa première page se trouvait avant la dernière page atteinte. Modifié par Lunatic 3.2.0
+
+#### Suppressions
+
+- le bouton "Suite de l'entretien" permettant une avance rapide vers la dernière page atteinte (lastReachedPage) a été supprimé. Lorsqu'il était présent, il a été remplacé par le bouton "Continuer"
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.2.0
+
+### 2.1.5
+
+#### Correction de bugs
+
+- lors de la récupération d'une unité enquêtée via l'api, les variables 'personalization' et 'comment' étaient obligatoires, pouvant rendre la synchronisation bloquante
+
+### 2.1.4
+
+#### Correction de bugs
+
+- lors de la récupération d'une unité enquêtée via l'api, les différentes valeurs collectées (COLLECTED, EDITED, FORCED, INPUTED, PREVIOUS) étaient obligatoires, pouvant rendre la synchronisation bloquante
+- le type de l'état de questionnaire (stateData.state) n'acceptait pas la valeur 'TOEXTRACT', pouvant rendre la synchronisation bloquante
+
+### 2.1.3
+
+#### Correction de bugs
+
+- menu : la gestion du scroll n'était pas adaptée si l'un ou plusieurs panneaux nécessitent un scroll
+- sur les questions à choix unique (radio), la sélection d'une modalité déjà sélectionnée provoquait le passage à la page suivante, au lieu de ne rien faire. Corrigé par Lunatic 3.1.0
+- accessibilité : il était impossible de mettre le focus sur les boutons radio tant qu'aucune modalité n'était sélectionnée. Corrigé par Lunatic 3.1.0
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.1.1
+
+### 2.1.2
+
+#### Correction de bugs
+
+- la navigation était bloquée lorsque l'on atteignait une boucle qui n'a aucune itération. Corrigé par Lunatic 3.0.9
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.0.9
+
+### 2.1.1
+
+#### Correction de bugs
+
+- les valeurs minimum et maximum des réponses de type "nombre" ne pouvaient être que des entiers. Corrigé par Lunatic 3.0.3
+- la dernière page atteinte était mal calculée à l'intérieur et à la sortie d'une boucle. Corrigé par Lunatic 3.0.5
+- les variables calculées depuis une boucle étaient parfois mal calculées. Corrigé par Lunatic 3.0.5
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.0.6
+
+### 2.1.0
+
+#### Nouvelles fonctionnalités
+
+- menu : ajout de la navigation vers les séquences et sous-séquences appartenant à une boucle, grâce aux améliorations de Lunatic 3.0.0
+
+#### Correction de bugs
+
+- meilleure gestion des cas de déclenchement du passage automatique à la page suivante
+- synchronisation : la synchronisation s'arrêtait lors de la récupération d'une unité enquêtée en cas de réponse [400, 403, 404, 500]
+- queen-v1 : la version de lunaticModel d'un questionnaire pour renvoyer vers l'orchestrateur queen-v1 était erronnée (corrigée à 2.2.10)
+- visualisation : l'url de visualisation de questionnaire était doublement encodée, rendant parfois bloquante la visualisation d'un questionnaire
+
+#### Refactorisation
+
+- réinternalisation du style de tous les composants Lunatic, dû à la montée de version Lunatic
+- modification de certains types (nomenclature, pages & pageTag), dû à la montée de version Lunatic
+- refactorisation de useAutoNext, dû à la montée de version Lunatic
+- refactorisation du fil d'Ariane utilisant le composant Overview, dû à la montée de version Lunatic
+- suppression des workers pour les suggesters, dû à la montée de version Lunatic
+
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.0.1
+
+### 2.0.0
+
+à ajouter...
