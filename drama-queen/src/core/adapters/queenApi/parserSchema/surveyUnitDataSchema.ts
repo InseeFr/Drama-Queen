@@ -4,7 +4,15 @@ const variableSchema = z
   .union([
     z.string(),
     z.number(),
-    z.union([z.string().nullable(), z.number(), z.boolean()]).array(),
+    z
+      .union([
+        z.string(),
+        z.number(),
+        z.boolean(),
+        z.string().nullable().array(),
+      ])
+      .nullable()
+      .array(),
     z.boolean(),
   ])
   .nullable()

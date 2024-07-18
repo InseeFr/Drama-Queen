@@ -6,7 +6,7 @@ type VariableType =
   | string
   | number
   | boolean
-  | (string | null | number | boolean)[]
+  | (string | null | number | boolean | (string | null)[])[]
   | null
 
 export type CollectedValues = Partial<
