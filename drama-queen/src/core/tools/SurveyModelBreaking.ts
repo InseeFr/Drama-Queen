@@ -1,7 +1,7 @@
 import type { Questionnaire } from 'core/model'
 import { getTranslation } from 'i18n'
 
-const lunaticModelVersionBreaking = '2.2.10'
+export const lunaticModelVersionBreaking = '2.2.10'
 
 const { t } = getTranslation('errorMessage')
 
@@ -12,7 +12,7 @@ const semverCompare = new Intl.Collator('en', { numeric: true }).compare
  * @param {Questionnaire} params - The questionnaire object.
  * @returns {boolean} Returns true if the survey is compatible with Queen version 2, false otherwise.
  */
-export const isSurveyCompatibleWithQueenV2 = (params: {
+export const isSurveyCompatibleWithQueen = (params: {
   questionnaire: Questionnaire
 }) => {
   const {

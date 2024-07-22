@@ -19,7 +19,7 @@ export function Visualize() {
   }
 
   if (loaderData) {
-    return loaderData.isQueenV2 ? (
+    return (
       <Orchestrator
         source={loaderData.source}
         surveyUnit={loaderData.surveyUnit}
@@ -29,8 +29,6 @@ export function Visualize() {
         onChangePage={undefined}
         getReferentiel={loaderData.getReferentiel}
       />
-    ) : (
-      <queen-app />
     )
   }
 
