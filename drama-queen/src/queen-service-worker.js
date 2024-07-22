@@ -1,32 +1,63 @@
-/* eslint-disable no-restricted-globals */
 /**
  * self._DRAMAQUEEN_URL has to be defined by parent app, like Pearl-Jam
- * Actally, functions as (registerRoute,NetworkFirst, NetworkFirst, etc) from workbox as imported by legacy queen.
- * When we will remove legacy queen, we have to add these functions like this
-    | importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js');
-    | const { CacheableResponsePlugin } = workbox.cacheableResponse;
-    | const { registerRoute } = workbox.routing;
-    | const { NetworkFirst, CacheFirst } = workbox.strategies;
  */
 
-importScripts(`${self._DRAMAQUEEN_URL}/swEnv.js`)
-self._QUEEN_URL = self.__VITE_ENVS.VITE_QUEEN_URL
+importScripts(
+  'https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js'
+)
 
-importScripts(`${self._QUEEN_URL}/queen-service-worker.js`)
+const { CacheableResponsePlugin } = workbox.cacheableResponse
+const { registerRoute } = workbox.routing
+const { NetworkFirst, CacheFirst } = workbox.strategies
 
 const getDramaQueenUrlRegex = (url) => {
   return url
     .replace('http', '^http')
     .concat('/(.*)((.js)|(.png)|(.svg)|(.css))')
 }
+
+const getDramaQueenUrlRegexJson = (url) => {
+  return url.replace('http', '^http').concat('/(.*)(.json)')
+}
+
+const getQuestionnaireUrlRegex = () => '^http.*/api/questionnaire/(.){1,}'
+
+const getResourceUrlRegex = () => '^http.*/api/nomenclature/(.){1,}'
+
 const dramaQueenCacheName = 'drama-queen-cache'
 
-console.log('Loading Drama Queen SW into another SW')
+console.log('Loading Drama Queen SW')
 
 registerRoute(
   new RegExp(getDramaQueenUrlRegex(self._DRAMAQUEEN_URL)),
   new NetworkFirst({
     cacheName: dramaQueenCacheName,
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+)
+
+// used by synchro for getting questionnaires
+registerRoute(
+  new RegExp(getQuestionnaireUrlRegex()),
+  new NetworkFirst({
+    cacheName: 'queen-questionnaire',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+)
+
+// used by synchro for getting nomenclatures
+registerRoute(
+  new RegExp(getResourceUrlRegex()),
+  new CacheFirst({
+    cacheName: 'queen-resource',
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
