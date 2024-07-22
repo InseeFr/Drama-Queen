@@ -56,38 +56,6 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 2500000,
       },
     }),
-    VitePWA({
-      injectRegister: 'auto',
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'sw.js',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-      manifest: {
-        name: 'Questionnaire',
-        short_name: 'Questionnaire',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait',
-        icons: [
-          {
-            src: 'android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'android-chrome-256x256.png',
-            sizes: '256x256',
-            type: 'image/png',
-          },
-        ],
-      },
-      // main file is 2.14 MB, and default value is 2.09 MB, so we adjust maximumFileSizeToCacheInBytes in order to cache all needed files
-      // https://vite-pwa-org.netlify.app/guide/faq#missing-assets-from-sw-precache-manifest
-      injectManifest: {
-        maximumFileSizeToCacheInBytes: 2500000,
-      },
-    }),
   ],
   build: {
     target: 'esnext',
