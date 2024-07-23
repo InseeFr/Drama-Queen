@@ -47,7 +47,7 @@ function createSUMocked(props: {
   return {
     id: `idSU:${idSu}`,
     questionnaireId: `idCampaign${idCampaign}`,
-    personalization: [{}],
+    personalization: [],
     data: {
       EXTERNAL: {},
       CALCULATED: {},
