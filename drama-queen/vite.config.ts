@@ -54,6 +54,8 @@ export default defineConfig({
       // https://vite-pwa-org.netlify.app/guide/faq#missing-assets-from-sw-precache-manifest
       injectManifest: {
         maximumFileSizeToCacheInBytes: 2500000,
+        // do not minify to avoid variable name conflicts with parent-app
+        minify: false,
       },
     }),
   ],
