@@ -4,7 +4,7 @@ import { DYNAMIC_PUBLIC_URL } from 'core'
 export const unsubscribeOldSW = () => {
   if ('serviceWorker' in navigator) {
     const isSoloQueen = DYNAMIC_PUBLIC_URL === window.location.origin
-
+		if (isSoloQueen) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
       registrations.forEach((registration) => {
         // Unregister old service worker
@@ -16,16 +16,16 @@ export const unsubscribeOldSW = () => {
             if (success) {
               console.log('Old service worker unregistered successfully.')
               // clear cache only if we are in standalone
-              if (isSoloQueen) {
+              
                 clearAllCaches()
-              }
+              
             } else {
               console.log('Failed to unregister old service worker.')
             }
           })
         }
       })
-    })
+    })}
   }
 }
 

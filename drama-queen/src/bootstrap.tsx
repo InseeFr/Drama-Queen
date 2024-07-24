@@ -33,7 +33,6 @@ const mount = ({
   console.log('Mount Drama Queen')
 
 	// unsubscribe to old SW
-	console.log("unsubscribe")
 	unsubscribeOldSW()
 
   const router = createRouter({ strategy: routingStrategy, initialPathname })
