@@ -8,7 +8,10 @@ import type {
 import { searchParamsSchema } from './parser/searchParamsSchema'
 import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSchema'
 import { fetchUrl } from 'core/tools/fetchUrl'
-import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
+import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
+import { getTranslation } from 'i18n'
+
+const { t } = getTranslation('errorMessage')
 
 export const name = 'visualizeSurvey'
 
@@ -66,12 +69,12 @@ export const thunks = {
         ? fetchedSource.value
         : fetchedSource
 
-      const isQueenV2 = isSurveyCompatibleWithQueenV2({
+      const isQuestionnaireCompatible = isSurveyCompatibleWithQueen({
         questionnaire: source,
       })
 
-      if (!isQueenV2) {
-        return { isQueenV2 }
+      if (!isQuestionnaireCompatible) {
+        throw new Error(t('questionnaireNotCompatible'))
       }
 
       const surveyUnit = data
@@ -84,6 +87,6 @@ export const thunks = {
         ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
         : undefined
 
-      return { isQueenV2, source, surveyUnit, readonly, getReferentiel }
+      return { source, surveyUnit, readonly, getReferentiel }
     },
 } satisfies Thunks

@@ -12,10 +12,6 @@ export function Review() {
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false)
   const { t } = useTranslation('modalMessage')
 
-  if (!loaderData.isQueenV2) {
-    return <queen-app />
-  }
-
   const { reviewSurvey } = useCore().functions
 
   const getReferentiel = reviewSurvey.getReferentiel

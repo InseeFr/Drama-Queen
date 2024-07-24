@@ -9,10 +9,6 @@ export function Collect() {
     ReturnType<typeof collectLoader>
   >
 
-  if (!loaderData.isQueenV2) {
-    return <queen-app />
-  }
-
   const {
     collectSurvey: { getReferentiel, changePage, changeSurveyUnitState, quit },
   } = useCore().functions

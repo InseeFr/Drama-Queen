@@ -1,5 +1,5 @@
 import type { Thunks } from 'core/bootstrap'
-import { isSurveyCompatibleWithQueenV2 } from 'core/tools/SurveyModelBreaking'
+import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
 import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('errorMessage')
@@ -16,11 +16,14 @@ export const thunks = {
 
       const { questionnaireId, surveyUnitId } = params
 
-      const questionnairePromise = queenApi.getQuestionnaire(questionnaireId)
-
-      const isQueenV2Promise = questionnairePromise.then((questionnaire) =>
-        isSurveyCompatibleWithQueenV2({ questionnaire })
-      )
+      const questionnairePromise = queenApi
+        .getQuestionnaire(questionnaireId)
+        .then((questionnaire) => {
+          if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+            throw new Error(t('questionnaireNotCompatible'))
+          }
+          return questionnaire
+        })
 
       const surveyUnitPromise = queenApi
         .getSurveyUnit(surveyUnitId)
@@ -37,13 +40,12 @@ export const thunks = {
           return surveyUnit
         })
 
-      const [surveyUnit, isQueenV2, questionnaire] = await Promise.all([
+      const [surveyUnit, questionnaire] = await Promise.all([
         surveyUnitPromise,
-        isQueenV2Promise,
         questionnairePromise,
       ])
 
-      return { surveyUnit, isQueenV2, questionnaire }
+      return { surveyUnit, questionnaire }
     },
   getReferentiel:
     (name: string) =>
