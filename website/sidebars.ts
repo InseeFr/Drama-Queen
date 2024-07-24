@@ -105,6 +105,7 @@ const sidebars: SidebarsConfig = {
         "transversal/authentification",
         "transversal/routing",
         "transversal/orchestratorRouting",
+				"transversal/offline"
       ],
     },
   ],
