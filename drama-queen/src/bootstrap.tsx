@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import CircularProgress from '@mui/material/CircularProgress'
 import { createCoreProvider } from 'core'
 import { createRoot } from 'react-dom/client'
@@ -13,6 +14,12 @@ const { CoreProvider, prCore } = createCoreProvider({
   },
 })
 
+const CenteredSpinner = () => (
+  <Stack alignItems="center" justifyContent="center" height="100vh">
+    <CircularProgress size={'5em'} />
+  </Stack>
+)
+
 const mount = ({
   mountPoint,
   initialPathname,
@@ -27,7 +34,7 @@ const mount = ({
   const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)
   root.render(
-    <CoreProvider fallback={<CircularProgress />}>
+    <CoreProvider fallback={<CenteredSpinner />}>
       <RouterProvider router={router} />
     </CoreProvider>
   )
