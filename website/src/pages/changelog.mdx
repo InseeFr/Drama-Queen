@@ -1,3 +1,22 @@
+### 2.2.0
+
+#### Correction de bugs
+
+- lorsque l'application est embarquée dans une application parent, la mise à jour ne se faisait pas toujours correctement
+
+#### Modifications
+
+- l'application en "standalone" (non embarquée dans une application parent) ne dispose plus de fonctionnement offline
+- l'ouverture d'un questionnaire avec une version du lunaticModel {'<='} 2.2.10 n'est désormais plus possible et renvoie vers une page d'erreur
+
+#### Suppressions
+
+- le module "queen-v1" a été totalement retiré de l'application
+
+#### Refactorisation
+
+- le fonctionnel permettant un fonctionnement offline de l'application lorsqu'elle est embarquée dans une application parent a été déplacé du module "queen-v1" vers Drama-Queen
+
 ### 2.1.7
 
 #### Correction de bugs
