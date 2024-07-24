@@ -4,6 +4,7 @@ import { createCoreProvider } from 'core'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { createRouter, type RoutingStrategy } from 'ui/routing/createRouter'
+import { unsubscribeOldSW } from 'unsubscribe_old_sw'
 
 const { CoreProvider, prCore } = createCoreProvider({
   apiUrl: import.meta.env.VITE_QUEEN_API_URL,
@@ -30,6 +31,10 @@ const mount = ({
   routingStrategy?: RoutingStrategy
 }) => {
   console.log('Mount Drama Queen')
+
+	// unsubscribe to old SW
+	console.log("unsubscribe")
+	unsubscribeOldSW()
 
   const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)
