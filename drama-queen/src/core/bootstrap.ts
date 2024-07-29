@@ -7,7 +7,6 @@ import type { LocalSyncStorage } from './ports/LocalSyncStorage'
 
 type ParamsOfBootstrapCore = {
   apiUrl: string
-  publicUrl: string
   oidcParams:
     | {
         issuerUri: string
@@ -33,7 +32,7 @@ export type CreateEvt = Core['types']['CreateEvt']
 export async function bootstrapCore(
   params: ParamsOfBootstrapCore
 ): Promise<{ core: Core }> {
-  const { apiUrl, publicUrl, oidcParams } = params
+  const { apiUrl, oidcParams } = params
 
   const oidc = await (async () => {
     if (
@@ -48,7 +47,6 @@ export async function bootstrapCore(
     return createOidc({
       issuerUri: oidcParams.issuerUri,
       clientId: oidcParams.clientId,
-      publicUrl: publicUrl,
     })
   })()
 

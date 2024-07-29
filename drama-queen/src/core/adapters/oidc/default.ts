@@ -4,14 +4,13 @@ import { createOidc as createOidcSpa } from 'oidc-spa'
 export async function createOidc(params: {
   issuerUri: string
   clientId: string
-  publicUrl: string
 }): Promise<Oidc> {
-  const { issuerUri, clientId, publicUrl } = params
+  const { issuerUri, clientId } = params
 
   const oidc = await createOidcSpa({
     issuerUri,
     clientId,
-    publicUrl,
+    publicUrl: undefined,
   })
 
   if (oidc.isUserLoggedIn) {
