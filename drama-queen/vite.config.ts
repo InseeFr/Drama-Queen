@@ -54,7 +54,8 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext',
-    minify: true,
+    minify: false,
     sourcemap: true,
+    modulePreload: false,
   },
 })
