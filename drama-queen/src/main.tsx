@@ -3,7 +3,6 @@ import('./bootstrap').then(({ mount }) => {
 
   mount({
     mountPoint: localRoot!,
-    routingStrategy: 'browser',
   })
 })
 

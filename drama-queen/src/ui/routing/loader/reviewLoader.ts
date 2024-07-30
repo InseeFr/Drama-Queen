@@ -1,4 +1,4 @@
-import { prCore } from 'bootstrap'
+import { prCore } from 'createCore'
 import { type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
 

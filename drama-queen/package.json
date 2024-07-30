@@ -4,11 +4,10 @@
   "version": "2.2.3",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5000 --strictPort",
+    "dev": "vite --port 5001 --strictPort",
     "build": "tsc && vite build",
     "postbuild": "node build/remote-env.cjs remoteEntry.js",
-    "preview": "vite preview --port 5000 --strictPort",
-    "serve": "vite preview --port 5000 --strictPort",
+    "preview": "vite preview --port 5001 --strictPort",
     "_format": "prettier '**/*.{ts,tsx,json,md}'",
     "format": "npm run _format -- --write",
     "format:check": "npm run _format -- --list-different"

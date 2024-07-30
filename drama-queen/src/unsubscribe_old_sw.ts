@@ -4,28 +4,28 @@ import { DYNAMIC_PUBLIC_URL } from 'core'
 export const unsubscribeOldSW = () => {
   if ('serviceWorker' in navigator) {
     const isSoloQueen = DYNAMIC_PUBLIC_URL === window.location.origin
-		if (isSoloQueen) {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      registrations.forEach((registration) => {
-        // Unregister old service worker
-        if (
-          registration.active &&
-          registration.active.scriptURL.includes('sw.js')
-        ) {
-          registration.unregister().then((success) => {
-            if (success) {
-              console.log('Old service worker unregistered successfully.')
-              // clear cache only if we are in standalone
-              
+    if (isSoloQueen) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          // Unregister old service worker
+          if (
+            registration.active &&
+            registration.active.scriptURL.includes('sw.js')
+          ) {
+            registration.unregister().then((success) => {
+              if (success) {
+                console.log('Old service worker unregistered successfully.')
+                // clear cache only if we are in standalone
+
                 clearAllCaches()
-              
-            } else {
-              console.log('Failed to unregister old service worker.')
-            }
-          })
-        }
+              } else {
+                console.log('Failed to unregister old service worker.')
+              }
+            })
+          }
+        })
       })
-    })}
+    }
   }
 }
 

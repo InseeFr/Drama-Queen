@@ -33,9 +33,13 @@ export default defineConfig({
       exposes: {
         './DramaIndex': './src/bootstrap.tsx',
       },
-      shared: ['react', 'react-dom', 'react-router-dom'],
+      shared: ['react', 'react-dom'],
     }),
-    tsconfigPaths(),
+    tsconfigPaths({
+      projects: [
+        './tsconfig.json', // To avoid tsconfigPaths read website tsconfig path
+      ],
+    }),
     VitePWA({
       //Generate the external service worker for pearl
       injectRegister: false,
