@@ -13,7 +13,7 @@ export function createOidc(params: { isUserLoggedIn: boolean }): Oidc {
     return id<Oidc.NotLoggedIn>({
       ...common,
       isUserLoggedIn: false,
-      login: (params: { redirectUri: string | undefined }) => {
+      login: () => {
         return new Promise<never>(() => {})
       },
     })

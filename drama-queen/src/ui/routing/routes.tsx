@@ -14,45 +14,42 @@ import {
 import { Review } from 'ui/pages/review/Review'
 import { ErrorPage } from 'ui/pages/Error/Error'
 
-export const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      Component: Layout,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          path: '/env',
-          Component: DisplayEnvValues,
-          loader: protectedRouteLoader,
-        },
-        {
-          path: '/visualize',
-          Component: Visualize,
-          loader: visualizeLoader,
-        },
-        {
-          path: '/synchronize',
-          Component: SynchronizeData,
-          loader: protectedRouteLoader,
-        },
-        {
-          path: '/survey-unit/:surveyUnitId',
-          Component: ErrorPage, // This route do not contains UI components, all things are done in loader, if not there is an error
-          loader: surveyUnitLoader,
-        },
-        {
-          path: `/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
-          Component: Collect,
-          loader: collectLoader,
-        },
-        {
-          path: `/readonly/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
-          Component: Review,
-          loader: reviewLoader,
-        },
-      ],
-    },
-  ],
-  { basename: '/queen' }
-)
+export const routes = [
+  {
+    path: '/',
+    Component: Layout,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '/env',
+        Component: DisplayEnvValues,
+        loader: protectedRouteLoader,
+      },
+      {
+        path: '/visualize',
+        Component: Visualize,
+        loader: visualizeLoader,
+      },
+      {
+        path: '/synchronize',
+        Component: SynchronizeData,
+        loader: protectedRouteLoader,
+      },
+      {
+        path: '/survey-unit/:surveyUnitId',
+        Component: ErrorPage, // This route do not contains UI components, all things are done in loader, if not there is an error
+        loader: surveyUnitLoader,
+      },
+      {
+        path: `/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        Component: Collect,
+        loader: collectLoader,
+      },
+      {
+        path: `/readonly/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+        Component: Review,
+        loader: reviewLoader,
+      },
+    ],
+  },
+]

@@ -10,7 +10,7 @@ export declare namespace Oidc {
 
   export type NotLoggedIn = Common & {
     isUserLoggedIn: false
-    login: (params: { redirectUri: string | undefined }) => Promise<never>
+    login: () => Promise<never>
   }
 
   export type LoggedIn = Common & {

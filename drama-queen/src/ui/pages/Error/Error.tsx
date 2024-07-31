@@ -6,6 +6,8 @@ export function ErrorPage() {
   const { t } = useTranslation('errorMessage')
   const error = useRouteError()
 
+  console.error(error)
+
   if (error instanceof Error) {
     return <ErrorComponent message={error.message} />
   }

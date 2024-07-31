@@ -1,12 +1,10 @@
 import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 
-export async function protectedRouteLoader({ request }: LoaderFunctionArgs) {
+export async function protectedRouteLoader() {
   const { userAuthentication } = (await prCore).functions
 
-  await userAuthentication.loginIfNotLoggedIn({
-    redirectUri: request.url,
-  })
+  await userAuthentication.loginIfNotLoggedIn()
 
   return null
 }

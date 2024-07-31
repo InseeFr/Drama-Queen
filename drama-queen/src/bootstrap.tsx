@@ -3,8 +3,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { unsubscribeOldSW } from 'unsubscribe_old_sw'
-import { router } from 'ui/routing/routes'
 import { CoreProvider } from 'createCore'
+import { createRouter, type RoutingStrategy } from 'ui/routing/createRouter'
 
 const CenteredSpinner = () => (
   <Stack alignItems="center" justifyContent="center" height="100vh">
@@ -12,12 +12,21 @@ const CenteredSpinner = () => (
   </Stack>
 )
 
-const mount = ({ mountPoint }: { mountPoint: HTMLElement }) => {
+const mount = ({
+  mountPoint,
+  initialPathname,
+  routingStrategy,
+}: {
+  mountPoint: HTMLElement
+  initialPathname?: string
+  routingStrategy?: RoutingStrategy
+}) => {
   console.log('Mount Drama Queen')
 
   // unsubscribe to old SW
   unsubscribeOldSW()
 
+  const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)
   root.render(
     <CoreProvider fallback={<CenteredSpinner />}>

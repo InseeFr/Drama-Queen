@@ -2,13 +2,11 @@ import { prCore } from 'createCore'
 import { type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
 
-export async function reviewLoader({ request, params }: LoaderFunctionArgs) {
+export async function reviewLoader({ params }: LoaderFunctionArgs) {
   const { userAuthentication } = (await prCore).functions
 
   //Protect the route
-  await userAuthentication.loginIfNotLoggedIn({
-    redirectUri: request.url,
-  })
+  await userAuthentication.loginIfNotLoggedIn()
 
   const { questionnaireId, surveyUnitId } = params
 

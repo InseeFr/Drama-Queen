@@ -22,17 +22,10 @@ export async function createOidc(params: {
 
   return {
     ...oidc,
-    login: ({ redirectUri }) => {
-      if (redirectUri === undefined) {
-        return oidc.login({
-          doesCurrentHrefRequiresAuth: false,
-        })
-      } else {
-        history.pushState({}, '', redirectUri)
-        return oidc.login({
-          doesCurrentHrefRequiresAuth: true,
-        })
-      }
+    login: () => {
+      return oidc.login({
+        doesCurrentHrefRequiresAuth: true,
+      })
     },
   }
 }
