@@ -8,7 +8,9 @@ export const thunks = {
   loginIfNotLoggedIn:
     () =>
     async (...args) => {
-      const [, , { oidc }] = args
+      const [, , { getOidc }] = args
+
+      const oidc = await getOidc()
 
       if (oidc.isUserLoggedIn) {
         return

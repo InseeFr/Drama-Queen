@@ -1,23 +1,15 @@
 export declare type Oidc = Oidc.LoggedIn | Oidc.NotLoggedIn
 
 export declare namespace Oidc {
-  export type Common = {
-    params: {
-      issuerUri: string
-      clientId: string
-    }
-  }
-
-  export type NotLoggedIn = Common & {
+  export type NotLoggedIn = {
     isUserLoggedIn: false
     login: () => Promise<never>
   }
 
-  export type LoggedIn = Common & {
+  export type LoggedIn = {
     isUserLoggedIn: true
-    renewTokens(): Promise<void>
-    getTokens: () => Tokens
     logout: () => Promise<never>
+    getTokens: () => Tokens
   }
 
   export type Tokens = {

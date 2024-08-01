@@ -17,7 +17,7 @@ type ParamsOfBootstrapCore = {
 
 type Context = {
   paramsOfBootstrapCore: ParamsOfBootstrapCore
-  oidc: Oidc
+  getOidc: () => Promise<Oidc>
   queenApi: QueenApi
   dataStore: DataStore
   localSyncStorage: LocalSyncStorage
@@ -34,12 +34,13 @@ export async function bootstrapCore(
 ): Promise<{ core: Core }> {
   const { apiUrl, oidcParams } = params
 
-  const oidc = await (async () => {
+  const getOidc = await (async () => {
     if (oidcParams === undefined || oidcParams.issuerUri === '') {
       const { createOidc } = await import('core/adapters/oidc/mock')
       return createOidc({ isUserLoggedIn: true })
     }
     const { createOidc } = await import('core/adapters/oidc/default')
+
     return createOidc({
       issuerUri: oidcParams.issuerUri,
       clientId: oidcParams.clientId,
@@ -57,10 +58,8 @@ export async function bootstrapCore(
 
     return createApiClient({
       apiUrl,
-      getAccessToken: () => {
-        if (oidc === undefined) {
-          return undefined
-        }
+      getAccessToken: async () => {
+        const oidc = await getOidc()
 
         if (!oidc.isUserLoggedIn) {
           return undefined
@@ -100,7 +99,7 @@ export async function bootstrapCore(
 
   const context: Context = {
     paramsOfBootstrapCore: params,
-    oidc,
+    getOidc,
     queenApi,
     dataStore,
     localSyncStorage,

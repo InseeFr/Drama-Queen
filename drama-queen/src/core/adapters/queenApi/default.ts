@@ -19,7 +19,7 @@ import { handleAxiosError } from 'core/tools/axiosError'
 
 export function createApiClient(params: {
   apiUrl: string
-  getAccessToken: () => string | undefined
+  getAccessToken: () => Promise<string | undefined>
 }): QueenApi {
   const { apiUrl, getAccessToken } = params
 
@@ -34,8 +34,8 @@ export function createApiClient(params: {
           ...config.headers,
           'Content-Type': 'application/json;charset=utf-8',
           Accept: 'application/json;charset=utf-8',
-          ...(() => {
-            const accessToken = getAccessToken()
+          ...(async () => {
+            const accessToken = await getAccessToken()
 
             if (!accessToken) {
               return undefined
