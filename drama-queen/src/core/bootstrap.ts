@@ -35,11 +35,7 @@ export async function bootstrapCore(
   const { apiUrl, oidcParams } = params
 
   const oidc = await (async () => {
-    if (
-      oidcParams === undefined ||
-      oidcParams.issuerUri === '' ||
-      !navigator.onLine
-    ) {
+    if (oidcParams === undefined || oidcParams.issuerUri === '') {
       const { createOidc } = await import('core/adapters/oidc/mock')
       return createOidc({ isUserLoggedIn: true })
     }

@@ -7,7 +7,6 @@ import { NavigationManager } from './NavigationManager'
 export function Layout() {
   return (
     <NavigationManager>
-      Layout
       {globalStyles}
       <ThemeProvider theme={theme}>
         <Outlet />

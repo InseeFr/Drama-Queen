@@ -1,5 +1,4 @@
 import { DisplayEnvValues } from 'ui/pages/env'
-import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import { Collect } from 'ui/pages/collect'
 import { SynchronizeData } from 'ui/pages/synchronize'
 import { Layout } from './Layout'
