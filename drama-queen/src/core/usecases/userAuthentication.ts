@@ -6,15 +6,16 @@ export const reducer = null
 
 export const thunks = {
   loginIfNotLoggedIn:
-    (params: { redirectUri: string }) =>
+    () =>
     async (...args) => {
-      const { redirectUri } = params
-      const [, , { oidc }] = args
+      const [, , { getOidc }] = args
+
+      const oidc = await getOidc()
 
       if (oidc.isUserLoggedIn) {
         return
       }
 
-      await oidc.login({ redirectUri })
+      await oidc.login()
     },
 } satisfies Thunks

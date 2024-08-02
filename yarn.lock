@@ -3301,11 +3301,6 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto-js@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
-  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
-
 crypto-random-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-2.0.0.tgz#ef2a7a966ec11083388369baa02ebead229b30d5"
@@ -5210,11 +5205,6 @@ jsonpointer@^5.0.0:
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-5.0.1.tgz#2110e0af0900fd37467b5907ecd13a7884a1b559"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
 
-jwt-decode@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
-  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
-
 jwt-decode@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
@@ -6435,22 +6425,10 @@ object.assign@^4.1.4:
     has-symbols "^1.0.3"
     object-keys "^1.1.1"
 
-oidc-client-ts@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-2.4.0.tgz#764c8a33de542026e2798de9849ce8049047d7e5"
-  integrity sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==
-  dependencies:
-    crypto-js "^4.2.0"
-    jwt-decode "^3.1.2"
-
-oidc-spa@^4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/oidc-spa/-/oidc-spa-4.4.1.tgz#f9390344bcf8c0c76167ae17fdbf88068d06295a"
-  integrity sha512-7sdYINxXZVgexS8iCJu3g/frgSiM0KEk44Pu31mc6+d9rBparalznWgYE7yMNX3GBgv1IeNOWw7gN5anudAMGg==
-  dependencies:
-    jwt-decode "^3.1.2"
-    oidc-client-ts "2.4.0"
-    tsafe "^1.6.5"
+oidc-spa@^4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/oidc-spa/-/oidc-spa-4.10.0.tgz#d6099577ef1506072770f86572e0a1c8bad49d06"
+  integrity sha512-jWPbFAM5XYnSdW7buAt5HikpUBfVDNSET9rf5C6J7OUEXyaKJ+H0s048uxLRuGIKP/ovYfUSKxauACxaI+h/Ig==
 
 once@^1.3.0, once@^1.4.0:
   version "1.4.0"

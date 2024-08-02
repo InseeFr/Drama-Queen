@@ -12,13 +12,13 @@ export function createRouter({
   strategy = 'memory',
   initialPathname = '/',
 }: CreateRouterProps) {
+
   if (strategy === 'browser') {
     return createBrowserRouter(routes, { basename: '/queen' })
   }
 
   const initialEntries = [initialPathname || '/']
   return createMemoryRouter(routes, {
-    basename: '/queen',
     initialEntries: initialEntries,
   })
 }

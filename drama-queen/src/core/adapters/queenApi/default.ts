@@ -19,7 +19,7 @@ import { handleAxiosError } from 'core/tools/axiosError'
 
 export function createApiClient(params: {
   apiUrl: string
-  getAccessToken: () => string | undefined
+  getAccessToken: () => Promise<string | undefined>
 }): QueenApi {
   const { apiUrl, getAccessToken } = params
 
@@ -27,24 +27,16 @@ export function createApiClient(params: {
     const axiosInstance = axios.create({ baseURL: apiUrl })
 
     // Type issue https://github.com/axios/axios/issues/5494
-    const onRequest = (config: any) => {
+    const onRequest = async (config: any) => {
+      const accessToken = await getAccessToken()
+
       return {
         ...config,
         headers: {
           ...config.headers,
           'Content-Type': 'application/json;charset=utf-8',
           Accept: 'application/json;charset=utf-8',
-          ...(() => {
-            const accessToken = getAccessToken()
-
-            if (!accessToken) {
-              return undefined
-            }
-
-            return {
-              Authorization: `Bearer ${accessToken}`,
-            }
-          })(),
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         },
       }
     }
