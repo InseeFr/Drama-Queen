@@ -20,7 +20,7 @@
     "@mui/material": "^5.15.14",
     "@types/memoizee": "^0.4.11",
     "axios": "^1.6.8",
-    "dexie": "^3.2.7",
+    "dexie": "^4.0.0",
     "dexie-react-hooks": "^1.1.7",
     "evt": "^2.5.7",
     "i18nifty": "^3.2.1",
