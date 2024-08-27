@@ -8,7 +8,6 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import CloseIcon from '@mui/icons-material/Close'
 import { tss } from 'tss-react/mui'
-import { useTranslation } from 'i18n'
 
 type ModalProps = {
   isOpen: boolean
@@ -33,7 +32,6 @@ export function Modal(props: ModalProps) {
     onClose,
   } = props
   const { classes } = useStyles()
-  const { t } = useTranslation('modalMessage')
 
   const handleClose = (event: any, reason: string) => {
     if (mandatory && ['backdropClick', 'escapeKeyDown'].includes(reason)) {
@@ -62,8 +60,9 @@ export function Modal(props: ModalProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {buttons.map((button) => (
+          {buttons.map((button, index) => (
             <Button
+              key={`${index}-${button.label}`}
               className={classes.button}
               autoFocus={button.autoFocus}
               onClick={button.onClick}
