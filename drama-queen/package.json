@@ -46,7 +46,7 @@
     "typescript": "^5.4.3",
     "vite": "^5.2.10",
     "vite-envs": "^4.2.2",
-    "vite-plugin-pwa": "^0.19.8",
+    "vite-plugin-pwa": "^0.20.0",
     "vite-tsconfig-paths": "^4.3.2"
   }
 }
