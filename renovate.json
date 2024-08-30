@@ -30,7 +30,7 @@
 		{
       "matchPaths": ["website/**"],
       "matchDepTypes": ["dependencies", "devDependencies"],
-      "matchpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["minor", "patch"],
       "groupName": "website minor and patch updates",
       "groupSlug": "website-minor-patch",
       "labels": ["dependencies", "website"]
