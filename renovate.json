@@ -1,23 +1,49 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
   "labels": ["dependencies"],
+  "dependencyDashboard": true,
   "packageRules": [
     {
-      "matchFiles": ["queen/**"],
-      "labels": ["queen"]
+      "matchPaths": ["drama-queen/package.json"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "drama-queen dependencies minor and patch updates",
+			"groupSlug": "minor-patch",
+      "labels": ["dependencies"]
     },
     {
-      "matchFiles": ["queen-v2/**"],
-      "labels": ["queen-v2"]
+      "matchPaths": ["drama-queen/package.json"],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "drama-queen devDependencies minor and patch updates",
+			"groupSlug": "dev-minor-patch",
+      "labels": ["devDependencies"]
     },
-    {
-      "matchFiles": ["drama-queen/**"],
-      "labels": ["drama-queen"]
+		{
+      "matchPaths": ["drama-queen/package.json"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackagePatterns": ["@inseefr/lunatic"],
+      "labels": ["lunatic"]
     },
-    {
+		{
+      "matchPaths": ["website/**"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchpdateTypes": ["minor", "patch"],
+      "groupName": "website minor and patch updates",
+      "groupSlug": "website-minor-patch",
+      "labels": ["dependencies", "website"]
+    },
+		{
       "matchFiles": ["package.json"],
+			"groupName": "drama-queen-container updates",
+      "groupSlug": "container-updates",
       "labels": ["drama-queen-container"]
+    },
+		{
+      "matchPaths": [".github/workflows/**"],
+      "labels": ["CI"]
     }
   ]
 }
