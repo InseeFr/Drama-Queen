@@ -42,7 +42,9 @@
       "labels": ["drama-queen-container"]
     },
 		{
+      "description": "CI dependencies",
       "matchPaths": [".github/workflows/**"],
+      "groupName": "CI dependencies",
       "labels": ["CI"]
     }
   ]
