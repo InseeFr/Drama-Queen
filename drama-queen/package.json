@@ -37,15 +37,15 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.67",
+    "@types/node": "^20.16.10",
+    "@types/react": "^18.3.10",
     "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.10",
-    "vite-envs": "^4.2.2",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8",
+    "vite-envs": "^4.4.5",
     "vite-plugin-pwa": "^0.19.8",
     "vite-tsconfig-paths": "^4.3.2"
   }
