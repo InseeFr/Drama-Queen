@@ -1,12 +1,10 @@
 import type { Thunks } from 'core/bootstrap'
 import { actions, name } from './state'
 import { AxiosError } from 'axios'
-import type { ExternalQuestionnaires, Questionnaire } from 'core/model'
-import { fetchUrl } from 'core/tools/fetchUrl'
+import type { Questionnaire } from 'core/model'
 import {
   getExternalQuestionnaires,
   getResourcesFromExternalQuestionnaire,
-  getTransformedManifest,
 } from 'core/tools/externalResources'
 
 const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL

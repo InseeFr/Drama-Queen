@@ -6,6 +6,7 @@ import type {
 } from 'core/model'
 import { fetchUrl } from './fetchUrl'
 
+// Get the list of external questionnaires from url
 export async function getExternalQuestionnaires(
   baseUrl: string
 ): Promise<ExternalQuestionnaires> {
@@ -16,7 +17,8 @@ export async function getExternalQuestionnaires(
   return questionnairesWrapper.questionnaires
 }
 
-export async function getTransformedManifest(
+// Get the list of external resource URLs for a questionnaireId from url
+async function getTransformedManifest(
   baseUrl: string,
   questionnaireId: string
 ): Promise<string[]> {
@@ -45,7 +47,7 @@ async function asyncFilter<T>(
 }
 
 // Filter resources from manifest that are already cached, to avoid useless requests (overly large files).
-export async function filterTransformedManifest(
+async function filterTransformedManifest(
   cacheName: string,
   transformedManifest: string[]
 ): Promise<string[]> {
@@ -64,6 +66,7 @@ export async function filterTransformedManifest(
   return [...transformedManifest]
 }
 
+// Cache every external resources (not already cached) for a particular questionnaire
 export async function getResourcesFromExternalQuestionnaire(
   baseUrl: string,
   questionnaire: ExternalQuestionnaire
