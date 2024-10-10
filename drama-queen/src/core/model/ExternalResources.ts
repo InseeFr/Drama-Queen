@@ -10,6 +10,11 @@ export type ExternalQuestionnairesWrapper = {
   version?: string
 }
 
+export type ExternalQuestionnairesFiltered = {
+  neededQuestionnaires: ExternalQuestionnaires
+  notNeededQuestionnaires: ExternalQuestionnaires
+}
+
 export type Manifest = {
   [key: string]: string
 }

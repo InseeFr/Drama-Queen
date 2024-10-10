@@ -3,6 +3,7 @@ import { actions, name } from './state'
 import { AxiosError } from 'axios'
 import type { Questionnaire } from 'core/model'
 import {
+  getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
   getResourcesFromExternalQuestionnaire,
 } from 'core/tools/externalResources'
@@ -188,9 +189,14 @@ export const thunks = {
           const externalQuestionnaires =
             await getExternalQuestionnaires(externalResourcesUrl)
 
-          // add in cache the missing external resources
+          const { neededQuestionnaires } = getExternalQuestionnaireFiltered(
+            questionnaireIdInSuccess,
+            externalQuestionnaires
+          )
+
+          // add in cache the missing external resources for needed questionnaires
           await Promise.all(
-            externalQuestionnaires.map((questionnaire) =>
+            neededQuestionnaires.map((questionnaire) =>
               getResourcesFromExternalQuestionnaire(
                 externalResourcesUrl,
                 questionnaire

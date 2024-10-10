@@ -1,6 +1,7 @@
 import type {
   ExternalQuestionnaire,
   ExternalQuestionnaires,
+  ExternalQuestionnairesFiltered,
   ExternalQuestionnairesWrapper,
   Manifest,
 } from 'core/model'
@@ -83,4 +84,36 @@ export async function getResourcesFromExternalQuestionnaire(
 
   const manifestCache = await caches.open(questionnaire.cacheName)
   return await manifestCache.addAll(filteredTransformedManifest)
+}
+
+// Separate, from the list of external questionnaires, those that are needed and those that are not needed
+export function getExternalQuestionnaireFiltered(
+  neededQuestionnaireIds: string[] = [],
+  externalQuestionnaires: ExternalQuestionnaires = []
+): ExternalQuestionnairesFiltered {
+  return externalQuestionnaires.reduce(
+    (result, questionnaire) => {
+      // Check if the current questionnaire's id matches any of the needed IDs
+      const isNeeded = neededQuestionnaireIds.some((neededId) =>
+        neededId.toLowerCase().includes(questionnaire.id.toLowerCase())
+      )
+
+      // If the external questionnaire is needed
+      if (isNeeded) {
+        result.neededQuestionnaires.push(questionnaire)
+      }
+      // If it's not needed
+      else {
+        result.notNeededQuestionnaires.push(questionnaire)
+      }
+
+      // Return the updated result object after processing this questionnaire
+      return result
+    },
+    // Initial value of result: an object with two empty arrays (needed and noNeeded)
+    {
+      neededQuestionnaires: [],
+      notNeededQuestionnaires: [],
+    } as ExternalQuestionnairesFiltered
+  )
 }
