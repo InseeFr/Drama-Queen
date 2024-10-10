@@ -1,7 +1,15 @@
 import type { Thunks } from 'core/bootstrap'
 import { actions, name } from './state'
 import { AxiosError } from 'axios'
-import type { Questionnaire } from 'core/model'
+import type { ExternalQuestionnaires, Questionnaire } from 'core/model'
+import { fetchUrl } from 'core/tools/fetchUrl'
+import {
+  getExternalQuestionnaires,
+  getResourcesFromExternalQuestionnaire,
+  getTransformedManifest,
+} from 'core/tools/externalResources'
+
+const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 
 export const thunks = {
   download:
@@ -171,6 +179,27 @@ export const thunks = {
               })
           )
         )
+
+        /*
+         * External special ressources
+         */
+
+        // we sychronize the external ressource only if there is a url for getting them
+        if (externalResourcesUrl) {
+          // get the list of external questionnaires
+          const externalQuestionnaires =
+            await getExternalQuestionnaires(externalResourcesUrl)
+
+          // add in cache the missing external resources
+          await Promise.all(
+            externalQuestionnaires.map((questionnaire) =>
+              getResourcesFromExternalQuestionnaire(
+                externalResourcesUrl,
+                questionnaire
+              )
+            )
+          )
+        }
 
         //We await untill all the promises are finished
         await Promise.all([prSurveyUnit, prNomenclatures])
