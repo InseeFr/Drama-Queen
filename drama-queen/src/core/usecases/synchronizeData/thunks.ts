@@ -189,10 +189,11 @@ export const thunks = {
           const externalQuestionnaires =
             await getExternalQuestionnaires(externalResourcesUrl)
 
-          const { neededQuestionnaires } = getExternalQuestionnaireFiltered(
-            questionnaireIdInSuccess,
-            externalQuestionnaires
-          )
+          const { neededQuestionnaires, notNeededQuestionnaires } =
+            getExternalQuestionnaireFiltered(
+              questionnaireIdInSuccess,
+              externalQuestionnaires
+            )
 
           // add in cache the missing external resources for needed questionnaires
           await Promise.all(
@@ -201,6 +202,13 @@ export const thunks = {
                 externalResourcesUrl,
                 questionnaire
               )
+            )
+          )
+
+          // delete the cache of every not needed questionnaire
+          await Promise.all(
+            notNeededQuestionnaires.map((questionnaire) =>
+              caches.delete(questionnaire.cacheName)
             )
           )
         }
