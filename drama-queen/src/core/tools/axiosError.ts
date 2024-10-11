@@ -11,7 +11,6 @@ export function handleAxiosError(error: AxiosError) {
   }
 
   const status = error.response.status
-  console.error(`Axios error with status ${status}:`, error.response.data)
 
   const messages: { [key: number]: string } = {
     400: t('400'),
