@@ -55,16 +55,22 @@ async function filterTransformedManifest(
   // Open the specified cache
   const cacheForManifest = await caches.open(cacheName)
 
-  // If the cache is available, filter the transformedManifest for keeping only files that are not cached yet
-  if (cacheForManifest) {
-    return await asyncFilter(transformedManifest, async (resourceUrl) => {
-      const cacheResponse = await cacheForManifest.match(resourceUrl)
-      return !cacheResponse?.ok
-    })
+  // If cache is not available, return a copy of transformedManifest
+  if (!cacheForManifest) {
+    return [...transformedManifest]
   }
 
-  // If cache is not available, return a copy of transformedManifest
-  return [...transformedManifest]
+  // Get all urls from the cache
+  const cachedUrls = (await cacheForManifest.keys()).map(
+    (request) => request.url
+  )
+
+  // filter the transformedManifest for keeping only files that are not cached yet
+  const uncachedResources = transformedManifest.filter(
+    (resourceUrl) => !cachedUrls.includes(resourceUrl)
+  )
+
+  return uncachedResources
 }
 
 // Cache every external resources (not already cached) for a particular questionnaire
