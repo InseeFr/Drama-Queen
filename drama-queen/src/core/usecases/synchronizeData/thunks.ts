@@ -9,6 +9,7 @@ import {
 } from 'core/tools/externalResources'
 
 const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
+const externalResourcesRootCacheName = 'cache-root-external'
 
 export const thunks = {
   download:
@@ -205,12 +206,17 @@ export const thunks = {
             )
           )
 
-          // delete the cache of every not needed questionnaire
+          // delete the cache of every not needed external questionnaires
           await Promise.all(
             notNeededQuestionnaires.map((questionnaire) =>
               caches.delete(questionnaire.cacheName)
             )
           )
+
+          // delete the root-cache of external resources if no external questionnaire is needed
+          if (neededQuestionnaires.length === 0) {
+            await caches.delete(externalResourcesRootCacheName)
+          }
         }
 
         //We await untill all the promises are finished
