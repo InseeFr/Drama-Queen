@@ -204,9 +204,9 @@ export const thunks = {
           )
 
           // add in cache the missing external resources for needed questionnaires
-          await Promise.all(
-            neededQuestionnaires.map((questionnaire) => {
-              getResourcesFromExternalQuestionnaire(
+          const prGetExternalResources = Promise.all(
+            neededQuestionnaires.map(async (questionnaire) => {
+              await getResourcesFromExternalQuestionnaire(
                 externalResourcesUrl,
                 questionnaire
               ).then(() =>
@@ -216,16 +216,24 @@ export const thunks = {
           )
 
           // delete the cache of every not needed external questionnaires
-          await Promise.all(
+          const prDeleteExternalResources = Promise.all(
             notNeededQuestionnaires.map((questionnaire) =>
               caches.delete(questionnaire.cacheName)
             )
           )
 
           // delete the root-cache of external resources if no external questionnaire is needed
-          if (neededQuestionnaires.length === 0) {
-            await caches.delete(externalResourcesRootCacheName)
-          }
+          const prDeleteExternalRootCache =
+            neededQuestionnaires.length === 0
+              ? caches.delete(externalResourcesRootCacheName)
+              : Promise.resolve()
+
+          // We await untill the promises for external resources are finished
+          await Promise.all([
+            prGetExternalResources,
+            prDeleteExternalResources,
+            prDeleteExternalRootCache,
+          ])
         }
 
         //We await untill all the promises are finished
