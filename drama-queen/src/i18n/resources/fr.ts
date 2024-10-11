@@ -78,6 +78,7 @@ export const translations: Translations<'fr'> = {
     surveyUnitsProgress: 'Unités enquêtées',
     questionnairesProgress: 'Questionnaires',
     nomenclaturesProgress: 'Nomenclatures',
+    externalResourcesProgress: 'Ressources externes',
     uploadingData: 'Envoi des données...',
   },
   visualizeMessage: {

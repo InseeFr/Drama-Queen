@@ -8,7 +8,7 @@ import {
   getResourcesFromExternalQuestionnaire,
 } from 'core/tools/externalResources'
 
-const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
+export const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 const externalResourcesRootCacheName = 'cache-root-external'
 
 export const thunks = {
@@ -196,14 +196,23 @@ export const thunks = {
               externalQuestionnaires
             )
 
+          // set the total of needed external questionnaires for progress bar
+          dispatch(
+            actions.setDownloadTotalExternalResources({
+              totalExternalResources: neededQuestionnaires.length,
+            })
+          )
+
           // add in cache the missing external resources for needed questionnaires
           await Promise.all(
-            neededQuestionnaires.map((questionnaire) =>
+            neededQuestionnaires.map((questionnaire) => {
               getResourcesFromExternalQuestionnaire(
                 externalResourcesUrl,
                 questionnaire
+              ).then(() =>
+                dispatch(actions.downloadExternalResourceCompleted())
               )
-            )
+            })
           )
 
           // delete the cache of every not needed external questionnaires
