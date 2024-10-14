@@ -36,17 +36,6 @@ async function getTransformedManifest(
   return transformedManifest
 }
 
-async function asyncFilter<T>(
-  arr: T[],
-  predicate: (element: T) => Promise<boolean>
-): Promise<T[]> {
-  // Map each element to a promise that resolves to a boolean
-  const results = await Promise.all(arr.map(predicate))
-
-  // Return elements where the corresponding result is true
-  return arr.filter((_, index) => results[index])
-}
-
 // Filter resources from manifest that are already cached, to avoid useless requests (overly large files).
 async function filterTransformedManifest(
   cacheName: string,
