@@ -187,8 +187,21 @@ export const thunks = {
         // we sychronize the external ressource only if there is a url for getting them
         if (externalResourcesUrl) {
           // get the list of external questionnaires
-          const externalQuestionnaires =
-            await getExternalQuestionnaires(externalResourcesUrl)
+          const externalQuestionnaires = await getExternalQuestionnaires(
+            externalResourcesUrl
+          ).catch((error) => {
+            if (
+              error instanceof AxiosError &&
+              error.response &&
+              [400, 403, 404, 500].includes(error.response.status)
+            ) {
+              console.error(
+                `An error occurred while fetching external questionnaires list`,
+                error
+              )
+            }
+            throw error
+          })
 
           const { neededQuestionnaires, notNeededQuestionnaires } =
             getExternalQuestionnaireFiltered(
@@ -209,9 +222,16 @@ export const thunks = {
               await getResourcesFromExternalQuestionnaire(
                 externalResourcesUrl,
                 questionnaire
-              ).then(() =>
-                dispatch(actions.downloadExternalResourceCompleted())
               )
+                .then(() =>
+                  dispatch(actions.downloadExternalResourceCompleted())
+                )
+                .catch((error) =>
+                  console.error(
+                    `An error occurred while fetching external resources of questionnaire ${questionnaire.id}`,
+                    error
+                  )
+                )
             })
           )
 

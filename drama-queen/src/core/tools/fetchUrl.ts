@@ -8,12 +8,5 @@ import { handleAxiosError } from './axiosError'
  */
 export async function fetchUrl<T>(params: { url: string }) {
   const { url } = params
-  return axios
-    .get<T>(decodeURIComponent(url))
-    .then(({ data }) => data)
-    .catch((error) => {
-      console.error(`An error occured, we could not retrieve ${url}`, error)
-      if (!(error instanceof AxiosError)) throw error
-      throw handleAxiosError(error)
-    })
+  return axios.get<T>(decodeURIComponent(url)).then(({ data }) => data)
 }
