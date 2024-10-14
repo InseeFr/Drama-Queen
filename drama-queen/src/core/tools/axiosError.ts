@@ -5,30 +5,25 @@ const { t } = getTranslation('errorMessage')
 
 export function handleAxiosError(error: AxiosError) {
   if (!error.response) {
-    throw new AxiosError(
+    error.message =
       "Une erreur s'est produite lors du traitement de la requête. Veuillez réessayer plus tard."
-    )
+    return error
   }
+
   const status = error.response.status
-  switch (status) {
-    case 400:
-      throw new AxiosError(t('400'))
-    case 401:
-      throw new AxiosError(t('401'))
-    case 403:
-      throw new AxiosError(t('403'))
-    case 404:
-      throw new AxiosError(t('404'))
-      break
-    case 500:
-      throw new AxiosError(t('500'))
-    case 502:
-      throw new AxiosError(t('502'))
-    case 503:
-      throw new AxiosError(t('503'))
-    case 504:
-      throw new AxiosError(t('504'))
-    default:
-      throw new AxiosError(t('longUnknownError'))
+
+  const messages: { [key: number]: string } = {
+    400: t('400'),
+    401: t('401'),
+    403: t('403'),
+    404: t('404'),
+    500: t('500'),
+    502: t('502'),
+    503: t('503'),
+    504: t('504'),
   }
+
+  error.message = messages[status] || t('longUnknownError')
+
+  return error
 }

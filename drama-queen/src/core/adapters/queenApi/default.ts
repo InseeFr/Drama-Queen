@@ -49,7 +49,7 @@ export function createApiClient(params: {
         if (!(error instanceof AxiosError)) {
           return Promise.reject(error)
         }
-        handleAxiosError(error)
+        return Promise.reject(handleAxiosError(error))
       }
     )
     return { axiosInstance }
