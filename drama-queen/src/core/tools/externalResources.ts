@@ -7,6 +7,8 @@ import type {
 } from 'core/model'
 import { fetchUrl } from './fetchUrl'
 
+const externalQuestionnairesKeyword = 'gide'
+
 // Get the list of external questionnaires from url
 export async function getExternalQuestionnaires(
   baseUrl: string
@@ -111,4 +113,21 @@ export function getExternalQuestionnaireFiltered(
       notNeededQuestionnaires: [],
     } as ExternalQuestionnairesFiltered
   )
+}
+
+// Get the list of caches where cacheName includes externalQuestionnairesKeyword, and that are not in needed external questionnaires
+export async function getOldExternalCacheNames(
+  neededQuestionnaires: ExternalQuestionnaires
+): Promise<string[]> {
+  const neededCaches = neededQuestionnaires.map(
+    (questionnaire) => questionnaire.cacheName
+  )
+
+  const oldExternalCacheNames = (await caches.keys()).filter(
+    (cacheName) =>
+      cacheName.toLowerCase().includes(externalQuestionnairesKeyword) &&
+      !neededCaches.includes(cacheName)
+  )
+
+  return oldExternalCacheNames
 }

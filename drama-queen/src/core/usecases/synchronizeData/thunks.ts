@@ -5,6 +5,7 @@ import type { Questionnaire } from 'core/model'
 import {
   getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
+  getOldExternalCacheNames,
   getResourcesFromExternalQuestionnaire,
 } from 'core/tools/externalResources'
 
@@ -248,11 +249,20 @@ export const thunks = {
               ? caches.delete(externalResourcesRootCacheName)
               : Promise.resolve()
 
+          // delete old caches (that are not in external questionnaires list but sill in browser) :
+          const oldExternalCacheNames =
+            await getOldExternalCacheNames(neededQuestionnaires)
+
+          const prDeleteOldExternalCaches = Promise.all(
+            oldExternalCacheNames.map((cacheName) => caches.delete(cacheName))
+          )
+
           // We await untill the promises for external resources are finished
           await Promise.all([
             prGetExternalResources,
             prDeleteExternalResources,
             prDeleteExternalRootCache,
+            prDeleteOldExternalCaches,
           ])
         }
 
