@@ -7,32 +7,30 @@ import type {
 } from 'core/model'
 import { fetchUrl } from './fetchUrl'
 
+export const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 const externalQuestionnairesKeyword = 'gide'
 
-// Get the list of external questionnaires from url
-export async function getExternalQuestionnaires(
-  baseUrl: string
-): Promise<ExternalQuestionnaires> {
+// Get the list of external questionnaires
+export async function getExternalQuestionnaires(): Promise<ExternalQuestionnaires> {
   const questionnairesWrapper = await fetchUrl<ExternalQuestionnairesWrapper>({
-    url: `${baseUrl}/gide-questionnaires.json`,
+    url: `${externalResourcesUrl}/gide-questionnaires.json`,
   })
 
   return questionnairesWrapper.questionnaires
 }
 
-// Get the list of external resource URLs for a questionnaireId from url
+// Get the list of external resource URLs for a questionnaireId
 async function getTransformedManifest(
-  baseUrl: string,
   questionnaireId: string
 ): Promise<string[]> {
   // get the manifest for a questionnaireId
   const manifest = await fetchUrl<Manifest>({
-    url: `${baseUrl}/${questionnaireId}/assets-manifest.json`,
+    url: `${externalResourcesUrl}/${questionnaireId}/assets-manifest.json`,
   })
 
   // Transform the manifest values into resource URLs, and get an array of these resource URLs
   const transformedManifest = Object.values(manifest).map(
-    (resourceUrl) => `${baseUrl}/${resourceUrl}`
+    (resourceUrl) => `${externalResourcesUrl}/${resourceUrl}`
   )
 
   return transformedManifest
@@ -66,13 +64,9 @@ async function filterTransformedManifest(
 
 // Cache every external resources (not already cached) for a particular questionnaire
 export async function getResourcesFromExternalQuestionnaire(
-  baseUrl: string,
   questionnaire: ExternalQuestionnaire
 ): Promise<void> {
-  const transformedManifest = await getTransformedManifest(
-    baseUrl,
-    questionnaire.id
-  )
+  const transformedManifest = await getTransformedManifest(questionnaire.id)
 
   const filteredTransformedManifest = await filterTransformedManifest(
     questionnaire.cacheName,

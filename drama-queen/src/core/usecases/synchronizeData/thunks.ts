@@ -3,13 +3,13 @@ import { actions, name } from './state'
 import { AxiosError } from 'axios'
 import type { Questionnaire } from 'core/model'
 import {
+  externalResourcesUrl,
   getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
   getOldExternalCacheNames,
   getResourcesFromExternalQuestionnaire,
 } from 'core/tools/externalResources'
 
-export const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 const externalResourcesRootCacheName = 'cache-root-external'
 
 export const thunks = {
@@ -188,21 +188,20 @@ export const thunks = {
         // we sychronize the external ressource only if there is a url for getting them
         if (externalResourcesUrl) {
           // get the list of external questionnaires
-          const externalQuestionnaires = await getExternalQuestionnaires(
-            externalResourcesUrl
-          ).catch((error) => {
-            if (
-              error instanceof AxiosError &&
-              error.response &&
-              [400, 403, 404, 500].includes(error.response.status)
-            ) {
-              console.error(
-                `An error occurred while fetching external questionnaires list`,
-                error
-              )
-            }
-            throw error
-          })
+          const externalQuestionnaires =
+            await getExternalQuestionnaires().catch((error) => {
+              if (
+                error instanceof AxiosError &&
+                error.response &&
+                [400, 403, 404, 500].includes(error.response.status)
+              ) {
+                console.error(
+                  `An error occurred while fetching external questionnaires list`,
+                  error
+                )
+              }
+              throw error
+            })
 
           const { neededQuestionnaires, notNeededQuestionnaires } =
             getExternalQuestionnaireFiltered(
@@ -220,10 +219,7 @@ export const thunks = {
           // add in cache the missing external resources for needed questionnaires
           const prGetExternalResources = Promise.all(
             neededQuestionnaires.map(async (questionnaire) => {
-              await getResourcesFromExternalQuestionnaire(
-                externalResourcesUrl,
-                questionnaire
-              )
+              await getResourcesFromExternalQuestionnaire(questionnaire)
                 .then(() =>
                   dispatch(actions.downloadExternalResourceCompleted())
                 )
