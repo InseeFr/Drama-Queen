@@ -1,5 +1,8 @@
 import type { PageTag, SurveyUnit } from 'core/model'
 import type { Component, Components } from '../lunaticType'
+import type { LunaticData } from '@inseefr/lunatic'
+
+const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 
 /**
  * temporary : should be handle by Lunatic
@@ -94,6 +97,22 @@ export function getinitialSurveyUnit(
       state: null,
       date: new Date().getTime(),
       currentPage: '1',
+    },
+  }
+}
+
+export function getInitialData(
+  surveyUnit: SurveyUnit
+): LunaticData | undefined {
+  const initialData = surveyUnit.data
+  if (!externalResourcesUrl) return initialData
+  return {
+    COLLECTED: initialData?.COLLECTED,
+    CALCULATED: initialData?.CALCULATED,
+    EXTERNAL: {
+      ...initialData?.EXTERNAL,
+      GLOBAL_QUESTIONNAIRE_ID: surveyUnit.questionnaireId,
+      GLOBAL_SURVEY_UNIT_ID: surveyUnit.id,
     },
   }
 }
