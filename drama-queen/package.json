@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
+    "test": "vitest run",
     "build": "tsc && vite build",
     "postbuild": "node build/remote-env.cjs remoteEntry.js",
     "preview": "vite preview --port 5001 --strictPort",
@@ -37,16 +38,21 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.3.2",
+    "jsdom": "^25.0.1",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
     "vite-envs": "^4.4.5",
     "vite-plugin-pwa": "^0.19.8",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.1.3"
   }
 }
