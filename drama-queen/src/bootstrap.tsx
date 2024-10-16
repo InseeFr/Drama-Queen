@@ -37,4 +37,11 @@ const mount = ({
   return () => queueMicrotask(() => root.unmount())
 }
 
-export { mount }
+const mountExternalResources = (externalResourcesUrl: string) => {
+  console.log('Mount External resources')
+  const script = document.createElement('script')
+  script.src = `${externalResourcesUrl}/entry.js`
+  document.body.appendChild(script)
+}
+
+export { mount, mountExternalResources }
