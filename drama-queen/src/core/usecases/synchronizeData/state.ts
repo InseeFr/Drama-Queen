@@ -1,7 +1,7 @@
 import { createUsecaseActions } from 'redux-clean-architecture'
 import { id } from 'tsafe/id'
 import { assert } from 'tsafe/assert'
-import { externalResourcesUrl } from './thunks'
+import { externalResourcesUrl } from 'core/tools/externalResources'
 
 export type State = State.NotRunning | State.Running
 
