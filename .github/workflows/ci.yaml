@@ -3,7 +3,6 @@ on:
   push:
     branches: ["main", "2.*"]
   pull_request:
-    branches: ["main", "2.*"]
 
 jobs:
   test_and_build:
