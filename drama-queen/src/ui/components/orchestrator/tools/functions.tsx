@@ -101,16 +101,13 @@ export function getinitialSurveyUnit(
   }
 }
 
-export function getInitialData(
-  surveyUnit: SurveyUnit
-): LunaticData | undefined {
+export function getInitialData(surveyUnit: SurveyUnit): LunaticData {
   const initialData = surveyUnit.data
   if (!externalResourcesUrl) return initialData
   return {
-    COLLECTED: initialData?.COLLECTED,
-    CALCULATED: initialData?.CALCULATED,
+    ...initialData,
     EXTERNAL: {
-      ...initialData?.EXTERNAL,
+      ...initialData.EXTERNAL,
       GLOBAL_QUESTIONNAIRE_ID: surveyUnit.questionnaireId,
       GLOBAL_SURVEY_UNIT_ID: surveyUnit.id,
     },

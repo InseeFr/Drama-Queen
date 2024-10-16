@@ -56,7 +56,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
 
   // get the initial data for useLunatic
-  const initialData = getInitialData(initialSurveyUnit) as LunaticData
+  const initialData = getInitialData(initialSurveyUnit)
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly && initialSurveyUnit.stateData?.currentPage !== '1'
