@@ -14,7 +14,7 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
-import { getinitialSurveyUnit, getInitialData } from './tools/functions'
+import { getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useNavigationButtons } from './tools/useNavigationButtons'
 import type { GetReferentiel } from './lunaticType'
@@ -54,9 +54,6 @@ export function Orchestrator(props: OrchestratorProps) {
 
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
-
-  // get the initial data for useLunatic
-  const initialData = getInitialData(initialSurveyUnit)
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly && initialSurveyUnit.stateData?.currentPage !== '1'
@@ -98,7 +95,7 @@ export function Orchestrator(props: OrchestratorProps) {
     hasPageResponse,
     getChangedData,
     loopVariables,
-  } = useLunatic(source, initialData, {
+  } = useLunatic(source, initialSurveyUnit.data, {
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     onChange,
     getReferentiel: getReferentiel,

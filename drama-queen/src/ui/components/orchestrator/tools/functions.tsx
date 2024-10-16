@@ -1,4 +1,4 @@
-import type { PageTag, SurveyUnit } from 'core/model'
+import type { PageTag, SurveyUnit, SurveyUnitData } from 'core/model'
 import type { Component, Components } from '../lunaticType'
 import type { LunaticData } from '@inseefr/lunatic'
 
@@ -84,32 +84,38 @@ export function downloadAsJson(params: { data: object; filename?: string }) {
   URL.revokeObjectURL(url)
 }
 
+function getInitialData(
+  surveyUnitId: string,
+  questionnaireId: string,
+  data?: SurveyUnitData
+): SurveyUnitData {
+  if (!externalResourcesUrl) return data ?? {}
+  return {
+    ...data,
+    EXTERNAL: {
+      ...data?.EXTERNAL,
+      GLOBAL_QUESTIONNAIRE_ID: surveyUnitId,
+      GLOBAL_SURVEY_UNIT_ID: questionnaireId,
+    },
+  }
+}
+
 export function getinitialSurveyUnit(
   partial?: Partial<SurveyUnit>
 ): SurveyUnit {
+  const surveyUnitId = partial?.id ?? ''
+  const questionnaireId = partial?.questionnaireId ?? ''
+
   return {
-    id: partial?.id ?? '',
-    questionnaireId: partial?.questionnaireId ?? '',
+    id: surveyUnitId,
+    questionnaireId: questionnaireId,
     personalization: partial?.personalization,
-    data: partial?.data ?? {},
+    data: getInitialData(surveyUnitId, questionnaireId, partial?.data),
     comment: partial?.comment,
     stateData: partial?.stateData ?? {
       state: null,
       date: new Date().getTime(),
       currentPage: '1',
-    },
-  }
-}
-
-export function getInitialData(surveyUnit: SurveyUnit): LunaticData {
-  const initialData = surveyUnit.data
-  if (!externalResourcesUrl) return initialData
-  return {
-    ...initialData,
-    EXTERNAL: {
-      ...initialData.EXTERNAL,
-      GLOBAL_QUESTIONNAIRE_ID: surveyUnit.questionnaireId,
-      GLOBAL_SURVEY_UNIT_ID: surveyUnit.id,
     },
   }
 }
