@@ -1,6 +1,7 @@
 import { createUsecaseActions } from 'redux-clean-architecture'
 import { id } from 'tsafe/id'
 import { assert } from 'tsafe/assert'
+import { externalResourcesUrl } from 'core/tools/externalResources'
 
 export type State = State.NotRunning | State.Running
 
@@ -30,6 +31,8 @@ export namespace State {
       nomenclatureCompleted: number
       totalSurvey: number
       surveyCompleted: number
+      totalExternalResources?: number
+      externalResourcesCompleted: number
     }
   }
 }
@@ -54,6 +57,11 @@ export const { reducer, actions } = createUsecaseActions({
           nomenclatureCompleted: 0,
           totalSurvey: Infinity,
           surveyCompleted: 0,
+          // for total external resources, we make difference for displaying progress bar between :
+          // 0 : external synchro is triggered but there is no needed questionnaire so we want a fullfilled progress bar
+          // undefined : external synchro is not triggered so we don't want the progress bar
+          totalExternalResources: externalResourcesUrl ? Infinity : undefined,
+          externalResourcesCompleted: 0,
         })
       ),
     runningUpload: () =>
@@ -114,6 +122,24 @@ export const { reducer, actions } = createUsecaseActions({
       return {
         ...state,
         nomenclatureCompleted: state.nomenclatureCompleted + 1,
+      }
+    },
+    setDownloadTotalExternalResources: (
+      state,
+      { payload }: { payload: { totalExternalResources: number } }
+    ) => {
+      const { totalExternalResources } = payload
+      assert(state.stateDescription === 'running' && state.type === 'download')
+      return {
+        ...state,
+        totalExternalResources,
+      }
+    },
+    downloadExternalResourceCompleted: (state) => {
+      assert(state.stateDescription === 'running' && state.type === 'download')
+      return {
+        ...state,
+        externalResourcesCompleted: state.externalResourcesCompleted + 1,
       }
     },
     setUploadTotal: (state, { payload }: { payload: { total: number } }) => {

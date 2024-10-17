@@ -13,6 +13,50 @@ Cela assure que les données conservées sont bien celles modifiées en local pa
 - récupération, en parallèle :
   - des unités enquêtées pour chacune de ces campagnes
   - des nomenclatures pour chacun de ces modèles de questionnaire
+- si nécessaire, phase de synchronisation de ressources externes
+
+### Synchronisation de ressources externes
+
+Si la variable d'environnement `VITE_EXTERNAL_RESOURCES_URL` est renseignée, une phase de synchronisation de ressources externes est effectuée.
+Elle permet de récupérer en cache, des ressources externes nécessaires pour des questionnaires externes, récupérées à partir de l'url de ressources externes.
+
+#### Récupération de nouvelles ressources
+
+Phase de mise en cache des ressources externes nécessaires : 
+
+- récupération de la liste des questionnaires externes : `${VITE_EXTERNAL_RESOURCES_URL}/gide-questionnaires.json`  
+
+Exemple :
+```` 
+{
+  "questionnaires": [
+    {
+      "id": "ms-2022",
+      "cacheName": "gide-cache-ms-2022-v1"
+    },
+    {
+      "id": "st-2024",
+      "cacheName": "gide-cache-gide-st-2024-v2"
+    }
+  ]
+}
+````
+
+- filtrage de cette liste pour ne conserver que les questionnaires dont l'utilisateur est concerné (cf. étape 3 de la synchronisation)
+- pour chaque questionnaire conservé, mise en cache de ses ressources nécessaires
+  - récupération de la liste des ressources : `${VITE_EXTERNAL_RESOURCES_URL}/${questionnaire.id}/assets-manifest.json`  
+	format : `[{ressource1: valeur1}, {ressource2: valeur2}, ...]`
+  - récupération de chaque valeur des ressources, en les transformant en url : `${VITE_EXTERNAL_RESOURCES_URL}/${valeur}`
+  - pour chaque 'url de ressources', on l'ajoute dans le cache `${questionnaire.cacheName}` si elle n'est pas encore présente
+
+#### Suppression de ressources plus utiles
+
+Phase de suppression du cache des ressources externes qui ne sont plus nécessaires :
+
+- filtrage de la liste des questionnaires externes (récupérée dans la phase précédente) pour ne conserver que les questionnaires dont l'utilisateur n'est pas concerné
+- pour chaque questionnaire conservé, suppression du cache `${questionnaire.cacheName}`
+- suppression de tous les caches incluant le mot `gide` : l'idée est de supprimer les caches des questionnaires externes qui ne seraient plus dans la liste de questionnaires externes
+- si l'utilisateur n'est concerné par aucun questionnaire externe, on supprime le cache `cache-root-external`
 
 ## Gestion des erreurs
 
@@ -20,7 +64,11 @@ Cela assure que les données conservées sont bien celles modifiées en local pa
 | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | Récupération<ul><li>d'une campagne</li><li>d'un modèle de questionnaire</li><li>d'une unité enquêtée</li><li>d'une nomenclature</li></ul> | format non reconnu | Arrêt de la synchronisation                                                                                        |
 | Récupération d'une unité enquêtée                                                                                                         | 400, 403, 404, 500 | Unité non récupérée, poursuite de la synchronisation                                                               |
-| Envoi d'une unité enquêtée                                                                                                                | 400, 403, 404, 500 | Unité non mise à jour, suppression de l'unité en locale (déplacée en "temp zone"), poursuite de la synchronisation |
+| Envoi d'une unité enquêtée                                                                                                               	| 400, 403, 404, 500 | Unité non mise à jour, suppression de l'unité en locale (déplacée en "temp zone"), poursuite de la synchronisation |
+| Envoi d'une unité enquêtée en "temp zone"																																																	| 400, 403, 404, 500 | Arrêt de la synchronisation																																												|
+| Récupération da la liste des questionnaires externes																																											| 400, 403, 404, 500 | Arrêt de la synchronisation                                                               |
+| Récupération das ressources d'un questionnaire externe																																										| toutes						 | Ressource non récupérée, poursuite de la synchronisation                                                               |
+
 
 ## Appels Api
 

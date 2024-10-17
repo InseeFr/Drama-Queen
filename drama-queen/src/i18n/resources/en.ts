@@ -77,6 +77,7 @@ export const translations: Translations<'en'> = {
     surveyUnitsProgress: 'Survey units',
     questionnairesProgress: 'Questionnaires',
     nomenclaturesProgress: 'Nomenclatures',
+    externalResourcesProgress: 'External resources',
     uploadingData: 'Sending data...',
   },
   visualizeMessage: {
