@@ -10,6 +10,7 @@ import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSche
 import { fetchUrl } from 'core/tools/fetchUrl'
 import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
 import { getTranslation } from 'i18n'
+import { AxiosError } from 'axios'
 
 const { t } = getTranslation('errorMessage')
 
@@ -49,11 +50,16 @@ export const thunks = {
         Questionnaire | WrappedQuestionnaire
       >({
         url: questionnaire,
+      }).catch((error) => {
+        if (
+          error instanceof AxiosError &&
+          error.response &&
+          [400, 403, 404, 500].includes(error.response.status)
+        ) {
+          throw new Error(t('questionnaireNotFound', { questionnaireId: '' }))
+        }
+        throw error
       })
-
-      if (fetchedSource === undefined) {
-        return null
-      }
 
       const isWrappedQuestionnaire = (
         source: Questionnaire | WrappedQuestionnaire

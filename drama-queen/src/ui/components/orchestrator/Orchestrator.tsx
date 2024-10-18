@@ -52,9 +52,6 @@ export function Orchestrator(props: OrchestratorProps) {
   const { t: t2 } = useTranslation('modalMessage')
   const { onChange, ref } = useAutoNext()
 
-  // get the initial data for useLunatic
-  const initialData = surveyUnit?.data as LunaticData | undefined
-
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
   const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
 
@@ -98,7 +95,7 @@ export function Orchestrator(props: OrchestratorProps) {
     hasPageResponse,
     getChangedData,
     loopVariables,
-  } = useLunatic(source, initialData, {
+  } = useLunatic(source, initialSurveyUnit.data, {
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     onChange,
     getReferentiel: getReferentiel,

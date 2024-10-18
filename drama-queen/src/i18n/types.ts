@@ -76,6 +76,7 @@ export type SynchronizeMessage =
   | 'surveyUnitsProgress'
   | 'questionnairesProgress'
   | 'nomenclaturesProgress'
+  | 'externalResourcesProgress'
   | 'uploadingData'
 
 export type VisualizeMessage =
