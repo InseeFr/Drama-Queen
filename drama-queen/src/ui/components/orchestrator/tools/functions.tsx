@@ -1,6 +1,5 @@
 import type { PageTag, SurveyUnit, SurveyUnitData } from 'core/model'
 import type { Component, Components } from '../lunaticType'
-import type { LunaticData } from '@inseefr/lunatic'
 import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 /**
