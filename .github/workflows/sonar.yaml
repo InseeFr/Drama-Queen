@@ -1,4 +1,4 @@
-name: Test CI
+name: Sonar analysis
 on:
   push:
     branches: ["main", "2.*"]
