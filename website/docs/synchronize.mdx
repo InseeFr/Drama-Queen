@@ -42,7 +42,8 @@ Exemple :
 }
 ````
 
-- filtrage de cette liste pour ne conserver que les questionnaires dont l'utilisateur est concerné (cf. étape 3 de la synchronisation)
+- filtrage de cette liste pour ne conserver que les questionnaires dont l'utilisateur est concerné (questionnaires récupérés lors de l'étape 3 de la synchronisation), selon la règle suivante :
+  un questionnaire de la liste est conservé si son `id` est inclus dans au moins un des `questionnaireId` dont l'utilisateur est concerné (comparaison insensible à la casse)
 - pour chaque questionnaire conservé, mise en cache de ses ressources nécessaires
   - récupération de la liste des ressources : `${VITE_EXTERNAL_RESOURCES_URL}/${questionnaire.id}/assets-manifest.json`  
 	format : `[{ressource1: valeur1}, {ressource2: valeur2}, ...]`
