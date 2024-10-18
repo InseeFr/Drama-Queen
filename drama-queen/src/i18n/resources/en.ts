@@ -1,5 +1,5 @@
+import { LUNATIC_MODEL_VERSION_BREAKING } from 'core/constants'
 import type { Translations } from '../types'
-import { LUNATIC_MODEL_VERSION_BREAKING } from 'core/tools/SurveyModelBreaking'
 
 export const translations: Translations<'en'> = {
   errorMessage: {
