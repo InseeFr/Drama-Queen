@@ -1,0 +1,2 @@
+export const EXTERNAL_RESOURCES_URL = import.meta.env
+  .VITE_EXTERNAL_RESOURCES_URL

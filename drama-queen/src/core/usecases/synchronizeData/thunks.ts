@@ -3,12 +3,12 @@ import { actions, name } from './state'
 import { AxiosError } from 'axios'
 import type { Questionnaire } from 'core/model'
 import {
-  externalResourcesUrl,
   getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
   getOldExternalCacheNames,
   getResourcesFromExternalQuestionnaire,
 } from 'core/tools/externalResources'
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 const externalResourcesRootCacheName = 'cache-root-external'
 
@@ -186,7 +186,7 @@ export const thunks = {
          */
 
         // we sychronize the external ressource only if there is a url for getting them
-        if (externalResourcesUrl) {
+        if (EXTERNAL_RESOURCES_URL) {
           // get the list of external questionnaires
           const externalQuestionnaires =
             await getExternalQuestionnaires().catch((error) => {

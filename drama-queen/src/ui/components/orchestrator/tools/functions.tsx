@@ -1,8 +1,7 @@
 import type { PageTag, SurveyUnit, SurveyUnitData } from 'core/model'
 import type { Component, Components } from '../lunaticType'
 import type { LunaticData } from '@inseefr/lunatic'
-
-const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 /**
  * temporary : should be handle by Lunatic
@@ -89,7 +88,7 @@ function getInitialData(
   questionnaireId: string,
   data?: SurveyUnitData
 ): SurveyUnitData {
-  if (!externalResourcesUrl) return data ?? {}
+  if (!EXTERNAL_RESOURCES_URL) return data ?? {}
   return {
     ...data,
     EXTERNAL: {

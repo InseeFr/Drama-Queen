@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest'
 import {
-  externalResourcesUrl,
   filterTransformedManifest,
   getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
@@ -15,6 +14,7 @@ import type {
   ExternalQuestionnairesWrapper,
   Manifest,
 } from 'core/model'
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 vi.mock('./fetchUrl', () => {
   return {
@@ -40,7 +40,7 @@ describe('getExternalQuestionnaires', () => {
 
     // Assert fetchUrl was called with the correct url
     expect(fetchUrl).toHaveBeenCalledWith({
-      url: `${externalResourcesUrl}/gide-questionnaires.json`,
+      url: `${EXTERNAL_RESOURCES_URL}/gide-questionnaires.json`,
     })
 
     expect(result).toEqual(questionnairesList.questionnaires)
@@ -75,12 +75,12 @@ describe('getTransformedManifest', () => {
 
     // Assert fetchUrl was called with the correct URL
     expect(fetchUrl).toHaveBeenCalledWith({
-      url: `${externalResourcesUrl}/${questionnaireId}/assets-manifest.json`,
+      url: `${EXTERNAL_RESOURCES_URL}/${questionnaireId}/assets-manifest.json`,
     })
 
     const expectedResult = [
-      `${externalResourcesUrl}/qt/resource1`,
-      `${externalResourcesUrl}/qt/resource2`,
+      `${EXTERNAL_RESOURCES_URL}/qt/resource1`,
+      `${EXTERNAL_RESOURCES_URL}/qt/resource2`,
     ]
 
     expect(result).toEqual(expectedResult)

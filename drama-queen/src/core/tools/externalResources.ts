@@ -6,14 +6,14 @@ import type {
   Manifest,
 } from 'core/model'
 import { fetchUrl } from './fetchUrl'
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
-export const externalResourcesUrl = import.meta.env.VITE_EXTERNAL_RESOURCES_URL
 const externalQuestionnairesKeyword = 'gide'
 
 // Get the list of external questionnaires
 export async function getExternalQuestionnaires(): Promise<ExternalQuestionnaires> {
   const questionnairesWrapper = await fetchUrl<ExternalQuestionnairesWrapper>({
-    url: `${externalResourcesUrl}/gide-questionnaires.json`,
+    url: `${EXTERNAL_RESOURCES_URL}/gide-questionnaires.json`,
   })
 
   return questionnairesWrapper.questionnaires
@@ -25,12 +25,12 @@ export async function getTransformedManifest(
 ): Promise<string[]> {
   // get the manifest for a questionnaireId
   const manifest = await fetchUrl<Manifest>({
-    url: `${externalResourcesUrl}/${questionnaireId}/assets-manifest.json`,
+    url: `${EXTERNAL_RESOURCES_URL}/${questionnaireId}/assets-manifest.json`,
   })
 
   // Transform the manifest values into resource URLs, and get an array of these resource URLs
   const transformedManifest = Object.values(manifest).map(
-    (resourceUrl) => `${externalResourcesUrl}/${resourceUrl}`
+    (resourceUrl) => `${EXTERNAL_RESOURCES_URL}/${resourceUrl}`
   )
 
   return transformedManifest
