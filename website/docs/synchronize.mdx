@@ -18,7 +18,7 @@ Cela assure que les données conservées sont bien celles modifiées en local pa
 ### Synchronisation de ressources externes
 
 Si la variable d'environnement `VITE_EXTERNAL_RESOURCES_URL` est renseignée, une phase de synchronisation de ressources externes est effectuée.
-Elle permet de récupérer en cache, des ressources externes nécessaires pour des questionnaires externes, récupérées à partir de l'url de ressources externes.
+Elle permet de récupérer, en cache, des ressources externes nécessaires pour des questionnaires externes, récupérées à partir de l'url spécifiée.
 
 #### Récupération de nouvelles ressources
 
@@ -50,7 +50,7 @@ Exemple :
   - récupération de chaque valeur des ressources, en les transformant en url : `${VITE_EXTERNAL_RESOURCES_URL}/${valeur}`
   - pour chaque 'url de ressources', on l'ajoute dans le cache `${questionnaire.cacheName}` si elle n'est pas encore présente
 
-#### Suppression de ressources plus utiles
+#### Suppression des ressources inutiles
 
 Phase de suppression du cache des ressources externes qui ne sont plus nécessaires :
 
