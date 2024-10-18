@@ -1,3 +1,5 @@
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+
 import('./bootstrap').then(({ mount, mountExternalResources }) => {
   const localRoot = document.getElementById('drama-queen')
 
@@ -6,8 +8,7 @@ import('./bootstrap').then(({ mount, mountExternalResources }) => {
     routingStrategy: 'browser',
   })
 
-  if (import.meta.env.VITE_EXTERNAL_RESOURCES_URL)
-    mountExternalResources(import.meta.env.VITE_EXTERNAL_RESOURCES_URL)
+  if (EXTERNAL_RESOURCES_URL) mountExternalResources(EXTERNAL_RESOURCES_URL)
 })
 
 export {}

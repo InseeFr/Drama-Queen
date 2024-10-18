@@ -8,5 +8,3 @@ import { bootstrapCore } from 'core/bootstrap'
 export const { createCoreProvider, useCore, useCoreState } = createReactApi({
   bootstrapCore,
 })
-
-export const DYNAMIC_PUBLIC_URL = new URL(import.meta.url).origin

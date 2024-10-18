@@ -13,6 +13,7 @@ import {
 import { Review } from 'ui/pages/review/Review'
 import { ErrorPage } from 'ui/pages/Error/Error'
 import { ExternalRessources } from 'ui/pages/External/External'
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 const getChildrenRoutes = () => {
   const baseRoutes = [
@@ -48,7 +49,7 @@ const getChildrenRoutes = () => {
     },
   ]
 
-  if (!import.meta.env.VITE_EXTERNAL_RESOURCES_URL) return baseRoutes
+  if (!EXTERNAL_RESOURCES_URL) return baseRoutes
 
   return [
     {
