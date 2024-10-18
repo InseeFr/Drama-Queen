@@ -1,4 +1,4 @@
-name: Sonar
+name: Sonar analysis
 on:
   push:
     branches: ["main", "2.*"]
@@ -6,13 +6,34 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: yarn
+      # Run tests sonar reports
+      - run: yarn test:coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: drama-queen/coverage
+
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: drama-queen/coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
