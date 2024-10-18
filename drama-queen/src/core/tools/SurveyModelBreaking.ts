@@ -1,7 +1,7 @@
 import type { Questionnaire } from 'core/model'
 import { getTranslation } from 'i18n'
 
-export const lunaticModelVersionBreaking = '2.2.10'
+export const LUNATIC_MODEL_VERSION_BREAKING = '2.2.10'
 
 const { t } = getTranslation('errorMessage')
 
@@ -23,5 +23,7 @@ export const isSurveyCompatibleWithQueen = (params: {
     return true
   }
 
-  return semverCompare(lunaticModelVersion, lunaticModelVersionBreaking) === 1
+  return (
+    semverCompare(lunaticModelVersion, LUNATIC_MODEL_VERSION_BREAKING) === 1
+  )
 }

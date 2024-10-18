@@ -1,5 +1,5 @@
 import type { Translations } from '../types'
-import { lunaticModelVersionBreaking } from 'core/tools/SurveyModelBreaking'
+import { LUNATIC_MODEL_VERSION_BREAKING } from 'core/tools/SurveyModelBreaking'
 
 export const translations: Translations<'fr'> = {
   errorMessage: {
@@ -23,7 +23,7 @@ export const translations: Translations<'fr'> = {
       `L'unité enquêtée ${surveyUnitId} est introuvable.`,
     lunaticModelVersionNotFound:
       'Le questionnaire ne comporte pas de champ lunaticModelVersion',
-    questionnaireNotCompatible: `Le questionnaire est incompatible. La version du 'lunaticModelVersion' doit être supérieure à  ${lunaticModelVersionBreaking}`,
+    questionnaireNotCompatible: `Le questionnaire est incompatible. La version du 'lunaticModelVersion' doit être supérieure à  ${LUNATIC_MODEL_VERSION_BREAKING}`,
     questionnaireNotFound: ({ questionnaireId }) =>
       `Impossible de récupérer le questionnaire ${questionnaireId}.`,
     wrongQuestionnaire: ({ surveyUnitId, questionnaireId }) =>

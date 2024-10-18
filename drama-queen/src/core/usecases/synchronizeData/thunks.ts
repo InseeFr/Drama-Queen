@@ -10,7 +10,7 @@ import {
 } from 'core/tools/externalResources'
 import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
-const externalResourcesRootCacheName = 'cache-root-external'
+const EXTERNAL_RESOURCES_ROOT_CACHE_NAME = 'cache-root-external'
 
 export const thunks = {
   download:
@@ -242,7 +242,7 @@ export const thunks = {
           // delete the root-cache of external resources if no external questionnaire is needed
           const prDeleteExternalRootCache =
             neededQuestionnaires.length === 0
-              ? caches.delete(externalResourcesRootCacheName)
+              ? caches.delete(EXTERNAL_RESOURCES_ROOT_CACHE_NAME)
               : Promise.resolve()
 
           // delete old caches (that are not in external questionnaires list but sill in browser) :

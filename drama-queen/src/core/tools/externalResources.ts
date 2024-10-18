@@ -8,7 +8,7 @@ import type {
 import { fetchUrl } from './fetchUrl'
 import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
-const externalQuestionnairesKeyword = 'gide'
+const EXTERNAL_QUESTIONNAIRES_KEYWORD = 'gide'
 
 // Get the list of external questionnaires
 export async function getExternalQuestionnaires(): Promise<ExternalQuestionnaires> {
@@ -121,7 +121,7 @@ export async function getOldExternalCacheNames(
     (cacheName) =>
       cacheName
         .toLowerCase()
-        .includes(externalQuestionnairesKeyword.toLowerCase()) &&
+        .includes(EXTERNAL_QUESTIONNAIRES_KEYWORD.toLowerCase()) &&
       !neededCaches.includes(cacheName)
   )
 
