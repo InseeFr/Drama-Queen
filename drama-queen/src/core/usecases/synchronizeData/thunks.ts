@@ -2,6 +2,15 @@ import type { Thunks } from 'core/bootstrap'
 import { actions, name } from './state'
 import { AxiosError } from 'axios'
 import type { Questionnaire } from 'core/model'
+import {
+  externalResourcesUrl,
+  getExternalQuestionnaireFiltered,
+  getExternalQuestionnaires,
+  getOldExternalCacheNames,
+  getResourcesFromExternalQuestionnaire,
+} from 'core/tools/externalResources'
+
+const externalResourcesRootCacheName = 'cache-root-external'
 
 export const thunks = {
   download:
@@ -171,6 +180,87 @@ export const thunks = {
               })
           )
         )
+
+        /*
+         * External special ressources
+         */
+
+        // we sychronize the external ressource only if there is a url for getting them
+        if (externalResourcesUrl) {
+          // get the list of external questionnaires
+          const externalQuestionnaires =
+            await getExternalQuestionnaires().catch((error) => {
+              if (
+                error instanceof AxiosError &&
+                error.response &&
+                [400, 403, 404, 500].includes(error.response.status)
+              ) {
+                console.error(
+                  `An error occurred while fetching external questionnaires list`,
+                  error
+                )
+              }
+              throw error
+            })
+
+          const { neededQuestionnaires, notNeededQuestionnaires } =
+            getExternalQuestionnaireFiltered(
+              questionnaireIdInSuccess,
+              externalQuestionnaires
+            )
+
+          // set the total of needed external questionnaires for progress bar
+          dispatch(
+            actions.setDownloadTotalExternalResources({
+              totalExternalResources: neededQuestionnaires.length,
+            })
+          )
+
+          // add in cache the missing external resources for needed questionnaires
+          const prGetExternalResources = Promise.all(
+            neededQuestionnaires.map(async (questionnaire) => {
+              await getResourcesFromExternalQuestionnaire(questionnaire)
+                .then(() =>
+                  dispatch(actions.downloadExternalResourceCompleted())
+                )
+                .catch((error) =>
+                  console.error(
+                    `An error occurred while fetching external resources of questionnaire ${questionnaire.id}`,
+                    error
+                  )
+                )
+            })
+          )
+
+          // delete the cache of every not needed external questionnaires
+          const prDeleteExternalResources = Promise.all(
+            notNeededQuestionnaires.map((questionnaire) =>
+              caches.delete(questionnaire.cacheName)
+            )
+          )
+
+          // delete the root-cache of external resources if no external questionnaire is needed
+          const prDeleteExternalRootCache =
+            neededQuestionnaires.length === 0
+              ? caches.delete(externalResourcesRootCacheName)
+              : Promise.resolve()
+
+          // delete old caches (that are not in external questionnaires list but sill in browser) :
+          const oldExternalCacheNames =
+            await getOldExternalCacheNames(neededQuestionnaires)
+
+          const prDeleteOldExternalCaches = Promise.all(
+            oldExternalCacheNames.map((cacheName) => caches.delete(cacheName))
+          )
+
+          // We await untill the promises for external resources are finished
+          await Promise.all([
+            prGetExternalResources,
+            prDeleteExternalResources,
+            prDeleteExternalRootCache,
+            prDeleteOldExternalCaches,
+          ])
+        }
 
         //We await untill all the promises are finished
         await Promise.all([prSurveyUnit, prNomenclatures])

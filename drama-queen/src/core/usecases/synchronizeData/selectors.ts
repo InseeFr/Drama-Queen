@@ -40,6 +40,22 @@ const surveyProgress = createSelector(downloadingState, (state) => {
   return (state.surveyCompleted * 100) / state.totalSurvey
 })
 
+const externalResourcesProgress = createSelector(downloadingState, (state) => {
+  if (state === undefined) {
+    return undefined
+  }
+  // if there is no external resources, we don't show the progress bar
+  if (state.totalExternalResources === undefined) {
+    return undefined
+  }
+  if (
+    state.externalResourcesCompleted === 0 &&
+    state.totalExternalResources === 0
+  )
+    return 100
+  return (state.externalResourcesCompleted * 100) / state.totalExternalResources
+})
+
 const uploadProgress = createSelector(state, (state) => {
   if (state.stateDescription !== 'running') {
     return undefined
@@ -58,12 +74,14 @@ const main = createSelector(
   surveyUnitProgress,
   nomenclatureProgress,
   surveyProgress,
+  externalResourcesProgress,
   uploadProgress,
   (
     state,
     surveyUnitProgress,
     nomenclatureProgress,
     surveyProgress,
+    externalResourcesProgress,
     uploadProgress
   ) => {
     switch (state.stateDescription) {
@@ -86,6 +104,7 @@ const main = createSelector(
               surveyUnitProgress,
               nomenclatureProgress,
               surveyProgress,
+              externalResourcesProgress,
             }
         }
     }
