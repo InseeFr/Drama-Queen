@@ -1,12 +1,12 @@
-name: ci
+name: Main CI
 on:
   push:
     branches: ["main", "2.*"]
   pull_request:
-    branches: ["main", "2.*"]
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     if: github.event.head_commit.author.name != 'github-actions[bot]'
     environment: demo

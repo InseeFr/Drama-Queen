@@ -14,7 +14,7 @@ import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
-import { DYNAMIC_PUBLIC_URL } from 'core'
+import { DYNAMIC_PUBLIC_URL } from 'core/constants'
 
 type HeaderProps = {
   questionnaireTitle: string

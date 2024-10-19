@@ -4,12 +4,19 @@
       "runner": "nx/tasks-runners/default",
       "options": {
         "cacheableOperations": [
-          "build"
+          "build",
+          "test:coverage"
         ]
       }
     }
   },
-  "targetDefaults": {},
+  "targetDefaults": {
+    "test:coverage": {
+      "outputs": [
+        "{projectRoot}/coverage"
+      ]
+    }
+  },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
     "default": [

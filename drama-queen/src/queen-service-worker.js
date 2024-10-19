@@ -6,9 +6,27 @@ importScripts(
   'https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js'
 )
 
+/**
+ * Load all functions needed by all service-workers
+ */
 const { CacheableResponsePlugin } = workbox.cacheableResponse
 const { registerRoute } = workbox.routing
 const { NetworkFirst, CacheFirst } = workbox.strategies
+const { RangeRequestsPlugin } = workbox.rangeRequests
+
+/**
+ * Load env variable with swEnv.js (manage by vite-envs plugin)
+ */
+importScripts(`${self._DRAMAQUEEN_URL}/swEnv.js`)
+
+/**
+ * Load external resource service-worker
+ */
+if (self.__VITE_ENVS.VITE_EXTERNAL_RESOURCES_URL) {
+  // In external service-worker, self._QUEEN_CAPMI_URL has to be defined to get root url of externalResourcesUrl
+  self._QUEEN_CAPMI_URL = self.__VITE_ENVS.VITE_EXTERNAL_RESOURCES_URL
+  importScripts(`${self._QUEEN_CAPMI_URL}/queen-service-worker.js`)
+}
 
 const getDramaQueenUrlRegex = (url) => {
   return url

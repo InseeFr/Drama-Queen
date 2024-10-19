@@ -1,4 +1,4 @@
-import { DYNAMIC_PUBLIC_URL } from 'core'
+import { DYNAMIC_PUBLIC_URL } from 'core/constants'
 
 // Unregister old service workers for standalone
 export const unsubscribeOldSW = () => {
