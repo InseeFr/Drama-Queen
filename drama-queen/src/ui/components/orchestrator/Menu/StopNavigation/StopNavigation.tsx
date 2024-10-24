@@ -97,7 +97,7 @@ export function StopNavigation(props: StopNavigationProps) {
   )
 }
 
-const useStyles = tss.create(({ theme }) => ({
+const useStyles = tss.create(() => ({
   navigationContainer: { gap: '1.5em' },
   typography: {
     lineHeight: '1.5em',

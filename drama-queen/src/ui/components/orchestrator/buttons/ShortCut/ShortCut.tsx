@@ -23,7 +23,7 @@ export function ShortCut(props: ShortCutProps) {
       key={shortCutKey}
       keyName={shortCutKey}
       onKeyDown={handleShortCut}
-      filter={(event) => true}
+      filter={() => true}
     ></ReactHotkeys>
   )
 }

@@ -1,9 +1,7 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-import SkipNext from '@mui/icons-material/SkipNext'
-import { SHORTCUT_FAST_FORWARD, SHORTCUT_NEXT } from 'ui/constants'
-import type { GoNextPage, GoPreviousPage, GoToPage } from '../lunaticType'
 import { getTranslation } from 'i18n'
-import type { PageTag } from 'core/model'
+import { SHORTCUT_NEXT } from 'ui/constants'
+import type { GoNextPage, GoPreviousPage } from '../lunaticType'
 
 const { t } = getTranslation('navigationMessage')
 

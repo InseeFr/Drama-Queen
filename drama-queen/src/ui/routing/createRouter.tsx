@@ -12,7 +12,6 @@ export function createRouter({
   strategy = 'memory',
   initialPathname = '/',
 }: CreateRouterProps) {
-
   if (strategy === 'browser') {
     return createBrowserRouter(routes, { basename: '/queen' })
   }

@@ -4,7 +4,7 @@ import type { SurveyUnit } from 'core/model'
 
 export function createApiClient(): QueenApi {
   return {
-    getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (_idCampaign) =>
+    getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: () =>
       Promise.resolve([{ id: 'id', questionnaireId: 'questionnaireId' }]),
     getSurveyUnits: () =>
       Promise.resolve([
@@ -30,7 +30,7 @@ export function createApiClient(): QueenApi {
           questionnaireIds: ['questionnaireIds'],
         },
       ]),
-    getQuestionnaire: (_idSurvey) => Promise.resolve(surveySample),
+    getQuestionnaire: () => Promise.resolve(surveySample),
     getRequiredNomenclaturesByCampaign: () => Promise.resolve([]),
     getNomenclature: (idNomenclature) =>
       Promise.resolve([{ id: `${idNomenclature}`, label: 'label' }]),
