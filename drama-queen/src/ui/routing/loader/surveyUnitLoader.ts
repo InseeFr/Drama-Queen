@@ -2,10 +2,7 @@ import { prCore } from 'createCore'
 import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
 
-export async function surveyUnitLoader({
-  request,
-  params,
-}: LoaderFunctionArgs) {
+export async function surveyUnitLoader({ params }: LoaderFunctionArgs) {
   const { collectSurvey } = (await prCore).functions
 
   const { surveyUnitId } = params

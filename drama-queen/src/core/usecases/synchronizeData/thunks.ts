@@ -343,7 +343,7 @@ export const thunks = {
         }
         dispatch(actions.uploadCompleted())
         dispatch(thunks.download())
-      } catch (error) {
+      } catch {
         localSyncStorage.addError(true)
         dispatch(actions.uploadError())
       }

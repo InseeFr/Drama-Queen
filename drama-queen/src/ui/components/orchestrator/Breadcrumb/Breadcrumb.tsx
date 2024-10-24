@@ -12,7 +12,7 @@ type BreadCrumbProps = {
 }
 
 export function BreadCrumb(props: BreadCrumbProps) {
-  const { sequence, subSequence, iteration, goToPage } = props
+  const { sequence, subSequence, goToPage } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 
