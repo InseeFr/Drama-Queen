@@ -34,6 +34,6 @@ export function SubSequenceNavigation(props: subSequenceNavigationProps) {
   )
 }
 
-const useStyles = tss.create(({}) => ({
+const useStyles = tss.create(() => ({
   navigationContainer: { gap: '1.5em' },
 }))
