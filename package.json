@@ -17,6 +17,6 @@
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.2.3",
     "kill-port": "^2.0.1",
-    "lerna": "^7.1.1"
+    "lerna": "^8.0.0"
   }
 }
