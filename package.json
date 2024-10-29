@@ -6,17 +6,12 @@
     "drama-queen"
   ],
   "scripts": {
-    "test": "lerna run test",
-    "test:coverage": "lerna run test:coverage",
-    "build": "lerna run build",
-    "build:drama-queen": "lerna run build --scope 'drama-queen'",
-    "serve:drama-queen": "lerna run serve --scope 'drama-queen'",
-    "dev:drama-queen": "lerna run dev --scope 'drama-queen'",
+    "build": "yarn --cwd drama-queen build",
+    "dev": "yarn --cwd drama-queen dev",
     "stop": "kill-port --port 5000,5001,5002"
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.2.3",
-    "kill-port": "^2.0.1",
-    "lerna": "^7.1.1"
+    "kill-port": "^2.0.1"
   }
 }
