@@ -54,7 +54,7 @@
     "vite": "^5.4.8",
     "vite-envs": "^4.4.5",
     "vite-plugin-pwa": "^0.19.8",
-    "vite-tsconfig-paths": "^4.3.2",
+    "vite-tsconfig-paths": "^5.0.0",
     "vitest": "^2.1.3"
   }
 }
