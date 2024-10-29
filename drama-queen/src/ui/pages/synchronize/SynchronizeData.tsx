@@ -14,6 +14,7 @@ export function SynchronizeData() {
     nomenclatureProgress,
     surveyProgress,
     surveyUnitProgress,
+    externalResourcesProgress,
     uploadProgress,
   } = useCoreState('synchronizeData', 'main')
 
@@ -68,6 +69,15 @@ export function SynchronizeData() {
               progress: surveyUnitProgress,
               label: t('surveyUnitsProgress'),
             },
+            // render external resources progress bar only if there are external resources
+            ...(externalResourcesProgress !== undefined
+              ? [
+                  {
+                    progress: externalResourcesProgress,
+                    label: t('externalResourcesProgress'),
+                  },
+                ]
+              : []),
           ]}
           syncStepTitle={t('downloadingData')}
         />

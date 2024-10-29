@@ -6,6 +6,8 @@
     "drama-queen"
   ],
   "scripts": {
+    "test": "lerna run test",
+    "test:coverage": "lerna run test:coverage",
     "build": "lerna run build",
     "build:drama-queen": "lerna run build --scope 'drama-queen'",
     "serve:drama-queen": "lerna run serve --scope 'drama-queen'",
