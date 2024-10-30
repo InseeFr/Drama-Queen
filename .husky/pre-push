@@ -1,0 +1,3 @@
+yarn --cwd drama-queen run format:check
+yarn --cwd drama-queen run lint
+yarn --cwd drama-queen run test
