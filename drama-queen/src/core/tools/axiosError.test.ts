@@ -3,7 +3,7 @@ import { handleAxiosError } from './axiosError'
 import { AxiosError } from 'axios'
 
 vi.mock('i18n', () => ({
-  getTranslation: () => ({ t: (keyMessage: string) => keyMessage }), // Remplacez par la logique de traduction souhaitée
+  getTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
 describe('handleAxiosError', () => {
@@ -34,7 +34,7 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('400') // Assurez-vous que la traduction pour '400' est correcte
+    expect(result.message).toBe('400')
   })
 
   it('should return the correct message for status 401', () => {
@@ -48,7 +48,7 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('401') // Assurez-vous que la traduction pour '401' est correcte
+    expect(result.message).toBe('401')
   })
 
   it('should return the correct message for unknown status', () => {
@@ -62,6 +62,6 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('longUnknownError') // Assurez-vous que la traduction pour 'longUnknownError' est correcte
+    expect(result.message).toBe('longUnknownError')
   })
 })
