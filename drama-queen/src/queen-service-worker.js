@@ -34,10 +34,6 @@ const getDramaQueenUrlRegex = (url) => {
     .concat('/(.*)((.js)|(.png)|(.svg)|(.css))')
 }
 
-const getDramaQueenUrlRegexJson = (url) => {
-  return url.replace('http', '^http').concat('/(.*)(.json)')
-}
-
 const getQuestionnaireUrlRegex = () => '^http.*/api/questionnaire/(.){1,}'
 
 const getResourceUrlRegex = () => '^http.*/api/nomenclature/(.){1,}'
@@ -98,6 +94,6 @@ self.addEventListener('install', (event) => {
   event.waitUntil(dramaPrecacheController())
 })
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', () => {
   console.log('Drama Queen sw : activating ...')
 })

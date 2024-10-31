@@ -1,12 +1,4 @@
-import axios, { Axios, AxiosError } from 'axios'
-import type { QueenApi } from 'core/ports/QueenApi'
-import {
-  campaignSchema,
-  idAndQuestionnaireIdSchema,
-  nomenclatureSchema,
-  requiredNomenclaturesSchema,
-  surveyUnitSchema,
-} from './parserSchema'
+import axios, { AxiosError } from 'axios'
 import type {
   Campaign,
   IdAndQuestionnaireId,
@@ -15,7 +7,15 @@ import type {
   RequiredNomenclatures,
   SurveyUnit,
 } from 'core/model'
+import type { QueenApi } from 'core/ports/QueenApi'
 import { handleAxiosError } from 'core/tools/axiosError'
+import {
+  campaignSchema,
+  idAndQuestionnaireIdSchema,
+  nomenclatureSchema,
+  requiredNomenclaturesSchema,
+  surveyUnitSchema,
+} from './parserSchema'
 
 export function createApiClient(params: {
   apiUrl: string
