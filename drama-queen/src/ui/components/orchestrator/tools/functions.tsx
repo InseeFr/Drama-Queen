@@ -1,4 +1,9 @@
-import type { PageTag, SurveyUnit, SurveyUnitData } from 'core/model'
+import type {
+  PageTag,
+  Questionnaire,
+  SurveyUnit,
+  SurveyUnitData,
+} from 'core/model'
 import type { Component, Components } from '../lunaticType'
 import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
@@ -92,8 +97,8 @@ function getInitialData(
     ...data,
     EXTERNAL: {
       ...data?.EXTERNAL,
-      GLOBAL_QUESTIONNAIRE_ID: surveyUnitId,
-      GLOBAL_SURVEY_UNIT_ID: questionnaireId,
+      GLOBAL_QUESTIONNAIRE_ID: questionnaireId,
+      GLOBAL_SURVEY_UNIT_ID: surveyUnitId,
     },
   }
 }
