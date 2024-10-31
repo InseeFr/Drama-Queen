@@ -8,11 +8,13 @@
   "scripts": {
     "build": "yarn --cwd drama-queen build",
     "dev": "yarn --cwd drama-queen dev",
+    "test": "yarn --cwd drama-queen test",
     "stop": "kill-port --port 5000,5001,5002",
     "prepare": "husky"
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.2.3",
+    "husky": "^9.1.6",
     "kill-port": "^2.0.1"
   }
 }

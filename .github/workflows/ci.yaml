@@ -14,8 +14,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
       - run: yarn
+      - run: yarn --cwd drama-queen install
       - run: yarn --cwd drama-queen run format:check
       - run: yarn --cwd drama-queen run lint
+      - run: yarn test --watch=false
       - run: yarn build
       - uses: actions/upload-artifact@v4
         with:

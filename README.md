@@ -14,6 +14,8 @@ Web application for the management of questionnaires powered by Lunatic (https:/
 ```
 cp .env.drama.sample ./drama-queen/.env
 cp .env.queen.sample ./queen/.env.local
+yarn
+yarn --cwd drama-queen install
 yarn dev
 yarn build
 ```
