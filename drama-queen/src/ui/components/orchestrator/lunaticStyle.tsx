@@ -80,15 +80,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
 
     // to replace checkbox by svg
     '& .list-icon': { position: 'absolute', marginTop: '-0.2rem' },
-    '& .checkbox-boolean-lunatic': {
-      position: 'absolute',
-      opacity: 0,
-      marginBottom: 0,
-      marginTop: '0.15rem',
-      marginLeft: '0.2rem',
-      height: '18px',
-      width: '18px',
-    },
 
     // datepicker
     '.lunaticDatepickerFields': {
@@ -255,6 +246,32 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         marginRight: '1em',
         height: 'min-content',
       },
+    },
+
+    // checkbox boolean
+    '& .lunatic-checkbox-boolean': {
+      '& .lunatic-input-checkbox__icon': {
+        display: 'grid',
+        placeItems: 'center',
+        width: '18px',
+        height: '18px',
+        padding: '0.1em',
+        flex: 'none',
+        borderRadius: '5px',
+        color: '#FFF',
+        backgroundColor: `${modalityCodeBackgroundColor}`,
+        border: `2px solid ${borderColorCheckbox}`,
+
+        '& svg': {
+          transform: 'scale(0.7)',
+        },
+      },
+
+      "& .lunatic-input-checkbox[aria-checked='true'] .lunatic-input-checkbox__icon":
+        {
+          backgroundColor: theme.palette.background.button.main,
+          borderColor: `${modalityLabelColorChecked}`,
+        },
     },
 
     // .lunatic-component lunatic label
