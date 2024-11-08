@@ -12,7 +12,6 @@ importScripts(
 const { CacheableResponsePlugin } = workbox.cacheableResponse
 const { registerRoute } = workbox.routing
 const { NetworkFirst, CacheFirst } = workbox.strategies
-const { RangeRequestsPlugin } = workbox.rangeRequests
 
 /**
  * Load env variable with swEnv.js (manage by vite-envs plugin)

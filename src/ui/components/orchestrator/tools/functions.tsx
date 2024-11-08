@@ -1,3 +1,5 @@
+import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+import type { Variable } from '@inseefr/lunatic/type.source'
 import type {
   PageTag,
   Questionnaire,
@@ -5,8 +7,6 @@ import type {
   SurveyUnitData,
 } from 'core/model'
 import type { Component, Components } from '../lunaticType'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
-import type { Variable } from '@inseefr/lunatic/type.source'
 
 /**
  * temporary : should be handle by Lunatic
