@@ -6,6 +6,7 @@ import type {
 } from 'core/model'
 import type { Component, Components } from '../lunaticType'
 import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+import type { Variable } from '@inseefr/lunatic/type.source'
 
 /**
  * temporary : should be handle by Lunatic
@@ -100,6 +101,26 @@ function getInitialData(
       GLOBAL_QUESTIONNAIRE_ID: questionnaireId,
       GLOBAL_SURVEY_UNIT_ID: surveyUnitId,
     },
+  }
+}
+
+export function getSource(source: Questionnaire): Questionnaire {
+  if (!EXTERNAL_RESOURCES_URL) return source
+  const globalExternalVariables = [
+    {
+      name: 'GLOBAL_QUESTIONNAIRE_ID',
+      value: null,
+      variableType: 'EXTERNAL',
+    },
+    {
+      name: 'GLOBAL_SURVEY_UNIT_ID',
+      value: null,
+      variableType: 'EXTERNAL',
+    },
+  ] as Variable[]
+  return {
+    ...source,
+    variables: [...source.variables, ...globalExternalVariables],
   }
 }
 
