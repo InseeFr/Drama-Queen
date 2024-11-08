@@ -311,7 +311,7 @@ describe('getOldExternalCacheNames', () => {
     expect(result).toEqual(expectedResult)
   })
 
-  it('should return an empty array if all questionnaires are needed or no cache name contains "gide" ', async () => {
+  it('should return an empty array if all questionnaires are needed or no cache name contains "gide"', async () => {
     const neededQuestionnaires: ExternalQuestionnaire[] = [
       { id: 'q1', cacheName: 'gide-cache1' },
     ]
