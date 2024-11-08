@@ -14,15 +14,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
       - run: yarn
-      - run: yarn --cwd drama-queen install
-      - run: yarn --cwd drama-queen run format:check
-      - run: yarn --cwd drama-queen run lint
+      - run: yarn install
+      - run: yarn run format:check
+      - run: yarn run lint
       - run: yarn test --watch=false
       - run: yarn build
       - uses: actions/upload-artifact@v4
         with:
           name: drama
-          path: drama-queen/dist
+          path: dist
 
   check_if_version_upgraded:
     needs: build
@@ -50,7 +50,7 @@ jobs:
         id: check-drama
         uses: EndBug/version-check@v2
         with:
-          file-name: drama-queen/package.json
+          file-name: package.json
 
   docker_drama:
     needs: check_if_version_upgraded
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: drama
-          path: drama-queen/dist
+          path: dist
       - uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
