@@ -13,13 +13,6 @@ const CenteredSpinner = () => (
   </Stack>
 )
 
-const mountExternalResources = (externalResourcesUrl: string) => {
-  console.log('Mount External resources')
-  const script = document.createElement('script')
-  script.src = `${externalResourcesUrl}/entry.js`
-  document.body.appendChild(script)
-}
-
 const mount = ({
   mountPoint,
   initialPathname,
@@ -33,8 +26,6 @@ const mount = ({
 
   // unsubscribe to old SW
   unsubscribeOldSW()
-
-  if (EXTERNAL_RESOURCES_URL) mountExternalResources(EXTERNAL_RESOURCES_URL)
 
   const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)
