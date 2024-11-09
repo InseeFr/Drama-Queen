@@ -11,5 +11,5 @@ export function ExternalRessources() {
 
   mountExternalResources(EXTERNAL_RESOURCES_URL)
   // Nothing to return, is the loaded script which create html-element.
-  return
+  return null
 }
