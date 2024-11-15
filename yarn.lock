@@ -6024,6 +6024,11 @@ tsafe@^1.6.5, tsafe@^1.6.6, tsafe@^1.7.2, tsafe@^1.7.5:
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.7.5.tgz#0d3a31202b5ef87c7ba997e66e03fd80801278ef"
   integrity sha512-tbNyyBSbwfbilFfiuXkSOj82a6++ovgANwcoqBAcO9/REPoZMEQoE8kWPeO0dy5A2D/2Lajr8Ohue5T0ifIvLQ==
 
+tsafe@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.8.4.tgz#ef2ecb21829eb5003d931de6a80b34303ed907ee"
+  integrity sha512-k1myNdDFEbqfq2hS7ln4qlgpvRlJq3wkOawQWieqVHu/K7dX+qQHTDkdzfvBBPNFrkIM7S/846JD6B3fm6MWHQ==
+
 tsconfck@^3.0.3:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/tsconfck/-/tsconfck-3.1.4.tgz#de01a15334962e2feb526824339b51be26712229"
