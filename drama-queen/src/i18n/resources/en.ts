@@ -29,6 +29,7 @@ export const translations: Translations<'en'> = {
       `The survey unit ${surveyUnitId} is not associated with the questionnaire ${questionnaireId}.`,
     surveyUnitUnauthorized:
       'You are not authorized to access data from this survey unit.',
+    externalResourcesLoadedError: 'Unable to load external resources.',
   },
   modalMessage: {
     reviewQuitTitle: 'Leaving the questionnaire',
