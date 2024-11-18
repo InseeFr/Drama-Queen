@@ -32,6 +32,7 @@ export type ErrorMessage =
       P: { surveyUnitId: string; questionnaireId: string }
     }
   | 'surveyUnitUnauthorized'
+  | 'externalResourcesLoadedError'
 
 export type ModalMessage =
   | 'reviewQuitTitle'
