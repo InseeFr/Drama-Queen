@@ -1,19 +1,22 @@
 import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { collectLoader } from './collectLoader'
+import { reviewLoader } from './reviewLoader'
 
 vi.mock('createCore', () => ({
   prCore: {
     functions: {
-      collectSurvey: {
+      reviewSurvey: {
         loader: vi.fn(),
+      },
+      userAuthentication: {
+        loginIfNotLoggedIn: vi.fn(),
       },
     },
   },
 }))
 
-describe('collectLoader', () => {
+describe('reviewLoader', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -21,7 +24,7 @@ describe('collectLoader', () => {
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
 
-    prCore.functions.collectSurvey.loader = mockLoader
+    prCore.functions.reviewSurvey.loader = mockLoader
 
     const mockParams = {
       questionnaireId: 'test-questionnaire-id',
@@ -32,7 +35,7 @@ describe('collectLoader', () => {
       params: mockParams,
     } as unknown as LoaderFunctionArgs
 
-    await collectLoader(mockLoaderArgs)
+    await reviewLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
       questionnaireId: mockParams.questionnaireId,
@@ -42,7 +45,7 @@ describe('collectLoader', () => {
 
   it('should throw an error if questionnaireId or surveyUnitId is undefined', async () => {
     await expect(
-      collectLoader({
+      reviewLoader({
         params: {
           questionnaireId: undefined,
           surveyUnitId: 'test-survey-unit-id',
@@ -51,7 +54,7 @@ describe('collectLoader', () => {
     ).rejects.toThrow('Wrong assertion encountered')
 
     await expect(
-      collectLoader({
+      reviewLoader({
         params: {
           questionnaireId: 'questionnaireId',
           surveyUnitId: undefined,
