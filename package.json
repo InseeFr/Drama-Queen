@@ -1,7 +1,7 @@
 {
   "name": "drama-queen-container",
   "private": true,
-  "version": "2.3.0-rc.5",
+  "version": "2.3.0",
   "workspaces": [
     "drama-queen"
   ],
