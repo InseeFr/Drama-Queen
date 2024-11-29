@@ -1179,10 +1179,10 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
-"@inseefr/lunatic@^3.4.3":
-  version "3.4.6"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.4.6.tgz#a81c6c295851272c581bb07a481d9549d8eb875b"
-  integrity sha512-ZtP1nYmAPkIFxK1fz7AcDyUXWfWanXqGmvExzpRf7VMpaJMqze4VxCqxwh2VMojAFaMuvuRnBHhXrCcLfdghaQ==
+"@inseefr/lunatic@^3.4.8":
+  version "3.4.8"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.4.8.tgz#6f036b7db4cfbc5fbd80746b394a192100144742"
+  integrity sha512-ZvQ13InGEfNRL3yVI0UWczSdtZ7ylNceuvkNPUT+4Fn2g0LynX6uht8RV5oom5p2S6T9gCqhDYmIoEUgfK68Jg==
   dependencies:
     "@inseefr/trevas" "^0.1.21"
     "@inseefr/vtl-2.0-antlr-tools" "^0.3.2"
