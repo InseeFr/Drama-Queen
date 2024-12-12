@@ -1,7 +1,7 @@
 name: Main CI
 on:
   push:
-    branches: ["main", "2.*"]
+    branches: ['main', '2.*']
   pull_request:
 
 jobs:
@@ -14,49 +14,37 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
       - run: yarn
-      - run: npx lerna run format
-      - run: npx lerna run lint
+      - run: yarn format
+      - run: yarn lint
       - run: yarn build
       - uses: actions/upload-artifact@v4
         with:
           name: drama
-          path: drama-queen/dist
+          path: dist
 
   check_if_version_upgraded:
-    needs: build
+    name: Check if version upgrade
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' || 
-      github.event.pull_request.head.repo.owner.login == github.event.pull_request.base.repo.owner.login
+    needs: build
     outputs:
-      is_upgraded_version: ${{ steps.check.outputs.changed }}
-      version: ${{ steps.check.outputs.version }}
-      type: ${{ steps.check.outputs.type }}
-      is_drama_upgraded_version: ${{ steps.check-drama.outputs.changed }}
-      drama_version: ${{ steps.check-drama.outputs.version }}
-      drama_type: ${{ steps.check-drama.outputs.type }}
-
+      from_version: ${{ steps.check.outputs.from_version }}
+      to_version: ${{ steps.check.outputs.to_version }}
+      is_upgraded_version: ${{ steps.check.outputs.is_upgraded_version }}
+      is_release_beta: ${{ steps.check.outputs.is_pre_release }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-
-      - name: Check if container version has been updated
+      - uses: garronej/ts-ci@v2.1.5
         id: check
-        uses: EndBug/version-check@v2
-
-      - name: Check if drama queen version has been updated
-        id: check-drama
-        uses: EndBug/version-check@v2
         with:
-          file-name: drama-queen/package.json
+          action_name: is_package_json_version_upgraded
+          branch: ${{ github.head_ref || github.ref }}
 
-  docker_drama:
+  docker:
     needs: check_if_version_upgraded
     if: |
-      (needs.check_if_version_upgraded.outputs.is_drama_upgraded_version == 'true')
+      needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
       && (
         github.event_name == 'push' ||
-        needs.check_if_version_upgraded.outputs.drama_type == 'prerelease'
+        needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
       )
     runs-on: ubuntu-latest
     steps:
@@ -67,18 +55,26 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Computing Docker image tags
+        id: step1
+        env:
+          IS_UPGRADED_VERSION: ${{ needs.check_if_version_upgraded.outputs.is_upgraded_version }}
+          TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+        run: |
+          OUT=$GITHUB_REPOSITORY:$TO_VERSION,$GITHUB_REPOSITORY:latest
+          OUT=$(echo "$OUT" | awk '{print tolower($0)}') 
+          echo "docker_tags=$OUT" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
         with:
-          name: drama
-          path: drama-queen/dist
+          name: dist
+          path: dist
       - uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
-          context: drama-queen
           push: true
-          tags: |
-            inseefr/drama-queen:latest,
-            inseefr/drama-queen:${{ needs.check_if_version_upgraded.outputs.drama_version }}
+          platforms: linux/amd64,linux/arm64
+          context: .
+          tags: ${{ steps.step1.outputs.docker_tags }}
+          file: Dockerfile
 
   release:
     runs-on: ubuntu-latest
@@ -87,7 +83,7 @@ jobs:
       needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' && 
       (
         github.event_name == 'push' ||
-        needs.check_if_version_upgraded.outputs.type == 'prerelease'
+        needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
       )
     steps:
       - uses: actions/checkout@v4
@@ -95,11 +91,11 @@ jobs:
           ref: ${{ github.ref }}
       - uses: softprops/action-gh-release@v2
         with:
-          name: Release v${{ needs.check_if_version_upgraded.outputs.version }}
-          tag_name: v${{ needs.check_if_version_upgraded.outputs.version }}
+          name: Release v${{ needs.check_if_version_upgraded.outputs.to_version }}
+          tag_name: v${{ needs.check_if_version_upgraded.outputs.to_version }}
           target_commitish: ${{ github.head_ref || github.ref }}
           generate_release_notes: true
           draft: false
-          prerelease: ${{ needs.check_if_version_upgraded.outputs.type == 'prerelease' }}
+          prerelease: ${{ needs.check_if_version_upgraded.outputs.is_release_beta == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
