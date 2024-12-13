@@ -32,7 +32,7 @@ export default tseslint.config(
       // see https://typescript-eslint.netlify.app/rules/no-unused-vars/
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { argsIgnorePattern: '^_$' },
+        { argsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-explicit-any': ['off'],
       '@typescript-eslint/no-namespace': ['off'],

@@ -42,9 +42,6 @@ function countMissingResponseInComponent(component: Component): number {
  */
 export function countMissingResponseInPage(components: Components) {
   return components.reduce((total, component) => {
-    if (component.componentType === 'Loop') {
-      component.paginatedLoop
-    }
     return total + countMissingResponseInComponent(component)
   }, 0)
 }

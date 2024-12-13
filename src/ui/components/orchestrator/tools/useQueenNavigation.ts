@@ -28,7 +28,7 @@ type UseQueenNavigationProps = {
 /**
  * Handle synchronization of the surveyUnit with the backend
  */
-export function getQueenNavigation({
+export function useQueenNavigation({
   initialSurveyUnit,
   lastReachedPage,
   pageTag,

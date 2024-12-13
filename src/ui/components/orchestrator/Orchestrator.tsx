@@ -1,8 +1,4 @@
-import {
-  LunaticComponents,
-  type LunaticData,
-  useLunatic,
-} from '@inseefr/lunatic'
+import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 
@@ -21,8 +17,8 @@ import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
 import { getSource, getinitialSurveyUnit } from './tools/functions'
-import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useNavigationButtons } from './tools/useNavigationButtons'
+import { useQueenNavigation } from './tools/useQueenNavigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -131,7 +127,7 @@ export function Orchestrator(props: OrchestratorProps) {
     surveyUnitData,
     orchestratorQuit,
     orchestratorDefinitiveQuit,
-  } = getQueenNavigation({
+  } = useQueenNavigation({
     initialSurveyUnit,
     getChangedData: getChangedData,
     lastReachedPage,

@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
-import { assert } from 'tsafe'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { prCore } from '@/createCore'

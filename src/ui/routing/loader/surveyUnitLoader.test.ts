@@ -42,10 +42,6 @@ describe('collectLoader', () => {
 
     ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId = mockLoader
 
-    const result = await surveyUnitLoader({
-      params: { surveyUnitId: 1 },
-    } as unknown as LoaderFunctionArgs)
-
     expect(redirect).toHaveBeenCalledWith(
       '/questionnaire/questionnaireId/survey-unit/1',
     )
