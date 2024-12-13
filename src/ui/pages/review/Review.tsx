@@ -1,10 +1,11 @@
-import { useCore } from 'core'
-import { useTranslation } from 'i18n'
 import { useState } from 'react'
-import { Modal } from 'ui/components/Modal'
-import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import type { reviewLoader } from 'ui/routing/loader'
-import { useLoaderData } from 'ui/routing/utils'
+
+import { useCore } from '@/core'
+import { useTranslation } from '@/i18n'
+import { Modal } from '@/ui/components/Modal'
+import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
+import type { reviewLoader } from '@/ui/routing/loader'
+import { useLoaderData } from '@/ui/routing/utils'
 
 export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

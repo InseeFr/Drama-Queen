@@ -1,12 +1,13 @@
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
 import type {
   ExternalQuestionnaire,
   ExternalQuestionnaires,
   ExternalQuestionnairesFiltered,
   ExternalQuestionnairesWrapper,
   Manifest,
-} from 'core/model'
+} from '@/core/model'
+
 import { fetchUrl } from './fetchUrl'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 const EXTERNAL_QUESTIONNAIRES_KEYWORD = 'gide'
 
@@ -21,7 +22,7 @@ export async function getExternalQuestionnaires(): Promise<ExternalQuestionnaire
 
 // Get the list of external resource URLs for a questionnaireId
 export async function getTransformedManifest(
-  questionnaireId: string
+  questionnaireId: string,
 ): Promise<string[]> {
   // get the manifest for a questionnaireId
   const manifest = await fetchUrl<Manifest>({
@@ -30,7 +31,7 @@ export async function getTransformedManifest(
 
   // Transform the manifest values into resource URLs, and get an array of these resource URLs
   const transformedManifest = Object.values(manifest).map(
-    (resourceUrl) => `${EXTERNAL_RESOURCES_URL}/${resourceUrl}`
+    (resourceUrl) => `${EXTERNAL_RESOURCES_URL}/${resourceUrl}`,
   )
 
   return transformedManifest
@@ -39,7 +40,7 @@ export async function getTransformedManifest(
 // Filter resources from manifest that are already cached, to avoid useless requests (overly large files).
 export async function filterTransformedManifest(
   cacheName: string,
-  transformedManifest: string[]
+  transformedManifest: string[],
 ): Promise<string[]> {
   // Open the specified cache
   const cacheForManifest = await caches.open(cacheName)
@@ -51,12 +52,12 @@ export async function filterTransformedManifest(
 
   // Get all urls from the cache
   const cachedUrls = (await cacheForManifest.keys()).map(
-    (request) => request.url
+    (request) => request.url,
   )
 
   // filter the transformedManifest for keeping only files that are not cached yet
   const uncachedResources = transformedManifest.filter(
-    (resourceUrl) => !cachedUrls.includes(resourceUrl)
+    (resourceUrl) => !cachedUrls.includes(resourceUrl),
   )
 
   return uncachedResources
@@ -64,13 +65,13 @@ export async function filterTransformedManifest(
 
 // Cache every external resources (not already cached) for a particular questionnaire
 export async function getResourcesFromExternalQuestionnaire(
-  questionnaire: ExternalQuestionnaire
+  questionnaire: ExternalQuestionnaire,
 ): Promise<void> {
   const transformedManifest = await getTransformedManifest(questionnaire.id)
 
   const filteredTransformedManifest = await filterTransformedManifest(
     questionnaire.cacheName,
-    transformedManifest
+    transformedManifest,
   )
 
   const manifestCache = await caches.open(questionnaire.cacheName)
@@ -80,13 +81,13 @@ export async function getResourcesFromExternalQuestionnaire(
 // Separate, from the list of external questionnaires, those that are needed and those that are not needed
 export function getExternalQuestionnaireFiltered(
   neededQuestionnaireIds: string[],
-  externalQuestionnaires: ExternalQuestionnaires
+  externalQuestionnaires: ExternalQuestionnaires,
 ): ExternalQuestionnairesFiltered {
   return externalQuestionnaires.reduce(
     (result, questionnaire) => {
       // Check if the current questionnaire's id matches any of the needed IDs
       const isNeeded = neededQuestionnaireIds.some((neededId) =>
-        neededId.toLowerCase().includes(questionnaire.id.toLowerCase())
+        neededId.toLowerCase().includes(questionnaire.id.toLowerCase()),
       )
 
       // If the external questionnaire is needed
@@ -105,16 +106,16 @@ export function getExternalQuestionnaireFiltered(
     {
       neededQuestionnaires: [],
       notNeededQuestionnaires: [],
-    } as ExternalQuestionnairesFiltered
+    } as ExternalQuestionnairesFiltered,
   )
 }
 
 // Get the list of caches where cacheName includes externalQuestionnairesKeyword, and that are not in needed external questionnaires
 export async function getOldExternalCacheNames(
-  neededQuestionnaires: ExternalQuestionnaires
+  neededQuestionnaires: ExternalQuestionnaires,
 ): Promise<string[]> {
   const neededCaches = neededQuestionnaires.map(
-    (questionnaire) => questionnaire.cacheName
+    (questionnaire) => questionnaire.cacheName,
   )
 
   const oldExternalCacheNames = (await caches.keys()).filter(
@@ -122,7 +123,7 @@ export async function getOldExternalCacheNames(
       cacheName
         .toLowerCase()
         .includes(EXTERNAL_QUESTIONNAIRES_KEYWORD.toLowerCase()) &&
-      !neededCaches.includes(cacheName)
+      !neededCaches.includes(cacheName),
   )
 
   return oldExternalCacheNames

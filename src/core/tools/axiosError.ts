@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios'
-import { getTranslation } from 'i18n'
+
+import { getTranslation } from '@/i18n'
 
 const { t } = getTranslation('errorMessage')
 

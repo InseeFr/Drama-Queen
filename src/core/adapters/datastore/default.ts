@@ -1,6 +1,7 @@
-import type { Paradata, SurveyUnit } from 'core/model'
-import type { DataStore } from 'core/ports/DataStore'
 import Dexie, { type Table } from 'dexie'
+
+import type { Paradata, SurveyUnit } from '@/core/model'
+import type { DataStore } from '@/core/ports/DataStore'
 
 type Tables = {
   surveyUnit: Table<SurveyUnit, string>

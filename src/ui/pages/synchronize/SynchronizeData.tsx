@@ -1,8 +1,11 @@
-import { useEffect } from 'react'
-import { useCoreState, useCore } from 'core'
 import { useEvt } from 'evt/hooks'
+
+import { useEffect } from 'react'
+
+import { useCore, useCoreState } from '@/core'
+import { useTranslation } from '@/i18n'
+
 import { LoadingDisplay } from './LoadingDisplay'
-import { useTranslation } from 'i18n'
 
 export function SynchronizeData() {
   const { t } = useTranslation('synchronizeMessage')
@@ -33,7 +36,7 @@ export function SynchronizeData() {
       () => {
         // This is hacky, if anyone has a better solution let's contribute :)
         ;(window.location as any) = window.location.origin
-      }
+      },
     )
   }, [])
 

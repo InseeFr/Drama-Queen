@@ -1,12 +1,14 @@
+import type { Variable } from '@inseefr/lunatic/type.source'
+
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
 import type {
   PageTag,
   Questionnaire,
   SurveyUnit,
   SurveyUnitData,
-} from 'core/model'
+} from '@/core/model'
+
 import type { Component, Components } from '../lunaticType'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
-import type { Variable } from '@inseefr/lunatic/type.source'
 
 /**
  * temporary : should be handle by Lunatic
@@ -51,7 +53,7 @@ export function countMissingResponseInPage(components: Components) {
 export function isIterationReachable(
   currentPage: number,
   lastReachedPage: PageTag,
-  iteration: number
+  iteration: number,
 ) {
   const maxPage = parseInt(lastReachedPage.split('.')[0])
   const maxIteration = parseInt(lastReachedPage.split('#')[1]) - 1
@@ -91,7 +93,7 @@ export function downloadAsJson(params: { data: object; filename?: string }) {
 function getInitialData(
   surveyUnitId: string,
   questionnaireId: string,
-  data?: SurveyUnitData
+  data?: SurveyUnitData,
 ): SurveyUnitData {
   if (!EXTERNAL_RESOURCES_URL) return data ?? {}
   return {
@@ -125,7 +127,7 @@ export function getSource(source: Questionnaire): Questionnaire {
 }
 
 export function getinitialSurveyUnit(
-  partial?: Partial<SurveyUnit>
+  partial?: Partial<SurveyUnit>,
 ): SurveyUnit {
   const surveyUnitId = partial?.id ?? ''
   const questionnaireId = partial?.questionnaireId ?? ''

@@ -1,6 +1,8 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-import { getTranslation } from 'i18n'
-import { SHORTCUT_NEXT } from 'ui/constants'
+
+import { getTranslation } from '@/i18n'
+import { SHORTCUT_NEXT } from '@/ui/constants'
+
 import type { GoNextPage, GoPreviousPage } from '../lunaticType'
 
 const { t } = getTranslation('navigationMessage')

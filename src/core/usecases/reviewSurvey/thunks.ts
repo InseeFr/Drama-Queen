@@ -1,6 +1,6 @@
-import type { Thunks } from 'core/bootstrap'
-import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
-import { getTranslation } from 'i18n'
+import type { Thunks } from '@/core/bootstrap'
+import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
+import { getTranslation } from '@/i18n'
 
 const { t } = getTranslation('errorMessage')
 
@@ -34,7 +34,7 @@ export const thunks = {
               t('wrongQuestionnaire', {
                 surveyUnitId,
                 questionnaireId,
-              })
+              }),
             )
           }
           return surveyUnit

@@ -1,5 +1,6 @@
-import type { Oidc } from 'core/ports/Oidc'
 import { id } from 'tsafe/id'
+
+import type { Oidc } from '@/core/ports/Oidc'
 
 export function createOidc(params: {
   isUserLoggedIn: boolean

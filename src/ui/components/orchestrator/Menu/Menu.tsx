@@ -3,9 +3,12 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTranslation } from 'i18n'
-import { useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
+
+import { useEffect, useState } from 'react'
+
+import { useTranslation } from '@/i18n'
+
 import { MenuNavigationButton } from '../buttons/MenuNavigationButton/MenuNavigationButton'
 import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
 import { SequenceNavigation } from './SequenceNavigation/SequenceNavigation'

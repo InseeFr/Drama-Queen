@@ -1,8 +1,9 @@
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
+import { getTranslation } from '@/i18n'
+import { CenteredSpinner } from '@/ui/components/CenteredSpinner'
+import { ErrorComponent } from '@/ui/components/ErrorComponent'
+
 import useScript from './useScript'
-import { ErrorComponent } from 'ui/components/ErrorComponent'
-import { CenteredSpinner } from 'ui/components/CenteredSpinner'
-import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('errorMessage')
 

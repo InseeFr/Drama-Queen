@@ -1,10 +1,12 @@
-import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { prCore } from '@/createCore'
+
 import { visualizeLoader } from './visualizeLoader'
 
-vi.mock('createCore', () => ({
+vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       visualizeSurvey: {

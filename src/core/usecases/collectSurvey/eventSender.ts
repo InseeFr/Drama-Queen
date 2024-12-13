@@ -1,4 +1,4 @@
-import type { EventQuestionnaireState } from 'core/model/QuestionnaireState'
+import type { EventQuestionnaireState } from '@/core/model/QuestionnaireState'
 
 type UpdateSurveyUnitData = {
   type: string
@@ -22,7 +22,7 @@ const sendEvent = (data: UpdateSurveyUnitData | CloseQueenData) => {
 
 export const sendQuestionnaireStateChangedEvent = (
   surveyUnitId: string,
-  state: EventQuestionnaireState
+  state: EventQuestionnaireState,
 ) => {
   const data: UpdateSurveyUnitData = {
     type: eventType,

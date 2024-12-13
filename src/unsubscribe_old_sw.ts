@@ -1,4 +1,4 @@
-import { DYNAMIC_PUBLIC_URL } from 'core/constants'
+import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
 
 // Unregister old service workers for standalone
 export const unsubscribeOldSW = () => {
@@ -37,7 +37,7 @@ const clearAllCaches = async () => {
   await Promise.all(
     cacheNames.map((cacheName) => {
       return caches.delete(cacheName)
-    })
+    }),
   )
 
   console.log('All caches cleared.')

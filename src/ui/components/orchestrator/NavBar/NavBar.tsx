@@ -1,8 +1,10 @@
-import { tss } from 'tss-react/mui'
-import { PrevNext } from '../buttons/PrevNext/PrevNext'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTranslation } from 'i18n'
+import { tss } from 'tss-react/mui'
+
+import { useTranslation } from '@/i18n'
+
+import { PrevNext } from '../buttons/PrevNext/PrevNext'
 
 type NavBarProps = {
   page: number
@@ -45,7 +47,7 @@ export function NavBar(props: NavBarProps) {
       current: number | undefined
       max: number | undefined
     },
-    index: number
+    index: number,
   ) {
     if (pageType.current !== undefined) {
       return (

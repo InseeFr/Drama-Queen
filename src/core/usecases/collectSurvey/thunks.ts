@@ -1,12 +1,13 @@
-import type { Thunks } from 'core/bootstrap'
-import type { SurveyUnit } from 'core/model'
-import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
+import type { Thunks } from '@/core/bootstrap'
+import type { SurveyUnit } from '@/core/model'
+import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
+import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
+import { getTranslation } from '@/i18n'
+
 import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
 } from './eventSender'
-import { getTranslation } from 'i18n'
 
 const { t } = getTranslation('errorMessage')
 
@@ -24,8 +25,8 @@ export const thunks = {
         if (!surveyUnit || !surveyUnit.questionnaireId) {
           return Promise.reject(
             new Error(
-              `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}`
-            )
+              `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}`,
+            ),
           )
         }
         return surveyUnit.questionnaireId
@@ -64,7 +65,7 @@ export const thunks = {
               t('wrongQuestionnaire', {
                 surveyUnitId,
                 questionnaireId,
-              })
+              }),
             )
           }
           return surveyUnit

@@ -6,11 +6,11 @@ import type {
   Questionnaire,
   RequiredNomenclatures,
   SurveyUnit,
-} from 'core/model'
+} from '@/core/model'
 
 export type QueenApi = {
   getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (
-    idCampaign: string
+    idCampaign: string,
   ) => Promise<IdAndQuestionnaireId[]>
   /**
    * Endpoint in development
@@ -28,13 +28,13 @@ export type QueenApi = {
    * /api/survey-units/data
    */
   putSurveyUnitsData: (
-    surveyUnitsData: Omit<SurveyUnit, 'questionnaireId'>[]
+    surveyUnitsData: Omit<SurveyUnit, 'questionnaireId'>[],
   ) => Promise<void>
   postSurveyUnitInTemp: (surveyUnit: SurveyUnit) => Promise<void>
   getCampaigns: () => Promise<Campaign[]>
   getQuestionnaire: (idQuestionnaire: string) => Promise<Questionnaire>
   getRequiredNomenclaturesByCampaign: (
-    idCampaign: string
+    idCampaign: string,
   ) => Promise<RequiredNomenclatures>
   getNomenclature: (idNomenclature: string) => Promise<Nomenclature>
   postParadata: (paradata: Paradata) => Promise<void>

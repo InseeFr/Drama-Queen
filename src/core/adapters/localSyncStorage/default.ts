@@ -1,7 +1,8 @@
 import type {
   LocalStorageObject,
   LocalSyncStorage,
-} from 'core/ports/LocalSyncStorage'
+} from '@/core/ports/LocalSyncStorage'
+
 import { localStorageObjectSchema } from './parser/localSyncObjectSchema'
 
 export function createLocalSyncStorage(params: {

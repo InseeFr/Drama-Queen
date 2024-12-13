@@ -1,16 +1,18 @@
-import type { Thunks } from 'core/bootstrap'
+import { AxiosError } from 'axios'
+
+import type { Thunks } from '@/core/bootstrap'
 import type {
   Nomenclature,
   Questionnaire,
   SurveyUnit,
   WrappedQuestionnaire,
-} from 'core/model'
+} from '@/core/model'
+import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
+import { fetchUrl } from '@/core/tools/fetchUrl'
+import { makeSearchParamsObjSchema } from '@/core/tools/makeSearchParamsObjectSchema'
+import { getTranslation } from '@/i18n'
+
 import { searchParamsSchema } from './parser/searchParamsSchema'
-import { makeSearchParamsObjSchema } from 'core/tools/makeSearchParamsObjectSchema'
-import { fetchUrl } from 'core/tools/fetchUrl'
-import { isSurveyCompatibleWithQueen } from 'core/tools/SurveyModelBreaking'
-import { getTranslation } from 'i18n'
-import { AxiosError } from 'axios'
 
 const { t } = getTranslation('errorMessage')
 
@@ -25,7 +27,7 @@ export const thunks = {
       const { requestUrl } = params
       const url = new URL(requestUrl)
       const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
-        url.searchParams
+        url.searchParams,
       )
 
       if (!result.success) {
@@ -62,7 +64,7 @@ export const thunks = {
       })
 
       const isWrappedQuestionnaire = (
-        source: Questionnaire | WrappedQuestionnaire
+        source: Questionnaire | WrappedQuestionnaire,
       ): source is WrappedQuestionnaire => {
         return (
           typeof source === 'object' &&

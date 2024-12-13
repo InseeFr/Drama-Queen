@@ -1,11 +1,12 @@
 import { useLunatic } from '@inseefr/lunatic'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import { isIterationReachable } from 'ui/components/orchestrator/tools/functions'
-import type { PageTag, SurveyUnitData } from 'core/model'
+
+import type { PageTag, SurveyUnitData } from '@/core/model'
+import { isIterationReachable } from '@/ui/components/orchestrator/tools/functions'
 
 type LoopPanelProps = {
   loopVariables: string[]
@@ -53,7 +54,7 @@ export function LoopPanel(props: LoopPanelProps) {
             classes.panelButton,
             index === iteration
               ? classes.currentIteration
-              : classes.notCurrentIteration
+              : classes.notCurrentIteration,
           )}
           disabled={isDisabledButton(index)}
           disableRipple

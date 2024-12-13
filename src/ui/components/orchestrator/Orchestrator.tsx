@@ -1,25 +1,28 @@
 import {
   LunaticComponents,
-  useLunatic,
   type LunaticData,
+  useLunatic,
 } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
-import type { Questionnaire, SurveyUnit } from 'core/model'
-import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { useTranslation } from 'i18n'
 import { tss } from 'tss-react/mui'
-import { useAutoNext } from 'ui/components/orchestrator/tools/useAutoNext'
+
+import { useState } from 'react'
+
+import type { Questionnaire, SurveyUnit } from '@/core/model'
+import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
+import { useTranslation } from '@/i18n'
+import { useAutoNext } from '@/ui/components/orchestrator/tools/useAutoNext'
+
+import { Modal } from '../Modal'
 import { Header } from './Header/Header'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
-import { getinitialSurveyUnit, getSource } from './tools/functions'
+import type { GetReferentiel } from './lunaticType'
+import { getSource, getinitialSurveyUnit } from './tools/functions'
 import { getQueenNavigation } from './tools/getQueenNavigation'
 import { useNavigationButtons } from './tools/useNavigationButtons'
-import type { GetReferentiel } from './lunaticType'
-import { Modal } from '../Modal'
-import { useState } from 'react'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -57,7 +60,7 @@ export function Orchestrator(props: OrchestratorProps) {
   const source = getSource(initialSource)
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
-    !readonly && initialSurveyUnit.stateData?.currentPage !== '1'
+    !readonly && initialSurveyUnit.stateData?.currentPage !== '1',
   )
   const welcomeModalTitle = t2('welcomeModalTitle')
   const welcomeModalContent = t2('welcomeModalContent')

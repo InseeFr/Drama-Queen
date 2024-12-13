@@ -1,6 +1,8 @@
 import { z } from 'zod'
+
+import type { PageTag } from '@/core/model'
+
 import { surveyUnitDataSchema } from './surveyUnitDataSchema'
-import type { PageTag } from 'core/model'
 
 export const idAndQuestionnaireIdSchema = z.object({
   id: z.string(),
@@ -23,7 +25,7 @@ const stateDataSchema = z.object({
     {
       message:
         'currentPage must be in the format `${number}.${number}#${number}` or `${number}`',
-    }
+    },
   ),
 })
 
@@ -35,7 +37,7 @@ export const surveyUnitSchema = z.object({
       z.object({
         name: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional(),
   data: surveyUnitDataSchema,

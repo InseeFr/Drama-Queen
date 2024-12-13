@@ -6,15 +6,18 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import Typography from '@mui/material/Typography'
-import { useTranslation } from 'i18n'
-import { useState } from 'react'
 import { tss } from 'tss-react/mui'
-import { SHORCUT_MENU, SHORTCUT_QUIT } from 'ui/constants'
+
+import { useState } from 'react'
+
+import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
+import { useTranslation } from '@/i18n'
+import { SHORCUT_MENU, SHORTCUT_QUIT } from '@/ui/constants'
+
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
-import { DYNAMIC_PUBLIC_URL } from 'core/constants'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -121,7 +124,7 @@ export function Header(props: HeaderProps) {
 }
 
 function findCurrentOverviewItem(
-  overviewItems: OverviewItem[]
+  overviewItems: OverviewItem[],
 ): OverviewItem | undefined {
   return overviewItems.find((item) => item.current)
 }

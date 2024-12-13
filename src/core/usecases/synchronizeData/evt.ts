@@ -1,5 +1,7 @@
-import type { CreateEvt } from 'core/bootstrap'
 import { Evt } from 'evt'
+
+import type { CreateEvt } from '@/core/bootstrap'
+
 import { name } from './state'
 
 export const createEvt = (({ evtAction }) => {
@@ -18,7 +20,7 @@ export const createEvt = (({ evtAction }) => {
         evt.post({
           action: 'redirect',
         })
-      }
+      },
     )
 
   return evt

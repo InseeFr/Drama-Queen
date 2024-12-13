@@ -1,4 +1,4 @@
-import { prCore } from 'createCore'
+import { prCore } from '@/createCore'
 
 export async function protectedRouteLoader() {
   const { userAuthentication } = (await prCore).functions

@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react'
+
 import type {
   CollectedValues,
   PageTag,
   SurveyUnit,
   SurveyUnitData,
-} from 'core/model'
-import type { QuestionnaireState } from 'core/model/QuestionnaireState'
-import { useEffect, useState } from 'react'
+} from '@/core/model'
+import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
+
 import type { GetChangedData } from '../lunaticType'
 
 type UseQueenNavigationProps = {
@@ -39,10 +41,10 @@ export function getQueenNavigation({
 }: UseQueenNavigationProps) {
   // handle state to check when it changes
   const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
-    initialSurveyUnit.stateData?.state ?? null
+    initialSurveyUnit.stateData?.state ?? null,
   )
   const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
-    initialSurveyUnit.data
+    initialSurveyUnit.data,
   )
 
   const isLastReachedPage =
@@ -58,7 +60,7 @@ export function getQueenNavigation({
   // get full data using changedData
   const getFullData = (
     currentData: SurveyUnitData,
-    changedData: SurveyUnitData
+    changedData: SurveyUnitData,
   ): SurveyUnitData => {
     return {
       CALCULATED: { ...currentData.CALCULATED, ...changedData.CALCULATED },
@@ -69,7 +71,7 @@ export function getQueenNavigation({
 
   // remove null data from COLLECTED data
   const removeNullCollectedData = (
-    data: SurveyUnitData = {}
+    data: SurveyUnitData = {},
   ): SurveyUnitData => {
     const { COLLECTED } = data || {}
 
@@ -88,13 +90,13 @@ export function getQueenNavigation({
             }
             return accContent
           },
-          {} as CollectedValues
+          {} as CollectedValues,
         )
         acc[variableName] = cleanedContent
 
         return acc
       },
-      {}
+      {},
     )
 
     return {
@@ -130,7 +132,7 @@ export function getQueenNavigation({
 
   const handleState = (
     hasDataChanged: boolean,
-    forcedState?: QuestionnaireState
+    forcedState?: QuestionnaireState,
   ) => {
     // forcedState is used for definitiveQuit which forces the validation
     if (forcedState) {
@@ -149,7 +151,7 @@ export function getQueenNavigation({
   // get the updated SurveyUnit
   const getUpdatedSurveyUnit = (
     state: QuestionnaireState,
-    data: SurveyUnitData
+    data: SurveyUnitData,
   ): SurveyUnit => {
     const surveyUnit = {
       ...initialSurveyUnit,

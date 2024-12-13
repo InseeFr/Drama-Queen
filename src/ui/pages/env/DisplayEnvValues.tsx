@@ -1,6 +1,9 @@
-import { useTranslation } from 'i18n'
 import React from 'react'
+
+import { useTranslation } from '@/i18n'
+
 import './env.css'
+
 export function DisplayEnvValues() {
   const { t } = useTranslation('envValuesMessage')
   return (

@@ -1,9 +1,11 @@
-import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { prCore } from '@/createCore'
+
 import { reviewLoader } from './reviewLoader'
 
-vi.mock('createCore', () => ({
+vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       reviewSurvey: {
@@ -50,7 +52,7 @@ describe('reviewLoader', () => {
           questionnaireId: undefined,
           surveyUnitId: 'test-survey-unit-id',
         },
-      } as unknown as LoaderFunctionArgs)
+      } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
 
     await expect(
@@ -59,7 +61,7 @@ describe('reviewLoader', () => {
           questionnaireId: 'questionnaireId',
           surveyUnitId: undefined,
         },
-      } as unknown as LoaderFunctionArgs)
+      } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })
 })

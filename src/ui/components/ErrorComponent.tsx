@@ -1,8 +1,8 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTranslation } from 'i18n'
-
 import { tss } from 'tss-react/mui'
+
+import { useTranslation } from '@/i18n'
 
 export function ErrorComponent(props: { message: string }) {
   const { message } = props

@@ -1,9 +1,11 @@
 import { useLoaderData, useNavigate } from 'react-router-dom'
+
+import type { SurveyUnit } from '@/core/model'
+import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
+import { downloadAsJson } from '@/ui/components/orchestrator/tools/functions'
+import { visualizeLoader } from '@/ui/routing/loader/visualizeLoader'
+
 import { VisualizeForm } from './VisualizeForm'
-import { visualizeLoader } from 'ui/routing/loader/visualizeLoader'
-import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import type { SurveyUnit } from 'core/model'
-import { downloadAsJson } from 'ui/components/orchestrator/tools/functions'
 
 export function Visualize() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

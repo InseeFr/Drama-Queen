@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+
 import type {
   Campaign,
   IdAndQuestionnaireId,
@@ -6,9 +7,10 @@ import type {
   Questionnaire,
   RequiredNomenclatures,
   SurveyUnit,
-} from 'core/model'
-import type { QueenApi } from 'core/ports/QueenApi'
-import { handleAxiosError } from 'core/tools/axiosError'
+} from '@/core/model'
+import type { QueenApi } from '@/core/ports/QueenApi'
+import { handleAxiosError } from '@/core/tools/axiosError'
+
 import {
   campaignSchema,
   idAndQuestionnaireIdSchema,
@@ -50,7 +52,7 @@ export function createApiClient(params: {
           return Promise.reject(error)
         }
         return Promise.reject(handleAxiosError(error))
-      }
+      },
     )
     return { axiosInstance }
   })()
@@ -65,14 +67,14 @@ export function createApiClient(params: {
       axiosInstance
         .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
         .then(({ data }) =>
-          data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit))
+          data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit)),
         ),
 
     getSurveyUnit: (idSurveyUnit) =>
       axiosInstance
         .get<Omit<SurveyUnit, 'id'>>(`/api/survey-unit/${idSurveyUnit}`)
         .then(({ data }) =>
-          surveyUnitSchema.parse({ id: idSurveyUnit, ...data })
+          surveyUnitSchema.parse({ id: idSurveyUnit, ...data }),
         ),
     putSurveyUnit: (surveyUnit) =>
       axiosInstance
@@ -100,7 +102,7 @@ export function createApiClient(params: {
     getRequiredNomenclaturesByCampaign: (idNomenclature) =>
       axiosInstance
         .get<RequiredNomenclatures>(
-          `/api/questionnaire/${idNomenclature}/required-nomenclatures`
+          `/api/questionnaire/${idNomenclature}/required-nomenclatures`,
         )
         .then(({ data }) => requiredNomenclaturesSchema.parse(data)),
 

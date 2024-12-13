@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { handleAxiosError } from './axiosError'
 import { AxiosError } from 'axios'
+import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('i18n', () => ({
+import { handleAxiosError } from './axiosError'
+
+vi.mock('@/i18n', () => ({
   getTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
@@ -19,7 +20,7 @@ describe('handleAxiosError', () => {
 
     const result = handleAxiosError(error)
     expect(result.message).toBe(
-      "Une erreur s'est produite lors du traitement de la requête. Veuillez réessayer plus tard."
+      "Une erreur s'est produite lors du traitement de la requête. Veuillez réessayer plus tard.",
     )
   })
 
