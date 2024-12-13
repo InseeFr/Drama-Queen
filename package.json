@@ -5,16 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
     "build": "tsc && vite build",
     "postbuild": "node build/remote-env.cjs remoteEntry.js",
     "preview": "vite preview --port 5001 --strictPort",
-    "_format": "prettier 'src/**/*.{ts,tsx,js,jsx,json,md}'",
+    "_format": "prettier --ignore-unknown .",
     "format": "npm run _format -- --write",
-    "lint": "eslint src/",
     "format:check": "npm run _format -- --list-different",
-    "stop": "kill-port --port 5000,5001,5002"
+    "lint": "eslint ./src",
+    "stop": "kill-port --port 5000,5001,5002",
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
