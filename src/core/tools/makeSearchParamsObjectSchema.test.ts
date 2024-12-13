@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
+
 import { makeSearchParamsObjSchema } from './makeSearchParamsObjectSchema'
 
 describe('makeSearchParamsObjSchema', () => {
@@ -9,7 +10,7 @@ describe('makeSearchParamsObjSchema', () => {
         key1: z.string(),
         key2: z.number(),
         key3: z.boolean(),
-      })
+      }),
     )
 
     const searchParams = new URLSearchParams()
@@ -32,7 +33,7 @@ describe('makeSearchParamsObjSchema', () => {
       z.object({
         key1: z.string().array(),
         key2: z.string(),
-      })
+      }),
     )
 
     const searchParams = new URLSearchParams()
@@ -54,7 +55,7 @@ describe('makeSearchParamsObjSchema', () => {
       z.object({
         key1: z.string(),
         key2: z.number(),
-      })
+      }),
     )
 
     const searchParams = new URLSearchParams()
@@ -72,7 +73,7 @@ describe('makeSearchParamsObjSchema', () => {
       z.object({
         key1: z.string(),
         key2: z.number().optional(),
-      })
+      }),
     )
 
     const searchParams = new URLSearchParams()
@@ -90,7 +91,7 @@ describe('makeSearchParamsObjSchema', () => {
     const schema = makeSearchParamsObjSchema(
       z.object({
         key1: z.string().optional(),
-      })
+      }),
     )
 
     const searchParams = new URLSearchParams()

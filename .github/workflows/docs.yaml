@@ -1,7 +1,7 @@
 name: Deploy Documentation
 on:
   push:
-    branches: ["main", "2.*"]
+    branches: ['main', '2.*']
     paths:
       - website/**
 
@@ -16,7 +16,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:

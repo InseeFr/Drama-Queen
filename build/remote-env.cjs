@@ -13,7 +13,7 @@ log.blue(`MFE manage env for remote (micro-frontend)`)
 
 const nameOfMfeEnv = 'swEnv.js'
 const entryScriptPath = path.resolve(
-  `${process.cwd()}/dist/assets/${process.argv[2]}`
+  `${process.cwd()}/dist/assets/${process.argv[2]}`,
 )
 const swEnvScriptPath = path.resolve(`${process.cwd()}/dist/${nameOfMfeEnv}`)
 
@@ -27,6 +27,6 @@ if (isSwEnvScriptExists && isEntryScriptExists) {
   log.green(`✓ Added env file inside ${entryScriptPath}`)
 } else {
   log.red(
-    `x Nothing to do. Are you using vite-envs and federation plugin in your configuration vite.config.ts ?`
+    `x Nothing to do. Are you using vite-envs and federation plugin in your configuration vite.config.ts ?`,
   )
 }

@@ -1,6 +1,6 @@
-import type { LunaticData, LunaticCollectedValue } from '@inseefr/lunatic'
-import { assert } from 'tsafe/assert'
+import type { LunaticCollectedValue, LunaticData } from '@inseefr/lunatic'
 import type { Extends } from 'tsafe/Extends'
+import { assert } from 'tsafe/assert'
 
 type VariableType =
   | string

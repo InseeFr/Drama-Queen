@@ -1,4 +1,4 @@
-import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 
 /**
  * Creating a sidebar enables you to:
@@ -12,81 +12,81 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
  */
 const sidebars: SidebarsConfig = {
   docs: [
-    "intro",
-    "collect",
-    "visualize",
-    "review",
-    "synchronize",
+    'intro',
+    'collect',
+    'visualize',
+    'review',
+    'synchronize',
     {
-      type: "category",
-      label: "Orchestration de questionnaire",
+      type: 'category',
+      label: 'Orchestration de questionnaire',
       link: {
         description: "Fonctionnalités de l'orchestrateur",
-        type: "generated-index",
+        type: 'generated-index',
       },
       collapsed: true,
       items: [
-        "orchestrator/pagination",
-        "orchestrator/navigation",
-        "orchestrator/dataHandling",
+        'orchestrator/pagination',
+        'orchestrator/navigation',
+        'orchestrator/dataHandling',
         {
-          type: "category",
-          label: "Composants",
+          type: 'category',
+          label: 'Composants',
           link: {
-            type: "generated-index",
+            type: 'generated-index',
             description:
-              "Les composants proposés par la filière (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)",
+              'Les composants proposés par la filière (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)',
           },
           collapsed: false,
           items: [
             {
-              type: "category",
-              label: "Le balisage",
+              type: 'category',
+              label: 'Le balisage',
               link: {
                 description:
                   "Ces composants offrent des indications visuelles pour aider l'utilisateur à s'orienter dans le formulaire",
-                type: "generated-index",
+                type: 'generated-index',
               },
               collapsed: true,
               items: [
-                "orchestrator/components/decorations/sequence",
-                "orchestrator/components/decorations/declaration",
+                'orchestrator/components/decorations/sequence',
+                'orchestrator/components/decorations/declaration',
               ],
             },
             {
-              type: "category",
-              label: "Les champs de saisie et leur affichage",
+              type: 'category',
+              label: 'Les champs de saisie et leur affichage',
               link: {
                 description:
-                  "Cette partie décrit les différents composants proposés dans Stromae DSFR pour saisir des informations (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic",
-                type: "generated-index",
+                  'Cette partie décrit les différents composants proposés dans Stromae DSFR pour saisir des informations (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic',
+                type: 'generated-index',
               },
               collapsed: true,
               items: [
-                "orchestrator/components/fields/input",
-                "orchestrator/components/fields/inputNumber",
-                "orchestrator/components/fields/date",
-                "orchestrator/components/fields/duration",
-                "orchestrator/components/fields/dropdown",
-                "orchestrator/components/fields/suggester",
-                "orchestrator/components/fields/radio",
-                "orchestrator/components/fields/checkboxGroup",
-                "orchestrator/components/fields/table",
+                'orchestrator/components/fields/input',
+                'orchestrator/components/fields/inputNumber',
+                'orchestrator/components/fields/date',
+                'orchestrator/components/fields/duration',
+                'orchestrator/components/fields/dropdown',
+                'orchestrator/components/fields/suggester',
+                'orchestrator/components/fields/radio',
+                'orchestrator/components/fields/checkboxGroup',
+                'orchestrator/components/fields/table',
               ],
             },
             {
-              type: "category",
-              label: "Les agrégateurs",
+              type: 'category',
+              label: 'Les agrégateurs',
               link: {
                 description:
                   "Quelques composants permettant d'agréger des informations complexes (et qui peuvent être décrits grâce aux outils Pogues, Eno et Lunatic)",
-                type: "generated-index",
+                type: 'generated-index',
               },
               collapsed: true,
               items: [
-                "orchestrator/components/aggregators/pairwise",
-                "orchestrator/components/aggregators/roundabout",
-                "orchestrator/components/aggregators/rosterForLoop",
+                'orchestrator/components/aggregators/pairwise',
+                'orchestrator/components/aggregators/roundabout',
+                'orchestrator/components/aggregators/rosterForLoop',
               ],
             },
           ],
@@ -94,21 +94,21 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "category",
-      label: "Fonctionnalités transverses",
+      type: 'category',
+      label: 'Fonctionnalités transverses',
       link: {
         description: "Fonctionnalités transversales de l'application",
-        type: "generated-index",
+        type: 'generated-index',
       },
       collapsed: true,
       items: [
-        "transversal/authentification",
-        "transversal/routing",
-        "transversal/orchestratorRouting",
-				"transversal/offline"
+        'transversal/authentification',
+        'transversal/routing',
+        'transversal/orchestratorRouting',
+        'transversal/offline',
       ],
     },
   ],
-};
+}
 
-export default sidebars;
+export default sidebars

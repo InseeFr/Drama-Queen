@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { localStorageObjectSchema } from './localSyncObjectSchema'
 
 describe('localStorageObjectSchema', () => {

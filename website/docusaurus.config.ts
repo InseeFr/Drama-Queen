@@ -1,47 +1,47 @@
-import { themes as prismThemes } from "prism-react-renderer";
-import type { Config } from "@docusaurus/types";
-import type * as Preset from "@docusaurus/preset-classic";
+import type * as Preset from '@docusaurus/preset-classic'
+import type { Config } from '@docusaurus/types'
+import { themes as prismThemes } from 'prism-react-renderer'
 
 const config: Config = {
-  title: "Drama-Queen",
+  title: 'Drama-Queen',
   tagline: "Orchestrateur enquêteur de la filière d'enquête de l'Insee",
-  favicon: "img/favicon.ico",
+  favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: "https://inseefr.github.io/",
+  url: 'https://inseefr.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "Drama-Queen",
+  baseUrl: 'Drama-Queen',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "InseeFr", // Usually your GitHub org/user name.
-  projectName: "Drama-Queen", // Usually your repo name.
+  organizationName: 'InseeFr', // Usually your GitHub org/user name.
+  projectName: 'Drama-Queen', // Usually your repo name.
   trailingSlash: false,
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "fr",
-    locales: ["fr"],
+    defaultLocale: 'fr',
+    locales: ['fr'],
   },
 
   presets: [
     [
-      "classic",
+      'classic',
       {
         docs: {
-          sidebarPath: "./sidebars.ts",
+          sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl: "https://github.com/InseeFr/Drama-Queen/tree/2.2/website/",
         },
         blog: false,
         theme: {
-          customCss: "./src/css/custom.css",
+          customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
     ],
@@ -49,52 +49,52 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
+    image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: "Drama-Queen",
+      title: 'Drama-Queen',
       logo: {
-        alt: "Drama-Queen",
-        src: "img/logo.svg",
+        alt: 'Drama-Queen',
+        src: 'img/logo.svg',
       },
       items: [
         {
-          type: "docSidebar",
-          sidebarId: "docs",
-          label: "Documentation",
+          type: 'docSidebar',
+          sidebarId: 'docs',
+          label: 'Documentation',
         },
         {
-          to: "changelog",
-          label: "Changelog",
+          to: 'changelog',
+          label: 'Changelog',
         },
         {
-          href: "https://github.com/InseeFr/Drama-Queen",
-          label: "GitHub",
-          position: "right",
+          href: 'https://github.com/InseeFr/Drama-Queen',
+          label: 'GitHub',
+          position: 'right',
         },
       ],
     },
     footer: {
-      style: "dark",
+      style: 'dark',
       links: [
         {
-          title: "Docs",
+          title: 'Docs',
           items: [
             {
-              label: "Documentation",
-              to: "/",
+              label: 'Documentation',
+              to: '/',
             },
           ],
         },
         {
-          title: "Community",
+          title: 'Community',
           items: [
             {
-              label: "Github",
-              href: "https://github.com/InseeFr/Drama-Queen",
+              label: 'Github',
+              href: 'https://github.com/InseeFr/Drama-Queen',
             },
             {
-              label: "Issues",
-              href: "https://github.com/InseeFr/Drama-Queen/issues",
+              label: 'Issues',
+              href: 'https://github.com/InseeFr/Drama-Queen/issues',
             },
           ],
         },
@@ -106,6 +106,6 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
-};
+}
 
-export default config;
+export default config

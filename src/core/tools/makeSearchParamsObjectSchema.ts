@@ -9,14 +9,14 @@ function safeParseJSON(string: string): any {
 }
 
 function searchParamsToValues(
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Record<string, any> {
   return Array.from(searchParams.keys()).reduce(
     (record, key) => {
       const values = searchParams.getAll(key).map(safeParseJSON)
       return { ...record, [key]: values.length > 1 ? values : values[0] }
     },
-    {} as Record<string, any>
+    {} as Record<string, any>,
   )
 }
 

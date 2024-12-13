@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
-import { thunks } from './userAuthentication'
 import type { Oidc } from 'oidc-spa'
+import { describe, expect, it, vi } from 'vitest'
+
+import { thunks } from './userAuthentication'
 
 describe('userAuthentication thunks', () => {
   describe('loginIfNotLoggedIn', () => {
@@ -9,7 +10,7 @@ describe('userAuthentication thunks', () => {
         Promise.resolve({
           isUserLoggedIn: true,
           login: vi.fn(),
-        } as unknown as Oidc)
+        } as unknown as Oidc),
       )
 
       await thunks.loginIfNotLoggedIn()(
@@ -17,12 +18,12 @@ describe('userAuthentication thunks', () => {
         null as any,
         {
           getOidc: mockGetOidc,
-        } as any
+        } as any,
       )
 
       expect(mockGetOidc).toHaveBeenCalled()
       expect(
-        (await mockGetOidc.mock.results[0].value).login
+        (await mockGetOidc.mock.results[0].value).login,
       ).not.toHaveBeenCalled()
     })
 
@@ -33,7 +34,7 @@ describe('userAuthentication thunks', () => {
         Promise.resolve({
           isUserLoggedIn: false,
           login: mockLogin,
-        } as unknown as Oidc)
+        } as unknown as Oidc),
       )
 
       await thunks.loginIfNotLoggedIn()(
@@ -41,7 +42,7 @@ describe('userAuthentication thunks', () => {
         null as any,
         {
           getOidc: mockGetOidc,
-        } as any
+        } as any,
       )
 
       expect(mockGetOidc).toHaveBeenCalled()

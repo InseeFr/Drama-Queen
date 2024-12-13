@@ -1,7 +1,8 @@
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
 import type { Overview, OverviewItem } from '../../lunaticType'
 

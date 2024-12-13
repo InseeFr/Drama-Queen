@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { paradataSchema } from './paradataSchema'
 
 describe('eventSchema', () => {
@@ -31,7 +32,7 @@ describe('eventSchema', () => {
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error.issues[0].message).toContain(
-        "Invalid enum value. Expected 'click' | 'session-started' | 'orchestrator-create', received 'invalid-type'"
+        "Invalid enum value. Expected 'click' | 'session-started' | 'orchestrator-create', received 'invalid-type'",
       )
     }
   })
@@ -46,7 +47,7 @@ describe('eventSchema', () => {
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error.issues[0].message).toContain(
-        'Number must be greater than or equal to 0'
+        'Number must be greater than or equal to 0',
       )
     }
   })

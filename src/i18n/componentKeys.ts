@@ -1,4 +1,5 @@
 import { declareComponentKeys } from 'i18nifty'
+
 import type {
   EnvValuesMessage,
   ErrorMessage,

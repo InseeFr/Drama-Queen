@@ -1,5 +1,7 @@
-import { useEffect, type PropsWithChildren } from 'react'
 import { matchRoutes, useLocation, useNavigate } from 'react-router-dom'
+
+import { type PropsWithChildren, useEffect } from 'react'
+
 import { routes } from '../routing/routes'
 
 export function NavigationManager({ children }: PropsWithChildren) {
@@ -27,7 +29,7 @@ export function NavigationManager({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent('[Drama Queen] navigated', { detail: location.pathname })
+      new CustomEvent('[Drama Queen] navigated', { detail: location.pathname }),
     )
   }, [location])
 
