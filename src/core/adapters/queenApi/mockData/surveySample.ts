@@ -1,4 +1,4 @@
-import type { Questionnaire } from 'core/model/Questionnaire'
+import type { Questionnaire } from '@/core/model/Questionnaire'
 
 export const surveySample = {
   componentType: 'Questionnaire',

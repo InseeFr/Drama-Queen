@@ -1,8 +1,10 @@
-import { prCore } from 'createCore'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { prCore } from '@/createCore'
+
 import { protectedRouteLoader } from './protectedLoader'
 
-vi.mock('createCore', () => ({
+vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       userAuthentication: {

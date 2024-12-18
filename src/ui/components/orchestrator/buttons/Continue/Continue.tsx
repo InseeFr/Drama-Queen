@@ -2,8 +2,10 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
+
+import { useTranslation } from '@/i18n'
+
 import { ShortCut } from '../ShortCut/ShortCut'
-import { useTranslation } from 'i18n'
 
 type ContinueProps = {
   label: string

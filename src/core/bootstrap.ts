@@ -1,9 +1,11 @@
-import { usecases } from './usecases'
-import { createCore, type GenericCore } from 'redux-clean-architecture'
-import type { Oidc } from 'core/ports/Oidc'
-import type { DataStore } from 'core/ports/DataStore'
-import type { QueenApi } from 'core/ports/QueenApi'
+import { type GenericCore, createCore } from 'redux-clean-architecture'
+
+import type { DataStore } from '@/core/ports/DataStore'
+import type { Oidc } from '@/core/ports/Oidc'
+import type { QueenApi } from '@/core/ports/QueenApi'
+
 import type { LocalSyncStorage } from './ports/LocalSyncStorage'
+import { usecases } from './usecases'
 
 type ParamsOfBootstrapCore = {
   apiUrl: string
@@ -30,16 +32,16 @@ export type Thunks = Core['types']['Thunks']
 export type CreateEvt = Core['types']['CreateEvt']
 
 export async function bootstrapCore(
-  params: ParamsOfBootstrapCore
+  params: ParamsOfBootstrapCore,
 ): Promise<{ core: Core }> {
   const { apiUrl, oidcParams } = params
 
   const getOidc = await (async () => {
     if (oidcParams === undefined || oidcParams.issuerUri === '') {
-      const { createOidc } = await import('core/adapters/oidc/mock')
+      const { createOidc } = await import('@/core/adapters/oidc/mock')
       return createOidc({ isUserLoggedIn: true })
     }
-    const { createOidc } = await import('core/adapters/oidc/default')
+    const { createOidc } = await import('@/core/adapters/oidc/default')
 
     return createOidc({
       issuerUri: oidcParams.issuerUri,
@@ -50,11 +52,11 @@ export async function bootstrapCore(
   const queenApi = await (async () => {
     if (apiUrl === '') {
       // When no apiUrl is provided, we use the mock
-      const { createApiClient } = await import('core/adapters/queenApi/mock')
+      const { createApiClient } = await import('@/core/adapters/queenApi/mock')
       return createApiClient()
     }
 
-    const { createApiClient } = await import('core/adapters/queenApi/default')
+    const { createApiClient } = await import('@/core/adapters/queenApi/default')
 
     return createApiClient({
       apiUrl,
@@ -70,7 +72,9 @@ export async function bootstrapCore(
   })()
 
   const dataStore = await (async () => {
-    const { createDataStore } = await import('core/adapters/datastore/default')
+    const { createDataStore } = await import(
+      '@/core/adapters/datastore/default'
+    )
     /**
      * TODO : replace schema (There are impact on legacy queens)
     schema: {
@@ -91,7 +95,7 @@ export async function bootstrapCore(
 
   const localSyncStorage = await (async () => {
     const { createLocalSyncStorage } = await import(
-      'core/adapters/localSyncStorage/default'
+      '@/core/adapters/localSyncStorage/default'
     )
 
     return createLocalSyncStorage({ localStorageKey: 'QUEEN_SYNC_RESULT' })

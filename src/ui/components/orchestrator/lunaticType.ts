@@ -1,4 +1,4 @@
-import type { LunaticState, LunaticOptions } from '@inseefr/lunatic'
+import type { LunaticOptions, LunaticState } from '@inseefr/lunatic'
 
 type ItemOf<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never

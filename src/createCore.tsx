@@ -1,4 +1,4 @@
-import { createCoreProvider } from 'core'
+import { createCoreProvider } from '@/core'
 
 export const { CoreProvider, prCore } = createCoreProvider({
   apiUrl: import.meta.env.VITE_QUEEN_API_URL,

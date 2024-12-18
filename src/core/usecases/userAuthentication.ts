@@ -1,4 +1,4 @@
-import type { Thunks } from 'core/bootstrap'
+import type { Thunks } from '@/core/bootstrap'
 
 export const name = 'userAuthentication'
 

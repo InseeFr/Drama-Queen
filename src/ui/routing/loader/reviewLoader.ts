@@ -1,6 +1,7 @@
-import { prCore } from 'createCore'
 import { type LoaderFunctionArgs } from 'react-router-dom'
 import { assert } from 'tsafe'
+
+import { prCore } from '@/createCore'
 
 export async function reviewLoader({ params }: LoaderFunctionArgs) {
   const { userAuthentication } = (await prCore).functions

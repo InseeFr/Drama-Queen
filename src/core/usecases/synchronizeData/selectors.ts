@@ -1,7 +1,9 @@
-import type { State as RootState } from 'core/bootstrap'
 import { createSelector } from 'redux-clean-architecture'
-import { name } from './state'
 import { assert } from 'tsafe/assert'
+
+import type { State as RootState } from '@/core/bootstrap'
+
+import { name } from './state'
 
 const state = (rootState: RootState) => rootState[name]
 
@@ -82,7 +84,7 @@ const main = createSelector(
     nomenclatureProgress,
     surveyProgress,
     externalResourcesProgress,
-    uploadProgress
+    uploadProgress,
   ) => {
     switch (state.stateDescription) {
       case 'not running':
@@ -108,7 +110,7 @@ const main = createSelector(
             }
         }
     }
-  }
+  },
 )
 
 export const selectors = {

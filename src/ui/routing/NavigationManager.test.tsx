@@ -1,11 +1,12 @@
-import { describe, it, vi, expect, beforeEach, afterEach } from 'vitest'
 import { render } from '@testing-library/react'
 import {
-  matchRoutes,
   MemoryRouter,
+  matchRoutes,
   useLocation,
   useNavigate,
 } from 'react-router-dom'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { NavigationManager } from './NavigationManager'
 
 vi.mock('react-router-dom', async () => {
@@ -45,7 +46,7 @@ describe('NavigationManager', () => {
     useLocationMock.mockReturnValue(mockLocation)
     useNavigateMock.mockImplementation(() => mockNavigate)
     matchRoutesMock.mockImplementation(
-      (routes, { pathname }) => pathname === '/same-path'
+      (routes, { pathname }) => pathname === '/same-path',
     )
 
     render(
@@ -53,7 +54,7 @@ describe('NavigationManager', () => {
         <NavigationManager>
           <div>Children</div>
         </NavigationManager>
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     const event = new CustomEvent('[Pearl] navigated', { detail: '/same-path' })
@@ -74,11 +75,11 @@ describe('NavigationManager', () => {
         <NavigationManager>
           <div>Children</div>
         </NavigationManager>
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(customEventSpy).toHaveBeenCalledWith(
-      new CustomEvent('[Drama Queen] navigated', { detail: '/test-path' })
+      new CustomEvent('[Drama Queen] navigated', { detail: '/test-path' }),
     )
   })
 })

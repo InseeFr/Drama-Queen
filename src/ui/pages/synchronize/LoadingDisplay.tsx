@@ -1,9 +1,11 @@
-import { Fragment } from 'react'
 import LinearProgress from '@mui/material/LinearProgress'
-import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
-import { useTranslation } from 'i18n'
+
+import { Fragment } from 'react'
+
+import { useTranslation } from '@/i18n'
 
 type LoadingDisplayProps = {
   syncStepTitle: string

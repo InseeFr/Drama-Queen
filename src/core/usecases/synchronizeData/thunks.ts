@@ -1,14 +1,16 @@
-import type { Thunks } from 'core/bootstrap'
-import { actions, name } from './state'
 import { AxiosError } from 'axios'
-import type { Questionnaire } from 'core/model'
+
+import type { Thunks } from '@/core/bootstrap'
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
+import type { Questionnaire } from '@/core/model'
 import {
   getExternalQuestionnaireFiltered,
   getExternalQuestionnaires,
   getOldExternalCacheNames,
   getResourcesFromExternalQuestionnaire,
-} from 'core/tools/externalResources'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+} from '@/core/tools/externalResources'
+
+import { actions, name } from './state'
 
 const EXTERNAL_RESOURCES_ROOT_CACHE_NAME = 'cache-root-external'
 
@@ -42,14 +44,14 @@ export const thunks = {
         const questionnaireIds = [
           ...new Set(
             campaigns.map(({ questionnaireIds }) => questionnaireIds).flat() ??
-              []
+              [],
           ),
         ]
 
         dispatch(
           actions.setDownloadTotalSurvey({
             totalSurvey: questionnaireIds.length,
-          })
+          }),
         )
 
         /*
@@ -71,15 +73,15 @@ export const thunks = {
               })
               .catch(() => {
                 console.error(
-                  ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`
+                  ` Questionnaire : An error occurred and we were unable to retrieve survey ${questionnaireId}`,
                 )
                 return {
                   success: false as const,
                   questionnaireId,
                   questionnaire: undefined,
                 }
-              })
-          )
+              }),
+          ),
         )
 
         const { questionnaireIdInSuccess, questionnaires } =
@@ -94,7 +96,7 @@ export const thunks = {
             { questionnaireIdInSuccess: [], questionnaires: [] } as {
               questionnaireIdInSuccess: string[]
               questionnaires: Questionnaire[]
-            }
+            },
           )
 
         /*
@@ -109,7 +111,7 @@ export const thunks = {
                 dispatch(
                   actions.updateDownloadTotalSurveyUnit({
                     totalSurveyUnit: arrayOfIds.length,
-                  })
+                  }),
                 )
                 return Promise.all(
                   arrayOfIds.map(({ id }) =>
@@ -118,7 +120,7 @@ export const thunks = {
                       .then((surveyUnit) => {
                         dataStore.updateSurveyUnit(surveyUnit)
                         return questionnaireIdInSuccess.includes(
-                          surveyUnit.questionnaireId
+                          surveyUnit.questionnaireId,
                         )
                       })
                       .then((isSurveyWellDownload) => {
@@ -135,16 +137,16 @@ export const thunks = {
                         ) {
                           console.error(
                             `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
-                            error
+                            error,
                           )
                           return
                         }
                         throw error
-                      })
-                  )
+                      }),
+                  ),
                 )
-              })
-          )
+              }),
+          ),
         )
 
         /*
@@ -155,13 +157,13 @@ export const thunks = {
           questionnaires
             .map((q) => q?.suggesters)
             .flat()
-            .map((suggester) => suggester?.name)
+            .map((suggester) => suggester?.name),
         )
 
         dispatch(
           actions.setDownloadTotalNomenclature({
             totalNomenclature: suggestersNames.length,
-          })
+          }),
         )
 
         //We don't store the data, but instead, we simply initiate the request for the service worker to cache the response
@@ -172,13 +174,13 @@ export const thunks = {
               .catch((error) => {
                 console.error(
                   `Nomenclature : An error occurred and we were unable to retrieve nomenclature ${nomenclatureId}`,
-                  error
+                  error,
                 )
               })
               .finally(() => {
                 dispatch(actions.downloadNomenclatureCompleted())
-              })
-          )
+              }),
+          ),
         )
 
         /*
@@ -197,7 +199,7 @@ export const thunks = {
               ) {
                 console.error(
                   `An error occurred while fetching external questionnaires list`,
-                  error
+                  error,
                 )
               }
               throw error
@@ -206,14 +208,14 @@ export const thunks = {
           const { neededQuestionnaires, notNeededQuestionnaires } =
             getExternalQuestionnaireFiltered(
               questionnaireIdInSuccess,
-              externalQuestionnaires
+              externalQuestionnaires,
             )
 
           // set the total of needed external questionnaires for progress bar
           dispatch(
             actions.setDownloadTotalExternalResources({
               totalExternalResources: neededQuestionnaires.length,
-            })
+            }),
           )
 
           // add in cache the missing external resources for needed questionnaires
@@ -221,22 +223,22 @@ export const thunks = {
             neededQuestionnaires.map(async (questionnaire) => {
               await getResourcesFromExternalQuestionnaire(questionnaire)
                 .then(() =>
-                  dispatch(actions.downloadExternalResourceCompleted())
+                  dispatch(actions.downloadExternalResourceCompleted()),
                 )
                 .catch((error) =>
                   console.error(
                     `An error occurred while fetching external resources of questionnaire ${questionnaire.id}`,
-                    error
-                  )
+                    error,
+                  ),
                 )
-            })
+            }),
           )
 
           // delete the cache of every not needed external questionnaires
           const prDeleteExternalResources = Promise.all(
             notNeededQuestionnaires.map((questionnaire) =>
-              caches.delete(questionnaire.cacheName)
-            )
+              caches.delete(questionnaire.cacheName),
+            ),
           )
 
           // delete the root-cache of external resources if no external questionnaire is needed
@@ -250,7 +252,7 @@ export const thunks = {
             await getOldExternalCacheNames(neededQuestionnaires)
 
           const prDeleteOldExternalCaches = Promise.all(
-            oldExternalCacheNames.map((cacheName) => caches.delete(cacheName))
+            oldExternalCacheNames.map((cacheName) => caches.delete(cacheName)),
           )
 
           // We await untill the promises for external resources are finished
@@ -269,7 +271,7 @@ export const thunks = {
       } catch (error) {
         console.error(
           'An unknown error occurred while we were fetching data so we stop the synchronization.',
-          error
+          error,
         )
         localSyncStorage.addError(true)
         dispatch(actions.downloadFailed())
@@ -317,13 +319,13 @@ export const thunks = {
                     .postSurveyUnitInTemp(surveyUnit)
                     .then(() =>
                       localSyncStorage.addIdToSurveyUnitsInTempZone(
-                        surveyUnit.id
-                      )
+                        surveyUnit.id,
+                      ),
                     )
                     .catch((postError: Error) => {
                       console.error(
                         'Error: Unable to post surveyUnit in tempZone',
-                        postError
+                        postError,
                       )
                       throw postError
                     })
@@ -337,7 +339,7 @@ export const thunks = {
               .catch((error) => {
                 console.error('Error: Unable to upload data', error)
                 throw error
-              })
+              }),
           )
           await Promise.all(surveyUnitPromises)
         }

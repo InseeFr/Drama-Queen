@@ -1,8 +1,10 @@
-import Button from '@mui/material/Button'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
+import Button from '@mui/material/Button'
 import { tss } from 'tss-react/mui'
+
+import { useTranslation } from '@/i18n'
+
 import type { GoToPage, OverviewItem } from '../lunaticType'
-import { useTranslation } from 'i18n'
 
 type BreadCrumbProps = {
   sequence: OverviewItem | undefined
@@ -26,7 +28,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
         <Button
           className={cx(
             classes.breadcrumbButton,
-            !subSequence && classes.lastButton
+            !subSequence && classes.lastButton,
           )}
           title={`${t('goToSequence')} ${sequence.label}`}
           disableRipple
@@ -40,7 +42,7 @@ export function BreadCrumb(props: BreadCrumbProps) {
           className={cx(
             classes.breadcrumbButton,
             classes.subsequenceButton,
-            classes.lastButton
+            classes.lastButton,
           )}
           title={`${t('goToSubSequence')} ${subSequence.label}`}
           disableRipple

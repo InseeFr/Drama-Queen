@@ -8,12 +8,10 @@ export type SurveyUnit = {
   questionnaireId: string
   personalization?: { name: string; value: string }[]
   data: SurveyUnitData
-  comment?: {} | undefined
-  stateData?:
-    | {
-        state: QuestionnaireState
-        date: number
-        currentPage: PageTag
-      }
-    | undefined
+  comment?: { [key: string]: unknown }
+  stateData?: {
+    state: QuestionnaireState
+    date: number
+    currentPage: PageTag
+  }
 }

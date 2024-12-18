@@ -3,7 +3,7 @@
  */
 
 importScripts(
-  'https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js'
+  'https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js',
 )
 
 /**
@@ -51,7 +51,7 @@ registerRoute(
         statuses: [0, 200],
       }),
     ],
-  })
+  }),
 )
 
 // used by synchro for getting questionnaires
@@ -64,7 +64,7 @@ registerRoute(
         statuses: [0, 200],
       }),
     ],
-  })
+  }),
 )
 
 // used by synchro for getting nomenclatures
@@ -77,14 +77,14 @@ registerRoute(
         statuses: [0, 200],
       }),
     ],
-  })
+  }),
 )
 
 const dramaPrecacheController = async () => {
   const cache = await caches.open(dramaQueenCacheName)
   const urlsToPrecache = self.__WB_MANIFEST.reduce(
     (_, { url }) => [..._, `${self._DRAMAQUEEN_URL}/${url}`],
-    []
+    [],
   )
   await cache.addAll(urlsToPrecache)
 }

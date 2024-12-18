@@ -1,12 +1,11 @@
 // utils.ts
-
 //https://stackoverflow.com/a/74937950/18201973
 import {
+  type LoaderFunction,
+  type LoaderFunctionArgs,
   Await as RrdAwait,
   defer,
-  type LoaderFunctionArgs,
   useLoaderData as useRrdLoaderData,
-  type LoaderFunction,
 } from 'react-router-dom'
 
 export function useLoaderData<
@@ -42,7 +41,7 @@ export function useLoaderData<
  *
  */
 export function deferredLoader<TData extends Record<string, unknown>>(
-  dataFunc: (args: LoaderFunctionArgs) => TData
+  dataFunc: (args: LoaderFunctionArgs) => TData,
 ) {
   return (args: LoaderFunctionArgs) =>
     defer(dataFunc(args)) as Omit<ReturnType<typeof defer>, 'data'> & {

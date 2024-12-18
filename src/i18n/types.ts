@@ -1,4 +1,5 @@
 import type { GenericTranslations } from 'i18nifty'
+
 import type {
   envValuesMessage,
   errorMessage,
@@ -7,7 +8,7 @@ import type {
   synchronizeMessage,
   visualizeMessage,
 } from './componentKeys'
-import type { fallbackLanguage, Language } from './i18n'
+import type { Language, fallbackLanguage } from './i18n'
 
 export type ErrorMessage =
   | 'error'

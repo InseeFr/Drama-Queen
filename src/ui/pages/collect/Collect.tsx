@@ -1,7 +1,7 @@
-import { useCore } from 'core'
-import { Orchestrator } from 'ui/components/orchestrator/Orchestrator'
-import type { collectLoader } from 'ui/routing/loader'
-import { useLoaderData } from 'ui/routing/utils'
+import { useCore } from '@/core'
+import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
+import type { collectLoader } from '@/ui/routing/loader'
+import { useLoaderData } from '@/ui/routing/utils'
 
 export function Collect() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

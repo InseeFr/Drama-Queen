@@ -1,4 +1,5 @@
-import { LUNATIC_MODEL_VERSION_BREAKING } from 'core/constants'
+import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
+
 import type { Translations } from '../types'
 
 export const translations: Translations<'en'> = {

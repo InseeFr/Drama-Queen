@@ -1,7 +1,8 @@
 import { createUsecaseActions } from 'redux-clean-architecture'
-import { id } from 'tsafe/id'
 import { assert } from 'tsafe/assert'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
+import { id } from 'tsafe/id'
+
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
 
 export type State = State.NotRunning | State.Running
 
@@ -43,7 +44,7 @@ export const { reducer, actions } = createUsecaseActions({
   initialState: id<State>(
     id<State.NotRunning>({
       stateDescription: 'not running',
-    })
+    }),
   ),
   reducers: {
     runningDownload: () =>
@@ -62,7 +63,7 @@ export const { reducer, actions } = createUsecaseActions({
           // undefined : external synchro is not triggered so we don't want the progress bar
           totalExternalResources: EXTERNAL_RESOURCES_URL ? Infinity : undefined,
           externalResourcesCompleted: 0,
-        })
+        }),
       ),
     runningUpload: () =>
       id<State>(
@@ -71,11 +72,11 @@ export const { reducer, actions } = createUsecaseActions({
           type: 'upload',
           total: Infinity,
           surveyUnitCompleted: 0,
-        })
+        }),
       ),
     updateDownloadTotalSurveyUnit: (
       state,
-      { payload }: { payload: { totalSurveyUnit: number } }
+      { payload }: { payload: { totalSurveyUnit: number } },
     ) => {
       const { totalSurveyUnit } = payload
       assert(state.stateDescription === 'running' && state.type === 'download')
@@ -96,7 +97,7 @@ export const { reducer, actions } = createUsecaseActions({
     },
     setDownloadTotalSurvey: (
       state,
-      { payload }: { payload: { totalSurvey: number } }
+      { payload }: { payload: { totalSurvey: number } },
     ) => {
       const { totalSurvey } = payload
       assert(state.stateDescription === 'running' && state.type === 'download')
@@ -111,7 +112,7 @@ export const { reducer, actions } = createUsecaseActions({
     },
     setDownloadTotalNomenclature: (
       state,
-      { payload }: { payload: { totalNomenclature: number } }
+      { payload }: { payload: { totalNomenclature: number } },
     ) => {
       const { totalNomenclature } = payload
       assert(state.stateDescription === 'running' && state.type === 'download')
@@ -126,7 +127,7 @@ export const { reducer, actions } = createUsecaseActions({
     },
     setDownloadTotalExternalResources: (
       state,
-      { payload }: { payload: { totalExternalResources: number } }
+      { payload }: { payload: { totalExternalResources: number } },
     ) => {
       const { totalExternalResources } = payload
       assert(state.stateDescription === 'running' && state.type === 'download')

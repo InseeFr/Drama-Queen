@@ -1,4 +1,5 @@
 import { createBrowserRouter, createMemoryRouter } from 'react-router-dom'
+
 import { routes } from './routes'
 
 export type RoutingStrategy = 'memory' | 'browser'

@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
-import { unsubscribeOldSW } from 'unsubscribe_old_sw'
-import { CoreProvider } from 'createCore'
-import { createRouter, type RoutingStrategy } from 'ui/routing/createRouter'
-import { CenteredSpinner } from 'ui/components/CenteredSpinner'
+
+import { CoreProvider } from '@/createCore'
+import { CenteredSpinner } from '@/ui/components/CenteredSpinner'
+import { type RoutingStrategy, createRouter } from '@/ui/routing/createRouter'
+import { unsubscribeOldSW } from '@/unsubscribe_old_sw'
 
 const mount = ({
   mountPoint,
@@ -24,7 +25,7 @@ const mount = ({
   root.render(
     <CoreProvider fallback={<CenteredSpinner />}>
       <RouterProvider router={router} />
-    </CoreProvider>
+    </CoreProvider>,
   )
 
   return () => queueMicrotask(() => root.unmount())

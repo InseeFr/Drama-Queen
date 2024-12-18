@@ -1,9 +1,11 @@
-import { vi, describe, beforeEach, it, expect } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import type { EventQuestionnaireState } from '@/core/model/QuestionnaireState'
+
 import {
-  sendQuestionnaireStateChangedEvent,
   sendCloseEvent,
+  sendQuestionnaireStateChangedEvent,
 } from './eventSender'
-import type { EventQuestionnaireState } from 'core/model/QuestionnaireState'
 
 describe('Event Dispatchers', () => {
   beforeEach(() => {
@@ -27,7 +29,7 @@ describe('Event Dispatchers', () => {
           surveyUnit: surveyUnitId,
           state: state,
         },
-      })
+      }),
     )
   })
 
@@ -46,7 +48,7 @@ describe('Event Dispatchers', () => {
           command: 'CLOSE_QUEEN',
           surveyUnit: surveyUnitId,
         },
-      })
+      }),
     )
   })
 })

@@ -1,5 +1,7 @@
-import { useCallback, useRef } from 'react'
 import { useLunatic } from '@inseefr/lunatic'
+
+import { useCallback, useRef } from 'react'
+
 import { countMissingResponseInPage } from './functions'
 
 type PartialLunatic = Pick<
@@ -19,7 +21,7 @@ export function useAutoNext() {
         name: string
         value: any
         iteration?: number[]
-      }[]
+      }[],
     ) => {
       if (ref.current === null) return
       const { getComponents, goNextPage } = ref.current
@@ -29,7 +31,7 @@ export function useAutoNext() {
       const hasMissingValue = valueChange.some(
         (variable) =>
           variable.name.includes('_MISSING') &&
-          ['DK', 'RF'].includes(variable.value)
+          ['DK', 'RF'].includes(variable.value),
       )
       if (
         // There is only one "don't know / refusal" variable on the page
@@ -38,13 +40,13 @@ export function useAutoNext() {
         (hasMissingValue ||
           (firstComponent.componentType &&
             ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
-              firstComponent.componentType
+              firstComponent.componentType,
             )))
       ) {
         goNextPage()
       }
     },
-    []
+    [],
   )
 
   return {

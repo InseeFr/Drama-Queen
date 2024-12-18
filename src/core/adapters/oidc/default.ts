@@ -1,5 +1,7 @@
-import type { Oidc } from 'core/ports/Oidc'
 import { createOidc as createOidcSpa } from 'oidc-spa'
+
+import type { Oidc } from '@/core/ports/Oidc'
+
 import { getMockedOidc } from './mock'
 
 export function createOidc(params: {

@@ -6,7 +6,7 @@ export const nomenclatureSchema = z.array(
       id: z.string(),
       label: z.string(),
     })
-    .catchall(z.string())
+    .catchall(z.string()),
 )
 
 export const requiredNomenclaturesSchema = z.string().array()

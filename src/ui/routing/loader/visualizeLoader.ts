@@ -1,5 +1,6 @@
-import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
+
+import { prCore } from '@/createCore'
 
 export async function visualizeLoader({ request }: LoaderFunctionArgs) {
   const { visualizeSurvey } = (await prCore).functions

@@ -1,4 +1,14 @@
-import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest'
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
+import type {
+  ExternalQuestionnaire,
+  ExternalQuestionnaires,
+  ExternalQuestionnairesFiltered,
+  ExternalQuestionnairesWrapper,
+  Manifest,
+} from '@/core/model'
+
 import {
   filterTransformedManifest,
   getExternalQuestionnaireFiltered,
@@ -7,14 +17,6 @@ import {
   getTransformedManifest,
 } from './externalResources'
 import { fetchUrl } from './fetchUrl'
-import type {
-  ExternalQuestionnaire,
-  ExternalQuestionnaires,
-  ExternalQuestionnairesFiltered,
-  ExternalQuestionnairesWrapper,
-  Manifest,
-} from 'core/model'
-import { EXTERNAL_RESOURCES_URL } from 'core/constants'
 
 vi.mock('./fetchUrl', () => {
   return {
@@ -139,7 +141,7 @@ describe('filterTransformedManifest', () => {
 
     const result = await filterTransformedManifest(
       cacheName,
-      transformedManifest
+      transformedManifest,
     )
 
     const expectedResult = [
@@ -164,7 +166,7 @@ describe('filterTransformedManifest', () => {
 
     const result = await filterTransformedManifest(
       cacheName,
-      transformedManifest
+      transformedManifest,
     )
 
     expect(result).toEqual(transformedManifest)
@@ -176,7 +178,7 @@ describe('filterTransformedManifest', () => {
 
     const result = await filterTransformedManifest(
       cacheName,
-      transformedManifest
+      transformedManifest,
     )
 
     expect(result).toEqual([])

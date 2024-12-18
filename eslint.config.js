@@ -1,30 +1,45 @@
+import js from '@eslint/js'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
-import pluginJs from '@eslint/js'
 import tseslint from 'typescript-eslint'
-import pluginReact from 'eslint-plugin-react'
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
-export default [
-  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat['jsx-runtime'],
-  eslintPluginPrettierRecommended,
+export default tseslint.config(
   {
-    settings: { react: { version: '18.3' } },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-namespace': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-empty-object-type': 'off',
-    },
+    ignores: ['dist', 'src/vite-env.d.ts'],
+  },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
+      ecmaVersion: 2020,
       globals: {
+        ...globals.browser,
+        ...globals.worker,
         importScripts: 'readonly',
         workbox: 'readonly',
       },
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      // see https://typescript-eslint.netlify.app/rules/no-unused-vars/
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/no-explicit-any': ['off'],
+      '@typescript-eslint/no-namespace': ['off'],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
     },
   },
-]
+)

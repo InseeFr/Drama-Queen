@@ -18,7 +18,7 @@ Montée de version Lunatic 3.4.8
 
 #### Nouvelles fonctionnalités
 
-- prise en compte d'un module applicatif externe (gide) : 
+- prise en compte d'un module applicatif externe (gide) :
   - import de script externe
   - récupération de ressources externes lors de la synchronisation (y compris fichiers audio)
   - ajout de variables externes "globale" dans les données d'une unité enquêtée
@@ -200,7 +200,6 @@ Montée de version Lunatic 3.0.6
 - refactorisation de useAutoNext, dû à la montée de version Lunatic
 - refactorisation du fil d'Ariane utilisant le composant Overview, dû à la montée de version Lunatic
 - suppression des workers pour les suggesters, dû à la montée de version Lunatic
-
 
 #### Montée de version Lunatic
 

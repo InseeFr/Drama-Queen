@@ -1,10 +1,13 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
+
 import { useState } from 'react'
+
+import { useTranslation } from '@/i18n'
+import { Modal } from '@/ui/components/Modal'
+
 import { MenuNavigationButton } from '../../buttons/MenuNavigationButton/MenuNavigationButton'
-import { Modal } from 'ui/components/Modal'
-import { useTranslation } from 'i18n'
 
 type StopNavigationProps = {
   quit: () => void

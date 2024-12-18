@@ -1,5 +1,6 @@
-import { vi, describe, beforeEach, it, expect } from 'vitest'
 import axios from 'axios'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { fetchUrl } from './fetchUrl'
 
 vi.mock('axios')

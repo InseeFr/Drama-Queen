@@ -10,7 +10,7 @@ export function getSearchParams(data: FormValues) {
   }
   // keep only form values that are filled
   const searchParams = Object.fromEntries(
-    Object.entries(stringParams).filter(([, value]) => value !== '')
+    Object.entries(stringParams).filter(([, value]) => value !== ''),
   )
 
   return searchParams

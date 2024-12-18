@@ -1,6 +1,6 @@
-import { LUNATIC_MODEL_VERSION_BREAKING } from 'core/constants'
-import type { Questionnaire } from 'core/model'
-import { getTranslation } from 'i18n'
+import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
+import type { Questionnaire } from '@/core/model'
+import { getTranslation } from '@/i18n'
 
 const { t } = getTranslation('errorMessage')
 

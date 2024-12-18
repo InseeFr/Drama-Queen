@@ -1,5 +1,7 @@
 import { createI18nApi, declareComponentKeys } from 'i18nifty'
+
 import type { ComponentKey } from './types'
+
 export { declareComponentKeys }
 
 const languages = ['fr', 'en'] as const
@@ -24,5 +26,5 @@ export const {
   {
     en: () => import('./resources/en').then(({ translations }) => translations),
     fr: () => import('./resources/fr').then(({ translations }) => translations),
-  }
+  },
 )

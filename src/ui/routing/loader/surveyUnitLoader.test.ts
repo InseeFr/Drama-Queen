@@ -1,14 +1,16 @@
-import { prCore } from 'createCore'
 import type { LoaderFunctionArgs } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { surveyUnitLoader } from './surveyUnitLoader'
 import { redirect } from 'react-router-dom'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { prCore } from '@/createCore'
+
+import { surveyUnitLoader } from './surveyUnitLoader'
 
 vi.mock('react-router-dom', () => ({
   redirect: vi.fn(),
 }))
 
-vi.mock('createCore', () => ({
+vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       collectSurvey: {
@@ -40,12 +42,12 @@ describe('collectLoader', () => {
 
     ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId = mockLoader
 
-    const result = await surveyUnitLoader({
+    await surveyUnitLoader({
       params: { surveyUnitId: 1 },
     } as unknown as LoaderFunctionArgs)
 
     expect(redirect).toHaveBeenCalledWith(
-      '/questionnaire/questionnaireId/survey-unit/1'
+      '/questionnaire/questionnaireId/survey-unit/1',
     )
   })
 
@@ -57,7 +59,7 @@ describe('collectLoader', () => {
     await await expect(
       surveyUnitLoader({
         params: {},
-      } as unknown as LoaderFunctionArgs)
+      } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })
 })

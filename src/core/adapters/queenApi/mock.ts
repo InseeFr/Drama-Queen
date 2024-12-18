@@ -1,6 +1,7 @@
-import type { QueenApi } from 'core/ports/QueenApi'
+import type { SurveyUnit } from '@/core/model'
+import type { QueenApi } from '@/core/ports/QueenApi'
+
 import { surveySample } from './mockData/surveySample'
-import type { SurveyUnit } from 'core/model'
 
 export function createApiClient(): QueenApi {
   return {
@@ -15,13 +16,13 @@ export function createApiClient(): QueenApi {
       Promise.resolve(createSUMocked({ idSu: idSurveyUnit })),
     putSurveyUnit: (surveyUnit) =>
       Promise.resolve(
-        console.log('putSurveyUnit', `id: ${surveyUnit.id}`, surveyUnit)
+        console.log('putSurveyUnit', `id: ${surveyUnit.id}`, surveyUnit),
       ),
     putSurveyUnitsData: (surveyUnitsData) =>
       Promise.resolve(console.table(surveyUnitsData)),
     postSurveyUnitInTemp: (surveyUnit) =>
       Promise.resolve(
-        console.log('postSurveyUnitInTemp', `id: ${surveyUnit.id}`, surveyUnit)
+        console.log('postSurveyUnitInTemp', `id: ${surveyUnit.id}`, surveyUnit),
       ),
     getCampaigns: () =>
       Promise.resolve([
