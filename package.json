@@ -9,6 +9,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
     "build": "tsc && vite build",
+    "serve": "vite serve --port 5001 --strictPort",
     "postbuild": "node build/remote-env.cjs remoteEntry.js",
     "preview": "vite preview --port 5001 --strictPort",
     "_format": "prettier --ignore-unknown .",
