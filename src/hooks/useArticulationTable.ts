@@ -1,6 +1,7 @@
 import { type LunaticSource, getArticulation } from '@inseefr/lunatic'
 
-import { type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode } from 'react'
+import type React from 'react'
 
 import { prCore } from '@/createCore'
 
@@ -17,11 +18,16 @@ type TableData = {
 /**
  * Generates table data for articulation
  * Used to get the progress of a surveys containing a roundabout
+ *
+ * To ensure the host use the same version of React we require it as a dependency of this function
  */
-export function useArticulationTable(surveyUnitId: string) {
-  const [data, setData] = useState<TableData | null>(null)
+export function useArticulationTable(
+  react: typeof React,
+  surveyUnitId: string,
+) {
+  const [data, setData] = react.useState<TableData | null>(null)
 
-  useEffect(() => {
+  react.useEffect(() => {
     ;(async () => {
       // Retrieve questionnaire source and survey unit data
       const { collectSurvey } = (await prCore).functions
