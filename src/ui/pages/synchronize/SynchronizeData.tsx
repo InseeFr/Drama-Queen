@@ -46,6 +46,7 @@ export function SynchronizeData() {
 
   return (
     <>
+      State : {JSON.stringify({ isUploading, isDownloading })}
       {isUploading && (
         <LoadingDisplay
           progressBars={[

@@ -15,6 +15,7 @@ export function Collect() {
 
   return (
     <Orchestrator
+      initialPage={loaderData.page}
       source={loaderData.questionnaire}
       surveyUnit={loaderData.surveyUnit}
       readonly={false}

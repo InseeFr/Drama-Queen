@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     viteEnvs({
-      computedEnv: async ({ resolvedConfig }) => {
+      computedEnv: async () => {
         const path = await import('path')
         const fs = await import('fs/promises')
 
@@ -32,6 +32,7 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './DramaIndex': './src/bootstrap.tsx',
+        './useArticulationTable': './src/hooks/useArticulationTable.ts',
       },
       shared: ['react', 'react-dom'],
     }),
