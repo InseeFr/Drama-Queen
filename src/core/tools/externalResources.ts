@@ -72,9 +72,9 @@ export async function getResourcesFromExternalQuestionnaire({
   callBackUnit,
 }: {
   questionnaire: ExternalQuestionnaire
-  callBackTotal: any
-  callBackReset: any
-  callBackUnit: any
+  callBackTotal: (total: number) => void
+  callBackReset: () => void
+  callBackUnit: () => void
 }): Promise<void> {
   const transformedManifest = await getTransformedManifest(questionnaire.id)
 
