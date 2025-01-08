@@ -83,7 +83,7 @@ export async function getResourcesFromExternalQuestionnaire({
     transformedManifest,
   )
 
-  const transformManifestFilteredChunked = chunk(
+  const transformManifestFilteredChunked = chunk<string>(
     filteredTransformedManifest,
     15,
   )
