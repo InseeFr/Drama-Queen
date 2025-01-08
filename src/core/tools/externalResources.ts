@@ -7,6 +7,7 @@ import type {
   Manifest,
 } from '@/core/model'
 
+import { chunk } from './array'
 import { fetchUrl } from './fetchUrl'
 
 const EXTERNAL_QUESTIONNAIRES_KEYWORD = 'gide'
@@ -64,9 +65,17 @@ export async function filterTransformedManifest(
 }
 
 // Cache every external resources (not already cached) for a particular questionnaire
-export async function getResourcesFromExternalQuestionnaire(
-  questionnaire: ExternalQuestionnaire,
-): Promise<void> {
+export async function getResourcesFromExternalQuestionnaire({
+  questionnaire,
+  callBackTotal,
+  callBackReset,
+  callBackUnit,
+}: {
+  questionnaire: ExternalQuestionnaire
+  callBackTotal: any
+  callBackReset: any
+  callBackUnit: any
+}): Promise<void> {
   const transformedManifest = await getTransformedManifest(questionnaire.id)
 
   const filteredTransformedManifest = await filterTransformedManifest(
@@ -74,8 +83,26 @@ export async function getResourcesFromExternalQuestionnaire(
     transformedManifest,
   )
 
-  const manifestCache = await caches.open(questionnaire.cacheName)
-  return await manifestCache.addAll(filteredTransformedManifest)
+  const transformManifestFilteredChunked = chunk(
+    filteredTransformedManifest,
+    15,
+  )
+  callBackReset()
+  callBackTotal(transformManifestFilteredChunked.length)
+
+  return await (transformManifestFilteredChunked || []).reduce(
+    async (previousPromise, subManifest) => {
+      await previousPromise
+
+      const putSubManifestInCache = async () => {
+        const cacheForManifest = await caches.open(questionnaire.cacheName)
+        await cacheForManifest.addAll(subManifest)
+        callBackUnit()
+      }
+      return putSubManifestInCache()
+    },
+    Promise.resolve(),
+  )
 }
 
 // Separate, from the list of external questionnaires, those that are needed and those that are not needed

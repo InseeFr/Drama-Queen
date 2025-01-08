@@ -18,6 +18,7 @@ export function SynchronizeData() {
     surveyProgress,
     surveyUnitProgress,
     externalResourcesProgress,
+    externalResourcesProgressCount,
     uploadProgress,
   } = useCoreState('synchronizeData', 'main')
 
@@ -51,7 +52,6 @@ export function SynchronizeData() {
           progressBars={[
             {
               progress: uploadProgress,
-              label: undefined,
             },
           ]}
           syncStepTitle={t('uploadingData')}
@@ -73,11 +73,17 @@ export function SynchronizeData() {
               label: t('surveyUnitsProgress'),
             },
             // render external resources progress bar only if there are external resources
-            ...(externalResourcesProgress !== undefined
+            ...(externalResourcesProgress !== undefined &&
+            externalResourcesProgressCount !== undefined
               ? [
                   {
                     progress: externalResourcesProgress,
                     label: t('externalResourcesProgress'),
+                    extraTitle: Number.isFinite(
+                      externalResourcesProgressCount.totalExternalResources,
+                    )
+                      ? `${externalResourcesProgressCount.externalResourcesCompleted} / ${externalResourcesProgressCount.totalExternalResources}`
+                      : undefined,
                   },
                 ]
               : []),
