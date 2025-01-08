@@ -11,7 +11,8 @@ type LoadingDisplayProps = {
   syncStepTitle: string
   progressBars: {
     progress: number
-    label: string | undefined
+    label?: string
+    extraTitle?: string
   }[]
 }
 
@@ -30,21 +31,22 @@ export function LoadingDisplay(props: LoadingDisplayProps) {
         </Typography>
       </Stack>
       <Stack spacing={2}>
-        {progressBars.map((bar) => (
-          <Fragment key={`${bar.label}-${bar.progress}`}>
+        {progressBars.map(({ label, progress, extraTitle }) => (
+          <Fragment key={`${label}-${progress}`}>
             <Stack spacing={1}>
-              {bar.label !== undefined && (
+              {label !== undefined && (
                 <Typography
                   variant="body2"
                   fontWeight="bold"
                   className={classes.lightText}
                 >
-                  {bar.label}
+                  {label}
+                  {extraTitle ? `: ${extraTitle}` : ''}
                 </Typography>
               )}
               <LinearProgress
                 variant="determinate"
-                value={bar.progress}
+                value={progress}
                 className={classes.progressBar}
               />
             </Stack>

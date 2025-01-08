@@ -47,16 +47,41 @@ const externalResourcesProgress = createSelector(downloadingState, (state) => {
     return undefined
   }
   // if there is no external resources, we don't show the progress bar
-  if (state.totalExternalResources === undefined) {
+  if (state.totalExternalResourcesByQuestionnaire === undefined) {
     return undefined
   }
   if (
-    state.externalResourcesCompleted === 0 &&
-    state.totalExternalResources === 0
+    state.externalResourcesByQuestionnaireCompleted === 0 &&
+    state.totalExternalResourcesByQuestionnaire === 0
   )
     return 100
-  return (state.externalResourcesCompleted * 100) / state.totalExternalResources
+  return (
+    (state.externalResourcesByQuestionnaireCompleted * 100) /
+    state.totalExternalResourcesByQuestionnaire
+  )
 })
+
+const externalResourcesProgressCount = createSelector(
+  downloadingState,
+  (state) => {
+    if (state === undefined) {
+      return undefined
+    }
+    // if there is no external resources, we don't show the progress bar
+    if (state.totalExternalResources === undefined) {
+      return undefined
+    }
+    if (
+      state.totalExternalResources === 0 &&
+      state.externalResourcesCompleted === 0
+    )
+      return undefined
+    return {
+      externalResourcesCompleted: state.externalResourcesCompleted,
+      totalExternalResources: state.totalExternalResources,
+    }
+  },
+)
 
 const uploadProgress = createSelector(state, (state) => {
   if (state.stateDescription !== 'running') {
@@ -77,6 +102,7 @@ const main = createSelector(
   nomenclatureProgress,
   surveyProgress,
   externalResourcesProgress,
+  externalResourcesProgressCount,
   uploadProgress,
   (
     state,
@@ -84,6 +110,7 @@ const main = createSelector(
     nomenclatureProgress,
     surveyProgress,
     externalResourcesProgress,
+    externalResourcesProgressCount,
     uploadProgress,
   ) => {
     switch (state.stateDescription) {
@@ -107,6 +134,7 @@ const main = createSelector(
               nomenclatureProgress,
               surveyProgress,
               externalResourcesProgress,
+              externalResourcesProgressCount,
             }
         }
     }

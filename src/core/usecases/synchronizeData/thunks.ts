@@ -219,19 +219,36 @@ export const thunks = {
           )
 
           // add in cache the missing external resources for needed questionnaires
-          const prGetExternalResources = Promise.all(
-            neededQuestionnaires.map(async (questionnaire) => {
-              await getResourcesFromExternalQuestionnaire(questionnaire)
-                .then(() =>
-                  dispatch(actions.downloadExternalResourceCompleted()),
-                )
+          const prGetExternalResources = (neededQuestionnaires || []).reduce(
+            async (previousPromise, questionnaire) => {
+              await previousPromise
+
+              return getResourcesFromExternalQuestionnaire({
+                questionnaire: questionnaire,
+                callBackTotal: (total: number) =>
+                  dispatch(
+                    actions.setDownloadTotalExternalResourcesByQuestionnaire({
+                      totalExternalResourcesByQuestionnaire: total,
+                    }),
+                  ),
+                callBackReset: () =>
+                  dispatch(actions.downloadExternalResourceReset()),
+                callBackUnit: () =>
+                  dispatch(
+                    actions.downloadExternalResourceByQuestionnaireCompleted(),
+                  ),
+              })
+                .then(() => {
+                  dispatch(actions.setDownloadExternalResourcesCompleted())
+                })
                 .catch((error) =>
                   console.error(
                     `An error occurred while fetching external resources of questionnaire ${questionnaire.id}`,
                     error,
                   ),
                 )
-            }),
+            },
+            Promise.resolve(),
           )
 
           // delete the cache of every not needed external questionnaires

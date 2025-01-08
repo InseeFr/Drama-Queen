@@ -32,6 +32,8 @@ export namespace State {
       nomenclatureCompleted: number
       totalSurvey: number
       surveyCompleted: number
+      totalExternalResourcesByQuestionnaire?: number
+      externalResourcesByQuestionnaireCompleted: number
       totalExternalResources?: number
       externalResourcesCompleted: number
     }
@@ -61,6 +63,10 @@ export const { reducer, actions } = createUsecaseActions({
           // for total external resources, we make difference for displaying progress bar between :
           // 0 : external synchro is triggered but there is no needed questionnaire so we want a fullfilled progress bar
           // undefined : external synchro is not triggered so we don't want the progress bar
+          totalExternalResourcesByQuestionnaire: EXTERNAL_RESOURCES_URL
+            ? Infinity
+            : undefined,
+          externalResourcesByQuestionnaireCompleted: 0,
           totalExternalResources: EXTERNAL_RESOURCES_URL ? Infinity : undefined,
           externalResourcesCompleted: 0,
         }),
@@ -136,11 +142,39 @@ export const { reducer, actions } = createUsecaseActions({
         totalExternalResources,
       }
     },
-    downloadExternalResourceCompleted: (state) => {
+    setDownloadExternalResourcesCompleted: (state) => {
       assert(state.stateDescription === 'running' && state.type === 'download')
       return {
         ...state,
         externalResourcesCompleted: state.externalResourcesCompleted + 1,
+      }
+    },
+    setDownloadTotalExternalResourcesByQuestionnaire: (
+      state,
+      {
+        payload,
+      }: { payload: { totalExternalResourcesByQuestionnaire: number } },
+    ) => {
+      const { totalExternalResourcesByQuestionnaire } = payload
+      assert(state.stateDescription === 'running' && state.type === 'download')
+      return {
+        ...state,
+        totalExternalResourcesByQuestionnaire,
+      }
+    },
+    downloadExternalResourceByQuestionnaireCompleted: (state) => {
+      assert(state.stateDescription === 'running' && state.type === 'download')
+      return {
+        ...state,
+        externalResourcesByQuestionnaireCompleted:
+          state.externalResourcesByQuestionnaireCompleted + 1,
+      }
+    },
+    downloadExternalResourceReset: (state) => {
+      assert(state.stateDescription === 'running' && state.type === 'download')
+      return {
+        ...state,
+        externalResourcesByQuestionnaireCompleted: 0,
       }
     },
     setUploadTotal: (state, { payload }: { payload: { total: number } }) => {
