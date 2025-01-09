@@ -40,13 +40,15 @@ export function createApiClient(): QueenApi {
   }
 }
 
+export const mockPrefixIdSu = 'idSU'
+
 function createSUMocked(props: {
   idSu?: string
   idCampaign?: string
 }): SurveyUnit {
   const { idSu = 'su1', idCampaign = 'campaign1' } = props
   return {
-    id: `idSU:${idSu}`,
+    id: `${mockPrefixIdSu}:${idSu}`,
     questionnaireId: `idCampaign${idCampaign}`,
     personalization: [],
     data: {

@@ -1,5 +1,6 @@
 import Dexie, { type Table } from 'dexie'
 
+import { mockPrefixIdSu } from '@/core/adapters/queenApi/mock'
 import type { Paradata, SurveyUnit } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 
@@ -21,7 +22,10 @@ export function createDataStore(params: {
   return {
     updateSurveyUnit: (surveyUnit) => db.surveyUnit.put(surveyUnit),
     deleteSurveyUnit: (id) => db.surveyUnit.delete(id),
-    getAllSurveyUnits: () => db.surveyUnit.toArray(),
+    getAllSurveyUnits: () =>
+      db.surveyUnit
+        .filter(({ id }) => !id.startsWith(mockPrefixIdSu))
+        .toArray(),
     getSurveyUnit: (id) => db.surveyUnit.get(id),
     getAllParadatas: () => db.paradata.toArray(),
     deleteParadata: (id) => db.paradata.delete(id),
