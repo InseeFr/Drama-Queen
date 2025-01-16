@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { useCore } from '@/core'
+import type { SurveyUnit } from '@/core/model'
 import { useTranslation } from '@/i18n'
 import { Modal } from '@/ui/components/Modal'
 import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
@@ -17,7 +18,7 @@ export function Review() {
 
   const getReferentiel = reviewSurvey.getReferentiel
 
-  const onQuit = () => {
+  const onQuit = (_surveyUnit: SurveyUnit) => {
     setIsQuitModalOpen(true)
   }
 
