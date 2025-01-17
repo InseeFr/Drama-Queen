@@ -14,7 +14,7 @@ import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
 import { useTranslation } from '@/i18n'
 import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/ui/constants'
 
-import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
+import { Breadcrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
@@ -61,6 +61,7 @@ export function Header(props: HeaderProps) {
         <IconButton
           className={classes.menuIcon}
           onClick={() => handleDrawerToggle(!isDrawerOpen)}
+          aria-label="menu"
         >
           <AppsIcon />
           <ShortCut
@@ -87,20 +88,19 @@ export function Header(props: HeaderProps) {
         />
       </SwipeableDrawer>
 
-      <Button title={t('backToQuestionnaireStart')}>
+      <Button title={t('backToQuestionnaireStart')} onClick={goToFirstPage}>
         <img
           id="logo"
           src={`${DYNAMIC_PUBLIC_URL}/assets/insee.png`}
           alt="Logo de L'Insee"
           className={classes.headerLogo}
-          onClick={goToFirstPage}
         />
       </Button>
       <Stack className={classes.headerTitle}>
         <Typography className={classes.questionnaireTitle} variant="h1">
           {questionnaireTitle}
         </Typography>
-        <BreadCrumb
+        <Breadcrumb
           sequence={currentSequence}
           subSequence={currentSubSequence}
           goToPage={goToPage}

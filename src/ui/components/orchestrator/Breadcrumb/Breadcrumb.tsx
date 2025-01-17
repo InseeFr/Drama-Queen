@@ -6,13 +6,13 @@ import { useTranslation } from '@/i18n'
 
 import type { GoToPage, OverviewItem } from '../lunaticType'
 
-type BreadCrumbProps = {
+type BreadcrumbProps = {
   sequence: OverviewItem | undefined
   subSequence: OverviewItem | undefined
   goToPage: GoToPage
 }
 
-export function BreadCrumb(props: BreadCrumbProps) {
+export function Breadcrumb(props: BreadcrumbProps) {
   const { sequence, subSequence, goToPage } = props
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
