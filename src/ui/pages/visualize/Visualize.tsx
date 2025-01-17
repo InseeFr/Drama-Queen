@@ -1,9 +1,10 @@
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import type { SurveyUnit } from '@/core/model'
 import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
 import { downloadAsJson } from '@/ui/components/orchestrator/tools/functions'
 import { visualizeLoader } from '@/ui/routing/loader/visualizeLoader'
+import { useLoaderData } from '@/ui/routing/utils'
 
 import { VisualizeForm } from './VisualizeForm'
 
