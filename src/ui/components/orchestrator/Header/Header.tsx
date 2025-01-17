@@ -12,7 +12,7 @@ import { useState } from 'react'
 
 import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
 import { useTranslation } from '@/i18n'
-import { SHORCUT_MENU, SHORTCUT_QUIT } from '@/ui/constants'
+import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/ui/constants'
 
 import { BreadCrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
@@ -41,7 +41,7 @@ export function Header(props: HeaderProps) {
   const { classes } = useStyles({ isDrawerOpen })
   const { t } = useTranslation('navigationMessage')
 
-  const menuShortKey = SHORCUT_MENU
+  const menuShortKey = SHORTCUT_MENU
   const quitShortKey = SHORTCUT_QUIT
 
   const handleDrawerToggle = (open: boolean) => setIsDrawerOpen(open)
