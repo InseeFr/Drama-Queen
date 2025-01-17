@@ -21,7 +21,6 @@ import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
 
 type HeaderProps = {
   questionnaireTitle: string
-  iteration: number | undefined
   readonly: boolean
   overview: Overview
   goToPage: GoToPage
@@ -32,7 +31,6 @@ type HeaderProps = {
 export function Header(props: HeaderProps) {
   const {
     questionnaireTitle,
-    iteration,
     readonly,
     overview,
     goToPage,
@@ -105,7 +103,6 @@ export function Header(props: HeaderProps) {
         <BreadCrumb
           sequence={currentSequence}
           subSequence={currentSubSequence}
-          iteration={iteration}
           goToPage={goToPage}
         />
       </Stack>

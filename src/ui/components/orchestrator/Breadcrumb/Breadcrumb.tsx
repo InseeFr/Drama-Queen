@@ -9,7 +9,6 @@ import type { GoToPage, OverviewItem } from '../lunaticType'
 type BreadCrumbProps = {
   sequence: OverviewItem | undefined
   subSequence: OverviewItem | undefined
-  iteration: number | undefined
   goToPage: GoToPage
 }
 
