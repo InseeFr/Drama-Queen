@@ -42,7 +42,7 @@ export function Modal(props: ModalProps) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isOpen} onClose={handleClose} data-testid="modal-backdrop">
       <Stack className={classes.dialog}>
         <Stack className={classes.dialogHeader}>
           <DialogTitle>{dialogTitle}</DialogTitle>
