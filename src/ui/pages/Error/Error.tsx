@@ -16,10 +16,9 @@ export function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     return (
       <ErrorComponent
-        message={`${t('error')} ${error.status} :
-        ${error.statusText}`}
+        message={`${t('error')} ${error.status} : ${error.statusText}`}
       />
     )
   }
-  return <ErrorComponent message="Erreur inconnue" />
+  return <ErrorComponent message={t('shortUnknownError')} />
 }

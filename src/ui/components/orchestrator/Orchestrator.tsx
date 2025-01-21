@@ -155,7 +155,6 @@ export function Orchestrator(props: OrchestratorProps) {
     <Stack className={classes.orchestrator}>
       <Header
         questionnaireTitle={questionnaireTitle}
-        iteration={iteration}
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}

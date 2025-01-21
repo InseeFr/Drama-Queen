@@ -1,10 +1,10 @@
 import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
 import { ErrorPage } from '@/ui/pages/Error/Error'
 import { ExternalRessources } from '@/ui/pages/External/External'
-import { Collect } from '@/ui/pages/collect'
-import { DisplayEnvValues } from '@/ui/pages/env'
+import { Collect } from '@/ui/pages/collect/Collect'
+import { DisplayEnvValues } from '@/ui/pages/env/DisplayEnvValues'
 import { Review } from '@/ui/pages/review/Review'
-import { SynchronizeData } from '@/ui/pages/synchronize'
+import { SynchronizeData } from '@/ui/pages/synchronize/SynchronizeData'
 import { Visualize } from '@/ui/pages/visualize/Visualize'
 
 import { Layout } from './Layout'
