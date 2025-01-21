@@ -32,6 +32,7 @@ export function PrevNext(props: PrevNextProps) {
           size="large"
           disabled={!isPreviousEnabled}
           onClick={onPrevious}
+          aria-label="previous"
         >
           <PlayArrowIcon fontSize="small" />
           {isPreviousEnabled && (
@@ -52,6 +53,7 @@ export function PrevNext(props: PrevNextProps) {
           size="large"
           disabled={!isNextEnabled}
           onClick={onNext}
+          aria-label="next"
         >
           <PlayArrowIcon fontSize="small" />
           {isNextEnabled && (
