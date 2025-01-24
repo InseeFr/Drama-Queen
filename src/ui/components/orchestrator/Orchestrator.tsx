@@ -30,6 +30,7 @@ type OrchestratorProps = {
   onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
   onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
   getReferentiel: GetReferentiel
+  initialPage?: string
   onChangeSurveyUnitState?:
     | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
     | undefined
@@ -45,6 +46,7 @@ export function Orchestrator(props: OrchestratorProps) {
     onChangePage = () => {},
     getReferentiel,
     onChangeSurveyUnitState = () => {},
+    initialPage,
   } = props
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
@@ -56,8 +58,11 @@ export function Orchestrator(props: OrchestratorProps) {
   const source = getSource(initialSource)
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
-    !readonly && initialSurveyUnit.stateData?.currentPage !== '1',
+    !readonly &&
+      initialSurveyUnit.stateData?.currentPage !== '1' &&
+      initialPage === undefined,
   )
+
   const welcomeModalTitle = t2('welcomeModalTitle')
   const welcomeModalContent = t2('welcomeModalContent')
 
@@ -104,6 +109,8 @@ export function Orchestrator(props: OrchestratorProps) {
     shortcut: true,
     withOverview: true,
     missing: true,
+    // @ts-expect-error Queen receives a string, we have no assertion to cast as a PageTag yet
+    initialPage: initialPage,
     dontKnowButton: t('dontKnowButtonLabel'),
     missingShortcut: missingShortcut,
   })
