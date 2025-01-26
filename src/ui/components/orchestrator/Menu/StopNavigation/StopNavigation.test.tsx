@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { TestWrapper } from '@/tests/TestWrapper'
@@ -67,6 +67,21 @@ describe('StopNavigation Component', () => {
       expect.objectContaining({
         label: '2. temporaryQuestionnaireStop',
         onClick: expect.any(Function),
+      }),
+      {},
+    )
+  })
+
+  it('does not open the modal initially', () => {
+    render(
+      <TestWrapper>
+        <StopNavigation {...defaultProps} />
+      </TestWrapper>,
+    )
+
+    expect(Modal).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isOpen: false,
       }),
       {},
     )
@@ -150,9 +165,11 @@ describe('StopNavigation Component', () => {
     // Get the modal props from the second render
     const modalProps = vi.mocked(Modal).mock.calls[1][0]
     // Simulate Modal's onClose call
-    modalProps.onClose()
+    act(() => {
+      modalProps.onClose()
+    })
 
-    expect(Modal).toHaveBeenCalledWith(
+    expect(Modal).toHaveBeenLastCalledWith(
       expect.objectContaining({
         isOpen: false,
       }),
