@@ -159,4 +159,48 @@ describe('StopNavigation Component', () => {
       {},
     )
   })
+
+  it('calls definitiveQuit function when validate button is clicked in the modal', () => {
+    const { getByRole } = render(
+      <TestWrapper>
+        <StopNavigation {...defaultProps} />
+      </TestWrapper>,
+    )
+
+    // Open the definitive quit modal
+    const definitivequitButton = getByRole('button', {
+      name: '1. definitiveQuestionnaireStop',
+    })
+    fireEvent.click(definitivequitButton)
+
+    // Get the modal props from the second render
+    const modalProps = vi.mocked(Modal).mock.calls[1][0]
+    // Simulate Modal's validate button onClick call
+    modalProps.buttons[1].onClick()
+
+    expect(mockDefinitiveQuit).toHaveBeenCalledOnce()
+    expect(mockQuit).not.toHaveBeenCalled()
+  })
+
+  it('calls quit function when validate button is clicked in the modal', () => {
+    const { getByRole } = render(
+      <TestWrapper>
+        <StopNavigation {...defaultProps} />
+      </TestWrapper>,
+    )
+
+    // Click on the temporary quit button
+    const temporaryQuitButton = getByRole('button', {
+      name: '2. temporaryQuestionnaireStop',
+    })
+    fireEvent.click(temporaryQuitButton)
+
+    // Get the modal props from the second render
+    const modalProps = vi.mocked(Modal).mock.calls[1][0]
+    // Simulate Modal's validate button onClick call
+    modalProps.buttons[1].onClick()
+
+    expect(mockQuit).toHaveBeenCalledOnce()
+    expect(mockDefinitiveQuit).not.toHaveBeenCalled()
+  })
 })
