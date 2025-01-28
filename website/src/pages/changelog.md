@@ -1,3 +1,33 @@
+### 2.3.5
+
+#### Nouvelles fonctionnalités
+
+- question de type texte/nombre : lorsque la saisie dépasse la taille du champ, ajout d'un '...' lorsque le champ n'est pas focus pour améliorer la lisibilité. Ajouté par Lunatic 3.4.9
+
+#### Correction de bugs
+
+- question de type date : la saisie d'une date au format YYYY-MM-DD avec une année sur 1 ou 2 digits était considérée invalide, et n'était donc pas enregistrée. Corrigé par Lunatic 3.4.9
+
+#### Modifications mineures
+
+- question de type date : modification de l'exemple du mois (07 -> 7) pour être cohérent avec les possibilités de saisie
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.12
+
+### 2.3.4
+
+#### Modifications mineures
+
+- retrait des données mockées lors de la synchronisation
+
+### 2.3.3
+
+#### Correction de bugs
+
+- optimisation la synchronisation des ressources externes qui pouvaient faire crash le navigateur (consommation de mémoire excessive)
+
 ### 2.3.2
 
 #### Build
