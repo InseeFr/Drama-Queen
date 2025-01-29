@@ -1,3 +1,9 @@
+### 2.3.6
+
+#### Correction de bugs
+
+- la sortie du questionnaire via le menu de gauche provoquait parfois la fermeture involontaire de la fenêtre
+
 ### 2.3.5
 
 #### Nouvelles fonctionnalités
