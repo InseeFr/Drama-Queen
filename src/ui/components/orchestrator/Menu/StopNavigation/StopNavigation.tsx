@@ -55,12 +55,7 @@ export function StopNavigation(props: StopNavigationProps) {
 
   const quitModalOnClose = () => setIsQuitOpenModal(false)
 
-  const quitModalValidate = () => {
-    if (isDefinitiveModal) {
-      definitiveQuit()
-    } else quit()
-    close()
-  }
+  const quitModalValidateOnClick = isDefinitiveModal ? definitiveQuit : quit
 
   const quitModalButtons = [
     {
@@ -70,7 +65,7 @@ export function StopNavigation(props: StopNavigationProps) {
     },
     {
       label: quitModalValidateLabel,
-      onClick: quitModalValidate,
+      onClick: quitModalValidateOnClick,
       autoFocus: true,
     },
   ]
