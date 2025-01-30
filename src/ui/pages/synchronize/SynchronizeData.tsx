@@ -26,7 +26,7 @@ export function SynchronizeData() {
 
   useEffect(() => {
     synchronizeData.upload()
-  }, [])
+  }, [synchronizeData])
 
   const { evtSynchronizeData } = useCore().evts
 

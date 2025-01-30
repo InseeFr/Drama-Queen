@@ -25,7 +25,7 @@ export function NavigationManager({ children }: PropsWithChildren) {
     return () => {
       window.removeEventListener('[Pearl] navigated', shellNavigationHandler)
     }
-  }, [location])
+  }, [location, navigate])
 
   useEffect(() => {
     window.dispatchEvent(
