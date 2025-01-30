@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ErrorComponent } from '@/ui/components/ErrorComponent'
 
@@ -16,6 +16,11 @@ vi.mock('@/i18n', () => ({
 vi.mock('@/ui/components/ErrorComponent', () => ({
   ErrorComponent: vi.fn(),
 }))
+
+beforeEach(() => {
+  // mock console.error to avoid useless logs during tests
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+})
 
 afterEach(() => {
   vi.clearAllMocks()

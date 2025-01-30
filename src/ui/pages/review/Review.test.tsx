@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { useCore } from '@/core'
@@ -90,16 +90,16 @@ describe('Review', () => {
 
     vi.mocked(useCore).mockReturnValue(mockCore as any)
 
-    const { rerender } = render(<Review />)
+    render(<Review />)
 
     // Simulate Orchestrator's onQuit call
     const { onQuit } = vi.mocked(Orchestrator).mock.calls[0][0]
 
     if (onQuit) {
-      onQuit(mockLoaderData.surveyUnit as SurveyUnit)
+      act(() => {
+        onQuit(mockLoaderData.surveyUnit as SurveyUnit)
+      })
     }
-
-    rerender(<Review />)
 
     expect(Modal).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -116,10 +116,9 @@ describe('Review', () => {
 
     // Simulate Modal's onClose call
     const modalProps = vi.mocked(Modal).mock.calls[0][0]
-    modalProps.onClose()
-
-    // Rerender to reflect state change
-    rerender(<Review />)
+    act(() => {
+      modalProps.onClose()
+    })
 
     expect(Modal).toHaveBeenLastCalledWith(
       expect.objectContaining({
