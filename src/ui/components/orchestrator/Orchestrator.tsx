@@ -233,6 +233,7 @@ const useStyles = tss.create(({ theme }) => ({
     backgroundColor: theme.palette.background.default,
     paddingTop: '60px',
     flex: 1,
+    width: 'calc(100% - 60px)',
   },
   mainContainer: {
     flex: 1,
@@ -250,9 +251,9 @@ const useStyles = tss.create(({ theme }) => ({
       height: '100%',
     },
     '& > div:first-of-type > div': {
-      width: '80%',
+      maxWidth: 'calc(100% - 100px)',
       marginLeft: '100px',
-      marginTop: '3em',
+      marginTop: '4em',
       flexGrow: 1,
     },
   },
@@ -263,7 +264,9 @@ const useStyles = tss.create(({ theme }) => ({
     minHeight: '2.3em',
   },
   navBarContainer: {
-    position: 'relative',
+    height: 'calc(100vh - 65px)',
+    right: '0',
+    position: 'fixed',
     justifyContent: 'flex-end',
     gap: '2em',
     paddingBottom: '2em',
