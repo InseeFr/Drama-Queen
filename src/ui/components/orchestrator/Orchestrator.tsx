@@ -264,7 +264,8 @@ const useStyles = tss.create(({ theme }) => ({
     minHeight: '2.3em',
   },
   navBarContainer: {
-    height: 'calc(100vh - 65px)',
+    backgroundColor: theme.palette.background.default,
+    height: 'calc(100vh - 65px - 2em)',
     right: '0',
     position: 'fixed',
     justifyContent: 'flex-end',

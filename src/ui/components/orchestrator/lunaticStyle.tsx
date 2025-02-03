@@ -590,7 +590,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         },
       },
     },
-    '&.Question .lunatic-combo-box-container': {
+    '&.Question .lunatic-combo-box-container:has(.lunatic-combo-box-fab)': {
       display: 'grid',
       gridTemplateColumns: '70% auto',
       gridTemplateRows: 'auto auto',
