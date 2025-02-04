@@ -63,6 +63,7 @@ describe('Should auto next', () => {
             missingResponse: { name: 'a_MISSING' },
           },
         ],
+        value: {},
       },
     ]
     const valueChange = [{ name: 'a', value: 'v2' }]
