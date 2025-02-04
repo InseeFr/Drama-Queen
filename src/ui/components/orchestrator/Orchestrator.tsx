@@ -265,11 +265,10 @@ const useStyles = tss.create(({ theme }) => ({
   },
   navBarContainer: {
     backgroundColor: theme.palette.background.default,
-    height: 'calc(100vh - 65px - 2em)',
+    height: 'calc(100vh - 60px - 2em)',
     right: '0',
     position: 'fixed',
     justifyContent: 'flex-end',
-    gap: '2em',
     paddingBottom: '2em',
     alignItems: 'center',
     borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
