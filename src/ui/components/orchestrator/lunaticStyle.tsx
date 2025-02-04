@@ -33,6 +33,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         padding: '0.2em 1em',
       },
     },
+    '&.Question .lunatic-table .lunatic-table-td > .field-container': {
+      marginTop: '1em',
+    },
 
     '&.Loop': {
       display: 'block',
@@ -110,41 +113,60 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     // declarations
-    '& .declarations-lunatic': {
-      padding: '0.5em',
-      fontSize: '92%',
-    },
+    '& .declarations-lunatic, &:is(.Sequence, .Subsequence) .label-description':
+      {
+        padding: '0.5em',
+        fontSize: '92%',
+      },
     '& .declaration-lunatic': {
       marginBottom: '1em',
+    },
+    '&:not(.Question) .declaration-lunatic': {
       '&.declaration-help': {
         color: theme.palette.declarations.help,
       },
-      '&.declaration-instruction': {
+      '&.declaration-instruction, &.declaration-statement, &.declaration-codecard':
+        {
+          color: theme.palette.declarations.instruction,
+        },
+    },
+    '&.Question > .declarations-lunatic': {
+      '.declaration-help': {
         color: theme.palette.declarations.instruction,
       },
-      '&.declaration-statement': {
-        color: theme.palette.declarations.instruction,
+    },
+    '&.Question > .field-container .declarations-lunatic': {
+      '.declaration-help': {
+        color: theme.palette.declarations.help,
       },
-      '&.declaration-codecard': {
-        color: theme.palette.declarations.instruction,
-      },
+      '.declaration-instruction, .declaration-statement, .declaration-codecard':
+        {
+          color: theme.palette.declarations.instruction,
+        },
+    },
+    '&.Subsequence > .field-container > .field > .label-description': {
+      color: theme.palette.declarations.instruction,
     },
 
     '& .label-top label': {
       fontWeight: 'bold',
     },
 
-    '& .lunatic-component fieldset legend, fieldset legend': {
-      fontWeight: 'bold',
-      maxWidth: '90%',
-      color: 'initial',
-      backgroundColor: 'initial',
-      fontSize: 'initial',
-      marginBottom: '1.5em',
-      lineHeight: '1.3em',
-    },
-    '& .lunatic-component .field-container, .field-container': {
+    '&:not(.Loop) .lunatic-component fieldset legend, &:not(.Question, .Loop) fieldset legend':
+      {
+        fontWeight: 'bold',
+        maxWidth: '90%',
+        color: 'initial',
+        backgroundColor: 'initial',
+        fontSize: 'initial',
+        marginBottom: '1.5em',
+        lineHeight: '1.3em',
+      },
+    '&:not(.Question) .lunatic-component .field-container': {
       marginTop: '1em',
+    },
+    '&.Question .lunatic-component .field-container': {
+      marginTop: '0',
     },
     '& .lunatic-textarea textarea': {
       padding: '0.5em',
@@ -186,6 +208,14 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         borderRadius: '15px',
       },
     },
+    '&.Question .lunatic-table fieldset:is(.lunatic-radio-group, .lunatic-checkbox-one) .code-modality':
+      {
+        borderRadius: '5px',
+      },
+    '&.Question fieldset:is(.lunatic-radio-group, .lunatic-checkbox-one) .code-modality':
+      {
+        borderRadius: '15px',
+      },
 
     '& .lunatic-component fieldset, fieldset': {
       padding: 0,
@@ -193,7 +223,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       border: 'none',
 
       // checkbox & radio
-      '& .lunatic-input-checkbox, & .lunatic-input-checkbox': {
+      '&:not(:has(.lunatic-checkbox-boolean)) .lunatic-input-checkbox': {
         borderRadius: '5px',
         border: `1px solid ${borderColorCheckbox}`,
         backgroundColor: `${backgroundColorCheckbox}`,
@@ -287,10 +317,58 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           padding: '0.5em',
         },
       },
+    '&:is(.Question, .Loop) .field-container > .field > fieldset > legend': {
+      '> h3': {
+        backgroundColor: 'transparent',
+        fontSize: '1em',
+        color: 'black',
+        display: 'block',
+        marginBottom: '1em',
+        fontWeight: 'bold',
+        padding: '0.5em',
+        marginTop: '0',
+      },
+      '> p:not(:has(*))': {
+        display: 'none',
+      },
+    },
+    '&.Loop .field-container > .field > fieldset > legend': {
+      '> h3': { marginBottom: '0' },
+    },
 
     // missing response buttons css override
     // roll-back some changes when Missing override is available in lunatic-v2
     // such as shortcut and checked selectors
+
+    '&.Question, &.Loop': {
+      '&:has(> .declarations-lunatic)': {
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr',
+        gridRowGap: '1em',
+      },
+      '.field-container, .field': {
+        height: '100%',
+      },
+      '.field fieldset': {
+        height: '100%',
+        display: 'grid',
+        gridTemplateRows: 'auto auto 1fr',
+        legend: {
+          gridRow: '1',
+          '&:not(:has(*))': {
+            display: 'none',
+          },
+        },
+        '.declarations-lunatic': {
+          gridRow: '2',
+        },
+        '.lunatic.lunatic-component': {
+          gridRow: '3',
+          display: 'grid',
+          gridTemplateRows: 'auto 1fr',
+        },
+      },
+    },
 
     '& .lunatic-component .missing-buttons, .missing-buttons': {
       display: 'flex',
@@ -510,6 +588,28 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
             },
           },
         },
+      },
+    },
+    '&.Question .lunatic-combo-box-container:has(.lunatic-combo-box-fab)': {
+      display: 'grid',
+      gridTemplateColumns: '70% auto',
+      gridTemplateRows: 'auto auto',
+      columnGap: '0.5em',
+      '.lunatic-combo-box': {
+        gridColumn: 1,
+        '.lunatic-combo-box-content': {
+          width: 'unset',
+        },
+      },
+      '.lunatic-combo-box-fab': {
+        gridColumn: 2,
+        position: 'unset',
+        left: 'unset',
+        alignSelf: 'center',
+      },
+      '.lunatic-errors': {
+        gridRow: 2,
+        gridColumn: 1 / 3,
       },
     },
   },
