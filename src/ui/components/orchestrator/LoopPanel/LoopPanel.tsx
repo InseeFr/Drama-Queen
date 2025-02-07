@@ -5,25 +5,22 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 
-import type { PageTag, SurveyUnitData } from '@/core/model'
-import { isIterationReachable } from '@/ui/components/orchestrator/tools/functions'
+import type { SurveyUnitData } from '@/core/model'
 
 type LoopPanelProps = {
   loopVariables: string[]
   page: number
   subPage: number | undefined
   iteration: number | undefined
-  lastReachedPage: PageTag | undefined
   data: SurveyUnitData
   goToPage: ReturnType<typeof useLunatic>['goToPage']
 }
 
 export function LoopPanel(props: LoopPanelProps) {
-  const { loopVariables, page, iteration, lastReachedPage, data, goToPage } =
-    props
+  const { loopVariables, page, iteration, data, goToPage } = props
   const { classes, cx } = useStyles()
 
-  if (!loopVariables[0] || !lastReachedPage || !data.COLLECTED) {
+  if (!loopVariables[0] || !data.COLLECTED) {
     return null
   }
 
@@ -36,10 +33,6 @@ export function LoopPanel(props: LoopPanelProps) {
   if (!titleData) {
     return null
   }
-
-  // panel is disabled if you cannot reach the first subPage of the iteration
-  const isDisabledButton = (iteration: number) =>
-    !isIterationReachable(page, lastReachedPage, iteration)
 
   // redirects to the first subPage of an iteration (in the same loop so "page" does not change)
   const goToIteration = (index: number) => () =>
@@ -56,7 +49,6 @@ export function LoopPanel(props: LoopPanelProps) {
               ? classes.currentIteration
               : classes.notCurrentIteration,
           )}
-          disabled={isDisabledButton(index)}
           disableRipple
           endIcon={<ChevronRightIcon />}
           onClick={goToIteration(index)}
