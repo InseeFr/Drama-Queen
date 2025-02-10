@@ -200,6 +200,7 @@ export function Orchestrator(props: OrchestratorProps) {
         </Stack>
         <Stack className={classes.navBarContainer}>
           <NavBar
+            overview={overview}
             page={page}
             maxPage={maxPage}
             subPage={subPage}
