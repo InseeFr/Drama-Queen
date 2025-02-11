@@ -277,8 +277,8 @@ const useStyles = tss.create(({ theme }) => ({
   },
   continue: {
     alignItems: 'end',
-    marginBottom: '1.5em',
-    marginTop: '1.5em',
+    marginBottom: '1em',
+    marginTop: '2em',
     marginRight: '4em',
     minHeight: '2.3em',
   },
