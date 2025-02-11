@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import type {
   CollectedValues,
@@ -105,7 +105,7 @@ export function useQueenNavigation({
     }
   }
 
-  const handleData = () => {
+  const handleData = useCallback(() => {
     const changedData = getChangedData(true) as SurveyUnitData
     const hasDataChanged = getHasDataChanged(changedData)
 
@@ -119,51 +119,54 @@ export function useQueenNavigation({
       hasDataChanged: hasDataChanged,
       data: newData,
     }
-  }
+  }, [getChangedData, surveyUnitData])
 
   // updates the surveyUnitState
-  const updateState = (newState: QuestionnaireState) => {
-    onChangeSurveyUnitState({
-      surveyUnitId: initialSurveyUnit.id,
-      newState: newState,
-    })
-    setSurveyUnitState(newState)
-  }
+  const updateState = useCallback(
+    (newState: QuestionnaireState) => {
+      onChangeSurveyUnitState({
+        surveyUnitId: initialSurveyUnit.id,
+        newState: newState,
+      })
+      setSurveyUnitState(newState)
+    },
+    [initialSurveyUnit.id, onChangeSurveyUnitState],
+  )
 
-  const handleState = (
-    hasDataChanged: boolean,
-    forcedState?: QuestionnaireState,
-  ) => {
-    // forcedState is used for definitiveQuit which forces the validation
-    if (forcedState) {
-      updateState(forcedState)
-      return forcedState
-    }
-    // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
-    const newState = hasDataChanged ? 'INIT' : surveyUnitState
-    // updates state only if necessary : prevents for calling onChangeSurveyUnitState
-    if (newState !== surveyUnitState) {
-      updateState(newState)
-    }
-    return newState
-  }
+  const handleState = useCallback(
+    (hasDataChanged: boolean, forcedState?: QuestionnaireState) => {
+      // forcedState is used for definitiveQuit which forces the validation
+      if (forcedState) {
+        updateState(forcedState)
+        return forcedState
+      }
+      // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
+      const newState = hasDataChanged ? 'INIT' : surveyUnitState
+      // updates state only if necessary : prevents for calling onChangeSurveyUnitState
+      if (newState !== surveyUnitState) {
+        updateState(newState)
+      }
+      return newState
+    },
+    [surveyUnitState, updateState],
+  )
 
   // get the updated SurveyUnit
-  const getUpdatedSurveyUnit = (
-    state: QuestionnaireState,
-    data: SurveyUnitData,
-  ): SurveyUnit => {
-    const surveyUnit = {
-      ...initialSurveyUnit,
-      data,
-      stateData: {
-        state: state,
-        date: new Date().getTime(),
-        currentPage: pageTag ?? '1',
-      },
-    }
-    return surveyUnit
-  }
+  const getUpdatedSurveyUnit = useCallback(
+    (state: QuestionnaireState, data: SurveyUnitData): SurveyUnit => {
+      const surveyUnit = {
+        ...initialSurveyUnit,
+        data,
+        stateData: {
+          state: state,
+          date: new Date().getTime(),
+          currentPage: pageTag ?? '1',
+        },
+      }
+      return surveyUnit
+    },
+    [initialSurveyUnit, pageTag],
+  )
 
   // handle updated surveyUnit when page changes
   useEffect(() => {
@@ -182,7 +185,15 @@ export function useQueenNavigation({
 
     const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onChangePage(surveyUnit)
-  }, [pageTag, lastReachedPage, isWelcomeModalOpen])
+  }, [
+    pageTag,
+    lastReachedPage,
+    isWelcomeModalOpen,
+    handleData,
+    handleState,
+    getUpdatedSurveyUnit,
+    onChangePage,
+  ])
 
   const orchestratorQuit = () => {
     // get updated data
