@@ -4,14 +4,15 @@ import { describe, expect, it, vi } from 'vitest'
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
 import type { Overview } from '../lunaticType'
 import { NavBar } from './NavBar'
+import { PageCount } from './PageCount'
 import { StepProgressBar } from './StepProgressBar'
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 
 vi.mock('./StepProgressBar', () => ({
   StepProgressBar: vi.fn(),
+}))
+
+vi.mock('./PageCount', () => ({
+  PageCount: vi.fn(),
 }))
 
 vi.mock('../buttons/PrevNext/PrevNext', () => ({
@@ -76,26 +77,38 @@ describe('NavBar Component', () => {
     )
   })
 
-  it('displays correctly the page and subPage count', () => {
-    const { getAllByText, getByText } = render(<NavBar {...defaultProps} />)
+  it('renders PageCount component for both page and subPage with the correct props', () => {
+    const { rerender } = render(<NavBar {...defaultProps} />)
 
-    // pageNumber is displayed twice : for page and for subPage
-    expect(getAllByText('pageNumber')).toHaveLength(2)
+    // subPage count
+    expect(PageCount).toHaveBeenCalledWith(
+      {
+        currentPage: defaultProps.subPage + 1,
+        maxPage: defaultProps.nbSubPages,
+      },
+      {},
+    )
 
-    // page count : `${page}/${maxPage}`
-    expect(getByText('2/5')).toBeInTheDocument()
+    // page count
+    expect(PageCount).toHaveBeenCalledWith(
+      {
+        currentPage: defaultProps.subPage + 1,
+        maxPage: defaultProps.nbSubPages,
+      },
+      {},
+    )
 
-    // subPage count : subPage is an index starting at 0, we display ${subPage}+1
-    expect(getByText('2/3')).toBeInTheDocument()
-  })
+    // subPage count if subPage is undefined
+    const propsWithoutSubPage = { ...defaultProps, subPage: undefined }
+    rerender(<NavBar {...propsWithoutSubPage} />)
 
-  it('hides the subPage information if subPage is undefined', () => {
-    const props = { ...defaultProps, subPage: undefined, nbSubPages: undefined }
-
-    const { container } = render(<NavBar {...props} />)
-    const subPageStack = container.querySelector('#progress-subPage')
-    expect(subPageStack).toBeInTheDocument()
-    expect(subPageStack).toHaveStyle('visibility: hidden')
+    expect(PageCount).toHaveBeenCalledWith(
+      {
+        currentPage: undefined,
+        maxPage: defaultProps.nbSubPages,
+      },
+      {},
+    )
   })
 
   it('renders PrevNext component with the correct props', () => {

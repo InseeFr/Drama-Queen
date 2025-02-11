@@ -1,11 +1,9 @@
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
-
-import { useTranslation } from '@/i18n'
 
 import { PrevNext } from '../buttons/PrevNext/PrevNext'
 import type { Overview } from '../lunaticType'
+import { PageCount } from './PageCount'
 import { StepProgressBar } from './StepProgressBar'
 
 type NavBarProps = {
@@ -33,7 +31,6 @@ export function NavBar(props: Readonly<NavBarProps>) {
     onNext,
   } = props
   const { classes } = useStyles()
-  const { t } = useTranslation('navigationMessage')
 
   const currentSequenceIndex = overview.findIndex(
     (sequence) => sequence.current,
@@ -41,42 +38,7 @@ export function NavBar(props: Readonly<NavBarProps>) {
 
   const nbMaxSequence = overview.length
 
-  type PageType = 'page' | 'subPage'
-
-  const displayPages = [
-    {
-      type: 'subPage' as PageType,
-      current: subPage === undefined ? subPage : subPage + 1,
-      max: nbSubPages,
-    },
-    {
-      type: 'page' as PageType,
-      current: page,
-      max: maxPage,
-    },
-  ]
-
-  function displayPage(pageType: {
-    type: PageType
-    current: number | undefined
-    max: number | undefined
-  }) {
-    return (
-      <Stack
-        className={classes.page}
-        key={`progress-${pageType.type}`}
-        id={`progress-${pageType.type}`}
-        style={{
-          visibility: pageType.current === undefined ? 'hidden' : 'visible',
-        }}
-      >
-        <Typography variant="caption">{t('pageNumber')}</Typography>
-        <Typography variant="body2" fontWeight={'bold'}>
-          {pageType.current}/{pageType.max}
-        </Typography>
-      </Stack>
-    )
-  }
+  const currentSubPage = subPage === undefined ? subPage : subPage + 1
 
   return (
     <Stack className={classes.root}>
@@ -86,7 +48,8 @@ export function NavBar(props: Readonly<NavBarProps>) {
           maxStep={nbMaxSequence}
         />
       </Stack>
-      {displayPages.map((pageType) => displayPage(pageType))}
+      <PageCount currentPage={currentSubPage} maxPage={nbSubPages} />
+      <PageCount currentPage={page} maxPage={maxPage} />
       <PrevNext
         isPreviousEnabled={isPreviousEnabled}
         isNextEnabled={isNextEnabled}
@@ -104,12 +67,6 @@ const useStyles = tss.create(() => ({
     width: '60px',
     height: '100%',
     marginTop: '2em',
-  },
-  page: {
-    textAlign: 'center',
-    borderRadius: '5px',
-    width: '57px',
-    backgroundColor: 'white',
   },
   progressBar: {
     display: 'flex',
