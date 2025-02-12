@@ -1,7 +1,12 @@
 import type { Variable } from '@inseefr/lunatic/type.source'
 
 import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
-import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type {
+  PageTag,
+  Questionnaire,
+  SurveyUnit,
+  SurveyUnitData,
+} from '@/core/model'
 
 import type { Component, Components } from '../lunaticType'
 
@@ -76,6 +81,26 @@ export function shouldAutoNext(
           firstComponent.componentType,
         )))
   ) {
+    return true
+  }
+  return false
+}
+
+// check if the first subPage of an iteration is before lastReachedPage
+export function isIterationReachable(
+  currentPage: number,
+  lastReachedPage: PageTag,
+  iteration: number,
+) {
+  const maxPage = parseInt(lastReachedPage.split('.')[0])
+  const maxIteration = parseInt(lastReachedPage.split('#')[1]) - 1
+  if (currentPage < maxPage) {
+    // no need to check iteration or subPage because we already reached the next page (out of the loop)
+    return true
+  }
+  // currentPage = maxPage , so we check if we already reached the iteration
+  if (iteration <= maxIteration) {
+    // no need to check subPage beacause we just want to reach the first subPage of the iteration
     return true
   }
   return false

@@ -190,6 +190,7 @@ export function Orchestrator(props: OrchestratorProps) {
               page={page}
               subPage={subPage}
               iteration={iteration}
+              lastReachedPage={lastReachedPage}
               data={surveyUnitData}
               goToPage={goToPage}
             />

@@ -1,11 +1,16 @@
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import type { SurveyUnitData } from '@/core/model'
+import type { PageTag, SurveyUnitData } from '@/core/model'
 
+import { isIterationReachable } from '../tools/functions'
 import { LoopPanel } from './LoopPanel'
 
 const mockGoToPage = vi.fn()
+
+vi.mock('@/ui/components/orchestrator/tools/functions', () => ({
+  isIterationReachable: vi.fn(),
+}))
 
 describe('LoopPanel Component', () => {
   const mockLoopVariables = ['loopTitle']
@@ -16,12 +21,14 @@ describe('LoopPanel Component', () => {
       },
     },
   }
+  const mockLastReachedPage: PageTag = '2'
 
   const defaultProps = {
     loopVariables: mockLoopVariables,
     page: 1,
     subPage: undefined,
     iteration: undefined,
+    lastReachedPage: mockLastReachedPage,
     data: mockData,
     goToPage: mockGoToPage,
   }
@@ -37,7 +44,23 @@ describe('LoopPanel Component', () => {
     expect(getByText('Iteration 3')).toBeInTheDocument()
   })
 
-  it('goes to the page {page, subPage:0} page on button click', () => {
+  it('disables buttons for unreachable iterations', () => {
+    // we mock the isIterationReachable function : every iteration is reachable except iteration 1
+    vi.mocked(isIterationReachable).mockImplementation(
+      (_page, _lastReachedPage, iteration) => iteration !== 1,
+    )
+
+    const { getAllByRole } = render(<LoopPanel {...defaultProps} />)
+
+    const buttons = getAllByRole('button')
+
+    // considering isIterationReachable mock : only button for iteration 1 is disabled
+    expect(buttons[0]).not.toBeDisabled()
+    expect(buttons[1]).toBeDisabled()
+    expect(buttons[2]).not.toBeDisabled()
+  })
+
+  it('go to the page {page, subPage:0} page on button click', () => {
     const { getAllByRole } = render(<LoopPanel {...defaultProps} />)
 
     const buttons = getAllByRole('button')
@@ -59,16 +82,6 @@ describe('LoopPanel Component', () => {
     })
   })
 
-  it('enables to navigate to any iteration', () => {
-    const { getAllByRole } = render(<LoopPanel {...defaultProps} />)
-
-    const buttons = getAllByRole('button')
-
-    expect(buttons[0]).not.toBeDisabled()
-    expect(buttons[1]).not.toBeDisabled()
-    expect(buttons[2]).not.toBeDisabled()
-  })
-
   it('applies different styles for current and non-current iterations', () => {
     const props = { ...defaultProps, iteration: 1 }
 
@@ -82,6 +95,13 @@ describe('LoopPanel Component', () => {
 
   it('returns null if loopVariables is empty (we are not in a loop)', () => {
     const props = { ...defaultProps, loopVariables: [] }
+
+    const { container } = render(<LoopPanel {...props} />)
+    expect(container.firstChild).toBeNull()
+  })
+
+  it('returns null if lastReachedPage is undefined', () => {
+    const props = { ...defaultProps, lastReachedPage: undefined }
 
     const { container } = render(<LoopPanel {...props} />)
     expect(container.firstChild).toBeNull()
