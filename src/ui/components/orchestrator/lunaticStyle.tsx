@@ -491,7 +491,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
               '& .placeholder': {
                 color: 'gray',
               },
-              '& > .placeholder, >.selection': {},
+              '& > .placeholder, >.selection': {
+                paddingLeft: '4px',
+              },
               '.lunatic-combo-box-input': {
                 height: '34px',
                 lineHeight: '34px',
