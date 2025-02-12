@@ -32,6 +32,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         border: '0.15em solid #555',
         padding: '0.2em 1em',
       },
+      '& .lunatic-table-td > .field-container': {
+        marginTop: '1rem',
+      },
     },
     '&.Question .lunatic-table .lunatic-table-td > .field-container': {
       marginTop: '1em',
@@ -46,20 +49,26 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       color: 'black',
       fontSize: '1.2em',
       display: 'block',
-      margin: '1em 0em 1em 0em',
+      marginBottom: '2rem',
       fontWeight: 'bold',
-      padding: '0.5em',
     },
     '& .subsequence-lunatic': {
       fontSize: '1.1em',
     },
 
+    '& input': {
+      fontSize: '1rem',
+    },
+
+    '& textarea': {
+      fontSize: '1rem',
+    },
+
     /* Firefox */
     '& input[type=text]': {
       MozAppearance: 'textfield',
-      marginLeft: '1em',
       marginBottom: '1em',
-      padding: '0.375rem 0 0.375rem 0.4375rem',
+      padding: '0.45rem 0 0.45rem 0.45rem',
       minWidth: '40%',
       borderRadius: '10px',
       border: '1px solid black',
@@ -67,9 +76,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
     '& input[type=number]': {
       MozAppearance: 'textfield',
-      marginLeft: '1em',
       marginBottom: '1em',
-      padding: '0.375rem 0 0.375rem 0.4375rem',
+      padding: '0.45rem 0 0.45rem 0.45rem',
       borderRadius: '10px',
       border: '1px solid black',
       backgroundColor: 'white',
@@ -87,36 +95,31 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     // datepicker
     '.lunaticDatepickerFields': {
       display: 'flex',
-      gap: '1rem',
+      gap: '2rem',
     },
-    '.lunaticDatepickerField input': {
-      width: '3.5em',
-    },
-    '.lunaticDatepickerFieldLarge input': {
-      width: '4.5em',
+    '.lunaticDatepickerField input, .lunaticDatepickerFieldLarge input': {
+      width: '4rem',
     },
     '.lunaticDatepickerHint': {
-      display: 'block',
+      display: 'flex',
       fontWeight: 400,
-      fontSize: '.9em',
+      fontSize: '0.9rem',
     },
 
     // duration
     '.duration-fields': {
       display: 'flex',
-      gap: '1rem',
+      gap: '2rem',
     },
-    '.input-field': {
-      display: 'block',
-      fontWeight: 400,
-      fontSize: '.9em',
+    '.duration-field input': {
+      minWidth: '4rem', // cannot overload width directly
     },
 
     // declarations
     '& .declarations-lunatic, &:is(.Sequence, .Subsequence) .label-description':
       {
-        padding: '0.5em',
-        fontSize: '92%',
+        marginBottom: '2rem',
+        fontSize: '0.92rem',
       },
     '& .declaration-lunatic': {
       marginBottom: '1em',
@@ -159,7 +162,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         color: 'initial',
         backgroundColor: 'initial',
         fontSize: 'initial',
-        marginBottom: '1.5em',
+        marginBottom: '2em',
         lineHeight: '1.3em',
       },
     '&:not(.Question) .lunatic-component .field-container': {
@@ -169,9 +172,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       marginTop: '0',
     },
     '& .lunatic-textarea textarea': {
-      padding: '0.5em',
-      fontSize: '100%',
-      marginLeft: '1em',
+      padding: '0.5rem',
       borderRadius: '10px',
       border: `${borderInput}`,
       width: '55%',
@@ -184,10 +185,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
     '& .input-lunatic': {
       paddingRight: '0.5em',
-      paddingLeft: '0.5em',
       fontSize: '100%',
-      marginLeft: '1em',
-      marginBottom: '1em',
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
       borderRadius: '10px',
       border: `${borderInput}`,
       width: '55%',
@@ -229,7 +229,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         backgroundColor: `${backgroundColorCheckbox}`,
         marginBottom: '12px',
         width: '70%',
-        padding: '0.5em',
+        padding: '0.5rem',
 
         '& .lunatic-input-checkbox__icon': {
           display: 'none',
@@ -312,9 +312,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           fontSize: '1em',
           color: 'black',
           display: 'block',
-          marginBottom: '1em',
+          marginBottom: '2rem',
           fontWeight: 'bold',
-          padding: '0.5em',
         },
       },
     '&:is(.Question, .Loop) .field-container > .field > fieldset > legend': {
@@ -323,9 +322,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         fontSize: '1em',
         color: 'black',
         display: 'block',
-        marginBottom: '1em',
+        marginBottom: '2rem',
         fontWeight: 'bold',
-        padding: '0.5em',
         marginTop: '0',
       },
       '> p:not(:has(*))': {
@@ -344,7 +342,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       '&:has(> .declarations-lunatic)': {
         display: 'grid',
         gridTemplateRows: 'auto 1fr',
-        gridRowGap: '1em',
       },
       '.field-container, .field': {
         height: '100%',
@@ -492,28 +489,22 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
             '.lunatic-combo-box-selection': {
               height: '34px',
               lineHeight: '34px',
-              fontSize: '15px',
               borderRadius: '10px',
               border: '1px solid black',
               backgroundColor: 'white',
               '& .placeholder': {
                 color: 'gray',
-                fontSize: '15px',
               },
-              '& > .placeholder, >.selection': {
-                paddingLeft: '4px',
-              },
+              '& > .placeholder, >.selection': {},
               '.lunatic-combo-box-input': {
                 height: '34px',
                 lineHeight: '34px',
-                fontSize: '15px',
                 textIndent: '4px',
                 margin: 0,
                 padding: 0,
                 width: '100%',
                 border: '1px solid black',
                 '&::placeholder': {
-                  fontSize: '15px',
                   fontFamily: "'Gotham SSm A','Gotham SSm B',sans-serif",
                 },
               },
