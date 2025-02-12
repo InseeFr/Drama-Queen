@@ -72,6 +72,7 @@ const useStyles = tss.create(({ theme }) => ({
   panelContainer: {
     gap: '1em',
     alignSelf: 'center',
+    minWidth: '70%',
   },
   panelButton: {
     padding: '1em',
