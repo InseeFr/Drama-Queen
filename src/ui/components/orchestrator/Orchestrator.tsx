@@ -185,15 +185,17 @@ export function Orchestrator(props: OrchestratorProps) {
                 />
               </Provider>
             </Stack>
-            <LoopPanel
-              loopVariables={loopVariables}
-              page={page}
-              subPage={subPage}
-              iteration={iteration}
-              lastReachedPage={lastReachedPage}
-              data={surveyUnitData}
-              goToPage={goToPage}
-            />
+            <Stack className={classes.loopPanel}>
+              <LoopPanel
+                loopVariables={loopVariables}
+                page={page}
+                subPage={subPage}
+                iteration={iteration}
+                lastReachedPage={lastReachedPage}
+                data={surveyUnitData}
+                goToPage={goToPage}
+              />
+            </Stack>
           </Stack>
           <Stack className={classes.continue}>
             {continueProps.isVisible && <Continue {...continueProps} />}
