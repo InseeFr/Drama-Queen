@@ -7,10 +7,6 @@ export const surveySample = {
       variableType: 'COLLECTED',
       values: {
         COLLECTED: null,
-        EDITED: null,
-        FORCED: null,
-        INPUTTED: null,
-        PREVIOUS: null,
       },
       name: 'INPUT',
     },
@@ -18,10 +14,6 @@ export const surveySample = {
       variableType: 'COLLECTED',
       values: {
         COLLECTED: null,
-        EDITED: null,
-        FORCED: null,
-        INPUTTED: null,
-        PREVIOUS: null,
       },
       name: 'COMMENT_QE',
     },
@@ -29,10 +21,6 @@ export const surveySample = {
       variableType: 'COLLECTED',
       values: {
         COLLECTED: null,
-        EDITED: null,
-        FORCED: null,
-        INPUTTED: null,
-        PREVIOUS: null,
       },
       name: 'INPUT_MISSING',
     },
@@ -40,10 +28,6 @@ export const surveySample = {
       variableType: 'COLLECTED',
       values: {
         COLLECTED: null,
-        EDITED: null,
-        FORCED: null,
-        INPUTTED: null,
-        PREVIOUS: null,
       },
       name: 'COMMENT_QE_MISSING',
     },
