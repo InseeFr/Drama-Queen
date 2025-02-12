@@ -71,11 +71,13 @@ export function LoopPanel(props: LoopPanelProps) {
 const useStyles = tss.create(({ theme }) => ({
   panelContainer: {
     gap: '1em',
-    padding: '1.5em',
+    alignSelf: 'center',
+    minWidth: '70%',
   },
   panelButton: {
     padding: '1em',
     justifyContent: 'space-between',
+    fontSize: '0.5em',
     '&:disabled': {
       background: 'transparent',
       borderColor: theme.palette.info.main,

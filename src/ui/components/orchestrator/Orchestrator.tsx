@@ -185,15 +185,17 @@ export function Orchestrator(props: OrchestratorProps) {
                 />
               </Provider>
             </Stack>
-            <LoopPanel
-              loopVariables={loopVariables}
-              page={page}
-              subPage={subPage}
-              iteration={iteration}
-              lastReachedPage={lastReachedPage}
-              data={surveyUnitData}
-              goToPage={goToPage}
-            />
+            <Stack className={classes.loopPanel}>
+              <LoopPanel
+                loopVariables={loopVariables}
+                page={page}
+                subPage={subPage}
+                iteration={iteration}
+                lastReachedPage={lastReachedPage}
+                data={surveyUnitData}
+                goToPage={goToPage}
+              />
+            </Stack>
           </Stack>
           <Stack className={classes.continue}>
             {continueProps.isVisible && <Continue {...continueProps} />}
@@ -227,46 +229,64 @@ export function Orchestrator(props: OrchestratorProps) {
 
 const useStyles = tss.create(({ theme }) => ({
   orchestrator: {
-    minHeight: '100vh',
+    height: '100vh',
   },
   bodyContainer: {
     flexDirection: 'row',
     backgroundColor: theme.palette.background.default,
-    paddingTop: '60px',
+    paddingTop: '65px',
     flex: 1,
     width: 'calc(100% - 60px)',
+    height: 'calc(100vh - 65px)',
   },
   mainContainer: {
     flex: 1,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   centerSection: {
+    display: 'flex',
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
+    height: '100%',
+    overflow: 'hidden',
   },
   activeSection: {
-    flex: 1,
+    flexDirection: 'column',
     height: '100%',
+    width: '80%',
+    overflowY: 'auto',
     '& > div:first-of-type': {
       display: 'flex',
       height: '100%',
     },
     '& > div:first-of-type > div': {
       maxWidth: 'calc(100% - 100px)',
-      marginLeft: '100px',
-      marginTop: '4em',
+      paddingLeft: '100px',
+      marginTop: '3em',
       flexGrow: 1,
+      overflowY: 'auto',
     },
+  },
+  loopPanel: {
+    marginTop: '3em',
+    marginLeft: '0.5em',
+    marginRight: '0.5em',
+    width: '20%',
+    overflowY: 'auto',
   },
   continue: {
     alignItems: 'end',
     marginBottom: '1em',
+    marginTop: '2em',
     marginRight: '4em',
     minHeight: '2.3em',
   },
   navBarContainer: {
     backgroundColor: theme.palette.background.default,
-    height: 'calc(100vh - 60px - 2em)',
+    height: 'calc(100vh - 65px - 2em)',
     right: '0',
     position: 'fixed',
     justifyContent: 'flex-end',

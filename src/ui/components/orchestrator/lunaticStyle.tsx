@@ -36,9 +36,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         marginTop: '1rem',
       },
     },
-    '&.Question .lunatic-table .lunatic-table-td > .field-container': {
-      marginTop: '1em',
-    },
 
     '&.Loop': {
       display: 'block',
@@ -165,9 +162,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         marginBottom: '2em',
         lineHeight: '1.3em',
       },
-    '&:not(.Question) .lunatic-component .field-container': {
-      marginTop: '1em',
-    },
     '&.Question .lunatic-component .field-container': {
       marginTop: '0',
     },
@@ -343,9 +337,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         display: 'grid',
         gridTemplateRows: 'auto 1fr',
       },
-      '.field-container, .field': {
-        height: '100%',
-      },
       '.field fieldset': {
         height: '100%',
         display: 'grid',
@@ -367,10 +358,15 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       },
     },
 
+    // fix missing-buttons except in Loop because there are multiple missing responses
+    '&:not(.Loop) .missing-buttons': {
+      position: 'fixed',
+      bottom: '1em',
+    },
+
     '& .lunatic-component .missing-buttons, .missing-buttons': {
       display: 'flex',
       gap: '1em',
-      marginTop: 'auto',
 
       '& .button-lunatic': {
         marginTop: 0,
@@ -495,7 +491,9 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
               '& .placeholder': {
                 color: 'gray',
               },
-              '& > .placeholder, >.selection': {},
+              '& > .placeholder, >.selection': {
+                paddingLeft: '4px',
+              },
               '.lunatic-combo-box-input': {
                 height: '34px',
                 lineHeight: '34px',
