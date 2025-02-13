@@ -74,6 +74,8 @@ export const translations: Translations<'fr'> = {
     continue: 'Continuer',
     dontKnowButtonLabel: 'Ne sait pas',
     shortCutNextLabel: 'alt + ENTRÉE',
+    goFullscreen: 'Plein écran',
+    exitFullscreen: 'Quitter le mode plein écran',
   },
   synchronizeMessage: {
     synchronizationInProgress: 'Synchronisation en cours',

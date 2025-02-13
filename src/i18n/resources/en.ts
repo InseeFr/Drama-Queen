@@ -72,6 +72,8 @@ export const translations: Translations<'en'> = {
     continue: 'Continue',
     dontKnowButtonLabel: "Don't know",
     shortCutNextLabel: 'alt + ENTER',
+    goFullscreen: 'Go fullscreen',
+    exitFullscreen: 'Exit fullscreen',
   },
   synchronizeMessage: {
     synchronizationInProgress: 'Synchronization in progress',
