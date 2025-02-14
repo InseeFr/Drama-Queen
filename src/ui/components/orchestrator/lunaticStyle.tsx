@@ -359,7 +359,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     // fix missing-buttons except in Loop because there are multiple missing responses
-    '&:not(.Loop) .missing-buttons': {
+    '&:not(.Loop, .PairwiseLinks) .missing-buttons': {
       position: 'fixed',
       bottom: '1em',
     },
