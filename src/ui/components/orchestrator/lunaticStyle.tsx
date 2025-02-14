@@ -147,6 +147,10 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     '&.Subsequence > .field-container > .field > .label-description': {
       color: theme.palette.declarations.instruction,
     },
+    '&.Question .lunatic-component .label-description': {
+      fontWeight: 400,
+      fontSize: '0.92rem',
+    },
 
     '& .label-top label': {
       fontWeight: 'bold',
