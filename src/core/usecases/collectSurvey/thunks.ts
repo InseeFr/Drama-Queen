@@ -24,9 +24,7 @@ export const thunks = {
       return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
         if (!surveyUnit || !surveyUnit.questionnaireId) {
           return Promise.reject(
-            new Error(
-              `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}`,
-            ),
+            new Error(t('surveyUnitQuestionnaireNotFound', { surveyUnitId })),
           )
         }
         return surveyUnit.questionnaireId

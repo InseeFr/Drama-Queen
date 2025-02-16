@@ -25,6 +25,8 @@ export const translations: Translations<'fr'> = {
     lunaticModelVersionNotFound:
       'Le questionnaire ne comporte pas de champ lunaticModelVersion',
     questionnaireNotCompatible: `Le questionnaire est incompatible. La version du 'lunaticModelVersion' doit être supérieure à  ${LUNATIC_MODEL_VERSION_BREAKING}`,
+    surveyUnitQuestionnaireNotFound: ({ surveyUnitId }) =>
+      `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}.`,
     questionnaireNotFound: ({ questionnaireId }) =>
       `Impossible de récupérer le questionnaire ${questionnaireId}.`,
     wrongQuestionnaire: ({ surveyUnitId, questionnaireId }) =>
