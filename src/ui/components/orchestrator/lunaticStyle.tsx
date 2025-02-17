@@ -368,6 +368,11 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       bottom: '1em',
     },
 
+    '&.Loop .missing-buttons, &.PairwiseLinks .missing-buttons': {
+      marginTop: '1rem',
+      marginBottom: '2rem',
+    },
+
     '& .lunatic-component .missing-buttons, .missing-buttons': {
       display: 'flex',
       gap: '1em',
