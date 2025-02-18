@@ -1,3 +1,34 @@
+### 2.3.8
+
+#### Nouvelles fonctionnalités
+
+- prise en compte des questionnaires Lunatic utilisant le composant Question
+- ajout d'une barre de progression des séquences du questionnaire dans la barre latérale de droite
+- question de type nombre : ajout d'une description du format attendu (minimum, maximum, unité). Ajouté par Lunatic 3.4.15
+
+#### Modifications mineures
+
+- amélioration de la taille des champs de saisie et du texte pour faciliter la saisie
+- séparation de la zone centrale du questionnaire en 3 zones fixes : "Question + réponses", "Ne sait pas / Refus + Continuer", "tableau de navigation interitération de boucle"
+
+#### Correction de bugs
+
+- recherche sur liste : lors de la sélection d'une saisie libre, le bouton "Continuer" pour passer à la page suivante était absent. Corrigé par Lunatic 3.4.17
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.17
+
+### 2.3.7
+
+#### Nouvelles fonctionnalités
+
+- question de type texte/nombre : rappel de la valeur saisie au survol du champ de réponse (avec l'unité dans le cas du champ nombre). Ajouté par Lunatic 3.4.13
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.13
+
 ### 2.3.6
 
 #### Correction de bugs
