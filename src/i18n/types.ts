@@ -27,6 +27,7 @@ export type ErrorMessage =
   | { K: 'surveyUnitNotFound'; P: { surveyUnitId: string } }
   | 'lunaticModelVersionNotFound'
   | 'questionnaireNotCompatible'
+  | { K: 'surveyUnitQuestionnaireNotFound'; P: { surveyUnitId: string } }
   | { K: 'questionnaireNotFound'; P: { questionnaireId: string } }
   | {
       K: 'wrongQuestionnaire'
