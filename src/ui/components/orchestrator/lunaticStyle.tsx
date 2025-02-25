@@ -144,10 +144,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
           color: theme.palette.declarations.instruction,
         },
     },
-    '&.Subsequence > .field-container > .field > .label-description': {
-      color: theme.palette.declarations.instruction,
-    },
-    '&.Question .lunatic-component .label-description': {
+    '&:is(.Question, .Loop) .lunatic-component .label-description': {
       fontWeight: 400,
       fontSize: '0.92rem',
     },
@@ -327,9 +324,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       '> p:not(:has(*))': {
         display: 'none',
       },
-    },
-    '&.Loop .field-container > .field > fieldset > legend': {
-      '> h3': { marginBottom: '0' },
     },
 
     // missing response buttons css override
