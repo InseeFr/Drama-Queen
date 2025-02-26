@@ -64,7 +64,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     /* Firefox */
     '& input[type=text]': {
       MozAppearance: 'textfield',
-      marginBottom: '1em',
       padding: '0.45rem 0 0.45rem 0.45rem',
       minWidth: '40%',
       borderRadius: '10px',
@@ -79,6 +78,39 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       border: '1px solid black',
       backgroundColor: 'white',
     },
+
+    // characters count for text fields
+    '& .lunatic-input, .lunatic-textarea ': {
+      '& .field-with-count': {
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: '1em',
+        gap: '0.5rem',
+
+        '& .characters-count': {
+          fontSize: '0.9rem',
+          fontWeight: 700,
+          color: '#666666',
+          textAlign: 'right',
+        },
+        '& .max-length-reached': {
+          color: 'red',
+        },
+      },
+    },
+    '& .lunatic-input .field-with-count': {
+      width: '40%',
+    },
+    '& .lunatic-table .lunatic-input .field-with-count': {
+      width: 'auto',
+    },
+    '& .lunatic-textarea .field-with-count': {
+      width: '80%',
+      '& textarea': {
+        resize: 'vertical',
+      },
+    },
+
     // unit for lunatic-input-number
     '& .lunatic-input-number > span': {
       position: 'relative',
@@ -170,8 +202,6 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       padding: '0.5rem',
       borderRadius: '10px',
       border: `${borderInput}`,
-      width: '55%',
-      minWidth: '200px',
       height: '10em',
       '&:focus': {
         outline: 'none',
