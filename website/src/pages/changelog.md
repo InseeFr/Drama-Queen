@@ -1,3 +1,17 @@
+### 2.3.9
+
+#### Nouvelles fonctionnalités
+
+- question de type texte : ajout d'un compteur de caractères saisis sur la longueur maximale autorisée. Ajouté par Lunatic 3.4.19
+
+#### Correction de bugs
+
+- boucle non paginée : le bouton "Continuer" pour passer à la page suivante était parfois absent même si une réponse était renseignée. Corrigé par Lunatic 3.4.18
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.19
+
 ### 2.3.8
 
 #### Nouvelles fonctionnalités
