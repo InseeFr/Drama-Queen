@@ -328,6 +328,10 @@ export const thunks = {
             queenApi
               .putSurveyUnit(surveyUnit)
               .catch((error: AxiosError) => {
+                // handle response 423 as a success
+                if (error.response!.status === 423) {
+                  return Promise.resolve()
+                }
                 if (
                   error.response &&
                   [400, 403, 404, 500].includes(error.response.status)

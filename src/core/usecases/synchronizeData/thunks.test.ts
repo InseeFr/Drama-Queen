@@ -229,6 +229,32 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
+  it('should treat 423 response as a success', async () => {
+    const surveyUnit = { id: '1' }
+
+    vi.mocked(mockDataStore.getAllSurveyUnits).mockResolvedValue([
+      surveyUnit,
+    ] as SurveyUnit[])
+    vi.mocked(mockQueenApi.putSurveyUnit).mockRejectedValue({
+      response: { status: 423 },
+    })
+
+    vi.mocked(mockQueenApi.postSurveyUnitInTemp).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteSurveyUnit).mockResolvedValue(undefined)
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    // Expect it to continue as if it were a success
+    expect(mockQueenApi.postSurveyUnitInTemp).not.toHaveBeenCalled()
+    expect(mockDataStore.deleteSurveyUnit).toHaveBeenCalledWith(surveyUnit.id)
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.uploadSurveyUnitCompleted(),
+    )
+
+    // Ensure upload completion is still dispatched
+    expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
+  })
+
   it('should handle unexpected errors', async () => {
     vi.mocked(mockDataStore.getAllSurveyUnits).mockRejectedValue(
       new Error('Unexpected error'),
