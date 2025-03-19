@@ -20,11 +20,11 @@ const { RangeRequestsPlugin } = workbox.rangeRequests
 importScripts(`${self._DRAMAQUEEN_URL}/swEnv.js`)
 
 /**
- * Load external resource service-worker
+ * Load external resource service-worker, we load env according main env variable, its name is defined in vite.config.ts (vite-envs plugin)
  */
-if (self.__VITE_ENVS.VITE_EXTERNAL_RESOURCES_URL) {
+if (self.__QUEEN_ENVS.VITE_EXTERNAL_RESOURCES_URL) {
   // In external service-worker, self._QUEEN_CAPMI_URL has to be defined to get root url of externalResourcesUrl
-  self._QUEEN_CAPMI_URL = self.__VITE_ENVS.VITE_EXTERNAL_RESOURCES_URL
+  self._QUEEN_CAPMI_URL = self.__QUEEN_ENVS.VITE_EXTERNAL_RESOURCES_URL
   importScripts(`${self._QUEEN_CAPMI_URL}/queen-service-worker.js`)
 }
 
