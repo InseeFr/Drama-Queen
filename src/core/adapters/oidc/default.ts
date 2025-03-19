@@ -22,7 +22,7 @@ export function createOidc(params: {
         oidc = await createOidcSpa({
           issuerUri,
           clientId,
-          publicUrl: undefined,
+          homeUrl: '/',
         })
       } catch (e) {
         console.error(e)
@@ -34,11 +34,11 @@ export function createOidc(params: {
 
   async function getOidc(): Promise<Oidc> {
     const initializedOidc = await initializeOidc()
-
     if (initializedOidc.isUserLoggedIn) {
       return {
         isUserLoggedIn: true as const,
         logout: () => initializedOidc.logout({ redirectTo: 'home' }),
+        // @ts-expect-error: If the user is logged in, we can assume that the tokens are available
         getTokens: initializedOidc.getTokens,
       }
     }
