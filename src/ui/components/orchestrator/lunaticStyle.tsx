@@ -634,5 +634,13 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         gridColumn: 1 / 3,
       },
     },
+
+    // tooltip
+    '.tooltip-content': {
+      maxWidth: '50%',
+      borderRadius: '5px',
+      opacity: 1,
+      fontWeight: '400 !important',
+    },
   },
 }))
