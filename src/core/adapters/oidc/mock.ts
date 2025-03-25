@@ -36,7 +36,7 @@ export const getMockedOidc = (isUserLoggedIn: boolean) => {
       accessToken: '',
       idToken: '',
       refreshToken: '',
-      refreshTokenExpirationTime: Infinity,
+      refreshTokenExpirationTime: Infinity ?? 0,
     }),
   })
 }
