@@ -635,6 +635,21 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       },
     },
 
+    // button inside roundabout
+    '&.Roundabout .button-lunatic': {
+      backgroundColor: theme.palette.background.button.main,
+      color: theme.palette.secondary.main,
+      padding: '0.5em 1em',
+      margin: '0.5em 0em',
+      border: 'none',
+      borderRadius: '4px',
+      fontSize: '0.875rem',
+      '&:hover,&:focus': {
+        backgroundColor: 'white',
+        color: theme.palette.primary.main,
+      },
+    },
+
     // tooltip
     '.tooltip-content': {
       maxWidth: '50%',
