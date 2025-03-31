@@ -1,3 +1,35 @@
+### 2.3.12
+
+#### Correction de bugs
+
+- la suppression de ligne dans un tableau dynamique ne fonctionnait plus. Corrigé par Lunatic 3.4.21
+- la langue par défaut a été modifiée en français pour éviter des traductions involontaires du navigateur
+
+#### Modifications mineures
+
+- amélioration du style du composant rond-point de Lunatic
+- amélioration du style des infobulles Lunatic
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.21
+
+### 2.3.11
+
+#### Correction de bugs
+
+- correction de variables d'environnement pour le service worker des ressources externes (bug apporté par la version 2.3.10)
+
+### 2.3.10
+
+#### Nouvelles fonctionnalités
+
+- synchronisation : prise en compte de la réponse 423 comme un succès lors de l'envoi d'une unité enquêtée (la synchronisation ne s'arrête plus)
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.4.20
+
 ### 2.3.9
 
 #### Nouvelles fonctionnalités
