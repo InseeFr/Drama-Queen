@@ -635,18 +635,47 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       },
     },
 
-    // button inside roundabout
-    '&.Roundabout .button-lunatic': {
-      backgroundColor: theme.palette.background.button.main,
-      color: theme.palette.secondary.main,
-      padding: '0.5em 1em',
-      margin: '0.5em 0em',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '0.875rem',
-      '&:hover,&:focus': {
-        backgroundColor: 'white',
-        color: theme.palette.primary.main,
+    // roundabout Style
+
+    '&.Roundabout': {
+      '.lunatic-roundabout__label': {
+        maxWidth: '90%',
+        fontWeight: 'bold',
+        fontSize: '1.2em',
+        marginBottom: '1em',
+      },
+      '.label-description': {
+        fontSize: '1em',
+        marginTop: '1em',
+      },
+
+      '.lunatic-roundabout__items > .lunatic-roundabout__item': {
+        fontSize: '1em',
+        marginTop: '3em',
+      },
+
+      '.lunatic-roundabout__items > .lunatic-roundabout__item > .lunatic-roundabout__description':
+        {
+          fontSize: '1em',
+          marginTop: '3em',
+        },
+
+      '.lunatic-roundabout__items > .lunatic-roundabout__item, label': {
+        fontSize: '1em',
+        marginBottom: '3em ',
+      },
+      '.button-lunatic': {
+        backgroundColor: theme.palette.background.button.main,
+        color: theme.palette.secondary.main,
+        padding: '0.5em 1em',
+        marginTop: '2em',
+        border: 'none',
+        borderRadius: '4px',
+        fontSize: '0.875rem',
+        '&:hover,&:focus': {
+          backgroundColor: 'white',
+          color: theme.palette.primary.main,
+        },
       },
     },
 
