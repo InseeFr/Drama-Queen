@@ -10,6 +10,7 @@ import { useTranslation } from '@/i18n'
 import { useAutoNext } from '@/ui/components/orchestrator/tools/useAutoNext'
 
 import { Modal } from '../Modal'
+import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
@@ -168,6 +169,7 @@ export function Orchestrator(props: OrchestratorProps) {
               <Provider>
                 <LunaticComponents
                   components={components}
+                  slots={slotComponents}
                   componentProps={() => ({
                     filterDescription: false,
                     disabled: readonly,
