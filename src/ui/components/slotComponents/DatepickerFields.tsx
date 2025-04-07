@@ -94,12 +94,12 @@ function computeDateFnsFormat(format: DateFormat) {
 }
 
 /**
- * Determines DatePicker views
+ * Determines calendar views
  */
 function getDatePickerViews(format: DateFormat): DateView[] {
   switch (format) {
     case 'YYYY-MM':
-      return ['year', 'month']
+      return ['month', 'year']
     case 'YYYY':
       return ['year']
     case 'YYYY-MM-DD':
