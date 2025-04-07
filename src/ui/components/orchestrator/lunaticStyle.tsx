@@ -62,7 +62,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     /* Firefox */
-    '& input[type=text]': {
+    // do not apply in a datepicker
+    '& input[type=text]:not(.datepicker *)': {
       MozAppearance: 'textfield',
       padding: '0.45rem 0 0.45rem 0.45rem',
       minWidth: '40%',
@@ -70,7 +71,8 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       border: '1px solid black',
       backgroundColor: 'white',
     },
-    '& input[type=number]': {
+    // do not apply in a datepicker
+    '& input[type=number]:not(.datepicker *)': {
       MozAppearance: 'textfield',
       marginBottom: '1em',
       padding: '0.45rem 0 0.45rem 0.45rem',
@@ -185,7 +187,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       fontWeight: 'bold',
     },
 
-    '&:not(.Loop) .lunatic-component fieldset legend, &:not(.Question, .Loop) fieldset legend':
+    '&:not(.Loop) .lunatic-component fieldset:not(.datepicker *) legend, &:not(.Question, .Loop) fieldset:not(.datepicker *) legend':
       {
         fontWeight: 'bold',
         maxWidth: '90%',
@@ -245,7 +247,10 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     '& .lunatic-component fieldset, fieldset': {
       padding: 0,
       margin: 0,
-      border: 'none',
+      // everywhere except in datepicker
+      '&:not(.datepicker *)': {
+        border: 'none',
+      },
 
       // checkbox & radio
       '&:not(:has(.lunatic-checkbox-boolean)) .lunatic-input-checkbox': {
@@ -365,7 +370,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         display: 'grid',
         gridTemplateRows: 'auto 1fr',
       },
-      '.field fieldset': {
+      '.field fieldset:not(.datepicker *)': {
         height: '100%',
         display: 'grid',
         gridTemplateRows: 'auto auto 1fr',
