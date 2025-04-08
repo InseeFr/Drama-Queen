@@ -22,7 +22,7 @@ export function createOidc(params: {
         oidc = await createOidcSpa({
           issuerUri,
           clientId,
-          homeUrl: '/',
+          homeUrl: '/queen',
         })
       } catch (e) {
         console.error(e)
