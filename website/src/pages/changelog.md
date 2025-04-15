@@ -1,3 +1,34 @@
+### 2.4.2
+
+#### Nouvelles fonctionnalités
+
+- question de type date : un datepicker est désormais disponible pour ne plus avoir plusieurs champs
+- tableau dynamique : il est désormais possible de filtrer une case du tableau selon une formule. Ajouté par Lunatic 3.5.2
+
+#### Correction de bugs
+
+- question de type nombre : les valeurs possibles respectent désormais correctement le minimum et maximum définis dans le questionnaire. Modifié par Lunatic 3.5.3
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.5.3
+
+### 2.4.1
+
+#### Correction de bugs
+
+- l'url de redirection lors de l'authentification était incorrecte (depuis la v2.3.12)
+
+### 2.4.0
+
+#### QOL
+
+- amélioration des performances des questionnaires. Modifié par Lunatic 3.5.0
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.5.0
+
 ### 2.3.12
 
 #### Correction de bugs
