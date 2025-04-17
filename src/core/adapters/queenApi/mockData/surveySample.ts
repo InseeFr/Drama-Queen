@@ -140,7 +140,7 @@ export const surveySample = {
         value:
           '"➡ 2. " || "Avez-vous des remarques concernant l\'enquête ou des commentaires ?"',
       },
-      mandatory: false,
+      isMandatory: false,
       maxLength: 2000,
     },
   ],

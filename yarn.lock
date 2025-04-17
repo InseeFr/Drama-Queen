@@ -1419,10 +1419,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.2.tgz#1860473de7dfa1546767448f333db80cb0ff2161"
   integrity sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==
 
-"@inseefr/lunatic@^3.5.3":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.5.3.tgz#953694ae486151a1ce74aac063535c70df9d672c"
-  integrity sha512-FteXs+pehi5rfuKmjay4uH2XCWo6i8cEHs9QyYlwnaL5gEbdx/s6M5ciXWu+wDqlDKHArrxN8mAm9eby4v5wtA==
+"@inseefr/lunatic@^3.5.4":
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-3.5.4.tgz#293ae25bee6eed17c2390d16f1a7e6cf5bb382e6"
+  integrity sha512-uP02mT5u5vWzkPBeYbpSi+y6QIKQ5k7m/34oLfNeaPuJjIS5VTScTO5dRx3hYrUOntmf0Q7WqFVcOQqGevYMYw==
   dependencies:
     "@inseefr/trevas" "^0.1.21"
     "@inseefr/vtl-2.0-antlr-tools" "^0.3.2"
