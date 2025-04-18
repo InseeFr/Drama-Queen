@@ -12,7 +12,6 @@ import type { GetChangedData } from '../lunaticType'
 
 type UseQueenNavigationProps = {
   initialSurveyUnit: SurveyUnit
-  lastReachedPage: PageTag | undefined
   pageTag: PageTag
   isWelcomeModalOpen: boolean
   getChangedData: GetChangedData
@@ -30,7 +29,6 @@ type UseQueenNavigationProps = {
  */
 export function useQueenNavigation({
   initialSurveyUnit,
-  lastReachedPage,
   pageTag,
   isWelcomeModalOpen,
   getChangedData,
@@ -46,9 +44,6 @@ export function useQueenNavigation({
   const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
     initialSurveyUnit.data,
   )
-
-  const isLastReachedPage =
-    lastReachedPage === undefined || pageTag === lastReachedPage
 
   const getHasDataChanged = (changedData: SurveyUnitData) => {
     if (changedData.COLLECTED) {
@@ -170,11 +165,7 @@ export function useQueenNavigation({
 
   // handle updated surveyUnit when page changes
   useEffect(() => {
-    if (
-      pageTag === undefined ||
-      lastReachedPage === undefined ||
-      isWelcomeModalOpen
-    ) {
+    if (pageTag === undefined || isWelcomeModalOpen) {
       return
     }
     // get updated data
@@ -187,7 +178,6 @@ export function useQueenNavigation({
     return onChangePage(surveyUnit)
   }, [
     pageTag,
-    lastReachedPage,
     isWelcomeModalOpen,
     handleData,
     handleState,
@@ -222,7 +212,6 @@ export function useQueenNavigation({
   }
 
   return {
-    isLastReachedPage,
     surveyUnitData,
     orchestratorQuit,
     orchestratorDefinitiveQuit,

@@ -18,6 +18,7 @@ import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
 import { getSource, getinitialSurveyUnit } from './tools/functions'
+import { useSurveyUnitHandling } from './tools/surveyUnit/useSurveyUnitHandling'
 import { useNavigationButtons } from './tools/useNavigationButtons'
 import { useQueenNavigation } from './tools/useQueenNavigation'
 
@@ -123,15 +124,20 @@ export function Orchestrator(props: OrchestratorProps) {
 
   const { classes: lunaticClasses } = useLunaticStyles()
 
+  const isLastReachedPage =
+    lastReachedPage === undefined || pageTag === lastReachedPage
+
   const {
-    isLastReachedPage,
     surveyUnitData,
-    orchestratorQuit,
-    orchestratorDefinitiveQuit,
-  } = useQueenNavigation({
+    surveyUnitState,
+    updateData,
+    updateState,
+    getUpdatedSurveyUnit,
+  } = useSurveyUnitHandling(initialSurveyUnit, pageTag)
+
+  const { orchestratorQuit, orchestratorDefinitiveQuit } = useQueenNavigation({
     initialSurveyUnit,
     getChangedData: getChangedData,
-    lastReachedPage,
     pageTag,
     isWelcomeModalOpen,
     onQuit,
