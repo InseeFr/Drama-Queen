@@ -1,14 +1,44 @@
-import type { Variable } from '@inseefr/lunatic/type.source'
+import { useLunatic } from '@inseefr/lunatic'
 
-import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
-import type {
-  PageTag,
-  Questionnaire,
-  SurveyUnit,
-  SurveyUnitData,
-} from '@/core/model'
+import { useCallback, useRef } from 'react'
 
 import type { Component, Components } from '../lunaticType'
+
+type PartialLunatic = Pick<
+  ReturnType<typeof useLunatic>,
+  'getComponents' | 'goNextPage'
+>
+
+/**
+ * Create a callback to go to the next page automatically when changing the
+ * value of a checkbox / radio / missing.
+ */
+export function useAutoNext() {
+  const ref = useRef<PartialLunatic | null>(null)
+
+  const onChange = useCallback(
+    (
+      valueChange: {
+        name: string
+        value: any
+        iteration?: number[]
+      }[],
+    ) => {
+      if (ref.current === null) return
+      const { getComponents, goNextPage } = ref.current
+      const components = getComponents()
+      if (shouldAutoNext(components, valueChange)) {
+        goNextPage()
+      }
+    },
+    [],
+  )
+
+  return {
+    onChange,
+    ref,
+  }
+}
 
 /**
  * temporary : should be handle by Lunatic
@@ -84,80 +114,4 @@ export function shouldAutoNext(
     return true
   }
   return false
-}
-
-// check if the first subPage of an iteration is before lastReachedPage
-export function isIterationReachable(
-  currentPage: number,
-  lastReachedPage: PageTag,
-  iteration: number,
-) {
-  const maxPage = parseInt(lastReachedPage.split('.')[0])
-  const maxIteration = parseInt(lastReachedPage.split('#')[1]) - 1
-  if (currentPage < maxPage) {
-    // no need to check iteration or subPage because we already reached the next page (out of the loop)
-    return true
-  }
-  // currentPage = maxPage , so we check if we already reached the iteration
-  if (iteration <= maxIteration) {
-    // no need to check subPage beacause we just want to reach the first subPage of the iteration
-    return true
-  }
-  return false
-}
-
-function getInitialData(
-  surveyUnitId: string,
-  questionnaireId: string,
-  data?: SurveyUnitData,
-): SurveyUnitData {
-  if (!EXTERNAL_RESOURCES_URL) return data ?? {}
-  return {
-    ...data,
-    EXTERNAL: {
-      ...data?.EXTERNAL,
-      GLOBAL_QUESTIONNAIRE_ID: questionnaireId,
-      GLOBAL_SURVEY_UNIT_ID: surveyUnitId,
-    },
-  }
-}
-
-export function getSource(source: Questionnaire): Questionnaire {
-  if (!EXTERNAL_RESOURCES_URL) return source
-  const globalExternalVariables = [
-    {
-      name: 'GLOBAL_QUESTIONNAIRE_ID',
-      value: null,
-      variableType: 'EXTERNAL',
-    },
-    {
-      name: 'GLOBAL_SURVEY_UNIT_ID',
-      value: null,
-      variableType: 'EXTERNAL',
-    },
-  ] as Variable[]
-  return {
-    ...source,
-    variables: [...source.variables, ...globalExternalVariables],
-  }
-}
-
-export function getinitialSurveyUnit(
-  partial?: Partial<SurveyUnit>,
-): SurveyUnit {
-  const surveyUnitId = partial?.id ?? ''
-  const questionnaireId = partial?.questionnaireId ?? ''
-
-  return {
-    id: surveyUnitId,
-    questionnaireId: questionnaireId,
-    personalization: partial?.personalization,
-    data: getInitialData(surveyUnitId, questionnaireId, partial?.data),
-    comment: partial?.comment,
-    stateData: partial?.stateData ?? {
-      state: null,
-      date: new Date().getTime(),
-      currentPage: '1',
-    },
-  }
 }

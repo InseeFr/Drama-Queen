@@ -7,7 +7,7 @@ import { useState } from 'react'
 import type { Questionnaire, SurveyUnit } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
-import { useAutoNext } from '@/ui/components/orchestrator/tools/useAutoNext'
+import { useAutoNext } from '@/ui/components/orchestrator/hooks/useAutoNext'
 
 import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
@@ -15,11 +15,11 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
+import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
-import { getSource, getinitialSurveyUnit } from './tools/functions'
-import { computeNavigationButtonsProps } from './tools/navigation'
-import { useQueenNavigation } from './tools/useQueenNavigation'
+import { getSource, getinitialSurveyUnit } from './utils/data'
+import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 

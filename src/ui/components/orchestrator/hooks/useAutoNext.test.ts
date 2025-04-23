@@ -1,7 +1,7 @@
 import type { LunaticComponentProps } from '@inseefr/lunatic/components/type'
 import { describe, expect, it, vi } from 'vitest'
 
-import { shouldAutoNext } from './functions'
+import { shouldAutoNext } from './useAutoNext'
 
 describe('Should auto next', () => {
   it('returns false with non-radio and non-checkbox components', () => {
