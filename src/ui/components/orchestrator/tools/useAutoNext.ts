@@ -10,7 +10,7 @@ type PartialLunatic = Pick<
 >
 
 /**
- * Creates a callback to go to the next page automatically when changing the value of a checkbox / radio / missing
+ * Create a callback to go to the next page automatically when changing the value of a checkbox / radio / missing
  */
 export function useAutoNext() {
   const ref = useRef<PartialLunatic | null>(null)

@@ -13,27 +13,28 @@ import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
-import { WelcomeModal } from './WelcomeModal'
+import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
 import { getSource, getinitialSurveyUnit } from './tools/functions'
-import { useNavigationButtons } from './tools/useNavigationButtons'
+import { computeNavigationButtonsProps } from './tools/navigation'
 import { useQueenNavigation } from './tools/useQueenNavigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
 type OrchestratorProps = {
   source: Questionnaire
-  surveyUnit: SurveyUnit | undefined
+  surveyUnit?: SurveyUnit
   readonly: boolean
-  onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
-  onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
-  onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
+  onQuit?: (surveyUnit: SurveyUnit) => void
+  onDefinitiveQuit?: (surveyUnit: SurveyUnit) => void
+  onChangePage?: (surveyUnit: SurveyUnit) => void
   getReferentiel: GetReferentiel
-  onChangeSurveyUnitState?:
-    | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
-    | undefined
+  onChangeSurveyUnitState?: (params: {
+    surveyUnitId: string
+    newState: QuestionnaireState
+  }) => void
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -114,17 +115,18 @@ export function Orchestrator(props: OrchestratorProps) {
     onChangeSurveyUnitState,
   })
 
-  const { continueProps, previousProps, nextProps } = useNavigationButtons({
-    readonly,
-    isFirstPage,
-    isLastPage,
-    isLastReachedPage,
-    hasPageResponse,
-    goPreviousPage,
-    goNextPage,
-    quit: orchestratorQuit,
-    definitiveQuit: orchestratorDefinitiveQuit,
-  })
+  const { continueProps, previousProps, nextProps } =
+    computeNavigationButtonsProps({
+      readonly,
+      isFirstPage,
+      isLastPage,
+      isLastReachedPage,
+      hasPageResponse,
+      goPreviousPage,
+      goNextPage,
+      quit: orchestratorQuit,
+      definitiveQuit: orchestratorDefinitiveQuit,
+    })
 
   return (
     <Stack className={classes.orchestrator}>
@@ -191,7 +193,7 @@ export function Orchestrator(props: OrchestratorProps) {
           />
         </Stack>
       </Stack>
-      <WelcomeModal
+      <WelcomeBackModal
         isOpen={isWelcomeModalOpen}
         onClose={() => setIsWelcomeModalOpen(false)}
         onGoBack={() => {

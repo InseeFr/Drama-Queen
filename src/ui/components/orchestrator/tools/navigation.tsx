@@ -21,7 +21,7 @@ type UseNavigationButtonsProps = {
   definitiveQuit: () => void
 }
 
-export function useNavigationButtons({
+export function computeNavigationButtonsProps({
   readonly,
   isFirstPage,
   isLastPage,

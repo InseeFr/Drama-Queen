@@ -18,10 +18,10 @@ function countMissingResponseInComponent(component: Component): number {
   // When we are Loop (not paginated), we have to compute the total of component repetition
   if (
     'iterations' in component &&
-    ('paginatedLoop'! in component ||
+    ('paginatedLoop' in component ||
       ('paginatedLoop' in component && !component.paginatedLoop))
   ) {
-    factor = component.iterations as number
+    factor = component.iterations
   }
   if ('components' in component && Array.isArray(component.components)) {
     const components = component.components
@@ -104,27 +104,6 @@ export function isIterationReachable(
     return true
   }
   return false
-}
-
-export function downloadAsJson(params: { data: object; filename?: string }) {
-  const { data, filename = 'data.json' } = params
-  if (!data) {
-    console.error('No data to download.')
-    return
-  }
-  const jsonData = JSON.stringify(data, null, 2)
-  const blob = new Blob([jsonData], { type: 'application/json' })
-
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-
-  document.body.appendChild(a)
-  a.click()
-
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
 }
 
 function getInitialData(

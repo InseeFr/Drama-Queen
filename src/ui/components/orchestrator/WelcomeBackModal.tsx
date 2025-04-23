@@ -2,7 +2,7 @@ import { useTranslation } from '@/i18n'
 
 import { Modal } from '../Modal'
 
-type WelcomeModalProps = {
+type WelcomeBackModalProps = {
   isOpen?: boolean
   onClose: () => void
   onGoBack: () => void
@@ -12,11 +12,11 @@ type WelcomeModalProps = {
  * Display a modal when the user come back to the orchestrator, allowing to
  * quickly come back to last page reached.
  */
-export function WelcomeModal({
+export function WelcomeBackModal({
   isOpen = false,
   onClose,
   onGoBack,
-}: Readonly<WelcomeModalProps>) {
+}: Readonly<WelcomeBackModalProps>) {
   const { t } = useTranslation('modalMessage')
 
   const welcomeModalTitle = t('welcomeModalTitle')
