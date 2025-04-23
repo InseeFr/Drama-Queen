@@ -56,7 +56,7 @@ export function removeNullCollectedData(
 }
 
 /** Get updated surveyUnit data, using the current data and changed data */
-export function getUpdatedData(
+export function getNewData(
   currentSurveyUnitData: SurveyUnitData,
   changedData: SurveyUnitData,
 ) {

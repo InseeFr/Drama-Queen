@@ -2,9 +2,9 @@ import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import type { Questionnaire, SurveyUnit } from '@/core/model'
+import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
 import { useAutoNext } from '@/ui/components/orchestrator/tools/useAutoNext'
@@ -18,9 +18,10 @@ import { Continue } from './buttons/Continue/Continue'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
 import { getSource, getinitialSurveyUnit } from './tools/functions'
+import { useQueenNavigation } from './tools/navigation/useQueenNavigation'
 import { useSurveyUnitHandling } from './tools/surveyUnit/useSurveyUnitHandling'
 import { useNavigationButtons } from './tools/useNavigationButtons'
-import { useQueenNavigation } from './tools/useQueenNavigation'
+import { useRefSync } from './tools/useRefSync'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
@@ -127,24 +128,19 @@ export function Orchestrator(props: OrchestratorProps) {
   const isLastReachedPage =
     lastReachedPage === undefined || pageTag === lastReachedPage
 
-  const {
-    surveyUnitData,
-    surveyUnitState,
-    updateData,
-    updateState,
-    getUpdatedSurveyUnit,
-  } = useSurveyUnitHandling(initialSurveyUnit, pageTag)
-
-  const { orchestratorQuit, orchestratorDefinitiveQuit } = useQueenNavigation({
+  const { surveyUnitData, getUpdatedSurveyUnit } = useSurveyUnitHandling(
     initialSurveyUnit,
-    getChangedData: getChangedData,
-    pageTag,
-    isWelcomeModalOpen,
-    onQuit,
-    onDefinitiveQuit,
-    onChangePage,
     onChangeSurveyUnitState,
-  })
+    pageTag,
+  )
+
+  const { orchestratorOnQuit, orchestratorOnDefinitiveQuit } =
+    useQueenNavigation({
+      onQuit,
+      onDefinitiveQuit,
+      getUpdatedSurveyUnit,
+      getChangedData,
+    })
 
   const { continueProps, previousProps, nextProps } = useNavigationButtons({
     readonly,
@@ -154,9 +150,29 @@ export function Orchestrator(props: OrchestratorProps) {
     hasPageResponse,
     goPreviousPage,
     goNextPage,
-    quit: orchestratorQuit,
-    definitiveQuit: orchestratorDefinitiveQuit,
+    quit: orchestratorOnQuit,
+    definitiveQuit: orchestratorOnDefinitiveQuit,
   })
+
+  // Use ref to avoid dependencies in useCallback. Else it triggers getChangedData at every input.
+  const getChangedDataRef = useRefSync(getChangedData)
+  const getUpdatedSurveyUnitRef = useRefSync(getUpdatedSurveyUnit)
+  const onChangePageRef = useRefSync(onChangePage)
+
+  const orchestratorOnChangePage = useCallback(() => {
+    const surveyUnit = getUpdatedSurveyUnitRef.current(
+      getChangedDataRef.current(true) as SurveyUnitData,
+    )
+    onChangePageRef.current(surveyUnit)
+  }, [getChangedDataRef, getUpdatedSurveyUnitRef, onChangePageRef])
+
+  useEffect(() => {
+    if (pageTag === undefined || isWelcomeModalOpen) {
+      return
+    }
+
+    return orchestratorOnChangePage()
+  }, [pageTag, isWelcomeModalOpen, orchestratorOnChangePage])
 
   return (
     <Stack className={classes.orchestrator}>
@@ -165,8 +181,8 @@ export function Orchestrator(props: OrchestratorProps) {
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
-        quit={orchestratorQuit}
-        definitiveQuit={orchestratorDefinitiveQuit}
+        quit={orchestratorOnQuit}
+        definitiveQuit={orchestratorOnDefinitiveQuit}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>

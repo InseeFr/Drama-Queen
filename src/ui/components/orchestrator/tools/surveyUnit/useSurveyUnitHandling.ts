@@ -3,6 +3,8 @@ import { useState } from 'react'
 import type { PageTag, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 
+import { getHasDataChanged, getNewData } from './data'
+
 export function useSurveyUnitHandling(
   initialSurveyUnit: SurveyUnit,
   onChangeSurveyUnitState: (params: {
@@ -18,8 +20,13 @@ export function useSurveyUnitHandling(
     initialSurveyUnit.stateData?.state ?? null,
   )
 
-  const updateData = (newData: SurveyUnitData) => {
+  function updateData(newData: SurveyUnitData) {
     setSurveyUnitData(newData)
+  }
+
+  function getUpdatedData(newData: SurveyUnitData): SurveyUnitData {
+    updateData(newData)
+    return getNewData(surveyUnitData, newData)
   }
 
   function updateState(newState: QuestionnaireState) {
@@ -33,7 +40,7 @@ export function useSurveyUnitHandling(
   function getUpdatedState(
     hasDataChanged: boolean,
     forcedState?: QuestionnaireState,
-  ) {
+  ): QuestionnaireState {
     // forcedState is used for definitiveQuit which forces the validation
     if (forcedState) {
       updateState(forcedState)
@@ -50,24 +57,33 @@ export function useSurveyUnitHandling(
     return newState
   }
 
-  const getUpdatedSurveyUnit = (
-    state: QuestionnaireState,
-    data: SurveyUnitData,
-  ): SurveyUnit => ({
-    ...initialSurveyUnit,
-    data,
-    stateData: {
-      state,
-      date: new Date().getTime(),
-      currentPage: pageTag ?? '1',
-    },
-  })
+  function getUpdatedSurveyUnit(
+    changedData: SurveyUnitData,
+    forcedState?: QuestionnaireState,
+  ): SurveyUnit {
+    const hasDataChanged = getHasDataChanged(changedData)
+
+    const newData = getNewData(surveyUnitData, changedData)
+    const updatedData = getUpdatedData(newData)
+
+    const updatedState = getUpdatedState(hasDataChanged, forcedState)
+
+    return {
+      ...initialSurveyUnit,
+      data: updatedData,
+      stateData: {
+        state: updatedState,
+        date: new Date().getTime(),
+        currentPage: pageTag ?? '1',
+      },
+    }
+  }
 
   return {
     surveyUnitData,
     surveyUnitState,
-    updateData,
-    updateState,
+    getUpdatedData,
+    getUpdatedState,
     getUpdatedSurveyUnit,
   }
 }
