@@ -54,7 +54,7 @@ export function Menu(props: MenuProps) {
 
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
-  const lunaticVersion = import.meta.env.LUNATIC_VERSION.replace(/^\^/, '')
+  const lunaticVersion = import.meta.env.LUNATIC_VERSION?.replace(/^\^/, '')
 
   const menuItems: MenuItem[] = [
     { type: 'survey', label: t('surveyButton') },
