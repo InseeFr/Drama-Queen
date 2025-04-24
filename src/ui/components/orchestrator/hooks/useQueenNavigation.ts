@@ -185,15 +185,9 @@ export function useQueenNavigation({
 
     const surveyUnit = getUpdatedSurveyUnit(state, data)
     return onChangePage(surveyUnit)
-  }, [
-    pageTag,
-    lastReachedPage,
-    isWelcomeModalOpen,
-    handleData,
-    handleState,
-    getUpdatedSurveyUnit,
-    onChangePage,
-  ])
+    // remove deps that should be stable, avoiding calling getChangedData on every input
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageTag, lastReachedPage, isWelcomeModalOpen])
 
   const orchestratorQuit = () => {
     // get updated data
