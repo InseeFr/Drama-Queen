@@ -4,8 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { SurveyUnit } from '@/core/model'
 import { Orchestrator } from '@/ui/components/orchestrator/Orchestrator'
-import { downloadAsJson } from '@/ui/components/orchestrator/tools/functions'
 import { useLoaderData } from '@/ui/routing/utils'
+import { downloadAsJson } from '@/utils/files'
 
 import { Visualize } from './Visualize'
 import { VisualizeForm } from './VisualizeForm'
@@ -17,7 +17,7 @@ vi.mock('@/ui/routing/utils', () => ({
 vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn(),
 }))
-vi.mock('@/ui/components/orchestrator/tools/functions', () => ({
+vi.mock('@/utils/files', () => ({
   downloadAsJson: vi.fn(),
 }))
 vi.mock('@/ui/components/orchestrator/Orchestrator', () => ({

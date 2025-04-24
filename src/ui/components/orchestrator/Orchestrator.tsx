@@ -7,33 +7,34 @@ import { useState } from 'react'
 import type { Questionnaire, SurveyUnit } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
-import { useAutoNext } from '@/ui/components/orchestrator/tools/useAutoNext'
+import { useAutoNext } from '@/ui/components/orchestrator/hooks/useAutoNext'
 
-import { Modal } from '../Modal'
 import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
 import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
+import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
+import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
-import { getSource, getinitialSurveyUnit } from './tools/functions'
-import { useNavigationButtons } from './tools/useNavigationButtons'
-import { useQueenNavigation } from './tools/useQueenNavigation'
+import { getSource, getinitialSurveyUnit } from './utils/data'
+import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
 type OrchestratorProps = {
   source: Questionnaire
-  surveyUnit: SurveyUnit | undefined
+  surveyUnit?: SurveyUnit
   readonly: boolean
-  onQuit: ((surveyUnit: SurveyUnit) => void) | undefined
-  onDefinitiveQuit: ((surveyUnit: SurveyUnit) => void) | undefined
-  onChangePage: ((surveyUnit: SurveyUnit) => void) | undefined
+  onQuit?: (surveyUnit: SurveyUnit) => void
+  onDefinitiveQuit?: (surveyUnit: SurveyUnit) => void
+  onChangePage?: (surveyUnit: SurveyUnit) => void
   getReferentiel: GetReferentiel
-  onChangeSurveyUnitState?:
-    | ((params: { surveyUnitId: string; newState: QuestionnaireState }) => void)
-    | undefined
+  onChangeSurveyUnitState?: (params: {
+    surveyUnitId: string
+    newState: QuestionnaireState
+  }) => void
 }
 
 export function Orchestrator(props: OrchestratorProps) {
@@ -49,7 +50,6 @@ export function Orchestrator(props: OrchestratorProps) {
   } = props
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
-  const { t: t2 } = useTranslation('modalMessage')
   const { onChange, ref } = useAutoNext()
 
   // the given surveyUnit can be empty or partial, we initialize it for having the waited format
@@ -59,28 +59,6 @@ export function Orchestrator(props: OrchestratorProps) {
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly && initialSurveyUnit.stateData?.currentPage !== '1',
   )
-  const welcomeModalTitle = t2('welcomeModalTitle')
-  const welcomeModalContent = t2('welcomeModalContent')
-
-  const welcomeModalOnClose = () => setIsWelcomeModalOpen(false)
-
-  const welcomeModalGoBack = () => {
-    goToPage({ page: initialSurveyUnit.stateData?.currentPage ?? '1' })
-    setIsWelcomeModalOpen(false)
-  }
-
-  const welcomeModalButtons = [
-    {
-      label: t2('welcomeModalFirstPage'),
-      onClick: welcomeModalOnClose,
-      autoFocus: false,
-    },
-    {
-      label: t2('welcomeModalGoBack'),
-      onClick: welcomeModalGoBack,
-      autoFocus: true,
-    },
-  ]
 
   const {
     getComponents,
@@ -109,10 +87,7 @@ export function Orchestrator(props: OrchestratorProps) {
     missingShortcut: missingShortcut,
   })
 
-  ref.current = {
-    goNextPage,
-    getComponents,
-  }
+  ref.current = { goNextPage, getComponents }
 
   const { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration } =
     pager
@@ -140,17 +115,18 @@ export function Orchestrator(props: OrchestratorProps) {
     onChangeSurveyUnitState,
   })
 
-  const { continueProps, previousProps, nextProps } = useNavigationButtons({
-    readonly,
-    isFirstPage,
-    isLastPage,
-    isLastReachedPage,
-    hasPageResponse,
-    goPreviousPage,
-    goNextPage,
-    quit: orchestratorQuit,
-    definitiveQuit: orchestratorDefinitiveQuit,
-  })
+  const { continueProps, previousProps, nextProps } =
+    computeNavigationButtonsProps({
+      readonly,
+      isFirstPage,
+      isLastPage,
+      isLastReachedPage,
+      hasPageResponse,
+      goPreviousPage,
+      goNextPage,
+      quit: orchestratorQuit,
+      definitiveQuit: orchestratorDefinitiveQuit,
+    })
 
   return (
     <Stack className={classes.orchestrator}>
@@ -217,22 +193,20 @@ export function Orchestrator(props: OrchestratorProps) {
           />
         </Stack>
       </Stack>
-      <Modal
+      <WelcomeBackModal
         isOpen={isWelcomeModalOpen}
-        dialogTitle={welcomeModalTitle}
-        dialogContent={welcomeModalContent}
-        buttons={welcomeModalButtons}
-        mandatory
-        onClose={welcomeModalOnClose}
+        onClose={() => setIsWelcomeModalOpen(false)}
+        onGoBack={() => {
+          goToPage({ page: initialSurveyUnit.stateData?.currentPage ?? '1' })
+          setIsWelcomeModalOpen(false)
+        }}
       />
     </Stack>
   )
 }
 
 const useStyles = tss.create(({ theme }) => ({
-  orchestrator: {
-    height: '100vh',
-  },
+  orchestrator: { height: '100vh' },
   bodyContainer: {
     flexDirection: 'row',
     backgroundColor: theme.palette.background.default,
@@ -260,10 +234,7 @@ const useStyles = tss.create(({ theme }) => ({
     height: '100%',
     width: '80%',
     overflowY: 'auto',
-    '& > div:first-of-type': {
-      display: 'flex',
-      height: '100%',
-    },
+    '& > div:first-of-type': { display: 'flex', height: '100%' },
     '& > div:first-of-type > div': {
       maxWidth: 'calc(100% - 100px)',
       paddingLeft: '100px',

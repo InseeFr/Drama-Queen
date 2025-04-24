@@ -3,12 +3,12 @@ import { describe, expect, it, vi } from 'vitest'
 
 import type { PageTag, SurveyUnitData } from '@/core/model'
 
-import { isIterationReachable } from '../tools/functions'
 import { LoopPanel } from './LoopPanel'
+import { isIterationReachable } from './utils'
 
 const mockGoToPage = vi.fn()
 
-vi.mock('@/ui/components/orchestrator/tools/functions', () => ({
+vi.mock('./utils', () => ({
   isIterationReachable: vi.fn(),
 }))
 

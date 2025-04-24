@@ -6,7 +6,8 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 
 import type { PageTag, SurveyUnitData } from '@/core/model'
-import { isIterationReachable } from '@/ui/components/orchestrator/tools/functions'
+
+import { isIterationReachable } from './utils'
 
 type LoopPanelProps = {
   loopVariables: string[]
