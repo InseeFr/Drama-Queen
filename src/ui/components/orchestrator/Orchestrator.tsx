@@ -2,12 +2,12 @@ import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import type { Questionnaire, SurveyUnit } from '@/core/model'
+import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
-import { useAutoNext } from '@/ui/components/orchestrator/hooks/useAutoNext'
+import { useAutoNext } from '@/ui/components/orchestrator/hooks/autoNext/useAutoNext'
 
 import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
@@ -15,105 +15,108 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
+import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
-import { getSource, getinitialSurveyUnit } from './utils/data'
+import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
 type OrchestratorProps = {
-  source: Questionnaire
-  surveyUnit?: SurveyUnit
-  readonly: boolean
-  onQuit?: (surveyUnit: SurveyUnit) => void
-  onDefinitiveQuit?: (surveyUnit: SurveyUnit) => void
-  onChangePage?: (surveyUnit: SurveyUnit) => void
   getReferentiel: GetReferentiel
+  /** Action to be called when the respondent changes page. */
+  onChangePage?: (surveyUnit: SurveyUnit) => void
+  /** Action to be called when the respondent's filled data enters a new state. */
   onChangeSurveyUnitState?: (params: {
     surveyUnitId: string
     newState: QuestionnaireState
   }) => void
+  /** Action to be called when the respondent finishes the survey. */
+  onDefinitiveQuit?: (surveyUnit: SurveyUnit) => void
+  /** Action to be called when the respondent closes the app. */
+  onQuit?: (surveyUnit: SurveyUnit) => void
+  /** Whether or not we should be on read only. */
+  readonly: boolean
+  /** Questionnaire data to be filled by the respondent. */
+  source: Questionnaire
+  /** Data filled by the respondent when the app is launched. */
+  surveyUnit?: SurveyUnit
 }
 
-export function Orchestrator(props: OrchestratorProps) {
-  const {
-    source: initialSource,
-    surveyUnit,
-    readonly,
-    onQuit = () => {},
-    onDefinitiveQuit = () => {},
-    onChangePage = () => {},
-    getReferentiel,
-    onChangeSurveyUnitState = () => {},
-  } = props
+/**
+ * Compute survey's components and handle input changes by sending data to the
+ * back-end.
+ */
+export function Orchestrator({
+  getReferentiel,
+  onChangePage = () => {},
+  onChangeSurveyUnitState = () => {},
+  onDefinitiveQuit = () => {},
+  onQuit = () => {},
+  readonly,
+  source: initialSource,
+  surveyUnit,
+}: OrchestratorProps) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
   const { onChange, ref } = useAutoNext()
+  const { classes: lunaticClasses } = useLunaticStyles()
 
-  // the given surveyUnit can be empty or partial, we initialize it for having the waited format
-  const initialSurveyUnit = getinitialSurveyUnit(surveyUnit)
-  const source = getSource(initialSource)
+  const initialSurveyUnit = computeSurveyUnit(surveyUnit)
+  const source = computeSourceExternalVariables(initialSource)
+  const questionnaireTitle = source.label ? source.label.value : ''
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly && initialSurveyUnit.stateData?.currentPage !== '1',
   )
 
   const {
+    getChangedData,
     getComponents,
-    goPreviousPage,
     goNextPage,
+    goPreviousPage,
     goToPage,
+    hasPageResponse,
     isFirstPage,
     isLastPage,
-    pager,
-    Provider,
-    pageTag,
-    overview,
-    hasPageResponse,
-    getChangedData,
     loopVariables,
+    overview,
+    pager: { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration },
+    pageTag,
+    Provider,
   } = useLunatic(source, initialSurveyUnit.data, {
-    lastReachedPage: initialSurveyUnit.stateData?.currentPage,
-    onChange,
-    getReferentiel: getReferentiel,
     autoSuggesterLoading: true,
-    trackChanges: true,
-    shortcut: true,
-    withOverview: true,
-    missing: true,
     dontKnowButton: t('dontKnowButtonLabel'),
+    getReferentiel,
+    lastReachedPage: initialSurveyUnit.stateData?.currentPage,
+    missing: true,
     missingShortcut: missingShortcut,
+    onChange,
+    shortcut: true,
+    trackChanges: true,
+    withOverview: true,
   })
 
   ref.current = { goNextPage, getComponents }
 
-  const { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration } =
-    pager
-
-  const questionnaireTitle = source.label ? source.label.value : ''
-
-  const components = getComponents()
-
-  const { classes: lunaticClasses } = useLunaticStyles()
-
-  const {
-    isLastReachedPage,
-    surveyUnitData,
-    orchestratorQuit,
-    orchestratorDefinitiveQuit,
-  } = useQueenNavigation({
+  const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
-    getChangedData: getChangedData,
-    lastReachedPage,
-    pageTag,
-    isWelcomeModalOpen,
-    onQuit,
-    onDefinitiveQuit,
-    onChangePage,
     onChangeSurveyUnitState,
-  })
+    pageTag,
+  )
+
+  const isLastReachedPage =
+    lastReachedPage === undefined || pageTag === lastReachedPage
+
+  const { orchestratorOnQuit, orchestratorOnDefinitiveQuit } =
+    useQueenNavigation({
+      getChangedData,
+      onQuit,
+      onDefinitiveQuit,
+      updateSurveyUnit,
+    })
 
   const { continueProps, previousProps, nextProps } =
     computeNavigationButtonsProps({
@@ -124,9 +127,27 @@ export function Orchestrator(props: OrchestratorProps) {
       hasPageResponse,
       goPreviousPage,
       goNextPage,
-      quit: orchestratorQuit,
-      definitiveQuit: orchestratorDefinitiveQuit,
+      quit: orchestratorOnQuit,
+      definitiveQuit: orchestratorOnDefinitiveQuit,
     })
+
+  // handle updated surveyUnit when page changes
+  useEffect(() => {
+    if (
+      pageTag === undefined ||
+      lastReachedPage === undefined ||
+      isWelcomeModalOpen
+    ) {
+      // do not trigger survey unit update when we first launch the orchestrator
+      return
+    }
+    const surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData)
+    return onChangePage(surveyUnit)
+    // remove deps that should be stable, avoiding calling getChangedData on every input
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageTag, lastReachedPage, isWelcomeModalOpen])
+
+  const components = getComponents()
 
   return (
     <Stack className={classes.orchestrator}>
@@ -135,8 +156,8 @@ export function Orchestrator(props: OrchestratorProps) {
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
-        quit={orchestratorQuit}
-        definitiveQuit={orchestratorDefinitiveQuit}
+        quit={orchestratorOnQuit}
+        definitiveQuit={orchestratorOnDefinitiveQuit}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>

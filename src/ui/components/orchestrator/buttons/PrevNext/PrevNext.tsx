@@ -21,9 +21,6 @@ export function PrevNext(props: PrevNextProps) {
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 
-  const previousShortCutKey = SHORTCUT_PREVIOUS
-  const nextShortCutKey = SHORTCUT_NEXT
-
   return (
     <Stack id="buttons" className={classes.root}>
       <Stack>
@@ -37,7 +34,7 @@ export function PrevNext(props: PrevNextProps) {
           <PlayArrowIcon fontSize="small" />
           {isPreviousEnabled && (
             <ShortCut
-              shortCutKey={previousShortCutKey}
+              shortCutKey={SHORTCUT_PREVIOUS}
               onClickMethod={onPrevious}
             />
           )}
@@ -57,7 +54,7 @@ export function PrevNext(props: PrevNextProps) {
         >
           <PlayArrowIcon fontSize="small" />
           {isNextEnabled && (
-            <ShortCut shortCutKey={nextShortCutKey} onClickMethod={onNext} />
+            <ShortCut shortCutKey={SHORTCUT_NEXT} onClickMethod={onNext} />
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
