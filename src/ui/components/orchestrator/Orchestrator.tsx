@@ -18,7 +18,7 @@ import { useControls } from './hooks/controls/useControls'
 import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
-import type { GetReferentiel } from './lunaticType'
+import type { GetReferentiel, ValueChange } from './lunaticType'
 import { shouldAutoNext } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
 import { computeNavigationButtonsProps } from './utils/navigation'
@@ -121,13 +121,7 @@ export function Orchestrator({
   })
 
   const onLunaticChange = useCallback(
-    (
-      v: {
-        name: string
-        value: any
-        iteration?: number[]
-      }[],
-    ) => {
+    (v: ValueChange) => {
       resetControls()
       const components = getComponents()
       if (shouldAutoNext(components, v)) {
