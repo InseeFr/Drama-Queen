@@ -1,4 +1,4 @@
-import type { SurveyUnit, SurveyUnitData } from '@/core/model'
+import type { PageTag, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 
 import type { GetChangedData } from '../lunaticType'
@@ -9,7 +9,7 @@ type UseQueenNavigationProps = {
   onQuit: (surveyUnit: SurveyUnit) => void
   updateSurveyUnit: (
     changedData: SurveyUnitData,
-    forcedState?: QuestionnaireState,
+    options?: { currentPage?: PageTag; forcedState?: QuestionnaireState },
   ) => SurveyUnit
 }
 
@@ -26,12 +26,13 @@ export function useQueenNavigation({
   }
 
   const orchestratorOnDefinitiveQuit = () => {
-    let surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData)
+    updateSurveyUnit(getChangedData(true) as SurveyUnitData)
 
     // Force the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
-    surveyUnit = updateSurveyUnit({}, 'COMPLETED')
+    updateSurveyUnit({}, { forcedState: 'COMPLETED' })
+
     // Force the state to VALIDATED.
-    surveyUnit = updateSurveyUnit({}, 'VALIDATED')
+    const surveyUnit = updateSurveyUnit({}, { forcedState: 'VALIDATED' })
 
     return onDefinitiveQuit(surveyUnit)
   }

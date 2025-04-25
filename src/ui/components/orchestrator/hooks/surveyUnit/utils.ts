@@ -11,14 +11,13 @@ export function hasDataChanged(changedData: SurveyUnitData): boolean {
 export function computeUpdatedData(
   currentSurveyUnitData: SurveyUnitData,
   changedData: SurveyUnitData,
-) {
+): SurveyUnitData {
   if (hasDataChanged(changedData)) {
     return computeFullData(
       currentSurveyUnitData,
       cleanCollectedData(changedData),
     )
   }
-
   return currentSurveyUnitData
 }
 

@@ -12,7 +12,6 @@ export function useSurveyUnit(
     surveyUnitId: string
     newState: QuestionnaireState
   }) => void,
-  pageTag: PageTag,
 ) {
   const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
     initialSurveyUnit.data,
@@ -51,11 +50,15 @@ export function useSurveyUnit(
     return newState
   }
 
-  /** Compute new survey unit, and send a state update if necessary. */
+  /**
+   * Compute new survey unit, and send a state update if the state (`"INIT"`,
+   * `"COMPLETED"`...) has changed.
+   */
   function updateSurveyUnit(
     changedData: SurveyUnitData,
-    forcedState?: QuestionnaireState,
+    options: { currentPage?: PageTag; forcedState?: QuestionnaireState } = {},
   ): SurveyUnit {
+    const { currentPage, forcedState } = options
     const hasDataBeenUpdated = hasDataChanged(changedData)
     let newData
     if (hasDataBeenUpdated) {
@@ -71,7 +74,7 @@ export function useSurveyUnit(
       stateData: {
         state: newState,
         date: new Date().getTime(),
-        currentPage: pageTag ?? '1',
+        currentPage: currentPage ?? '1',
       },
     }
   }

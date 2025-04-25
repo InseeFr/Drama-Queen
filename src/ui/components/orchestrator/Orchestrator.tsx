@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
-import { useAutoNext } from '@/ui/components/orchestrator/hooks/autoNext/useAutoNext'
 
 import { slotComponents } from '../slotComponents'
 import { Header } from './Header/Header'
@@ -15,6 +14,7 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
+import { useAutoNext } from './hooks/autoNext/useAutoNext'
 import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
@@ -58,7 +58,7 @@ export function Orchestrator({
   readonly,
   source: initialSource,
   surveyUnit,
-}: OrchestratorProps) {
+}: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
   const { onChange, ref } = useAutoNext()
@@ -104,11 +104,7 @@ export function Orchestrator({
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
     onChangeSurveyUnitState,
-    pageTag,
   )
-
-  const isLastReachedPage =
-    lastReachedPage === undefined || pageTag === lastReachedPage
 
   const { orchestratorOnQuit, orchestratorOnDefinitiveQuit } =
     useQueenNavigation({
@@ -117,6 +113,9 @@ export function Orchestrator({
       onDefinitiveQuit,
       updateSurveyUnit,
     })
+
+  const isLastReachedPage =
+    lastReachedPage === undefined || pageTag === lastReachedPage
 
   const { continueProps, previousProps, nextProps } =
     computeNavigationButtonsProps({
@@ -131,18 +130,21 @@ export function Orchestrator({
       definitiveQuit: orchestratorOnDefinitiveQuit,
     })
 
-  // handle updated surveyUnit when page changes
+  // Trigger a survey unit update when the Lunatic page changes
   useEffect(() => {
     if (
       pageTag === undefined ||
       lastReachedPage === undefined ||
       isWelcomeModalOpen
     ) {
-      // do not trigger survey unit update when we first launch the orchestrator
+      // do not trigger the update when we first launch the orchestrator
       return
     }
-    const surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData)
-    return onChangePage(surveyUnit)
+    const surveyUnit = updateSurveyUnit(
+      getChangedData(true) as SurveyUnitData,
+      { currentPage: pageTag },
+    )
+    onChangePage(surveyUnit)
     // remove deps that should be stable, avoiding calling getChangedData on every input
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageTag, lastReachedPage, isWelcomeModalOpen])
