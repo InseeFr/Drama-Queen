@@ -15,6 +15,7 @@ import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
 import { useAutoNext } from './hooks/autoNext/useAutoNext'
+import { useControls } from './hooks/controls/useControls'
 import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
@@ -73,6 +74,7 @@ export function Orchestrator({
   )
 
   const {
+    compileControls,
     getChangedData,
     getComponents,
     goNextPage,
@@ -87,19 +89,32 @@ export function Orchestrator({
     pageTag,
     Provider,
   } = useLunatic(source, initialSurveyUnit.data, {
+    activeControls: true,
     autoSuggesterLoading: true,
     dontKnowButton: t('dontKnowButtonLabel'),
     getReferentiel,
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     missing: true,
     missingShortcut: missingShortcut,
-    onChange,
+    onChange: (v) => {
+      resetControls()
+      onChange(v)
+    },
     shortcut: true,
     trackChanges: true,
     withOverview: true,
   })
 
-  ref.current = { goNextPage, getComponents }
+  const {
+    activeErrors,
+    handleGoToPage,
+    handleNextPage,
+    handlePreviousPage,
+    isBlocking,
+    resetControls,
+  } = useControls({ compileControls, goNextPage, goPreviousPage, goToPage })
+
+  ref.current = { goNextPage: handleNextPage, getComponents }
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
@@ -119,13 +134,14 @@ export function Orchestrator({
 
   const { continueProps, previousProps, nextProps } =
     computeNavigationButtonsProps({
+      isBlocking,
       readonly,
       isFirstPage,
       isLastPage,
       isLastReachedPage,
       hasPageResponse,
-      goPreviousPage,
-      goNextPage,
+      goPreviousPage: handlePreviousPage,
+      goNextPage: handleNextPage,
       quit: () => orchestratorOnQuit(pageTag),
       definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
@@ -157,7 +173,7 @@ export function Orchestrator({
         questionnaireTitle={questionnaireTitle}
         readonly={readonly}
         overview={overview}
-        goToPage={goToPage}
+        goToPage={handleGoToPage}
         quit={() => orchestratorOnQuit(pageTag)}
         definitiveQuit={() => orchestratorOnDefinitiveQuit(pageTag)}
       />
@@ -170,8 +186,9 @@ export function Orchestrator({
                   components={components}
                   slots={slotComponents}
                   componentProps={() => ({
-                    filterDescription: false,
                     disabled: readonly,
+                    errors: activeErrors,
+                    filterDescription: false,
                     readOnly: readonly,
                   })}
                   autoFocusKey={pageTag}
@@ -194,7 +211,7 @@ export function Orchestrator({
                 iteration={iteration}
                 lastReachedPage={lastReachedPage}
                 data={surveyUnitData}
-                goToPage={goToPage}
+                goToPage={handleGoToPage}
               />
             </Stack>
           </Stack>
@@ -220,7 +237,9 @@ export function Orchestrator({
         isOpen={isWelcomeModalOpen}
         onClose={() => setIsWelcomeModalOpen(false)}
         onGoBack={() => {
-          goToPage({ page: initialSurveyUnit.stateData?.currentPage ?? '1' })
+          handleGoToPage({
+            page: initialSurveyUnit.stateData?.currentPage ?? '1',
+          })
           setIsWelcomeModalOpen(false)
         }}
       />

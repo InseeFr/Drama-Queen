@@ -61,6 +61,11 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       fontSize: '1rem',
     },
 
+    '&:is(.Question,.Loop) .lunatic-errors': {
+      margin: '1rem 0',
+      color: '#DB0202',
+    },
+
     /* Firefox */
     // do not apply in a datepicker
     '& input[type=text]:not(.datepicker *)': {

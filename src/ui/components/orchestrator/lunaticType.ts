@@ -16,3 +16,5 @@ export type GetReferentiel = LunaticOptions['getReferentiel']
 
 export type Components = ReturnType<LunaticState['getComponents']>
 export type Component = Components[number]
+
+export type CompileControls = LunaticState['compileControls']
