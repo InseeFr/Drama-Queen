@@ -42,7 +42,7 @@ describe('Orchestrator', () => {
       questionnaireId: '',
       stateData: {
         currentPage: '1',
-        date: 1730131653011,
+        date: vi.getMockedSystemTime()?.valueOf(),
         state: null,
       },
     })

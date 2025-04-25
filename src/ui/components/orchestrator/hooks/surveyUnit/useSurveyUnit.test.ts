@@ -92,7 +92,7 @@ describe('Use survey unit', () => {
         questionnaireId: 'qid',
         stateData: {
           currentPage: '1',
-          date: 1730131653011,
+          date: vi.getMockedSystemTime()?.valueOf(),
           state: 'INIT',
         },
       })
@@ -138,7 +138,7 @@ describe('Use survey unit', () => {
         questionnaireId: 'qid',
         stateData: {
           currentPage: '1',
-          date: 1730131653011,
+          date: vi.getMockedSystemTime()?.valueOf(),
           state: 'INIT',
         },
       })
