@@ -41,12 +41,14 @@ export function useControls({
         return
       case ErrorType.WARNING:
         if (isWarningAcknowledged) {
+          resetControls()
           goNextPage()
-          setIsWarningAcknowledged(false)
-        } else setIsWarningAcknowledged(true)
+          return
+        }
+        setIsWarningAcknowledged(true)
         return
       default:
-        setIsWarningAcknowledged(false)
+        resetControls()
         goNextPage()
     }
   }
@@ -72,7 +74,7 @@ export function useControls({
     handlePreviousPage,
     /**
      * Whether or not the respondent should be blocked from further navigation
-     * until the filled input are changed.
+     * until the filled input is changed.
      */
     isBlocking,
     resetControls,
