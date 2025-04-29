@@ -38,7 +38,7 @@ describe('Use controls', () => {
     expect(goNextPageMock).not.toHaveBeenCalled()
   })
 
-  test('do not block further navigation if an error is a warning', async () => {
+  test('do not block further navigation if an error is an acknowledged warning', async () => {
     const compileControlsMock = vi.fn()
     compileControlsMock.mockReturnValue({
       currentErrors: {
@@ -70,6 +70,74 @@ describe('Use controls', () => {
     act(() => result.current.handleNextPage())
     expect(result.current.activeErrors).toBeUndefined()
     expect(goNextPageMock).toHaveBeenCalled()
+  })
+
+  test('do not block further navigation if an error is a warning but user ignores them', async () => {
+    const compileControlsMock = vi.fn()
+    compileControlsMock.mockReturnValue({
+      currentErrors: {
+        Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+      },
+    })
+
+    const goNextPageMock = vi.fn()
+
+    const { result } = renderHook(() =>
+      useControls({
+        compileControls: compileControlsMock,
+        goNextPage: goNextPageMock,
+        goPreviousPage: vi.fn(),
+        goToPage: vi.fn(),
+      }),
+    )
+
+    expect(result.current.isBlocking).toBeFalsy()
+
+    act(() => result.current.handleNextPage(true))
+
+    expect(result.current.isBlocking).toBeFalsy()
+    expect(result.current.activeErrors).toBeUndefined()
+    expect(goNextPageMock).toHaveBeenCalled()
+  })
+
+  test('block further navigation if warning acknowledged but user triggers another warning', async () => {
+    const compileControlsMock = vi.fn()
+    const goNextPageMock = vi.fn()
+
+    const { result } = renderHook(() =>
+      useControls({
+        compileControls: compileControlsMock,
+        goNextPage: goNextPageMock,
+        goPreviousPage: vi.fn(),
+        goToPage: vi.fn(),
+      }),
+    )
+
+    expect(result.current.isBlocking).toBeFalsy()
+
+    compileControlsMock.mockReturnValueOnce({
+      currentErrors: {
+        Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+      },
+    })
+    act(() => result.current.handleNextPage())
+
+    expect(result.current.isBlocking).toBeFalsy()
+    expect(result.current.activeErrors).toStrictEqual({
+      Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+    })
+    expect(goNextPageMock).not.toHaveBeenCalled()
+
+    compileControlsMock.mockReturnValueOnce({
+      currentErrors: {
+        Q1: [{ id: 'id2', criticality: 'WARN', errorMessage: 'warning' }],
+      },
+    })
+    act(() => result.current.handleNextPage())
+    expect(result.current.activeErrors).toStrictEqual({
+      Q1: [{ id: 'id2', criticality: 'WARN', errorMessage: 'warning' }],
+    })
+    expect(goNextPageMock).not.toHaveBeenCalled()
   })
 
   test('resets errors on navigation', async () => {

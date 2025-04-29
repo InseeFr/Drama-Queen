@@ -28,3 +28,24 @@ export function computeErrorType(
 
   return undefined
 }
+
+export function isSameErrors(
+  errorsA: Record<string, LunaticError[]>,
+  errorsB: Record<string, LunaticError[]>,
+) {
+  const idsA = []
+  const idsB = []
+
+  for (const control of Object.values(errorsA)) {
+    for (const error of control) {
+      idsA.push(error.id)
+    }
+  }
+  for (const control of Object.values(errorsB)) {
+    for (const error of control) {
+      idsB.push(error.id)
+    }
+  }
+
+  return idsA.toString() === idsB.toString()
+}

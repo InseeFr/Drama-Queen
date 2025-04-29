@@ -1,7 +1,7 @@
 import type { LunaticComponentProps } from '@inseefr/lunatic/components/type'
 import { describe, expect, it, vi } from 'vitest'
 
-import { shouldAutoNext } from './utils'
+import { shouldAutoNext } from './autoNext'
 
 describe('Should auto next', () => {
   it('returns false with non-radio and non-checkbox components', () => {
@@ -17,6 +17,7 @@ describe('Should auto next', () => {
     const valueChange = [{ name: 'a', value: 'v2' }]
     expect(shouldAutoNext(components, valueChange)).toBeFalsy()
   })
+
   it('returns true with radio components', () => {
     const components: LunaticComponentProps[] = [
       {
@@ -32,6 +33,7 @@ describe('Should auto next', () => {
     const valueChange = [{ name: 'a', value: 'v2' }]
     expect(shouldAutoNext(components, valueChange)).toBeTruthy()
   })
+
   it('returns true with missing value', () => {
     const components: LunaticComponentProps[] = [
       {
@@ -47,6 +49,7 @@ describe('Should auto next', () => {
     const valueChange = [{ name: 'a_MISSING', value: 'DK' }]
     expect(shouldAutoNext(components, valueChange)).toBeTruthy()
   })
+
   it('returns true with a radio in a question component', () => {
     const components: LunaticComponentProps[] = [
       {

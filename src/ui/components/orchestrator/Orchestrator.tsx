@@ -14,12 +14,12 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
-import { useAutoNext } from './hooks/autoNext/useAutoNext'
 import { useControls } from './hooks/controls/useControls'
 import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
+import { shouldAutoNext } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
@@ -62,7 +62,6 @@ export function Orchestrator({
 }: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
-  const { onChange, ref } = useAutoNext()
   const { classes: lunaticClasses } = useLunaticStyles()
 
   const initialSurveyUnit = computeSurveyUnit(surveyUnit)
@@ -98,7 +97,14 @@ export function Orchestrator({
     missingShortcut: missingShortcut,
     onChange: (v) => {
       resetControls()
-      onChange(v)
+      const components = getComponents()
+      if (shouldAutoNext(components, v)) {
+        // We need to put a timeout since Lunatic triggers the onChange before
+        // its state has been updated
+        setTimeout(() => {
+          handleNextPage(true)
+        }, 100)
+      }
     },
     shortcut: true,
     trackChanges: true,
@@ -113,8 +119,6 @@ export function Orchestrator({
     isBlocking,
     resetControls,
   } = useControls({ compileControls, goNextPage, goPreviousPage, goToPage })
-
-  ref.current = { goNextPage: handleNextPage, getComponents }
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
