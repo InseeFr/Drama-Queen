@@ -127,7 +127,7 @@ export function Orchestrator({
       goPreviousPage,
       goNextPage,
       quit: orchestratorOnQuit,
-      definitiveQuit: orchestratorOnDefinitiveQuit,
+      definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
 
   // Trigger a survey unit update when the Lunatic page changes
@@ -159,7 +159,7 @@ export function Orchestrator({
         overview={overview}
         goToPage={goToPage}
         quit={orchestratorOnQuit}
-        definitiveQuit={orchestratorOnDefinitiveQuit}
+        definitiveQuit={() => orchestratorOnDefinitiveQuit(pageTag)}
       />
       <Stack className={classes.bodyContainer}>
         <Stack className={classes.mainContainer}>
