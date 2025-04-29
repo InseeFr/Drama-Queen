@@ -25,14 +25,17 @@ export function useQueenNavigation({
     return onQuit(surveyUnit)
   }
 
-  const orchestratorOnDefinitiveQuit = () => {
-    updateSurveyUnit(getChangedData(true) as SurveyUnitData)
+  const orchestratorOnDefinitiveQuit = (currentPage: PageTag) => {
+    updateSurveyUnit(getChangedData(true) as SurveyUnitData, { currentPage })
 
     // Force the state to COMPLETED only for sending the event. Completed state should be defined by an algorithm.
-    updateSurveyUnit({}, { forcedState: 'COMPLETED' })
+    updateSurveyUnit({}, { currentPage, forcedState: 'COMPLETED' })
 
     // Force the state to VALIDATED.
-    const surveyUnit = updateSurveyUnit({}, { forcedState: 'VALIDATED' })
+    const surveyUnit = updateSurveyUnit(
+      {},
+      { currentPage, forcedState: 'VALIDATED' },
+    )
 
     return onDefinitiveQuit(surveyUnit)
   }

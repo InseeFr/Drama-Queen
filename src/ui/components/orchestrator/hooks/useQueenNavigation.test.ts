@@ -49,18 +49,20 @@ describe('Use queen navigation', () => {
     )
 
     act(() => {
-      result.current.orchestratorOnDefinitiveQuit()
+      result.current.orchestratorOnDefinitiveQuit('3')
     })
 
     expect(updateSurveyUnitMock).toHaveBeenCalledTimes(3)
-    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my data')
+    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my data', {
+      currentPage: '3',
+    })
     expect(updateSurveyUnitMock).toHaveBeenCalledWith(
       {},
-      { forcedState: 'COMPLETED' },
+      { currentPage: '3', forcedState: 'COMPLETED' },
     )
     expect(updateSurveyUnitMock).toHaveBeenCalledWith(
       {},
-      { forcedState: 'VALIDATED' },
+      { currentPage: '3', forcedState: 'VALIDATED' },
     )
     expect(onDefinitiveQuitMock).toHaveBeenCalledOnce()
     expect(onDefinitiveQuitMock).toHaveBeenCalledWith('my updated survey unit')
