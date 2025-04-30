@@ -20,8 +20,11 @@ export function useQueenNavigation({
   onQuit,
   updateSurveyUnit,
 }: UseQueenNavigationProps) {
-  const orchestratorOnQuit = () => {
-    const surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData)
+  const orchestratorOnQuit = (currentPage: PageTag) => {
+    const surveyUnit = updateSurveyUnit(
+      getChangedData(true) as SurveyUnitData,
+      { currentPage },
+    )
     return onQuit(surveyUnit)
   }
 
