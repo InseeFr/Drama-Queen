@@ -126,7 +126,7 @@ export function Orchestrator({
       hasPageResponse,
       goPreviousPage,
       goNextPage,
-      quit: orchestratorOnQuit,
+      quit: () => orchestratorOnQuit(pageTag),
       definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
 
@@ -158,7 +158,7 @@ export function Orchestrator({
         readonly={readonly}
         overview={overview}
         goToPage={goToPage}
-        quit={orchestratorOnQuit}
+        quit={() => orchestratorOnQuit(pageTag)}
         definitiveQuit={() => orchestratorOnDefinitiveQuit(pageTag)}
       />
       <Stack className={classes.bodyContainer}>

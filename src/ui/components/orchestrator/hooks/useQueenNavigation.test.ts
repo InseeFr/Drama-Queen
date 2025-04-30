@@ -22,11 +22,13 @@ describe('Use queen navigation', () => {
     )
 
     act(() => {
-      result.current.orchestratorOnQuit()
+      result.current.orchestratorOnQuit('3')
     })
 
     expect(updateSurveyUnitMock).toHaveBeenCalledOnce()
-    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my data')
+    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my data', {
+      currentPage: '3',
+    })
     expect(onQuitMock).toHaveBeenCalledOnce()
     expect(onQuitMock).toHaveBeenCalledWith('my updated survey unit')
   })
