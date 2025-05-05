@@ -2,7 +2,7 @@ import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
@@ -99,17 +99,7 @@ export function Orchestrator({
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     missing: true,
     missingShortcut: missingShortcut,
-    onChange: (v) => {
-      resetControls()
-      const components = getComponents()
-      if (shouldAutoNext(components, v)) {
-        // We need to put a timeout since Lunatic triggers the onChange before
-        // its state has been updated
-        setTimeout(() => {
-          handleNextPage(true)
-        }, 100)
-      }
-    },
+    onChange: (v) => onLunaticChange(v),
     shortcut: true,
     trackChanges: true,
     withOverview: true,
@@ -129,6 +119,27 @@ export function Orchestrator({
     goToPage,
     isEnabled: isControlsFeatureEnabled,
   })
+
+  const onLunaticChange = useCallback(
+    (
+      v: {
+        name: string
+        value: any
+        iteration?: number[]
+      }[],
+    ) => {
+      resetControls()
+      const components = getComponents()
+      if (shouldAutoNext(components, v)) {
+        // We need to put a timeout since Lunatic triggers the onChange before
+        // its state has been updated
+        setTimeout(() => {
+          handleNextPage()
+        }, 100)
+      }
+    },
+    [resetControls, getComponents, handleNextPage],
+  )
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
