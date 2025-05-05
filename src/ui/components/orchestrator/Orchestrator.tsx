@@ -25,6 +25,10 @@ import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
+/** Whether or not controls should display warning / errors and prevent navigation */
+const isControlsFeatureEnabled =
+  import.meta.env.VITE_ENABLE_CONTROLS_FEATURE === 'true'
+
 type OrchestratorProps = {
   getReferentiel: GetReferentiel
   /** Action to be called when the respondent changes page. */
@@ -118,7 +122,13 @@ export function Orchestrator({
     handlePreviousPage,
     isBlocking,
     resetControls,
-  } = useControls({ compileControls, goNextPage, goPreviousPage, goToPage })
+  } = useControls({
+    compileControls,
+    goNextPage,
+    goPreviousPage,
+    goToPage,
+    isEnabled: isControlsFeatureEnabled,
+  })
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,

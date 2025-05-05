@@ -8,6 +8,7 @@ type ImportMetaEnv = {
   VITE_EXTERNAL_RESOURCES_URL: string
   VITE_OIDC_ISSUER: string
   VITE_OIDC_CLIENT_ID: string
+  VITE_ENABLE_CONTROLS_FEATURE: string
   BASE_URL: string
   MODE: string
   DEV: boolean
