@@ -134,7 +134,7 @@ export function Orchestrator({
         // We need to put a timeout since Lunatic triggers the onChange before
         // its state has been updated
         setTimeout(() => {
-          handleNextPage()
+          handleNextPage(true)
         }, 100)
       }
     },
