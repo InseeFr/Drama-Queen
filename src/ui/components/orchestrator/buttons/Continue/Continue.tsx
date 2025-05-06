@@ -13,16 +13,29 @@ type ContinueProps = {
   shortCutKey: string
   shortCutLabel: string
   onContinue: () => void
+  isEnabled?: boolean
 }
 
 export function Continue(props: ContinueProps) {
-  const { label, endIcon, shortCutKey, shortCutLabel, onContinue } = props
+  const {
+    label,
+    isEnabled = true,
+    endIcon,
+    shortCutKey,
+    shortCutLabel,
+    onContinue,
+  } = props
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
 
   return (
     <Stack direction={'row'} className={classes.continueWrapper}>
-      <Button className={classes.button} endIcon={endIcon} onClick={onContinue}>
+      <Button
+        className={classes.button}
+        endIcon={endIcon}
+        onClick={onContinue}
+        disabled={!isEnabled}
+      >
         {label}
         <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
       </Button>
@@ -45,6 +58,10 @@ const useStyles = tss.create(({ theme }) => ({
     '&:hover,&:focus': {
       backgroundColor: 'white',
       color: theme.palette.primary.main,
+    },
+    '&:disabled': {
+      backgroundColor: 'transparent',
+      color: theme.palette.grey[600],
     },
   },
 }))

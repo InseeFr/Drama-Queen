@@ -2,7 +2,7 @@ import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { tss } from 'tss-react/mui'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
@@ -14,15 +14,20 @@ import { LoopPanel } from './LoopPanel/LoopPanel'
 import { NavBar } from './NavBar/NavBar'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { Continue } from './buttons/Continue/Continue'
-import { useAutoNext } from './hooks/autoNext/useAutoNext'
+import { useControls } from './hooks/controls/useControls'
 import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { useLunaticStyles } from './lunaticStyle'
 import type { GetReferentiel } from './lunaticType'
+import { shouldAutoNext } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
+
+/** Whether or not controls should display warning / errors and prevent navigation */
+const isControlsFeatureEnabled =
+  import.meta.env.VITE_ENABLE_CONTROLS_FEATURE === 'true'
 
 type OrchestratorProps = {
   getReferentiel: GetReferentiel
@@ -61,7 +66,6 @@ export function Orchestrator({
 }: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
-  const { onChange, ref } = useAutoNext()
   const { classes: lunaticClasses } = useLunaticStyles()
 
   const initialSurveyUnit = computeSurveyUnit(surveyUnit)
@@ -73,6 +77,7 @@ export function Orchestrator({
   )
 
   const {
+    compileControls,
     getChangedData,
     getComponents,
     goNextPage,
@@ -87,19 +92,54 @@ export function Orchestrator({
     pageTag,
     Provider,
   } = useLunatic(source, initialSurveyUnit.data, {
+    activeControls: true,
     autoSuggesterLoading: true,
     dontKnowButton: t('dontKnowButtonLabel'),
     getReferentiel,
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     missing: true,
     missingShortcut: missingShortcut,
-    onChange,
+    onChange: (v) => onLunaticChange(v),
     shortcut: true,
     trackChanges: true,
     withOverview: true,
   })
 
-  ref.current = { goNextPage, getComponents }
+  const {
+    activeErrors,
+    handleGoToPage,
+    handleNextPage,
+    handlePreviousPage,
+    isBlocking,
+    resetControls,
+  } = useControls({
+    compileControls,
+    goNextPage,
+    goPreviousPage,
+    goToPage,
+    isEnabled: isControlsFeatureEnabled,
+  })
+
+  const onLunaticChange = useCallback(
+    (
+      v: {
+        name: string
+        value: any
+        iteration?: number[]
+      }[],
+    ) => {
+      resetControls()
+      const components = getComponents()
+      if (shouldAutoNext(components, v)) {
+        // We need to put a timeout since Lunatic triggers the onChange before
+        // its state has been updated
+        setTimeout(() => {
+          handleNextPage(true)
+        }, 100)
+      }
+    },
+    [resetControls, getComponents, handleNextPage],
+  )
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
     initialSurveyUnit,
@@ -119,13 +159,14 @@ export function Orchestrator({
 
   const { continueProps, previousProps, nextProps } =
     computeNavigationButtonsProps({
+      isBlocking,
       readonly,
       isFirstPage,
       isLastPage,
       isLastReachedPage,
       hasPageResponse,
-      goPreviousPage,
-      goNextPage,
+      goPreviousPage: handlePreviousPage,
+      goNextPage: handleNextPage,
       quit: () => orchestratorOnQuit(pageTag),
       definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
@@ -157,7 +198,7 @@ export function Orchestrator({
         questionnaireTitle={questionnaireTitle}
         readonly={readonly}
         overview={overview}
-        goToPage={goToPage}
+        goToPage={handleGoToPage}
         quit={() => orchestratorOnQuit(pageTag)}
         definitiveQuit={() => orchestratorOnDefinitiveQuit(pageTag)}
       />
@@ -170,8 +211,9 @@ export function Orchestrator({
                   components={components}
                   slots={slotComponents}
                   componentProps={() => ({
-                    filterDescription: false,
                     disabled: readonly,
+                    errors: activeErrors,
+                    filterDescription: false,
                     readOnly: readonly,
                   })}
                   autoFocusKey={pageTag}
@@ -194,7 +236,7 @@ export function Orchestrator({
                 iteration={iteration}
                 lastReachedPage={lastReachedPage}
                 data={surveyUnitData}
-                goToPage={goToPage}
+                goToPage={handleGoToPage}
               />
             </Stack>
           </Stack>
@@ -220,7 +262,9 @@ export function Orchestrator({
         isOpen={isWelcomeModalOpen}
         onClose={() => setIsWelcomeModalOpen(false)}
         onGoBack={() => {
-          goToPage({ page: initialSurveyUnit.stateData?.currentPage ?? '1' })
+          handleGoToPage({
+            page: initialSurveyUnit.stateData?.currentPage ?? '1',
+          })
           setIsWelcomeModalOpen(false)
         }}
       />

@@ -1,4 +1,4 @@
-import type { Component, Components } from '../../lunaticType'
+import type { Component, Components } from '../lunaticType'
 
 /**
  * temporary : should be handle by Lunatic
@@ -51,27 +51,34 @@ export function shouldAutoNext(
   }[],
 ): boolean {
   const firstComponent = components[0]
+
   // If it's a question we need to look at its components instead
   if (firstComponent.componentType === 'Question') {
     return shouldAutoNext(firstComponent.components, valueChange)
   }
-  // at least one missing value has been selected
-  const hasMissingValue = valueChange.some(
-    (variable) =>
-      variable.name.includes('_MISSING') &&
-      ['DK', 'RF'].includes(variable.value),
-  )
-  if (
-    // There is only one "don't know / refusal" variable on the page
-    countMissingResponseInPage(components) === 1 &&
-    // One of the values changed is a "don't know / refusal" response, or the current component is a radio or checkbox
-    (hasMissingValue ||
-      (firstComponent.componentType &&
-        ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
-          firstComponent.componentType,
-        )))
-  ) {
-    return true
+
+  // There is only one "don't know / refusal" variable on the page
+  if (countMissingResponseInPage(components) === 1) {
+    // Check if the respondent answered "don't know" / "refusal"
+    const hasMissingValue = valueChange.some(
+      (variable) =>
+        variable.name.includes('_MISSING') &&
+        ['DK', 'RF'].includes(variable.value),
+    )
+    if (hasMissingValue) {
+      return true
+    }
+
+    // Check if the current component is a radio or checkbox
+    if (
+      firstComponent.componentType &&
+      ['Radio', 'CheckboxBoolean', 'CheckboxOne'].includes(
+        firstComponent.componentType,
+      )
+    ) {
+      return true
+    }
   }
+
   return false
 }

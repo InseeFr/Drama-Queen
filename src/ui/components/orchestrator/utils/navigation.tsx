@@ -10,6 +10,7 @@ const { t } = getTranslation('navigationMessage')
 type ContinueAction = 'continue' | 'quit' | 'saveAndQuit' | undefined
 
 type UseNavigationButtonsProps = {
+  isBlocking?: boolean
   readonly: boolean
   isFirstPage: boolean
   isLastPage: boolean
@@ -22,6 +23,7 @@ type UseNavigationButtonsProps = {
 }
 
 export function computeNavigationButtonsProps({
+  isBlocking = false,
   readonly,
   isFirstPage,
   isLastPage,
@@ -65,11 +67,14 @@ export function computeNavigationButtonsProps({
   const isPreviousEnabled = !isFirstPage
 
   const isNextEnabled =
-    ((!isLastReachedPage && hasPageResponse()) || readonly) && !isLastPage
+    !isBlocking &&
+    ((!isLastReachedPage && hasPageResponse()) || readonly) &&
+    !isLastPage
 
   return {
     continueProps: {
       label: getLabelFromAction(continueAction),
+      isEnabled: !isBlocking,
       isVisible: isContinueVisible,
       endIcon: getEndIcon(continueAction),
       shortCutKey: continueShortCutKey,
