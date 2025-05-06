@@ -4,6 +4,20 @@ import { describe, expect, it, vi } from 'vitest'
 import { shouldAutoNext } from './autoNext'
 
 describe('Should auto next', () => {
+  it("returns true in the case of a don't know / refusal", () => {
+    const components: LunaticComponentProps[] = [
+      {
+        componentType: 'Text',
+        id: 'a',
+        value: 'v',
+        handleChanges: vi.fn(),
+        missingResponse: { name: 'a_MISSING' },
+      },
+    ]
+    const valueChange = [{ name: 'a_MISSING', value: 'DK' }]
+    expect(shouldAutoNext(components, valueChange)).toBeTruthy()
+  })
+
   it('returns false with non-radio and non-checkbox components', () => {
     const components: LunaticComponentProps[] = [
       {
@@ -24,7 +38,10 @@ describe('Should auto next', () => {
         componentType: 'Radio',
         id: 'a',
         value: '',
-        options: [],
+        options: [
+          { value: 'v1', label: 'my value' },
+          { value: 'v2', label: 'my other value' },
+        ],
         handleChanges: vi.fn(),
         response: { name: 'a' },
         missingResponse: { name: 'a_MISSING' },
@@ -34,20 +51,42 @@ describe('Should auto next', () => {
     expect(shouldAutoNext(components, valueChange)).toBeTruthy()
   })
 
-  it('returns true with missing value', () => {
+  it('returns false when selected option ask for clarification', () => {
     const components: LunaticComponentProps[] = [
       {
         componentType: 'Radio',
         id: 'a',
         value: '',
-        options: [],
+        options: [
+          { value: 'v1', label: 'my value' },
+          { value: 'v2', label: 'my other value', detailLabel: 'Précisez :' },
+        ],
         handleChanges: vi.fn(),
         response: { name: 'a' },
         missingResponse: { name: 'a_MISSING' },
       },
     ]
-    const valueChange = [{ name: 'a_MISSING', value: 'DK' }]
-    expect(shouldAutoNext(components, valueChange)).toBeTruthy()
+    const valueChange = [{ name: 'a', value: 'v2' }]
+    expect(shouldAutoNext(components, valueChange)).toBeFalsy()
+  })
+
+  it('returns false when user is answering clarification', () => {
+    const components: LunaticComponentProps[] = [
+      {
+        componentType: 'Radio',
+        id: 'a',
+        value: '',
+        options: [
+          { value: 'v1', label: 'my value' },
+          { value: 'v2', label: 'my other value', detailLabel: 'Précisez :' },
+        ],
+        handleChanges: vi.fn(),
+        response: { name: 'a' },
+        missingResponse: { name: 'a_MISSING' },
+      },
+    ]
+    const valueChange = [{ name: 'a_cl', value: 'parce que...' }]
+    expect(shouldAutoNext(components, valueChange)).toBeFalsy()
   })
 
   it('returns true with a radio in a question component', () => {
@@ -60,7 +99,10 @@ describe('Should auto next', () => {
             componentType: 'Radio',
             id: 'a',
             value: '',
-            options: [],
+            options: [
+              { value: 'v1', label: 'my value' },
+              { value: 'v2', label: 'my other value' },
+            ],
             handleChanges: vi.fn(),
             response: { name: 'a' },
             missingResponse: { name: 'a_MISSING' },
@@ -69,7 +111,7 @@ describe('Should auto next', () => {
         value: {},
       },
     ]
-    const valueChange = [{ name: 'a', value: 'v2' }]
+    const valueChange = [{ name: 'a', value: 'v1' }]
     expect(shouldAutoNext(components, valueChange)).toBeTruthy()
   })
 })

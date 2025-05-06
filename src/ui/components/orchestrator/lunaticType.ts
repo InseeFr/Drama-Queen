@@ -1,4 +1,8 @@
-import type { LunaticOptions, LunaticState } from '@inseefr/lunatic'
+import type {
+  LunaticChangesHandler,
+  LunaticOptions,
+  LunaticState,
+} from '@inseefr/lunatic'
 
 type ItemOf<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never
@@ -18,3 +22,4 @@ export type Components = ReturnType<LunaticState['getComponents']>
 export type Component = Components[number]
 
 export type CompileControls = LunaticState['compileControls']
+export type ValueChange = Parameters<LunaticChangesHandler>[0]
