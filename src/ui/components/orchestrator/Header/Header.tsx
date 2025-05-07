@@ -1,5 +1,7 @@
 import AppsIcon from '@mui/icons-material/Apps'
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
@@ -18,6 +20,7 @@ import { Breadcrumb } from '../Breadcrumb/Breadcrumb'
 import { Menu } from '../Menu/Menu'
 import { ShortCut } from '../buttons/ShortCut/ShortCut'
 import type { GoToPage, Overview, OverviewItem } from '../lunaticType'
+import { useFullscreen } from '../tools/useFullscreen'
 
 type HeaderProps = {
   questionnaireTitle: string
@@ -38,6 +41,7 @@ export function Header(props: HeaderProps) {
     definitiveQuit,
   } = props
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const { isFullscreen, toggleFullscreen } = useFullscreen()
   const { classes } = useStyles({ isDrawerOpen })
   const { t } = useTranslation('navigationMessage')
 
@@ -106,15 +110,21 @@ export function Header(props: HeaderProps) {
           goToPage={goToPage}
         />
       </Stack>
-      <Stack className={classes.headerClose}>
+      <Stack className={classes.rightButtons}>
         <IconButton
-          title={t('quit')}
-          className={classes.closeIcon}
-          onClick={quit}
+          title={isFullscreen ? t('exitFullscreen') : t('goFullscreen')}
+          id="fullscreen"
+          className={classes.fullscreenIcon}
+          onClick={toggleFullscreen}
         >
-          <ExitToAppIcon />
-          <ShortCut shortCutKey={quitShortKey} onClickMethod={quit} />
+          {isFullscreen ? <CloseFullscreenIcon /> : <OpenInFullIcon />}
         </IconButton>
+        <Stack className={classes.headerClose}>
+          <IconButton title={t('quit')} onClick={quit}>
+            <ExitToAppIcon />
+            <ShortCut shortCutKey={quitShortKey} onClickMethod={quit} />
+          </IconButton>
+        </Stack>
       </Stack>
     </AppBar>
   )
@@ -139,12 +149,25 @@ const useStyles = tss
     },
     menuIcon: {
       color: isDrawerOpen ? '#E30342' : 'black',
-      '& svg': { fontSize: '2em' },
+      '& svg': {
+        fontSize: '2em',
+      },
     },
     menu: {
       zIndex: 1000,
       '& .MuiDrawer-paper': {
         minWidth: '250px',
+      },
+    },
+    rightButtons: {
+      flexDirection: 'row',
+      marginLeft: 'auto',
+      gap: '1rem',
+      '& button': {
+        color: 'black',
+        '& svg': {
+          fontSize: '2em',
+        },
       },
     },
     headerClose: {
@@ -155,9 +178,10 @@ const useStyles = tss
     headerLogo: {
       height: '50px',
     },
-    closeIcon: {
-      color: 'black',
-      '& svg': { fontSize: '2em' },
+    fullscreenIcon: {
+      '& svg': {
+        transform: 'scale(0.7)',
+      },
     },
     headerTitle: {
       paddingLeft: '1em',

@@ -72,6 +72,8 @@ export type NavigationMessage =
   | 'continue'
   | 'dontKnowButtonLabel'
   | 'shortCutNextLabel'
+  | 'goFullscreen'
+  | 'exitFullscreen'
 
 export type SynchronizeMessage =
   | 'synchronizationInProgress'

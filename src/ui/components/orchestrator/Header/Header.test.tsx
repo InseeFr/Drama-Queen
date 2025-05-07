@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { TestWrapper } from '@/tests/TestWrapper'
@@ -24,6 +24,16 @@ vi.mock('../buttons/ShortCut/ShortCut', () => ({
 
 vi.mock('@/i18n', () => ({
   useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
+}))
+
+vi.mock('@mui/icons-material/OpenInFull', () => ({
+  __esModule: true,
+  default: vi.fn(() => <svg>OpenInFullIcon</svg>),
+}))
+
+vi.mock('@mui/icons-material/CloseFullscreen', () => ({
+  __esModule: true,
+  default: vi.fn(() => <svg>CloseFullscreenIcon</svg>),
 }))
 
 describe('Header Component', () => {
@@ -62,6 +72,7 @@ describe('Header Component', () => {
 
     expect(getByText('Test Questionnaire')).toBeInTheDocument()
     expect(getByTitle('backToQuestionnaireStart')).toBeInTheDocument()
+    expect(getByTitle('goFullscreen')).toBeInTheDocument()
     expect(getByTitle('quit')).toBeInTheDocument()
   })
 
@@ -92,6 +103,36 @@ describe('Header Component', () => {
     // Close menu
     fireEvent.click(menuButton)
     expect(queryByRole('presentation')).not.toBeInTheDocument()
+  })
+
+  it('should handle fullscreen correctly', async () => {
+    const { container, getByText } = render(
+      <TestWrapper>
+        <Header {...defaultProps} />
+      </TestWrapper>,
+    )
+
+    const fullscreenButton = container.querySelector('#fullscreen')!
+
+    // Should be in non-fullscreen
+    expect(fullscreenButton).toHaveAttribute('title', 'goFullscreen')
+    expect(getByText('OpenInFullIcon')).toBeInTheDocument()
+
+    await act(async () => {
+      fireEvent.click(fullscreenButton)
+    })
+
+    // The title and icon should change
+    expect(fullscreenButton).toHaveAttribute('title', 'exitFullscreen')
+    expect(getByText('CloseFullscreenIcon')).toBeInTheDocument()
+
+    await act(async () => {
+      fireEvent.click(fullscreenButton)
+    })
+
+    // After clicking again, the title and icon should change back
+    expect(fullscreenButton).toHaveAttribute('title', 'goFullscreen')
+    expect(getByText('OpenInFullIcon')).toBeInTheDocument()
   })
 
   it('calls quit when the quit button is clicked', () => {
