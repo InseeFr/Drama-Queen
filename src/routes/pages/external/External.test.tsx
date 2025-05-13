@@ -13,7 +13,7 @@ vi.mock('@/i18n', () => ({
 vi.mock('@/components/ui/ErrorComponent', () => ({
   ErrorComponent: vi.fn(),
 }))
-vi.mock('@//components/ui/CenteredSpinner', () => ({
+vi.mock('@/components/ui/CenteredSpinner', () => ({
   CenteredSpinner: vi.fn(),
 }))
 vi.mock('./useScript', () => ({

@@ -9,7 +9,7 @@ import { useLoaderData } from '@/routes/routing/utils'
 
 import { Review } from './Review'
 
-vi.mock('@/ui/routing/utils', () => ({
+vi.mock('@/routes/routing/utils', () => ({
   useLoaderData: vi.fn(),
 }))
 

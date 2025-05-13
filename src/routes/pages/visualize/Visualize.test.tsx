@@ -10,7 +10,7 @@ import { downloadAsJson } from '@/utils/files'
 import { Visualize } from './Visualize'
 import { VisualizeForm } from './VisualizeForm'
 
-vi.mock('@/ui/routing/utils', () => ({
+vi.mock('@/routes/routing/utils', () => ({
   useLoaderData: vi.fn(),
 }))
 

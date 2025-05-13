@@ -10,7 +10,7 @@ import { Collect } from './Collect'
 vi.mock('@/core', () => ({
   useCore: vi.fn(),
 }))
-vi.mock('@/ui/routing/utils', () => ({
+vi.mock('@/routes/routing/utils', () => ({
   useLoaderData: vi.fn(),
 }))
 vi.mock('@/components/orchestrator/Orchestrator', () => ({
