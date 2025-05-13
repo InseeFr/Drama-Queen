@@ -46,7 +46,7 @@ describe('NavigationManager', () => {
     useLocationMock.mockReturnValue(mockLocation)
     useNavigateMock.mockImplementation(() => mockNavigate)
     matchRoutesMock.mockImplementation(
-      (routes, { pathname }) => pathname === '/same-path',
+      (_, { pathname }) => pathname === '/same-path',
     )
 
     render(
