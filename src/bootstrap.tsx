@@ -1,9 +1,12 @@
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
+import { CenteredSpinner } from '@/components/ui/CenteredSpinner'
 import { CoreProvider } from '@/createCore'
-import { CenteredSpinner } from '@/ui/components/CenteredSpinner'
-import { type RoutingStrategy, createRouter } from '@/ui/routing/createRouter'
+import {
+  type RoutingStrategy,
+  createRouter,
+} from '@/routes/routing/createRouter'
 import { unsubscribeOldSW } from '@/unsubscribe_old_sw'
 
 const mount = ({
