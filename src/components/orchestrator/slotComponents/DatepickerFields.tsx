@@ -12,12 +12,16 @@ import { useState } from 'react'
 
 export type DateFormat = 'YYYY-MM-DD' | 'YYYY-MM' | 'YYYY'
 
-export const DatepickerFields: LunaticSlotComponents['DatepickerFields'] = (
-  props,
-) => {
-  const { disabled, readOnly, value, dateFormat, id, min, max, onChange } =
-    props
-
+export const DatepickerFields: LunaticSlotComponents['DatepickerFields'] = ({
+  disabled,
+  readOnly,
+  value,
+  dateFormat,
+  id,
+  min,
+  max,
+  onChange,
+}) => {
   const parsedDate = value ? parseISO(value) : null
   const parsedMinDate = min ? parseISO(min) : undefined
   const parsedMaxDate = max ? parseISO(max) : undefined

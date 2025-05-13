@@ -7,8 +7,10 @@ type StepProgressBarProps = {
   maxStep: number
 }
 
-export function StepProgressBar(props: Readonly<StepProgressBarProps>) {
-  const { currentStep, maxStep } = props
+export function StepProgressBar({
+  currentStep,
+  maxStep,
+}: Readonly<StepProgressBarProps>) {
   const { classes, cx } = useStyles()
 
   const stepBar = (index: number) => (

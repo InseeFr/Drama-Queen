@@ -6,9 +6,10 @@ type ShortCutProps = {
 }
 
 /** Allow to add an action that will be triggered through a hotkey. */
-export function ShortCut(props: ShortCutProps) {
-  const { shortCutKey, onClickMethod } = props
-
+export function ShortCut({
+  shortCutKey,
+  onClickMethod,
+}: Readonly<ShortCutProps>) {
   function onClickShortCut(onClickMethod: () => void) {
     return (_keyName: string, event: KeyboardEvent) => {
       onClickMethod()

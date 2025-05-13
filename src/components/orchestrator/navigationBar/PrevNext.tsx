@@ -16,8 +16,12 @@ type PrevNextProps = {
   onNext: () => void
 }
 
-export function PrevNext(props: PrevNextProps) {
-  const { isPreviousEnabled, isNextEnabled, onPrevious, onNext } = props
+export function PrevNext({
+  isPreviousEnabled,
+  isNextEnabled,
+  onPrevious,
+  onNext,
+}: PrevNextProps) {
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 

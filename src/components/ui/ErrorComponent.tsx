@@ -4,9 +4,11 @@ import { tss } from 'tss-react/mui'
 
 import { useTranslation } from '@/i18n'
 
-export function ErrorComponent(props: { message: string }) {
-  const { message } = props
+type ErrorComponentProps = {
+  message: string
+}
 
+export function ErrorComponent({ message }: Readonly<ErrorComponentProps>) {
   const { classes } = useStyles()
 
   const { t } = useTranslation('errorMessage')

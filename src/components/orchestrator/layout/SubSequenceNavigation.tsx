@@ -10,8 +10,10 @@ type subSequenceNavigationProps = {
   subSequenceOnClick: (subSequence: OverviewItem) => void
 }
 
-export function SubSequenceNavigation(props: subSequenceNavigationProps) {
-  const { sequence, subSequenceOnClick } = props
+export function SubSequenceNavigation({
+  sequence,
+  subSequenceOnClick,
+}: Readonly<subSequenceNavigationProps>) {
   const { classes } = useStyles()
 
   return (

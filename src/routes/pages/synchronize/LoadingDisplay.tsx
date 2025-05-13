@@ -16,8 +16,10 @@ type LoadingDisplayProps = {
   }[]
 }
 
-export function LoadingDisplay(props: LoadingDisplayProps) {
-  const { syncStepTitle, progressBars } = props
+export function LoadingDisplay({
+  syncStepTitle,
+  progressBars,
+}: Readonly<LoadingDisplayProps>) {
   const { t } = useTranslation('synchronizeMessage')
   const { classes } = useStyles()
   return (

@@ -11,13 +11,7 @@ import { tss } from 'tss-react/mui'
 import { useTranslation } from '@/i18n'
 
 import { getSearchParams } from './getSearchParams'
-
-export type FormValues = {
-  questionnaire: string
-  data?: string
-  nomenclature?: Record<string, string>
-  readonly: boolean
-}
+import type { FormValues } from './models'
 
 export function VisualizeForm() {
   const { t } = useTranslation('visualizeMessage')

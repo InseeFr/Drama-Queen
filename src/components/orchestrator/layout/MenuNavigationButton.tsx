@@ -13,16 +13,15 @@ type MenuNaviGationButtonProps = {
   onClick: () => void
 }
 
-export function MenuNavigationButton(props: MenuNaviGationButtonProps) {
-  const {
-    className,
-    label,
-    disabled = false,
-    startIcon,
-    endIcon,
-    autofocus,
-    onClick,
-  } = props
+export function MenuNavigationButton({
+  className,
+  label,
+  disabled = false,
+  startIcon,
+  endIcon,
+  autofocus,
+  onClick,
+}: Readonly<MenuNaviGationButtonProps>) {
   const { classes, cx } = useStyles()
 
   return (
