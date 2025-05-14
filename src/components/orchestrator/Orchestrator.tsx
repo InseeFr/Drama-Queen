@@ -206,7 +206,6 @@ export function Orchestrator({
                   slots={slotComponents}
                   componentProps={() => ({
                     errors: activeErrors,
-                    filterDescription: false,
                     ...(readonly ? { readOnly: true, disabled: true } : {}),
                   })}
                   autoFocusKey={pageTag}
