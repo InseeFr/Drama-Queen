@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import type { FormValues } from './VisualizeForm'
 import { getSearchParams } from './getSearchParams'
+import type { FormValues } from './models'
 
 describe('getSearchParams', () => {
   it('should return all fields when all fields are provided', () => {

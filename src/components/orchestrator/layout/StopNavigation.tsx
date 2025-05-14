@@ -19,8 +19,10 @@ type StopItem = {
   label: string
 }
 
-export function StopNavigation(props: StopNavigationProps) {
-  const { quit, definitiveQuit } = props
+export function StopNavigation({
+  quit,
+  definitiveQuit,
+}: Readonly<StopNavigationProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
   const { t: t2 } = useTranslation('modalMessage')

@@ -31,17 +31,16 @@ type MenuItem = {
   label: string
 }
 
-export function Menu(props: MenuProps) {
-  const {
-    isDrawerOpen,
-    readonly,
-    questionnaireTitle,
-    overview,
-    goToPage,
-    setIsDrawerOpen,
-    quit,
-    definitiveQuit,
-  } = props
+export function Menu({
+  isDrawerOpen,
+  readonly,
+  questionnaireTitle,
+  overview,
+  goToPage,
+  setIsDrawerOpen,
+  quit,
+  definitiveQuit,
+}: Readonly<MenuProps>) {
   const [selectedMenuItem, setSelectedMenuItem] = useState<
     MenuItem | undefined
   >(undefined)

@@ -1,10 +1,10 @@
-import type { FormValues } from './VisualizeForm'
+import type { FormValues } from './models'
 
 export function getSearchParams(data: FormValues) {
   // get encoded form values
   const stringParams = {
     questionnaire: data.questionnaire,
-    data: data.data ? data.data : '',
+    data: data.data ?? '',
     nomenclature: data.nomenclature ? JSON.stringify(data.nomenclature) : '',
     readonly: data.readonly.toString(),
   }

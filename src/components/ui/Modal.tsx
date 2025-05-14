@@ -22,15 +22,14 @@ type ModalProps = {
   onClose: () => void
 }
 
-export function Modal(props: ModalProps) {
-  const {
-    isOpen,
-    dialogTitle,
-    dialogContent,
-    buttons,
-    mandatory = false,
-    onClose,
-  } = props
+export function Modal({
+  isOpen,
+  dialogTitle,
+  dialogContent,
+  buttons,
+  mandatory = false,
+  onClose,
+}: Readonly<ModalProps>) {
   const { classes } = useStyles()
 
   const handleClose = (event: any, reason: string) => {

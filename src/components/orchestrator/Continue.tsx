@@ -15,15 +15,14 @@ type ContinueProps = {
   isEnabled?: boolean
 }
 
-export function Continue(props: ContinueProps) {
-  const {
-    label,
-    isEnabled = true,
-    endIcon,
-    shortCutKey,
-    shortCutLabel,
-    onContinue,
-  } = props
+export function Continue({
+  label,
+  isEnabled = true,
+  endIcon,
+  shortCutKey,
+  shortCutLabel,
+  onContinue,
+}: Readonly<ContinueProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
 

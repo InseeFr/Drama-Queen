@@ -14,9 +14,12 @@ type SequenceNavigationProps = {
   sequenceOnClick: (sequence: OverviewItem) => void
 }
 
-export function SequenceNavigation(props: SequenceNavigationProps) {
-  const { questionnaireTitle, overview, selectedSequence, sequenceOnClick } =
-    props
+export function SequenceNavigation({
+  questionnaireTitle,
+  overview,
+  selectedSequence,
+  sequenceOnClick,
+}: Readonly<SequenceNavigationProps>) {
   const { classes } = useStyles()
 
   // display endIcon only if sequence leads to a subSequences menu

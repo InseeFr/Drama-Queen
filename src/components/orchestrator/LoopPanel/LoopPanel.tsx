@@ -19,9 +19,14 @@ type LoopPanelProps = {
   goToPage: ReturnType<typeof useLunatic>['goToPage']
 }
 
-export function LoopPanel(props: LoopPanelProps) {
-  const { loopVariables, page, iteration, lastReachedPage, data, goToPage } =
-    props
+export function LoopPanel({
+  loopVariables,
+  page,
+  iteration,
+  lastReachedPage,
+  data,
+  goToPage,
+}: Readonly<LoopPanelProps>) {
   const { classes, cx } = useStyles()
 
   if (!loopVariables[0] || !lastReachedPage || !data.COLLECTED) {
@@ -50,7 +55,6 @@ export function LoopPanel(props: LoopPanelProps) {
     <Stack className={classes.panelContainer}>
       {titleData.map((value, index) => (
         <Button
-          key={`panel-${index}`}
           className={cx(
             classes.panelButton,
             index === iteration

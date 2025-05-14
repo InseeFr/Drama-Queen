@@ -11,8 +11,11 @@ type BreadcrumbProps = {
   goToPage: GoToPage
 }
 
-export function Breadcrumb(props: BreadcrumbProps) {
-  const { sequence, subSequence, goToPage } = props
+export function Breadcrumb({
+  sequence,
+  subSequence,
+  goToPage,
+}: Readonly<BreadcrumbProps>) {
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 

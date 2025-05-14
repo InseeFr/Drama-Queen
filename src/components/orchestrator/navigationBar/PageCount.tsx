@@ -8,8 +8,7 @@ type PageCountProps = {
   maxPage: number | undefined
 }
 
-export function PageCount(props: Readonly<PageCountProps>) {
-  const { currentPage, maxPage } = props
+export function PageCount({ currentPage, maxPage }: Readonly<PageCountProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
 

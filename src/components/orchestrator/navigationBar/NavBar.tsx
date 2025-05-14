@@ -19,18 +19,17 @@ type NavBarProps = {
   onNext: () => void
 }
 
-export function NavBar(props: Readonly<NavBarProps>) {
-  const {
-    overview,
-    page,
-    maxPage,
-    subPage,
-    nbSubPages,
-    isPreviousEnabled,
-    isNextEnabled,
-    onPrevious,
-    onNext,
-  } = props
+export function NavBar({
+  overview,
+  page,
+  maxPage,
+  subPage,
+  nbSubPages,
+  isPreviousEnabled,
+  isNextEnabled,
+  onPrevious,
+  onNext,
+}: Readonly<NavBarProps>) {
   const { classes } = useStyles()
 
   const currentSequenceIndex = overview.findIndex(

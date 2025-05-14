@@ -28,15 +28,14 @@ type HeaderProps = {
   definitiveQuit: () => void
 }
 
-export function Header(props: HeaderProps) {
-  const {
-    questionnaireTitle,
-    readonly,
-    overview,
-    goToPage,
-    quit,
-    definitiveQuit,
-  } = props
+export function Header({
+  questionnaireTitle,
+  readonly,
+  overview,
+  goToPage,
+  quit,
+  definitiveQuit,
+}: Readonly<HeaderProps>) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
   const { t } = useTranslation('navigationMessage')
