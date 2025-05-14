@@ -38,8 +38,10 @@ describe('Use queen navigation', () => {
     const onDefinitiveQuitMock = vi.fn()
     const updateSurveyUnitMock = vi.fn()
 
-    getChangedDataMock.mockReturnValueOnce('my data')
-    updateSurveyUnitMock.mockReturnValue('my updated survey unit')
+    getChangedDataMock.mockReturnValueOnce('my new data')
+    updateSurveyUnitMock.mockReturnValue({
+      data: 'my updated survey unit data',
+    })
 
     const { result } = renderHook(() =>
       useQueenNavigation({
@@ -55,18 +57,20 @@ describe('Use queen navigation', () => {
     })
 
     expect(updateSurveyUnitMock).toHaveBeenCalledTimes(3)
-    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my data', {
+    expect(updateSurveyUnitMock).toHaveBeenCalledWith('my new data', {
       currentPage: '3',
     })
     expect(updateSurveyUnitMock).toHaveBeenCalledWith(
-      {},
+      'my updated survey unit data',
       { currentPage: '3', forcedState: 'COMPLETED' },
     )
     expect(updateSurveyUnitMock).toHaveBeenCalledWith(
-      {},
+      'my updated survey unit data',
       { currentPage: '3', forcedState: 'VALIDATED' },
     )
     expect(onDefinitiveQuitMock).toHaveBeenCalledOnce()
-    expect(onDefinitiveQuitMock).toHaveBeenCalledWith('my updated survey unit')
+    expect(onDefinitiveQuitMock).toHaveBeenCalledWith({
+      data: 'my updated survey unit data',
+    })
   })
 })
