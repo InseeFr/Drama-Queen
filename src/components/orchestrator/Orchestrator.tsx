@@ -205,10 +205,9 @@ export function Orchestrator({
                   components={components}
                   slots={slotComponents}
                   componentProps={() => ({
-                    disabled: readonly,
                     errors: activeErrors,
                     filterDescription: false,
-                    readOnly: readonly,
+                    ...(readonly ? { readOnly: true, disabled: true } : {}),
                   })}
                   autoFocusKey={pageTag}
                   wrapper={({ children, id, componentType }) => (
