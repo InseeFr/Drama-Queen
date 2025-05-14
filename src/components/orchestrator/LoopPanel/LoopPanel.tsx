@@ -55,7 +55,6 @@ export function LoopPanel({
     <Stack className={classes.panelContainer}>
       {titleData.map((value, index) => (
         <Button
-          key={`${value}`}
           className={cx(
             classes.panelButton,
             index === iteration
