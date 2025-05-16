@@ -47,8 +47,7 @@ export function computeSourceExternalVariables(
 }
 
 /**
- * Initialize the survey unit with the expected format since it can be empty or
- * partial. State data must be initialized the first time.
+ * Initialize the survey unit with the expected format since it can be empty or partial.
  */
 export function computeSurveyUnit(partial?: Partial<SurveyUnit>): SurveyUnit {
   const surveyUnitId = partial?.id ?? ''
@@ -64,10 +63,6 @@ export function computeSurveyUnit(partial?: Partial<SurveyUnit>): SurveyUnit {
       partial?.data,
     ),
     comment: partial?.comment,
-    stateData: partial?.stateData ?? {
-      state: null,
-      date: new Date().getTime(),
-      currentPage: '1',
-    },
+    stateData: partial?.stateData,
   }
 }

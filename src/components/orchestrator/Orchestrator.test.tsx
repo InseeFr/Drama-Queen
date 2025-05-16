@@ -1,18 +1,9 @@
 import { fireEvent, render } from '@testing-library/react'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { TestWrapper } from '@/tests/TestWrapper'
 
 import { Orchestrator } from './Orchestrator'
-
-beforeAll(() => {
-  vi.useFakeTimers()
-  vi.setSystemTime(new Date(2024, 9, 28, 17, 7, 33, 11))
-})
-
-afterAll(() => {
-  vi.useRealTimers()
-})
 
 describe('Orchestrator', () => {
   it('triggers function on page change', () => {
@@ -40,11 +31,6 @@ describe('Orchestrator', () => {
       id: '',
       personalization: undefined,
       questionnaireId: '',
-      stateData: {
-        currentPage: '1',
-        date: vi.getMockedSystemTime()?.valueOf(),
-        state: null,
-      },
     })
   })
 })

@@ -13,6 +13,22 @@ afterAll(() => {
 })
 
 describe('Use survey unit', () => {
+  it('does not create state data if it did not exist and data did no change', () => {
+    const onChangeSurveyUnitStateMock = vi.fn()
+
+    const { result } = renderHook(() =>
+      useSurveyUnit(
+        { id: 'id', questionnaireId: 'qid', data: {} },
+        onChangeSurveyUnitStateMock,
+      ),
+    )
+
+    act(() => {
+      const res = result.current.updateSurveyUnit({}, { currentPage: '2' })
+      expect(res.stateData).toBeUndefined()
+    })
+  })
+
   test('inits survey unit data', async () => {
     const onChangeSurveyUnitStateMock = vi.fn()
 
