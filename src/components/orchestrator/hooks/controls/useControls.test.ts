@@ -104,11 +104,11 @@ describe('Use controls', () => {
     expect(goNextPageMock).toHaveBeenCalled()
   })
 
-  test('do not block further navigation if an error is a warning but user ignores them', async () => {
+  test('do not block further navigation if an error is a non mandatory error but user ignores them', async () => {
     const compileControlsMock = vi.fn()
     compileControlsMock.mockReturnValue({
       currentErrors: {
-        Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+        Q1: [{ id: 'id1', criticality: 'ERROR', errorMessage: 'error' }],
       },
     })
 
@@ -131,6 +131,51 @@ describe('Use controls', () => {
     expect(result.current.isBlocking).toBeFalsy()
     expect(result.current.activeErrors).toBeUndefined()
     expect(goNextPageMock).toHaveBeenCalled()
+  })
+
+  test('block further navigation if an error is a mandatory error', async () => {
+    const compileControlsMock = vi.fn()
+    compileControlsMock.mockReturnValue({
+      currentErrors: {
+        Q1: [
+          {
+            id: 'id1',
+            criticality: 'ERROR',
+            errorMessage: 'error',
+            typeOfControl: 'MANDATORY',
+          },
+        ],
+      },
+    })
+
+    const goNextPageMock = vi.fn()
+
+    const { result } = renderHook(() =>
+      useControls({
+        compileControls: compileControlsMock,
+        goNextPage: goNextPageMock,
+        goPreviousPage: vi.fn(),
+        goToPage: vi.fn(),
+        isEnabled: true,
+      }),
+    )
+
+    expect(result.current.isBlocking).toBeFalsy()
+
+    act(() => result.current.handleNextPage(true))
+
+    expect(result.current.isBlocking).toBeTruthy()
+    expect(result.current.activeErrors).toStrictEqual({
+      Q1: [
+        {
+          id: 'id1',
+          criticality: 'ERROR',
+          errorMessage: 'error',
+          typeOfControl: 'MANDATORY',
+        },
+      ],
+    })
+    expect(goNextPageMock).not.toHaveBeenCalled()
   })
 
   test('block further navigation if warning acknowledged but user triggers another warning', async () => {

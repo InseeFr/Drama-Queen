@@ -35,14 +35,14 @@ export function useControls({
   const [isWarningAcknowledged, setIsWarningAcknowledged] =
     useState<boolean>(false)
 
-  const handleNextPage = (ignoreWarning: boolean = false) => {
+  const handleNextPage = (ignoreNonMandatoryErrors: boolean = false) => {
     if (!isEnabled) {
       goNextPage()
       return
     }
 
     const { currentErrors } = compileControls()
-    const errorType = computeErrorType(currentErrors)
+    const errorType = computeErrorType(currentErrors, ignoreNonMandatoryErrors)
     switch (errorType) {
       case ErrorType.BLOCKING:
         // If error is blocking we prevent further navigation no matter what
@@ -54,11 +54,10 @@ export function useControls({
         // see this error before ; if the user wants to pursue anyway (i.e. the
         // same error is triggered twice), user can proceed
         if (
-          ignoreWarning ||
-          (isWarningAcknowledged &&
-            currentErrors &&
-            activeErrors &&
-            isSameErrors(currentErrors, activeErrors))
+          isWarningAcknowledged &&
+          currentErrors &&
+          activeErrors &&
+          isSameErrors(currentErrors, activeErrors)
         ) {
           resetControls()
           goNextPage()
