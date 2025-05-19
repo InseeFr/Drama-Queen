@@ -3,10 +3,35 @@ import type { InterpretedOption } from '@inseefr/lunatic/use-lunatic/props/propO
 import type { Component, Components, ValueChange } from '@/models/lunaticType'
 
 /**
+ * Whether or not we should skip the question and go to the next page.
+ *
+ * It can only be true if we have only one component in the page and the
+ * response is a "don't know" / "refusal"
+ */
+export function shouldSkipQuestion(
+  components: Components,
+  valueChange: ValueChange,
+): boolean {
+  const firstComponent = components[0]
+
+  // a Question component is a wrapper, we have to check its children
+  if (firstComponent.componentType === 'Question') {
+    return shouldSkipQuestion(firstComponent.components, valueChange)
+  }
+
+  // there is multiple "don't know" / "refusal" variables in the page
+  if (countMissingResponseInPage(components) !== 1) return false
+
+  // the respondent answered "don't know" / "refusal"
+  if (isResponseMissing(valueChange)) return true
+
+  return false
+}
+
+/**
  * Whether or not we should go on next page when a value has changed.
  *
  * It can only be true if we have only one component in the page and one of:
- * - the response if a "don't know" / "refusal"
  * - the component is a simple checkbox
  * - the component is a radio / checkbox and the selected option does not ask
  *   for clarification
@@ -24,9 +49,6 @@ export function shouldAutoNext(
 
   // there is multiple "don't know" / "refusal" variables in the page
   if (countMissingResponseInPage(components) !== 1) return false
-
-  // the respondent answered "don't know" / "refusal"
-  if (isResponseMissing(valueChange)) return true
 
   // the component is a simple checkbox
   if (firstComponent.componentType === 'CheckboxBoolean') return true

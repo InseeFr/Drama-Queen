@@ -38,4 +38,33 @@ describe('Compute error type', () => {
     ).toBeUndefined()
     expect(computeErrorType()).toBeUndefined()
   })
+
+  it('can ignore non mandatory errors', () => {
+    expect(computeErrorType({ Q1: [] }, true)).toBeUndefined()
+    expect(
+      computeErrorType(
+        {
+          Q1: [
+            { id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' },
+          ],
+        },
+        true,
+      ),
+    ).toBeUndefined()
+    expect(
+      computeErrorType(
+        {
+          Q1: [
+            {
+              id: 'id1',
+              criticality: 'ERROR',
+              errorMessage: 'blocking error',
+              typeOfControl: 'MANDATORY',
+            },
+          ],
+        },
+        true,
+      ),
+    ).toBe(ErrorType.BLOCKING)
+  })
 })

@@ -19,7 +19,7 @@ import { Header } from './layout/Header'
 import { useLunaticStyles } from './lunaticStyle'
 import { NavBar } from './navigationBar/NavBar'
 import { slotComponents } from './slotComponents'
-import { shouldAutoNext } from './utils/autoNext'
+import { shouldAutoNext, shouldSkipQuestion } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
@@ -124,11 +124,18 @@ export function Orchestrator({
     (v: ValueChange) => {
       resetControls()
       const components = getComponents()
-      if (shouldAutoNext(components, v)) {
+      if (shouldSkipQuestion(components, v)) {
         // We need to put a timeout since Lunatic triggers the onChange before
         // its state has been updated
         setTimeout(() => {
+          // The answer is a DK / Refusal -> we ignore all errors except mandatory ones
           handleNextPage(true)
+        }, 100)
+      } else if (shouldAutoNext(components, v)) {
+        setTimeout(() => {
+          // The component can be answered in a click, we can directly go to
+          // next page if there are no related errors or warning
+          handleNextPage()
         }, 100)
       }
     },
