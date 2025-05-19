@@ -8,7 +8,7 @@ export enum ErrorType {
 export function computeErrorType(
   controls?: Record<string, LunaticError[]>,
   /** Ignore errors that are not related to mandatory variables. */
-  ignoreNonMandatoryErrors: boolean | undefined = false,
+  ignoreNonMandatoryErrors: boolean = false,
 ): ErrorType | undefined {
   if (!controls) return undefined
 
@@ -16,11 +16,11 @@ export function computeErrorType(
   for (const control of Object.values(controls)) {
     for (const error of control) {
       if (!ignoreNonMandatoryErrors || error.typeOfControl === 'MANDATORY') {
-        if (error.criticality === 'ERROR') {
-          return ErrorType.BLOCKING
-        }
-        if (error.criticality === 'WARN') {
-          isWarning = true
+        switch (error.criticality) {
+          case 'ERROR':
+            return ErrorType.BLOCKING
+          case 'WARN':
+            isWarning = true
         }
       }
     }
