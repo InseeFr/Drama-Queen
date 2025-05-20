@@ -125,18 +125,12 @@ export function Orchestrator({
       resetControls()
       const components = getComponents()
       if (shouldSkipQuestion(components, v)) {
-        // We need to put a timeout since Lunatic triggers the onChange before
-        // its state has been updated
-        setTimeout(() => {
-          // The answer is a DK / Refusal -> we ignore all errors except mandatory ones
-          handleNextPage(true)
-        }, 100)
+        // answer is a DK/refusal, we ignore all errors except mandatory ones
+        handleNextPage(true)
       } else if (shouldAutoNext(components, v)) {
-        setTimeout(() => {
-          // The component can be answered in a click, we can directly go to
-          // next page if there are no related errors or warning
-          handleNextPage()
-        }, 100)
+        // the component can be answered in a click, we can directly go to next
+        // page if there are no related errors or warning
+        handleNextPage()
       }
     },
     [resetControls, getComponents, handleNextPage],
