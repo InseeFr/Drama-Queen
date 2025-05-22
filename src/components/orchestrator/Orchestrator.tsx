@@ -21,6 +21,7 @@ import { NavBar } from './navigationBar/NavBar'
 import { slotComponents } from './slotComponents'
 import { shouldAutoNext, shouldSkipQuestion } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
+import { scrollAndFocusToFirstError } from './utils/focus'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
@@ -119,6 +120,11 @@ export function Orchestrator({
     goToPage,
     isEnabled: isControlsFeatureEnabled,
   })
+
+  /** Focus on the first input with an error. */
+  useEffect(() => {
+    if (activeErrors) scrollAndFocusToFirstError()
+  }, [activeErrors])
 
   const onLunaticChange = useCallback(
     (v: ValueChange) => {

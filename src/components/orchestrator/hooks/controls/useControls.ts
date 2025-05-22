@@ -103,6 +103,7 @@ export function useControls({
 
   const obsoleteControls = () => {
     setIsWarningAcknowledged(false)
+    setIsBlocking(false)
   }
 
   return {
