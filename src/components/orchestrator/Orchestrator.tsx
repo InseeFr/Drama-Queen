@@ -111,7 +111,7 @@ export function Orchestrator({
     handleNextPage,
     handlePreviousPage,
     isBlocking,
-    resetControls,
+    obsoleteControls,
   } = useControls({
     compileControls,
     goNextPage,
@@ -122,7 +122,7 @@ export function Orchestrator({
 
   const onLunaticChange = useCallback(
     (v: ValueChange) => {
-      resetControls()
+      obsoleteControls()
       const components = getComponents()
       if (shouldSkipQuestion(components, v)) {
         // answer is a DK/refusal, we ignore all errors except mandatory ones
@@ -133,7 +133,7 @@ export function Orchestrator({
         handleNextPage()
       }
     },
-    [resetControls, getComponents, handleNextPage],
+    [obsoleteControls, getComponents, handleNextPage],
   )
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(

@@ -4,7 +4,12 @@ import { useState } from 'react'
 
 import type { CompileControls, GoToPage } from '@/models/lunaticType'
 
-import { ErrorType, computeErrorType, isSameErrors } from './utils'
+import {
+  ErrorType,
+  computeErrorType,
+  isSameErrors,
+  removeNonMandatoryErrors,
+} from './utils'
 
 type useControlsProps = {
   compileControls: CompileControls
@@ -42,12 +47,20 @@ export function useControls({
     }
 
     const { currentErrors } = compileControls()
-    const errorType = computeErrorType(currentErrors, ignoreNonMandatoryErrors)
+
+    let newErrors: Record<string, LunaticError[]> | undefined
+    if (ignoreNonMandatoryErrors) {
+      newErrors = removeNonMandatoryErrors(currentErrors)
+    } else {
+      newErrors = currentErrors
+    }
+
+    const errorType = computeErrorType(newErrors)
     switch (errorType) {
       case ErrorType.BLOCKING:
         // If error is blocking we prevent further navigation no matter what
         setIsBlocking(true)
-        setActiveErrors(currentErrors)
+        setActiveErrors(newErrors)
         return
       case ErrorType.WARNING:
         // If error is warning we prevent further navigation if the user did not
@@ -55,16 +68,16 @@ export function useControls({
         // same error is triggered twice), user can proceed
         if (
           isWarningAcknowledged &&
-          currentErrors &&
+          newErrors &&
           activeErrors &&
-          isSameErrors(currentErrors, activeErrors)
+          isSameErrors(newErrors, activeErrors)
         ) {
           resetControls()
           goNextPage()
           return
         }
         setIsWarningAcknowledged(true)
-        setActiveErrors(currentErrors)
+        setActiveErrors(newErrors)
         return
       default:
         resetControls()
@@ -88,6 +101,10 @@ export function useControls({
     setIsBlocking(false)
   }
 
+  const obsoleteControls = () => {
+    setIsWarningAcknowledged(false)
+  }
+
   return {
     /** Errors to be displayed by Lunatic components. */
     activeErrors,
@@ -103,7 +120,11 @@ export function useControls({
      * buttons as disabled.
      */
     isBlocking,
-    /** Allow to manually reset controls (e.g. when the input is changed). */
-    resetControls,
+    /**
+     * Allow to manually set acknowledgement as obsolete (e.g. when the input is
+     * changed) so that new controls can trigger the same warning again but do
+     * not erase the displayed errors.
+     */
+    obsoleteControls,
   }
 }

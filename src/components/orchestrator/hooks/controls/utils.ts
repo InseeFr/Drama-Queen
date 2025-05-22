@@ -5,23 +5,20 @@ export enum ErrorType {
   WARNING,
 }
 
+/** Return the highest criticality of provided controls. */
 export function computeErrorType(
   controls?: Record<string, LunaticError[]>,
-  /** Ignore errors that are not related to mandatory variables. */
-  ignoreNonMandatoryErrors: boolean = false,
 ): ErrorType | undefined {
   if (!controls) return undefined
 
   let isWarning = false
   for (const control of Object.values(controls)) {
     for (const error of control) {
-      if (!ignoreNonMandatoryErrors || error.typeOfControl === 'MANDATORY') {
-        switch (error.criticality) {
-          case 'ERROR':
-            return ErrorType.BLOCKING
-          case 'WARN':
-            isWarning = true
-        }
+      switch (error.criticality) {
+        case 'ERROR':
+          return ErrorType.BLOCKING
+        case 'WARN':
+          isWarning = true
       }
     }
   }
@@ -31,6 +28,31 @@ export function computeErrorType(
   }
 
   return undefined
+}
+
+/**
+ * Remove errors that are not related to mandatory variables.
+ *
+ * Used to prevent displaying useless errors when the user wants to skip a
+ * question.
+ */
+export function removeNonMandatoryErrors(
+  controls?: Record<string, LunaticError[]>,
+): Record<string, LunaticError[]> | undefined {
+  if (!controls) return undefined
+
+  const newControls: Record<string, LunaticError[]> = {}
+
+  for (const [id, control] of Object.entries(controls)) {
+    for (const error of control) {
+      if (error.typeOfControl === 'MANDATORY') {
+        if (newControls[id]) newControls[id] = [...newControls[id], error]
+        else newControls[id] = [error]
+      }
+    }
+  }
+
+  return newControls
 }
 
 export function isSameErrors(
