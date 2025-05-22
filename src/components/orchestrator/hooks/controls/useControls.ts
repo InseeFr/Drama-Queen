@@ -9,6 +9,7 @@ import {
   computeErrorType,
   isSameErrors,
   removeNonMandatoryErrors,
+  sortErrors,
 } from './utils'
 
 type useControlsProps = {
@@ -54,6 +55,8 @@ export function useControls({
     } else {
       newErrors = currentErrors
     }
+
+    newErrors = sortErrors(newErrors)
 
     const errorType = computeErrorType(newErrors)
     switch (errorType) {

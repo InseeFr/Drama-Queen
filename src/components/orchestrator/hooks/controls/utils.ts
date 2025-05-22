@@ -30,6 +30,40 @@ export function computeErrorType(
   return undefined
 }
 
+/** Sort errors by criticality to display most important first to the user. */
+export function sortErrors(
+  controls?: Record<string, LunaticError[]>,
+): Record<string, LunaticError[]> | undefined {
+  if (!controls) return undefined
+
+  const sortedControls: Record<string, LunaticError[]> = {}
+  for (const [id, control] of Object.entries(controls)) {
+    const errorControls = []
+    const warningControls = []
+    const otherControls = []
+    for (const error of control) {
+      switch (error.criticality) {
+        case 'ERROR':
+          errorControls.push(error)
+          break
+        case 'WARN':
+          warningControls.push(error)
+          break
+        default:
+          otherControls.push(error)
+          break
+      }
+    }
+    sortedControls[id] = [
+      ...errorControls,
+      ...warningControls,
+      ...otherControls,
+    ]
+  }
+
+  return sortedControls
+}
+
 /**
  * Remove errors that are not related to mandatory variables.
  *
