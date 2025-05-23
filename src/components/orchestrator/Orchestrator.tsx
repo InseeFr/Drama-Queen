@@ -74,7 +74,9 @@ export function Orchestrator({
   const questionnaireTitle = source.label ? source.label.value : ''
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
-    !readonly && initialSurveyUnit.stateData?.currentPage !== '1',
+    !readonly &&
+      initialSurveyUnit.stateData !== undefined &&
+      initialSurveyUnit.stateData.currentPage !== '1',
   )
 
   const {
