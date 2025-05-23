@@ -9,7 +9,8 @@ describe('Use controls', () => {
     compileControlsMock.mockReturnValue({
       currentErrors: {
         Q1: [
-          { id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' },
+          { id: 'id1', criticality: 'WARN', errorMessage: 'warning error' },
+          { id: 'id2', criticality: 'ERROR', errorMessage: 'blocking error' },
         ],
       },
     })
@@ -31,7 +32,10 @@ describe('Use controls', () => {
 
     expect(result.current.isBlocking).toBeTruthy()
     expect(result.current.activeErrors).toStrictEqual({
-      Q1: [{ id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' }],
+      Q1: [
+        { id: 'id2', criticality: 'ERROR', errorMessage: 'blocking error' },
+        { id: 'id1', criticality: 'WARN', errorMessage: 'warning error' },
+      ],
     })
     expect(goNextPageMock).not.toHaveBeenCalled()
 

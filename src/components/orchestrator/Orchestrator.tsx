@@ -21,6 +21,7 @@ import { NavBar } from './navigationBar/NavBar'
 import { slotComponents } from './slotComponents'
 import { shouldAutoNext, shouldSkipQuestion } from './utils/autoNext'
 import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
+import { scrollAndFocusToFirstError } from './utils/focus'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
@@ -111,7 +112,7 @@ export function Orchestrator({
     handleNextPage,
     handlePreviousPage,
     isBlocking,
-    resetControls,
+    obsoleteControls,
   } = useControls({
     compileControls,
     goNextPage,
@@ -120,9 +121,14 @@ export function Orchestrator({
     isEnabled: isControlsFeatureEnabled,
   })
 
+  /** Focus on the first input with an error. */
+  useEffect(() => {
+    if (activeErrors) scrollAndFocusToFirstError()
+  }, [activeErrors])
+
   const onLunaticChange = useCallback(
     (v: ValueChange) => {
-      resetControls()
+      obsoleteControls()
       const components = getComponents()
       if (shouldSkipQuestion(components, v)) {
         // answer is a DK/refusal, we ignore all errors except mandatory ones
@@ -133,7 +139,7 @@ export function Orchestrator({
         handleNextPage()
       }
     },
-    [resetControls, getComponents, handleNextPage],
+    [obsoleteControls, getComponents, handleNextPage],
   )
 
   const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(

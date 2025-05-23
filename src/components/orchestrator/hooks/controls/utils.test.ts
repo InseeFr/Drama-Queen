@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ErrorType, computeErrorType } from './utils'
+import { ErrorType, computeErrorType, removeNonMandatoryErrors } from './utils'
 
 describe('Compute error type', () => {
   it('returns blocking when there is at least one error', () => {
@@ -38,33 +38,34 @@ describe('Compute error type', () => {
     ).toBeUndefined()
     expect(computeErrorType()).toBeUndefined()
   })
+})
 
-  it('can ignore non mandatory errors', () => {
-    expect(computeErrorType({ Q1: [] }, true)).toBeUndefined()
-    expect(
-      computeErrorType(
+it('Remove non mandatory errors', () => {
+  expect(removeNonMandatoryErrors()).toBeUndefined()
+  expect(
+    removeNonMandatoryErrors({
+      Q1: [{ id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' }],
+    }),
+  ).toStrictEqual({})
+  expect(
+    removeNonMandatoryErrors({
+      Q1: [
         {
-          Q1: [
-            { id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' },
-          ],
+          id: 'id1',
+          criticality: 'ERROR',
+          errorMessage: 'blocking error',
+          typeOfControl: 'MANDATORY',
         },
-        true,
-      ),
-    ).toBeUndefined()
-    expect(
-      computeErrorType(
-        {
-          Q1: [
-            {
-              id: 'id1',
-              criticality: 'ERROR',
-              errorMessage: 'blocking error',
-              typeOfControl: 'MANDATORY',
-            },
-          ],
-        },
-        true,
-      ),
-    ).toBe(ErrorType.BLOCKING)
+      ],
+    }),
+  ).toStrictEqual({
+    Q1: [
+      {
+        id: 'id1',
+        criticality: 'ERROR',
+        errorMessage: 'blocking error',
+        typeOfControl: 'MANDATORY',
+      },
+    ],
   })
 })
