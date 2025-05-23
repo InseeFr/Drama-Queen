@@ -35,7 +35,9 @@ export function Continue({
         disabled={!isEnabled}
       >
         {label}
-        <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
+        {isEnabled ? (
+          <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
+        ) : null}
       </Button>
       <Typography variant="caption" color="#777777">
         {t('continueHelper')}
