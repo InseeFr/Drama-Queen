@@ -71,11 +71,14 @@ export function useSurveyUnit(
     return {
       ...initialSurveyUnit,
       data: hasDataBeenUpdated && newData ? newData : surveyUnitData,
-      stateData: {
-        state: newState,
-        date: new Date().getTime(),
-        currentPage: currentPage ?? '1',
-      },
+      // provide stateData only if there is state (exclude null state)
+      ...(newState && {
+        stateData: {
+          state: newState,
+          date: new Date().getTime(),
+          currentPage: currentPage ?? '1',
+        },
+      }),
     }
   }
 
