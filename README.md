@@ -12,7 +12,7 @@ Web application for the management of questionnaires powered by Lunatic (https:/
 ## Getting Started
 
 ```
-yarn
-yarn dev
-yarn build
+pnpm install
+pnpm run dev
+pnpm run build
 ```
