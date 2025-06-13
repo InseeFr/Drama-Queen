@@ -205,6 +205,11 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     '&.Question .lunatic-component .field-container': {
       marginTop: '0',
     },
+    '&.Question .lunatic-component > .field-container > .field': {
+      '& > :not(:last-child, .sequence-lunatic)': {
+        marginBlockEnd: '1.5rem',
+      },
+    },
     '& .lunatic-textarea textarea': {
       padding: '0.5rem',
       borderRadius: '10px',
