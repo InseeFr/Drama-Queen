@@ -15,6 +15,7 @@ export type GoPreviousPage = LunaticState['goPreviousPage']
 export type GoNextPage = LunaticState['goNextPage']
 
 export type GetChangedData = LunaticState['getChangedData']
+export type GetData = LunaticState['getData']
 
 export type GetReferentiel = LunaticOptions['getReferentiel']
 

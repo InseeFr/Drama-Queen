@@ -24,6 +24,7 @@ export function Visualize() {
   if (loaderData) {
     return (
       <Orchestrator
+        includeCalculatedVariables={true}
         source={loaderData.source}
         surveyUnit={loaderData.surveyUnit}
         readonly={loaderData.readonly}
