@@ -23,7 +23,7 @@ export function useQueenNavigation({
   onQuit,
   updateSurveyUnit,
 }: UseQueenNavigationProps) {
-  const orchestratorOnQuit = (currentPage: PageTag) => {
+  const computeAndUpdateSurveyUnit = (currentPage: PageTag): SurveyUnit => {
     let surveyUnit
     if (includeCalculatedVariables) {
       surveyUnit = updateSurveyUnit(getData(true) as SurveyUnitData, {
@@ -34,13 +34,16 @@ export function useQueenNavigation({
         currentPage,
       })
     }
+    return surveyUnit
+  }
+
+  const orchestratorOnQuit = (currentPage: PageTag) => {
+    const surveyUnit = computeAndUpdateSurveyUnit(currentPage)
     return onQuit(surveyUnit)
   }
 
   const orchestratorOnDefinitiveQuit = (currentPage: PageTag) => {
-    let surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData, {
-      currentPage,
-    })
+    let surveyUnit = computeAndUpdateSurveyUnit(currentPage)
 
     // Force the state to COMPLETED only for sending the event.
     // Completed state should be defined by an algorithm.
