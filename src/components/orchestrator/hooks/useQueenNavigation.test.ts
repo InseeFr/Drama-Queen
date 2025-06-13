@@ -15,6 +15,7 @@ describe('Use queen navigation', () => {
     const { result } = renderHook(() =>
       useQueenNavigation({
         getChangedData: getChangedDataMock,
+        getData: vi.fn(),
         onDefinitiveQuit: vi.fn(),
         onQuit: onQuitMock,
         updateSurveyUnit: updateSurveyUnitMock,
@@ -46,6 +47,7 @@ describe('Use queen navigation', () => {
     const { result } = renderHook(() =>
       useQueenNavigation({
         getChangedData: getChangedDataMock,
+        getData: vi.fn(),
         onDefinitiveQuit: onDefinitiveQuitMock,
         onQuit: vi.fn(),
         updateSurveyUnit: updateSurveyUnitMock,
@@ -72,5 +74,37 @@ describe('Use queen navigation', () => {
     expect(onDefinitiveQuitMock).toHaveBeenCalledWith({
       data: 'my updated survey unit data',
     })
+  })
+
+  test('includes calculated variables', async () => {
+    const getDataMock = vi.fn()
+    const onQuitMock = vi.fn()
+    const updateSurveyUnitMock = vi.fn()
+
+    getDataMock.mockReturnValueOnce('my new data with calculated variables')
+    updateSurveyUnitMock.mockReturnValueOnce('my updated survey unit')
+
+    const { result } = renderHook(() =>
+      useQueenNavigation({
+        getChangedData: vi.fn(),
+        getData: getDataMock,
+        includeCalculatedVariables: true,
+        onDefinitiveQuit: vi.fn(),
+        onQuit: onQuitMock,
+        updateSurveyUnit: updateSurveyUnitMock,
+      }),
+    )
+
+    act(() => {
+      result.current.orchestratorOnQuit('3')
+    })
+
+    expect(updateSurveyUnitMock).toHaveBeenCalledOnce()
+    expect(updateSurveyUnitMock).toHaveBeenCalledWith(
+      'my new data with calculated variables',
+      { currentPage: '3' },
+    )
+    expect(onQuitMock).toHaveBeenCalledOnce()
+    expect(onQuitMock).toHaveBeenCalledWith('my updated survey unit')
   })
 })
