@@ -1,9 +1,11 @@
 import type { PageTag, SurveyUnit, SurveyUnitData } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
-import type { GetChangedData } from '@/models/lunaticType'
+import type { GetChangedData, GetData } from '@/models/lunaticType'
 
 type UseQueenNavigationProps = {
   getChangedData: GetChangedData
+  getData: GetData
+  includeCalculatedVariables?: boolean
   onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
   onQuit: (surveyUnit: SurveyUnit) => void
   updateSurveyUnit: (
@@ -15,15 +17,23 @@ type UseQueenNavigationProps = {
 /** Override navigation function to send updates to back-end. */
 export function useQueenNavigation({
   getChangedData,
+  getData,
+  includeCalculatedVariables = false,
   onDefinitiveQuit,
   onQuit,
   updateSurveyUnit,
 }: UseQueenNavigationProps) {
   const orchestratorOnQuit = (currentPage: PageTag) => {
-    const surveyUnit = updateSurveyUnit(
-      getChangedData(true) as SurveyUnitData,
-      { currentPage },
-    )
+    let surveyUnit
+    if (includeCalculatedVariables) {
+      surveyUnit = updateSurveyUnit(getData(true) as SurveyUnitData, {
+        currentPage,
+      })
+    } else {
+      surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData, {
+        currentPage,
+      })
+    }
     return onQuit(surveyUnit)
   }
 

@@ -32,6 +32,11 @@ const isControlsFeatureEnabled =
 
 type OrchestratorProps = {
   getReferentiel: GetReferentiel
+  /**
+   * Whether or not we should include calculated variables in survey unit
+   * provided to the onQuit function.
+   */
+  includeCalculatedVariables?: boolean
   /** Action to be called when the respondent changes page. */
   onChangePage?: (surveyUnit: SurveyUnit) => void
   /** Action to be called when the respondent's filled data enters a new state. */
@@ -57,6 +62,7 @@ type OrchestratorProps = {
  */
 export function Orchestrator({
   getReferentiel,
+  includeCalculatedVariables = false,
   onChangePage = () => {},
   onChangeSurveyUnitState = () => {},
   onDefinitiveQuit = () => {},
@@ -83,6 +89,7 @@ export function Orchestrator({
     compileControls,
     getChangedData,
     getComponents,
+    getData,
     goNextPage,
     goPreviousPage,
     goToPage,
@@ -152,6 +159,8 @@ export function Orchestrator({
   const { orchestratorOnQuit, orchestratorOnDefinitiveQuit } =
     useQueenNavigation({
       getChangedData,
+      getData,
+      includeCalculatedVariables,
       onQuit,
       onDefinitiveQuit,
       updateSurveyUnit,
