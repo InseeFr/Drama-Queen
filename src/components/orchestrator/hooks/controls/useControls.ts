@@ -17,8 +17,6 @@ type useControlsProps = {
   goNextPage: () => void
   goPreviousPage: () => void
   goToPage: GoToPage
-  /** Whether or not this feature should be enabled */
-  isEnabled: boolean
 }
 
 /**
@@ -32,7 +30,6 @@ export function useControls({
   goNextPage,
   goPreviousPage,
   goToPage,
-  isEnabled = false,
 }: Readonly<useControlsProps>) {
   const [activeErrors, setActiveErrors] = useState<
     Record<string, LunaticError[]> | undefined
@@ -42,11 +39,6 @@ export function useControls({
     useState<boolean>(false)
 
   const handleNextPage = (ignoreNonMandatoryErrors: boolean = false) => {
-    if (!isEnabled) {
-      goNextPage()
-      return
-    }
-
     const { currentErrors } = compileControls()
 
     let newErrors: Record<string, LunaticError[]> | undefined

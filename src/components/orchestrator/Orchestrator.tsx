@@ -26,10 +26,6 @@ import { computeNavigationButtonsProps } from './utils/navigation'
 
 const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 
-/** Whether or not controls should display warning / errors and prevent navigation */
-const isControlsFeatureEnabled =
-  import.meta.env.VITE_ENABLE_CONTROLS_FEATURE === 'true'
-
 type OrchestratorProps = {
   getReferentiel: GetReferentiel
   /**
@@ -127,7 +123,6 @@ export function Orchestrator({
     goNextPage,
     goPreviousPage,
     goToPage,
-    isEnabled: isControlsFeatureEnabled,
   })
 
   /** Focus on the first input with an error. */
