@@ -22,7 +22,6 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
@@ -43,36 +42,6 @@ describe('Use controls', () => {
     expect(goNextPageMock).not.toHaveBeenCalled()
   })
 
-  test('do not block further navigation if feature is disabled', async () => {
-    const compileControlsMock = vi.fn()
-    compileControlsMock.mockReturnValue({
-      currentErrors: {
-        Q1: [
-          { id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' },
-        ],
-      },
-    })
-    const goNextPageMock = vi.fn()
-
-    const { result } = renderHook(() =>
-      useControls({
-        compileControls: compileControlsMock,
-        goNextPage: goNextPageMock,
-        goPreviousPage: vi.fn(),
-        goToPage: vi.fn(),
-        isEnabled: false,
-      }),
-    )
-
-    expect(result.current.isBlocking).toBeFalsy()
-
-    act(() => result.current.handleNextPage())
-
-    expect(result.current.isBlocking).toBeFalsy()
-    expect(result.current.activeErrors).toBeUndefined()
-    expect(goNextPageMock).toHaveBeenCalled()
-  })
-
   test('do not block further navigation if an error is an acknowledged warning', async () => {
     const compileControlsMock = vi.fn()
     compileControlsMock.mockReturnValue({
@@ -89,7 +58,6 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
@@ -124,7 +92,6 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
@@ -160,7 +127,6 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
@@ -192,7 +158,6 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
@@ -231,7 +196,6 @@ describe('Use controls', () => {
         goNextPage: vi.fn(),
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        isEnabled: true,
       }),
     )
 
