@@ -61,7 +61,7 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
       fontSize: '1rem',
     },
 
-    '&:is(.Question,.Loop) .lunatic-errors': {
+    '&:is(.Question, .Loop, .Roundabout) .lunatic-errors': {
       margin: '1rem 0',
       color: '#DB0202',
     },
