@@ -306,7 +306,11 @@ const useStyles = tss.create(({ theme }) => ({
     height: '100%',
     width: '80%',
     overflowY: 'auto',
-    '& > div:first-of-type': { display: 'flex', height: '100%' },
+    '& > div:first-of-type': {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+    },
     '& > div:first-of-type > div': {
       maxWidth: 'calc(100% - 100px)',
       paddingLeft: '100px',
