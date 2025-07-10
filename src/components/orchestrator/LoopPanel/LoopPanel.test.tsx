@@ -114,6 +114,22 @@ describe('LoopPanel Component', () => {
     expect(container.firstChild).toBeNull()
   })
 
+  it('returns null in an occurrence paginated loop (titleData is a scalar variable)', () => {
+    const props = {
+      ...defaultProps,
+      data: {
+        COLLECTED: {
+          loopTitle: {
+            COLLECTED: 3,
+          },
+        },
+      },
+    }
+
+    const { container } = render(<LoopPanel {...props} />)
+    expect(container.firstChild).toBeNull()
+  })
+
   it('returns null if there is no data as title', () => {
     const props = {
       ...defaultProps,

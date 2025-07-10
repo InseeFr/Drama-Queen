@@ -37,9 +37,9 @@ export function LoopPanel({
   const titleVariable = loopVariables[0]
 
   // get its collected value for every iteration
-  const titleData = data.COLLECTED[titleVariable]?.COLLECTED as unknown[]
+  const titleData = data.COLLECTED[titleVariable]?.COLLECTED
 
-  if (!titleData) {
+  if (!Array.isArray(titleData)) {
     return null
   }
 
