@@ -695,6 +695,18 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
     },
 
     // tooltip
+    '.link-md': {
+      color: '#0063CB',
+      textDecoration: 'underline',
+      textDecorationColor: '#0063CB',
+      textDecorationStyle: 'dotted',
+      textUnderlineOffset: '0.2rem',
+      cursor: 'help',
+      ':after': {
+        content: '" 🛈"',
+      },
+    },
+
     '.tooltip-content': {
       maxWidth: '50%',
       borderRadius: '5px',
