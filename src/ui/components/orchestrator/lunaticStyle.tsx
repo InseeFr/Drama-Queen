@@ -6,6 +6,7 @@ const modalityLabelColorChecked = '#1d63a0'
 const modalityCodeBackgroundColor = 'white'
 const borderInput = '1px solid #767676'
 const disabledColor = '#dcdcdc'
+const focusBorderColor = '#9ed2ffff'
 
 export const useLunaticStyles = tss.create(({ theme }) => ({
   lunatic: {
@@ -677,9 +678,12 @@ export const useLunaticStyles = tss.create(({ theme }) => ({
         border: 'none',
         borderRadius: '4px',
         fontSize: '0.875rem',
-        '&:hover,&:focus': {
+        '&:hover': {
           backgroundColor: 'white',
           color: theme.palette.primary.main,
+        },
+        '&:focus': {
+          border: `3px solid ${focusBorderColor} !important`,
         },
       },
     },
