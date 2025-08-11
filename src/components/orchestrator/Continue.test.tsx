@@ -1,13 +1,13 @@
 import { fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ShortCut } from '@/components/ui/ShortCut'
 import { TestWrapper } from '@/tests/TestWrapper'
 
 import { Continue } from './Continue'
+import { useShortCut } from './hooks/useShortcut'
 
-vi.mock('@/components/ui/ShortCut', () => ({
-  ShortCut: vi.fn(),
+vi.mock('./hooks/useShortcut', () => ({
+  useShortCut: vi.fn(),
 }))
 
 vi.mock('@/i18n', () => ({
@@ -69,12 +69,10 @@ describe('Continue Component', () => {
       </TestWrapper>,
     )
 
-    expect(ShortCut).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shortCutKey: defaultProps.shortCutKey,
-        onClickMethod: onContinueMock,
-      }),
-      {},
+    expect(useShortCut).toHaveBeenCalledWith(
+      defaultProps.shortCutKey,
+      onContinueMock,
+      true,
     )
   })
 })

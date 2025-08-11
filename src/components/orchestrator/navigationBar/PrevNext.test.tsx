@@ -1,14 +1,18 @@
 import { fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
 import { TestWrapper } from '@/tests/TestWrapper'
 
+import { useShortCut } from '../hooks/useShortcut'
 import { PrevNext } from './PrevNext'
 
 vi.mock('@/components/ui/ShortCut', () => ({
   ShortCut: vi.fn(),
+}))
+
+vi.mock('../hooks/useShortcut', () => ({
+  useShortCut: vi.fn(),
 }))
 
 vi.mock('@/i18n', () => ({
@@ -99,23 +103,12 @@ describe('PrevNext Component', () => {
       </TestWrapper>,
     )
 
-    // renders ShortCut for previous button
-    expect(ShortCut).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shortCutKey: SHORTCUT_PREVIOUS,
-        onClickMethod: onPreviousMock,
-      }),
-      {},
+    expect(useShortCut).toHaveBeenCalledWith(
+      SHORTCUT_PREVIOUS,
+      onPreviousMock,
+      true,
     )
-
-    // renders ShortCut for next button
-    expect(ShortCut).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shortCutKey: SHORTCUT_NEXT,
-        onClickMethod: onNextMock,
-      }),
-      {},
-    )
+    expect(useShortCut).toHaveBeenCalledWith(SHORTCUT_NEXT, onNextMock, true)
   })
 
   it('does not render ShortCut component for disabled buttons', () => {
@@ -130,6 +123,15 @@ describe('PrevNext Component', () => {
       </TestWrapper>,
     )
 
-    expect(ShortCut).not.toHaveBeenCalled()
+    expect(useShortCut).toHaveBeenCalledWith(
+      SHORTCUT_PREVIOUS,
+      expect.any(Function),
+      false,
+    )
+    expect(useShortCut).toHaveBeenCalledWith(
+      SHORTCUT_NEXT,
+      expect.any(Function),
+      false,
+    )
   })
 })

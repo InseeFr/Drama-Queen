@@ -7,7 +7,7 @@ import { tss } from 'tss-react/mui'
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
 import { useTranslation } from '@/i18n'
 
-import { ShortCut } from '../../ui/ShortCut'
+import { useShortCut } from '../hooks/useShortcut'
 
 type PrevNextProps = {
   isPreviousEnabled: boolean
@@ -25,6 +25,9 @@ export function PrevNext({
   const { classes, cx } = useStyles()
   const { t } = useTranslation('navigationMessage')
 
+  useShortCut(SHORTCUT_PREVIOUS, onPrevious, isPreviousEnabled)
+  useShortCut(SHORTCUT_NEXT, onNext, isNextEnabled)
+
   return (
     <Stack id="buttons" className={classes.root}>
       <Stack>
@@ -36,12 +39,6 @@ export function PrevNext({
           aria-label="previous"
         >
           <PlayArrowIcon fontSize="small" />
-          {isPreviousEnabled && (
-            <ShortCut
-              shortCutKey={SHORTCUT_PREVIOUS}
-              onClickMethod={onPrevious}
-            />
-          )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
           {t('previousHelper')}
@@ -57,9 +54,6 @@ export function PrevNext({
           aria-label="next"
         >
           <PlayArrowIcon fontSize="small" />
-          {isNextEnabled && (
-            <ShortCut shortCutKey={SHORTCUT_NEXT} onClickMethod={onNext} />
-          )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
           {t('nextHelper')}
