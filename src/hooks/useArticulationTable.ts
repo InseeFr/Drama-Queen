@@ -1,4 +1,4 @@
-import { type LunaticSource, getArticulation } from '@inseefr/lunatic'
+import { type LunaticSource, getArticulationState } from '@inseefr/lunatic'
 
 import { type ReactNode } from 'react'
 import type React from 'react'
@@ -43,7 +43,7 @@ export function useArticulationTable(
       }
 
       // Extract articulation data
-      const { items } = getArticulation(questionnaire, surveyUnit.data)
+      const { items } = getArticulationState(questionnaire, surveyUnit.data)
       if (items.length === 0) {
         return null
       }
@@ -65,7 +65,7 @@ export function useArticulationTable(
 
 function hasArticulation(
   source: LunaticSource | null,
-): source is Parameters<typeof getArticulation>[0] {
+): source is Parameters<typeof getArticulationState>[0] {
   return Boolean(source && source && 'articulation' in source)
 }
 
