@@ -10,12 +10,12 @@ import { tss } from 'tss-react/mui'
 
 import { useState } from 'react'
 
-import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/constants/shortcuts'
 import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
 import { useTranslation } from '@/i18n'
 import type { GoToPage, Overview, OverviewItem } from '@/models/lunaticType'
 
+import { useShortCut } from '../hooks/useShortcut'
 import { Breadcrumb } from './Breadcrumb'
 import { Menu } from './Menu'
 
@@ -38,10 +38,11 @@ export function Header({
 }: Readonly<HeaderProps>) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
+
   const { t } = useTranslation('navigationMessage')
 
-  const menuShortKey = SHORTCUT_MENU
-  const quitShortKey = SHORTCUT_QUIT
+  useShortCut(SHORTCUT_QUIT, quit)
+  useShortCut(SHORTCUT_MENU, () => handleDrawerToggle(!isDrawerOpen))
 
   const handleDrawerToggle = (open: boolean) => setIsDrawerOpen(open)
   const handleOpen = () => setIsDrawerOpen(true)
@@ -63,10 +64,6 @@ export function Header({
           aria-label="menu"
         >
           <AppsIcon />
-          <ShortCut
-            shortCutKey={menuShortKey}
-            onClickMethod={() => handleDrawerToggle(!isDrawerOpen)}
-          />
         </IconButton>
       </Stack>
       <SwipeableDrawer
@@ -112,7 +109,6 @@ export function Header({
           onClick={quit}
         >
           <ExitToAppIcon />
-          <ShortCut shortCutKey={quitShortKey} onClickMethod={quit} />
         </IconButton>
       </Stack>
     </AppBar>
