@@ -29,8 +29,8 @@ const collectedValueSchema = z
 
 export const surveyUnitDataSchema = z
   .object({
-    CALCULATED: z.record(variableSchema),
-    EXTERNAL: z.record(variableSchema),
-    COLLECTED: z.record(collectedValueSchema),
+    CALCULATED: z.record(z.string(), variableSchema),
+    EXTERNAL: z.record(z.string(), variableSchema),
+    COLLECTED: z.record(z.string(), collectedValueSchema),
   })
   .partial()

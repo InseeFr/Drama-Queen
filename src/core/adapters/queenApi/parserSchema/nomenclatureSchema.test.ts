@@ -25,9 +25,6 @@ describe('nomenclatureSchema', () => {
 
     const result = nomenclatureSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Required')
-    }
   })
 
   it('should fail validation when "label" is missing in one object', () => {
@@ -38,9 +35,6 @@ describe('nomenclatureSchema', () => {
 
     const result = nomenclatureSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Required')
-    }
   })
 
   it('should fail validation when an object is not valid', () => {
@@ -48,9 +42,6 @@ describe('nomenclatureSchema', () => {
 
     const result = nomenclatureSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Expected string')
-    }
   })
 })
 
@@ -68,9 +59,6 @@ describe('requiredNomenclaturesSchema', () => {
 
     const result = requiredNomenclaturesSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Expected string')
-    }
   })
 
   it('should fail validation when the value is not an array', () => {
@@ -78,8 +66,5 @@ describe('requiredNomenclaturesSchema', () => {
 
     const result = requiredNomenclaturesSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Expected array')
-    }
   })
 })

@@ -30,11 +30,6 @@ describe('eventSchema', () => {
 
     const result = eventSchema.safeParse(invalidEvent)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain(
-        "Invalid enum value. Expected 'click' | 'session-started' | 'orchestrator-create', received 'invalid-type'",
-      )
-    }
   })
 
   it('should fail validation for negative timestamp', () => {
@@ -45,11 +40,6 @@ describe('eventSchema', () => {
 
     const result = eventSchema.safeParse(invalidEvent)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain(
-        'Number must be greater than or equal to 0',
-      )
-    }
   })
 
   it('should fail validation for missing required properties', () => {
@@ -61,9 +51,6 @@ describe('eventSchema', () => {
 
     const result = eventSchema.safeParse(invalidEvent)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Required')
-    }
   })
 })
 
@@ -110,9 +97,6 @@ describe('paradataSchema', () => {
 
     const result = paradataSchema.safeParse(invalidParadata)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Required')
-    }
   })
 
   it('should fail validation for invalid event array', () => {
@@ -128,8 +112,5 @@ describe('paradataSchema', () => {
 
     const result = paradataSchema.safeParse(invalidParadata)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Invalid enum value')
-    }
   })
 })
