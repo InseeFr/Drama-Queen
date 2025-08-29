@@ -33,6 +33,7 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './DramaIndex': './src/bootstrap.tsx',
+        './useArticulationTable': './src/hooks/useArticulationTable.ts',
       },
       shared: ['react', 'react-dom'],
     }),
