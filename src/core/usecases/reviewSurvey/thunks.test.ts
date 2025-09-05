@@ -36,6 +36,37 @@ const mockContext = {
   queenApi: mockQueenApi,
 }
 
+describe('retrieveQuestionnaireId', () => {
+  afterEach(() => {
+    vi.resetAllMocks()
+  })
+
+  it('should return questionnaireId if surveyUnit exists', async () => {
+    vi.mocked(mockQueenApi.getSurveyUnit).mockResolvedValue({
+      questionnaireId: 'Q123',
+    } as SurveyUnit)
+
+    const result = await thunks.retrieveQuestionnaireId({
+      surveyUnitId: 'SU001',
+    })(mockDispatch, mockGetState, mockContext as any)
+
+    expect(result).toBe('Q123')
+    expect(mockQueenApi.getSurveyUnit).toHaveBeenCalledWith('SU001')
+  })
+
+  it('should reject if surveyUnit does not exist', async () => {
+    vi.mocked(mockQueenApi.getSurveyUnit).mockResolvedValue(undefined)
+
+    await expect(
+      thunks.retrieveQuestionnaireId({ surveyUnitId: 'SU002' })(
+        mockDispatch,
+        mockGetState,
+        mockContext as any,
+      ),
+    ).rejects.toThrow('surveyUnitQuestionnaireNotFound SU002')
+  })
+})
+
 describe('loader', () => {
   afterEach(() => {
     vi.resetAllMocks()
