@@ -9,6 +9,7 @@ vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       collectSurvey: {
+        retrieveQuestionnaireId: vi.fn(),
         loader: vi.fn(),
       },
     },
@@ -22,11 +23,15 @@ describe('collectLoader', () => {
 
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
+    const mockRetrieveQuestionnaireId = vi
+      .fn()
+      .mockResolvedValue('test-questionnaire-id')
 
     ;(await prCore).functions.collectSurvey.loader = mockLoader
+    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId =
+      mockRetrieveQuestionnaireId
 
     const mockParams = {
-      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: 'test-survey-unit-id',
     }
 
@@ -36,27 +41,38 @@ describe('collectLoader', () => {
 
     await collectLoader(mockLoaderArgs)
 
+    expect(mockRetrieveQuestionnaireId).toHaveBeenCalledWith({
+      surveyUnitId: mockParams.surveyUnitId,
+    })
+
     expect(mockLoader).toHaveBeenCalledWith({
-      questionnaireId: mockParams.questionnaireId,
+      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: mockParams.surveyUnitId,
     })
   })
 
-  it('should throw an error if questionnaireId or surveyUnitId is undefined', async () => {
+  it('should throw an exception if surveyUnitId is undefined', async () => {
+    const mockLoader = vi.fn().mockResolvedValueOnce(undefined)
+
+    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId = mockLoader
+
     await expect(
       collectLoader({
-        params: {
-          questionnaireId: undefined,
-          surveyUnitId: 'test-survey-unit-id',
-        },
+        params: {},
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
+  })
+
+  it('should throw an exception if questionnaireId is undefined', async () => {
+    const mockRetrieveQuestionnaireId = vi.fn().mockResolvedValueOnce(undefined)
+
+    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId =
+      mockRetrieveQuestionnaireId
 
     await expect(
       collectLoader({
         params: {
-          questionnaireId: 'questionnaireId',
-          surveyUnitId: undefined,
+          surveyUnitId: 'test-survey-unit-id',
         },
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
