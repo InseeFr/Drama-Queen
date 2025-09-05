@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "2.5.9-rc.0",
+  "version": "2.5.9",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
