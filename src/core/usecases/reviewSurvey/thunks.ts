@@ -9,55 +9,30 @@ export const name = 'reviewSurvey'
 export const reducer = null
 
 export const thunks = {
-  retrieveQuestionnaireId:
-    (params: { surveyUnitId: string }) =>
-    (...args) => {
-      const [, , { queenApi }] = args
-      const { surveyUnitId } = params
-      return queenApi.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
-        if (!surveyUnit || !surveyUnit.questionnaireId) {
-          return Promise.reject(
-            new Error(t('surveyUnitQuestionnaireNotFound', { surveyUnitId })),
-          )
-        }
-        return surveyUnit.questionnaireId
-      })
-    },
   loader:
-    (params: { questionnaireId: string; surveyUnitId: string }) =>
+    (params: { surveyUnitId: string }) =>
     async (...args) => {
       const [, , { queenApi }] = args
 
-      const { questionnaireId, surveyUnitId } = params
+      const { surveyUnitId } = params
 
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
+      const surveyUnit = await queenApi
+        .getSurveyUnit(surveyUnitId)
+        .then((surveyUnit) => {
+          if (!surveyUnit) {
+            throw new Error(t('surveyUnitNotFound', { surveyUnitId }))
+          }
+          return surveyUnit
+        })
+
+      const questionnaire = await queenApi
+        .getQuestionnaire(surveyUnit.questionnaireId)
         .then((questionnaire) => {
           if (!isSurveyCompatibleWithQueen({ questionnaire })) {
             throw new Error(t('questionnaireNotCompatible'))
           }
           return questionnaire
         })
-
-      const surveyUnitPromise = queenApi
-        .getSurveyUnit(surveyUnitId)
-        // check the association between surveyUnit and questionnaireId
-        .then((surveyUnit) => {
-          if (surveyUnit.questionnaireId !== questionnaireId) {
-            throw new Error(
-              t('wrongQuestionnaire', {
-                surveyUnitId,
-                questionnaireId,
-              }),
-            )
-          }
-          return surveyUnit
-        })
-
-      const [surveyUnit, questionnaire] = await Promise.all([
-        surveyUnitPromise,
-        questionnairePromise,
-      ])
 
       return { surveyUnit, questionnaire }
     },

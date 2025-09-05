@@ -9,14 +9,7 @@ export async function collectLoader({ params }: LoaderFunctionArgs) {
   const { surveyUnitId } = params
   assert(surveyUnitId !== undefined)
 
-  const questionnaireId = await collectSurvey.retrieveQuestionnaireId({
-    surveyUnitId,
-  })
-
-  assert(questionnaireId !== undefined)
-
   return collectSurvey.loader({
-    questionnaireId,
     surveyUnitId,
   })
 }
