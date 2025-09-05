@@ -13,13 +13,7 @@ export async function reviewLoader({ params }: LoaderFunctionArgs) {
   const { surveyUnitId } = params
   assert(surveyUnitId !== undefined)
 
-  const questionnaireId = await reviewSurvey.retrieveQuestionnaireId({
-    surveyUnitId,
-  })
-  assert(questionnaireId !== undefined)
-
   return reviewSurvey.loader({
-    questionnaireId,
     surveyUnitId,
   })
 }

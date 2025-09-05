@@ -23,13 +23,8 @@ describe('collectLoader', () => {
 
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
-    const mockRetrieveQuestionnaireId = vi
-      .fn()
-      .mockResolvedValue('test-questionnaire-id')
 
     ;(await prCore).functions.collectSurvey.loader = mockLoader
-    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId =
-      mockRetrieveQuestionnaireId
 
     const mockParams = {
       surveyUnitId: 'test-survey-unit-id',
@@ -41,39 +36,15 @@ describe('collectLoader', () => {
 
     await collectLoader(mockLoaderArgs)
 
-    expect(mockRetrieveQuestionnaireId).toHaveBeenCalledWith({
-      surveyUnitId: mockParams.surveyUnitId,
-    })
-
     expect(mockLoader).toHaveBeenCalledWith({
-      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: mockParams.surveyUnitId,
     })
   })
 
   it('should throw an exception if surveyUnitId is undefined', async () => {
-    const mockLoader = vi.fn().mockResolvedValueOnce(undefined)
-
-    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId = mockLoader
-
     await expect(
       collectLoader({
         params: {},
-      } as unknown as LoaderFunctionArgs),
-    ).rejects.toThrow('Wrong assertion encountered')
-  })
-
-  it('should throw an exception if questionnaireId is undefined', async () => {
-    const mockRetrieveQuestionnaireId = vi.fn().mockResolvedValueOnce(undefined)
-
-    ;(await prCore).functions.collectSurvey.retrieveQuestionnaireId =
-      mockRetrieveQuestionnaireId
-
-    await expect(
-      collectLoader({
-        params: {
-          surveyUnitId: 'test-survey-unit-id',
-        },
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })
@@ -83,13 +54,12 @@ describe('collectLoader', () => {
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
     const mockParams = {
-      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: 'test-survey-unit-id',
     }
 
     // encode the `#` for page as `%23` in url
     const mockRequest = new Request(
-      `http://localhost/collect?qid=${mockParams.questionnaireId}&suid=${mockParams.surveyUnitId}&page=12.3%235`,
+      `http://localhost/collect?suid=${mockParams.surveyUnitId}&page=12.3%235`,
     )
 
     const result = await collectLoader({
@@ -105,13 +75,12 @@ describe('collectLoader', () => {
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
     const mockParams = {
-      questionnaireId: 'qid',
       surveyUnitId: 'suid',
     }
 
     // page is not a valid PageTag
     const mockRequest = new Request(
-      `http://localhost/collect?qid=${mockParams.questionnaireId}&suid=${mockParams.surveyUnitId}&page=15.15`,
+      `http://localhost/collect?suid=${mockParams.surveyUnitId}&page=15.15`,
     )
 
     const result = await collectLoader({
