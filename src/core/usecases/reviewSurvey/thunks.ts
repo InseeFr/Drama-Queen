@@ -12,9 +12,9 @@ export const thunks = {
   retrieveQuestionnaireId:
     (params: { surveyUnitId: string }) =>
     (...args) => {
-      const [, , { dataStore }] = args
+      const [, , { queenApi }] = args
       const { surveyUnitId } = params
-      return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
+      return queenApi.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
         if (!surveyUnit || !surveyUnit.questionnaireId) {
           return Promise.reject(
             new Error(t('surveyUnitQuestionnaireNotFound', { surveyUnitId })),
