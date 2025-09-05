@@ -26,13 +26,8 @@ describe('reviewLoader', () => {
 
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
-    const mockRetrieveQuestionnaireId = vi
-      .fn()
-      .mockResolvedValue('test-questionnaire-id')
 
     ;(await prCore).functions.reviewSurvey.loader = mockLoader
-    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId =
-      mockRetrieveQuestionnaireId
 
     const mockParams = {
       surveyUnitId: 'test-survey-unit-id',
@@ -45,34 +40,14 @@ describe('reviewLoader', () => {
     await reviewLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: mockParams.surveyUnitId,
     })
   })
 
   it('should throw an exception if surveyUnitId is undefined', async () => {
-    const mockLoader = vi.fn().mockResolvedValueOnce(undefined)
-
-    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId = mockLoader
-
     await expect(
       reviewLoader({
         params: {},
-      } as unknown as LoaderFunctionArgs),
-    ).rejects.toThrow('Wrong assertion encountered')
-  })
-
-  it('should throw an exception if questionnaireId is undefined', async () => {
-    const mockRetrieveQuestionnaireId = vi.fn().mockResolvedValueOnce(undefined)
-
-    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId =
-      mockRetrieveQuestionnaireId
-
-    await expect(
-      reviewLoader({
-        params: {
-          surveyUnitId: 'test-survey-unit-id',
-        },
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })
