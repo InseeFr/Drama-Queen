@@ -5,7 +5,7 @@ import type { Paradata, SurveyUnit } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 
 type Tables = {
-  surveyUnit: Table<SurveyUnit, string>
+  interrogation: Table<SurveyUnit, string>
   paradata: Table<Paradata>
 }
 
@@ -17,16 +17,29 @@ export function createDataStore(params: {
   const { name, schema, version } = params
 
   const db = new Dexie(name) as InstanceType<typeof Dexie> & Tables
-  db.version(version).stores(schema)
+
+  db.version(version)
+    .stores(schema)
+    .upgrade(async (tx) => {
+      // migration from version 2 to version 3 : from table 'surveyUnit' to 'interrogation' with same content
+      if (tx.storeNames.includes('surveyUnit')) {
+        const oldTable = tx.table<SurveyUnit, string>('surveyUnit')
+        const newTable = tx.table<SurveyUnit, string>('interrogation')
+
+        await oldTable.toCollection().each(async (item) => {
+          await newTable.put(item)
+        })
+      }
+    })
 
   return {
-    updateSurveyUnit: (surveyUnit) => db.surveyUnit.put(surveyUnit),
-    deleteSurveyUnit: (id) => db.surveyUnit.delete(id),
+    updateSurveyUnit: (surveyUnit) => db.interrogation.put(surveyUnit),
+    deleteSurveyUnit: (id) => db.interrogation.delete(id),
     getAllSurveyUnits: () =>
-      db.surveyUnit
+      db.interrogation
         .filter(({ id }) => !id.startsWith(mockPrefixIdSu))
         .toArray(),
-    getSurveyUnit: (id) => db.surveyUnit.get(id),
+    getSurveyUnit: (id) => db.interrogation.get(id),
     getAllParadatas: () => db.paradata.toArray(),
     deleteParadata: (id) => db.paradata.delete(id),
     getParadata: (id) => db.paradata.get(id),
