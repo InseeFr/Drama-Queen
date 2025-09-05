@@ -60,34 +60,36 @@ export function createApiClient(params: {
   return {
     getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: (idCampaign) =>
       axiosInstance
-        .get<IdAndQuestionnaireId>(`/api/campaign/${idCampaign}/survey-units`)
+        .get<IdAndQuestionnaireId>(`/api/campaign/${idCampaign}/interrogations`)
         .then(({ data }) => idAndQuestionnaireIdSchema.array().parse(data)),
 
     getSurveyUnits: () =>
       axiosInstance
-        .get<SurveyUnit[]>(`/api/survey-units/interviewer`)
+        .get<SurveyUnit[]>(`/api/interrogations/interviewer`)
         .then(({ data }) =>
           data.map((surveyUnit) => surveyUnitSchema.parse(surveyUnit)),
         ),
 
     getSurveyUnit: (idSurveyUnit) =>
       axiosInstance
-        .get<Omit<SurveyUnit, 'id'>>(`/api/survey-unit/${idSurveyUnit}`)
+        .get<Omit<SurveyUnit, 'id'>>(`/api/interrogations/${idSurveyUnit}`)
         .then(({ data }) =>
           surveyUnitSchema.parse({ id: idSurveyUnit, ...data }),
         ),
     putSurveyUnit: (surveyUnit) =>
       axiosInstance
-        .put<typeof surveyUnit>(`api/survey-unit/${surveyUnit.id}`, surveyUnit)
+        .put<
+          typeof surveyUnit
+        >(`api/interrogations/${surveyUnit.id}`, surveyUnit)
         .then(() => undefined),
     putSurveyUnitsData: (surveyUnitsData) =>
       axiosInstance
-        .put(`/api/survey-units/data`, surveyUnitsData)
+        .put(`/api/interrogations/data`, surveyUnitsData)
         .then(() => undefined),
 
     postSurveyUnitInTemp: (surveyUnit) =>
       axiosInstance
-        .post(`api/survey-unit/${surveyUnit.id}/temp-zone`, surveyUnit)
+        .post(`api/interrogations/${surveyUnit.id}/temp-zone`, surveyUnit)
         .then(() => undefined),
 
     getCampaigns: () =>
