@@ -38,7 +38,7 @@ const getChildrenRoutes = () => {
       loader: collectLoader,
     },
     {
-      path: `/readonly/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+      path: `/review/interrogations/:surveyUnitId`,
       Component: Review,
       loader: reviewLoader,
     },

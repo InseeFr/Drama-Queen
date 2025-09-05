@@ -9,6 +9,7 @@ vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       reviewSurvey: {
+        retrieveQuestionnaireId: vi.fn(),
         loader: vi.fn(),
       },
       userAuthentication: {
@@ -25,11 +26,15 @@ describe('reviewLoader', () => {
 
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
+    const mockRetrieveQuestionnaireId = vi
+      .fn()
+      .mockResolvedValue('test-questionnaire-id')
 
     ;(await prCore).functions.reviewSurvey.loader = mockLoader
+    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId =
+      mockRetrieveQuestionnaireId
 
     const mockParams = {
-      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: 'test-survey-unit-id',
     }
 
@@ -40,26 +45,33 @@ describe('reviewLoader', () => {
     await reviewLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      questionnaireId: mockParams.questionnaireId,
+      questionnaireId: 'test-questionnaire-id',
       surveyUnitId: mockParams.surveyUnitId,
     })
   })
 
-  it('should throw an error if questionnaireId or surveyUnitId is undefined', async () => {
+  it('should throw an exception if surveyUnitId is undefined', async () => {
+    const mockLoader = vi.fn().mockResolvedValueOnce(undefined)
+
+    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId = mockLoader
+
     await expect(
       reviewLoader({
-        params: {
-          questionnaireId: undefined,
-          surveyUnitId: 'test-survey-unit-id',
-        },
+        params: {},
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
+  })
+
+  it('should throw an exception if questionnaireId is undefined', async () => {
+    const mockRetrieveQuestionnaireId = vi.fn().mockResolvedValueOnce(undefined)
+
+    ;(await prCore).functions.reviewSurvey.retrieveQuestionnaireId =
+      mockRetrieveQuestionnaireId
 
     await expect(
       reviewLoader({
         params: {
-          questionnaireId: 'questionnaireId',
-          surveyUnitId: undefined,
+          surveyUnitId: 'test-survey-unit-id',
         },
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')

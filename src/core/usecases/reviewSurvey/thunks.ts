@@ -9,6 +9,20 @@ export const name = 'reviewSurvey'
 export const reducer = null
 
 export const thunks = {
+  retrieveQuestionnaireId:
+    (params: { surveyUnitId: string }) =>
+    (...args) => {
+      const [, , { dataStore }] = args
+      const { surveyUnitId } = params
+      return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
+        if (!surveyUnit || !surveyUnit.questionnaireId) {
+          return Promise.reject(
+            new Error(t('surveyUnitQuestionnaireNotFound', { surveyUnitId })),
+          )
+        }
+        return surveyUnit.questionnaireId
+      })
+    },
   loader:
     (params: { questionnaireId: string; surveyUnitId: string }) =>
     async (...args) => {
