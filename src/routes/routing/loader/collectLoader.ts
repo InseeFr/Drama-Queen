@@ -4,15 +4,12 @@ import { assert } from 'tsafe'
 import { prCore } from '@/createCore'
 
 export async function collectLoader({ params }: LoaderFunctionArgs) {
-  const { questionnaireId, surveyUnitId } = params
-
-  assert(questionnaireId !== undefined)
-  assert(surveyUnitId !== undefined)
-
   const { collectSurvey } = (await prCore).functions
 
+  const { surveyUnitId } = params
+  assert(surveyUnitId !== undefined)
+
   return collectSurvey.loader({
-    questionnaireId,
     surveyUnitId,
   })
 }

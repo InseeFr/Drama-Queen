@@ -25,8 +25,8 @@ describe('Event Dispatchers', () => {
         type: 'QUEEN',
         detail: {
           type: 'QUEEN',
-          command: 'UPDATE_SURVEY_UNIT',
-          surveyUnit: surveyUnitId,
+          command: 'UPDATE_STATE',
+          interrogationId: surveyUnitId,
           state: state,
         },
       }),
@@ -46,7 +46,7 @@ describe('Event Dispatchers', () => {
         detail: {
           type: 'QUEEN',
           command: 'CLOSE_QUEEN',
-          surveyUnit: surveyUnitId,
+          interrogationId: surveyUnitId,
         },
       }),
     )
