@@ -10,8 +10,8 @@ type TableData = {
   rows: {
     cells: { label: string; value: ReactNode }[]
     label: string
-    page: string
-    url: string
+    page: string | null
+    url: string | null
   }[]
 }
 
@@ -38,7 +38,26 @@ export function useArticulationTable(
         questionnaireId,
         surveyUnitId,
       })
-      if (!hasArticulation(questionnaire) || !surveyUnit.data) {
+
+      if (!hasArticulation(questionnaire)) {
+        return
+      }
+
+      // Use leafState
+      if (!surveyUnit.data) {
+        if (!surveyUnit?.stateData.leafStates) {
+          return null
+        }
+        setData({
+          headers: [],
+          rows: surveyUnit?.stateData.leafStates.map((leaf: any) => ({
+            cells: [],
+            url: null,
+            page: null,
+            label: progressLabel(leafProgress(leaf.state)),
+            progress: leafProgress(leaf.state),
+          })),
+        })
         return
       }
 
@@ -90,4 +109,14 @@ const progressLabel = (n: number) => {
     return 'Continuer'
   }
   return 'Complété'
+}
+
+const leafProgress = (leafState: string) => {
+  if (leafState === 'NOT_INIT') {
+    return -1
+  }
+  if (leafState === 'INIT') {
+    return 0
+  }
+  return 1
 }
