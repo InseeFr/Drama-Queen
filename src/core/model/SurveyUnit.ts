@@ -1,7 +1,5 @@
-import type { QuestionnaireState } from './QuestionnaireState'
+import type { StateData } from './StateData'
 import type { SurveyUnitData } from './SurveyUnitData'
-
-export type PageTag = `${number}.${number}#${number}` | `${number}`
 
 export type SurveyUnit = {
   id: string
@@ -9,9 +7,5 @@ export type SurveyUnit = {
   personalization?: { name: string; value: string }[]
   data: SurveyUnitData
   comment?: { [key: string]: unknown }
-  stateData?: {
-    state: QuestionnaireState
-    date: number
-    currentPage: PageTag
-  }
+  stateData?: StateData
 }

@@ -3,6 +3,7 @@ import { type LunaticSource, getArticulationState } from '@inseefr/lunatic'
 import { type ReactNode } from 'react'
 import type React from 'react'
 
+import type { LeafStateState } from '@/core/model'
 import { prCore } from '@/createCore'
 
 type TableData = {
@@ -45,17 +46,17 @@ export function useArticulationTable(
 
       // Use leafState
       if (!surveyUnit.data) {
-        if (!surveyUnit?.stateData.leafStates) {
+        if (!surveyUnit?.stateData?.leafStates) {
           return null
         }
         setData({
           headers: [],
-          rows: surveyUnit?.stateData.leafStates.map((leaf: any) => ({
+          rows: surveyUnit?.stateData.leafStates.map((leafState) => ({
             cells: [],
             url: null,
             page: null,
-            label: progressLabel(leafProgress(leaf.state)),
-            progress: leafProgress(leaf.state),
+            label: progressLabel(leafProgress(leafState.state)),
+            progress: leafProgress(leafState.state),
           })),
         })
         return
@@ -85,7 +86,7 @@ export function useArticulationTable(
 function hasArticulation(
   source: LunaticSource | null,
 ): source is Parameters<typeof getArticulationState>[0] {
-  return Boolean(source && source && 'articulation' in source)
+  return Boolean(source && 'articulation' in source)
 }
 
 const buildUrl = (
@@ -111,7 +112,7 @@ const progressLabel = (n: number) => {
   return 'Complété'
 }
 
-const leafProgress = (leafState: string) => {
+const leafProgress = (leafState: LeafStateState) => {
   if (leafState === 'NOT_INIT') {
     return -1
   }
