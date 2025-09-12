@@ -4,7 +4,12 @@ import { tss } from 'tss-react/mui'
 
 import { useCallback, useEffect, useState } from 'react'
 
-import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type {
+  PageTag,
+  Questionnaire,
+  SurveyUnit,
+  SurveyUnitData,
+} from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
 import type { GetReferentiel, ValueChange } from '@/models/lunaticType'
@@ -50,6 +55,8 @@ type OrchestratorProps = {
   source: Questionnaire
   /** Data filled by the respondent when the app is launched. */
   surveyUnit?: SurveyUnit
+  /** Starting page **/
+  initialPage?: string
 }
 
 /**
@@ -65,6 +72,7 @@ export function Orchestrator({
   onQuit = () => {},
   readonly,
   source: initialSource,
+  initialPage,
   surveyUnit,
 }: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
@@ -109,6 +117,7 @@ export function Orchestrator({
     shortcut: true,
     trackChanges: true,
     withOverview: true,
+    initialPage: initialPage as PageTag,
   })
 
   const {
