@@ -26,20 +26,16 @@ vi.mock('@inseefr/lunatic', () => ({
 }))
 
 const mockLoader = vi.fn()
-const mockRetrieveQuestionnaireId = vi.fn()
 
 describe('useArticulationTable', () => {
   beforeEach(async () => {
     const core = await prCore
     core.functions.collectSurvey.loader = mockLoader
-    core.functions.collectSurvey.retrieveQuestionnaireId =
-      mockRetrieveQuestionnaireId
 
     vi.clearAllMocks()
   })
 
   it('builds rows from articulation items if available', async () => {
-    mockRetrieveQuestionnaireId.mockResolvedValue('q1')
     mockLoader.mockResolvedValue({
       surveyUnit: { id: 'su1', data: { foo: 'bar' } },
       questionnaire: { id: 'q1', articulation: { items: [] } },
@@ -89,7 +85,7 @@ describe('useArticulationTable', () => {
         { label: 'age', value: '30' },
       ])
       expect(result.current?.rows[0].url).toContain(
-        '/queen/questionnaire/q1/survey-unit/su1?page=1.1%231', // for the page, `#` is encoded into `%23`
+        '/queen/interrogations/su1?page=1.1%231', // for the page, `#` is encoded into `%23`
       )
       expect(result.current?.rows[0].label).toBe('Continuer')
 
@@ -99,14 +95,13 @@ describe('useArticulationTable', () => {
         { label: 'age', value: '25' },
       ])
       expect(result.current?.rows[1].url).toContain(
-        '/queen/questionnaire/q1/survey-unit/su1?page=1.1%232', // for the page, `#` is encoded into `%23`
+        '/queen/interrogations/su1?page=1.1%232', // for the page, `#` is encoded into `%23`
       )
       expect(result.current?.rows[1].label).toBe('Complété')
     })
   })
 
   it('returns null if questionnaire has no articulation', async () => {
-    mockRetrieveQuestionnaireId.mockResolvedValue('q1')
     mockLoader.mockResolvedValue({
       surveyUnit: { id: 'su1' },
       questionnaire: null,
@@ -120,7 +115,6 @@ describe('useArticulationTable', () => {
   })
 
   it('builds rows from leafStates if no surveyUnit.data', async () => {
-    mockRetrieveQuestionnaireId.mockResolvedValue('q1')
     mockLoader.mockResolvedValue({
       surveyUnit: {
         stateData: {
@@ -148,7 +142,6 @@ describe('useArticulationTable', () => {
   })
 
   it('returns null if articulation items is empty', async () => {
-    mockRetrieveQuestionnaireId.mockResolvedValue('q1')
     mockLoader.mockResolvedValue({
       surveyUnit: { id: 'su1', data: { foo: 'bar' } },
       questionnaire: { id: 'q1', articulation: { items: [] } },
