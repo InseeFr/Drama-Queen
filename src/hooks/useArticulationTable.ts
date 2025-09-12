@@ -32,11 +32,7 @@ export function useArticulationTable(
     ;(async () => {
       // Retrieve questionnaire source and survey unit data
       const { collectSurvey } = (await prCore).functions
-      const questionnaireId = await collectSurvey.retrieveQuestionnaireId({
-        surveyUnitId,
-      })
       const { surveyUnit, questionnaire } = await collectSurvey.loader({
-        questionnaireId,
         surveyUnitId,
       })
 
@@ -73,7 +69,7 @@ export function useArticulationTable(
         headers: items[0].cells.map((c) => c.label),
         rows: items.map((item) => ({
           ...item,
-          url: buildUrl(questionnaireId, surveyUnitId, item.page),
+          url: buildUrl(surveyUnitId, item.page),
           label: progressLabel(item.progress),
         })),
       })
@@ -89,13 +85,9 @@ function hasArticulation(
   return Boolean(source && 'articulation' in source)
 }
 
-const buildUrl = (
-  questionnaireId: string,
-  surveyUnitId: string,
-  page: string,
-): string => {
+const buildUrl = (surveyUnitId: string, page: string): string => {
   const url = new URL(
-    `/queen/questionnaire/${questionnaireId}/survey-unit/${surveyUnitId}`,
+    `/queen/interrogations/${surveyUnitId}`,
     window.location.origin,
   )
   url.searchParams.set('page', page.toString())
