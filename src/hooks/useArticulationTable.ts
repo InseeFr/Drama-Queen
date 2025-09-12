@@ -46,9 +46,12 @@ export function useArticulationTable(
           return null
         }
         setData({
-          headers: [],
+          headers:
+            interrogation?.stateData.leafStates[0]?.cells?.map(
+              (c) => c.label,
+            ) ?? [],
           rows: interrogation?.stateData.leafStates.map((leafState) => ({
-            cells: [],
+            cells: leafState.cells ?? [],
             url: null,
             page: null,
             label: progressLabel(leafProgress(leafState.state)),
