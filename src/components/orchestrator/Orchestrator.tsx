@@ -4,7 +4,12 @@ import { tss } from 'tss-react/mui'
 
 import { useCallback, useEffect, useState } from 'react'
 
-import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type {
+  PageTag,
+  Questionnaire,
+  SurveyUnit,
+  SurveyUnitData,
+} from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
 import type { GetReferentiel, ValueChange } from '@/models/lunaticType'
@@ -33,6 +38,8 @@ type OrchestratorProps = {
    * provided to the onQuit function.
    */
   includeCalculatedVariables?: boolean
+  /** Questionnaire page on which starting when the app is launched. */
+  initialPage?: PageTag
   /** Action to be called when the respondent changes page. */
   onChangePage?: (surveyUnit: SurveyUnit) => void
   /** Action to be called when the respondent's filled data enters a new state. */
@@ -59,6 +66,7 @@ type OrchestratorProps = {
 export function Orchestrator({
   getReferentiel,
   includeCalculatedVariables = false,
+  initialPage,
   onChangePage = () => {},
   onChangeSurveyUnitState = () => {},
   onDefinitiveQuit = () => {},
@@ -102,6 +110,7 @@ export function Orchestrator({
     autoSuggesterLoading: true,
     dontKnowButton: t('dontKnowButtonLabel'),
     getReferentiel,
+    initialPage: initialPage,
     lastReachedPage: initialSurveyUnit.stateData?.currentPage,
     missing: true,
     missingShortcut: missingShortcut,

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import type { PageTag, SurveyUnit } from '@/core/model'
+import { isPageTag } from '@/core/tools/pageTag'
 
 import { surveyUnitDataSchema } from './surveyUnitDataSchema'
 
@@ -17,18 +18,10 @@ const stateDataSchema = z.object({
   date: z.number().int().min(0), //Should be improve when zod support unix timestamp
   currentPage: z
     .string()
-    .refine(
-      (val) => {
-        // Check if the value matches either of the specified formats
-        const isNumberOnly = /^\d+(\.\d+)?$/.test(val)
-        const isComplexFormat = /^\d+\.\d+#\d+$/.test(val)
-        return isNumberOnly || isComplexFormat
-      },
-      {
-        message:
-          'currentPage must be in the format `${number}.${number}#${number}` or `${number}`',
-      },
-    )
+    .refine(isPageTag, {
+      message:
+        'currentPage must be in the format `${number}.${number}#${number}` or `${number}`',
+    })
     .transform((val) => val as PageTag),
 })
 
