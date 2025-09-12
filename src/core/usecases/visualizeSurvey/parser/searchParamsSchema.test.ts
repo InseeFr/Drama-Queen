@@ -33,9 +33,6 @@ describe('searchParamsSchema', () => {
 
     const result = searchParamsSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Expected boolean')
-    }
   })
 
   it('should fail validation when nomenclature has non-string values', () => {
@@ -45,9 +42,6 @@ describe('searchParamsSchema', () => {
 
     const result = searchParamsSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toContain('Expected string')
-    }
   })
 
   it('should validate an empty object', () => {

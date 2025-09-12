@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import type { SurveyUnit } from '@/core/model'
 import { isPageTag } from '@/core/tools/pageTag'
 
 import { surveyUnitDataSchema } from './surveyUnitDataSchema'
@@ -21,7 +22,7 @@ const stateDataSchema = z.object({
   }),
 })
 
-export const surveyUnitSchema = z.object({
+export const surveyUnitSchema: z.ZodType<SurveyUnit> = z.object({
   id: z.string(),
   questionnaireId: z.string(),
   personalization: z
