@@ -61,4 +61,48 @@ describe('collectLoader', () => {
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })
+
+  it('should return page when a valid page param is provided', async () => {
+    const mockLoader = vi.fn().mockResolvedValue({ some: 'data' })
+    ;(await prCore).functions.collectSurvey.loader = mockLoader
+
+    const mockParams = {
+      questionnaireId: 'test-questionnaire-id',
+      surveyUnitId: 'test-survey-unit-id',
+    }
+
+    // encode the `#` for page as `%23` in url
+    const mockRequest = new Request(
+      `http://localhost/collect?qid=${mockParams.questionnaireId}&suid=${mockParams.surveyUnitId}&page=12.3%235`,
+    )
+
+    const result = await collectLoader({
+      params: mockParams,
+      request: mockRequest,
+    } as unknown as LoaderFunctionArgs)
+
+    expect(result.page).toBe('12.3#5')
+  })
+
+  it('should not set page when page param is invalid', async () => {
+    const mockLoader = vi.fn().mockResolvedValue({ some: 'data' })
+    ;(await prCore).functions.collectSurvey.loader = mockLoader
+
+    const mockParams = {
+      questionnaireId: 'qid',
+      surveyUnitId: 'suid',
+    }
+
+    // page is not a valid PageTag
+    const mockRequest = new Request(
+      `http://localhost/collect?qid=${mockParams.questionnaireId}&suid=${mockParams.surveyUnitId}&page=15.15`,
+    )
+
+    const result = await collectLoader({
+      params: mockParams,
+      request: mockRequest,
+    } as unknown as LoaderFunctionArgs)
+
+    expect(result.page).toBeUndefined()
+  })
 })
