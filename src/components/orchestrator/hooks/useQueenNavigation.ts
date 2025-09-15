@@ -1,4 +1,4 @@
-import type { PageTag, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type { Interrogation, InterrogationData, PageTag } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import type { GetChangedData, GetData } from '@/models/lunaticType'
 
@@ -6,12 +6,12 @@ type UseQueenNavigationProps = {
   getChangedData: GetChangedData
   getData: GetData
   includeCalculatedVariables?: boolean
-  onDefinitiveQuit: (surveyUnit: SurveyUnit) => void
-  onQuit: (surveyUnit: SurveyUnit) => void
-  updateSurveyUnit: (
-    changedData: SurveyUnitData,
+  onDefinitiveQuit: (interrogation: Interrogation) => void
+  onQuit: (interrogation: Interrogation) => void
+  updateInterrogation: (
+    changedData: InterrogationData,
     options?: { currentPage?: PageTag; forcedState?: QuestionnaireState },
-  ) => SurveyUnit
+  ) => Interrogation
 }
 
 /** Override navigation function to send updates to back-end. */
@@ -21,44 +21,49 @@ export function useQueenNavigation({
   includeCalculatedVariables = false,
   onDefinitiveQuit,
   onQuit,
-  updateSurveyUnit,
+  updateInterrogation,
 }: UseQueenNavigationProps) {
-  const computeAndUpdateSurveyUnit = (currentPage: PageTag): SurveyUnit => {
-    let surveyUnit
+  const computeAndUpdateInterrogation = (
+    currentPage: PageTag,
+  ): Interrogation => {
+    let interrogation
     if (includeCalculatedVariables) {
-      surveyUnit = updateSurveyUnit(getData(true) as SurveyUnitData, {
+      interrogation = updateInterrogation(getData(true) as InterrogationData, {
         currentPage,
       })
     } else {
-      surveyUnit = updateSurveyUnit(getChangedData(true) as SurveyUnitData, {
-        currentPage,
-      })
+      interrogation = updateInterrogation(
+        getChangedData(true) as InterrogationData,
+        {
+          currentPage,
+        },
+      )
     }
-    return surveyUnit
+    return interrogation
   }
 
   const orchestratorOnQuit = (currentPage: PageTag) => {
-    const surveyUnit = computeAndUpdateSurveyUnit(currentPage)
-    return onQuit(surveyUnit)
+    const interrogation = computeAndUpdateInterrogation(currentPage)
+    return onQuit(interrogation)
   }
 
   const orchestratorOnDefinitiveQuit = (currentPage: PageTag) => {
-    let surveyUnit = computeAndUpdateSurveyUnit(currentPage)
+    let interrogation = computeAndUpdateInterrogation(currentPage)
 
     // Force the state to COMPLETED only for sending the event.
     // Completed state should be defined by an algorithm.
-    surveyUnit = updateSurveyUnit(surveyUnit.data, {
+    interrogation = updateInterrogation(interrogation.data, {
       currentPage,
       forcedState: 'COMPLETED',
     })
 
     // Force the state to VALIDATED.
-    surveyUnit = updateSurveyUnit(surveyUnit.data, {
+    interrogation = updateInterrogation(interrogation.data, {
       currentPage,
       forcedState: 'VALIDATED',
     })
 
-    return onDefinitiveQuit(surveyUnit)
+    return onDefinitiveQuit(interrogation)
   }
 
   return {

@@ -18,21 +18,21 @@ export const translations: Translations<'fr'> = {
     shortUnknownError: 'Erreur inconnue',
     longUnknownError:
       "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard.",
-    surveyUnitNotRetrievable:
-      "Une erreur est survenue lors de la récupération de l'unité enquêtée.",
-    surveyUnitNotFound: ({ surveyUnitId }) =>
-      `L'unité enquêtée ${surveyUnitId} est introuvable.`,
+    interrogationNotRetrievable:
+      "Une erreur est survenue lors de la récupération de l'interrogation.",
+    interrogationNotFound: ({ interrogationId }) =>
+      `L'interrogation ${interrogationId} est introuvable.`,
     lunaticModelVersionNotFound:
       'Le questionnaire ne comporte pas de champ lunaticModelVersion',
     questionnaireNotCompatible: `Le questionnaire est incompatible. La version du 'lunaticModelVersion' doit être supérieure à  ${LUNATIC_MODEL_VERSION_BREAKING}`,
-    surveyUnitQuestionnaireNotFound: ({ surveyUnitId }) =>
-      `Impossible de récupérer le questionnaire de l'unité d'enquête ${surveyUnitId}.`,
+    interrogationQuestionnaireNotFound: ({ interrogationId }) =>
+      `Impossible de récupérer le questionnaire de l'unité d'enquête ${interrogationId}.`,
     questionnaireNotFound: ({ questionnaireId }) =>
       `Impossible de récupérer le questionnaire ${questionnaireId}.`,
-    wrongQuestionnaire: ({ surveyUnitId, questionnaireId }) =>
-      `L'unité enquêtée ${surveyUnitId} n'est pas associée au questionnaire ${questionnaireId}.`,
-    surveyUnitUnauthorized:
-      "Vous n'êtes pas autorisé à accéder aux données de cette unité enquêtée.",
+    wrongQuestionnaire: ({ interrogationId, questionnaireId }) =>
+      `L'interrogation ${interrogationId} n'est pas associée au questionnaire ${questionnaireId}.`,
+    interrogationUnauthorized:
+      "Vous n'êtes pas autorisé à accéder aux données de cette interrogation.",
     externalResourcesLoadedError:
       'Impossible de charger les ressources externes.',
   },
@@ -80,7 +80,7 @@ export const translations: Translations<'fr'> = {
   synchronizeMessage: {
     synchronizationInProgress: 'Synchronisation en cours',
     downloadingData: 'Téléchargement des données...',
-    surveyUnitsProgress: 'Unités enquêtées',
+    interrogationsProgress: 'Unités enquêtées',
     questionnairesProgress: 'Questionnaires',
     nomenclaturesProgress: 'Nomenclatures',
     externalResourcesProgress: 'Ressources externes',

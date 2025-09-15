@@ -16,8 +16,8 @@ describe('Reducer tests', () => {
       expect(newState).toEqual({
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: Infinity,
-        surveyUnitCompleted: 0,
+        totalInterrogation: Infinity,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -43,8 +43,8 @@ describe('Reducer tests', () => {
       expect(newState).toEqual({
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: Infinity,
-        surveyUnitCompleted: 0,
+        totalInterrogation: Infinity,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -66,18 +66,18 @@ describe('Reducer tests', () => {
         stateDescription: 'running',
         type: 'upload',
         total: Infinity,
-        surveyUnitCompleted: 0,
+        interrogationCompleted: 0,
       })
     })
   })
 
-  describe('updateDownloadTotalSurveyUnit', () => {
-    it('updates totalSurveyUnit correctly if totalSurveyUnit was Infinity', () => {
+  describe('updateDownloadTotalInterrogation', () => {
+    it('updates totalInterrogation correctly if totalInterrogation was Infinity', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: Infinity,
-        surveyUnitCompleted: 0,
+        totalInterrogation: Infinity,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -90,21 +90,21 @@ describe('Reducer tests', () => {
 
       const newState = reducer(
         initialState,
-        actions.updateDownloadTotalSurveyUnit({ totalSurveyUnit: 100 }),
+        actions.updateDownloadTotalInterrogation({ totalInterrogation: 100 }),
       )
 
       expect(newState).toEqual({
         ...initialState,
-        totalSurveyUnit: 100,
+        totalInterrogation: 100,
       })
     })
 
-    it('adds to totalSurveyUnit correctly if totalSurveyUnit was not Infinity', () => {
+    it('adds to totalInterrogation correctly if totalInterrogation was not Infinity', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 50,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 50,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -117,23 +117,23 @@ describe('Reducer tests', () => {
 
       const newState = reducer(
         initialState,
-        actions.updateDownloadTotalSurveyUnit({ totalSurveyUnit: 30 }),
+        actions.updateDownloadTotalInterrogation({ totalInterrogation: 30 }),
       )
 
       expect(newState).toEqual({
         ...initialState,
-        totalSurveyUnit: initialState.totalSurveyUnit + 30,
+        totalInterrogation: initialState.totalInterrogation + 30,
       })
     })
   })
 
-  describe('downloadSurveyUnitCompleted', () => {
-    it('increments surveyUnitCompleted correctly', () => {
+  describe('downloadInterrogationCompleted', () => {
+    it('increments interrogationCompleted correctly', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -146,12 +146,12 @@ describe('Reducer tests', () => {
 
       const newState = reducer(
         initialState,
-        actions.downloadSurveyUnitCompleted(),
+        actions.downloadInterrogationCompleted(),
       )
 
       expect(newState).toEqual({
         ...initialState,
-        surveyUnitCompleted: initialState.surveyUnitCompleted + 1,
+        interrogationCompleted: initialState.interrogationCompleted + 1,
       })
     })
   })
@@ -161,8 +161,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: 0,
@@ -190,8 +190,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -216,8 +216,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 0,
         nomenclatureCompleted: 0,
         totalSurvey: 50,
@@ -245,8 +245,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 100,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -274,8 +274,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 0,
         nomenclatureCompleted: 0,
         totalSurvey: 50,
@@ -305,8 +305,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 0,
         nomenclatureCompleted: 0,
         totalSurvey: 50,
@@ -334,8 +334,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 0,
         nomenclatureCompleted: 0,
         totalSurvey: 50,
@@ -365,8 +365,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 100,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -395,8 +395,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: 100,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -424,7 +424,7 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
-        surveyUnitCompleted: 0,
+        interrogationCompleted: 0,
         total: 0,
       }
 
@@ -442,23 +442,23 @@ describe('Reducer tests', () => {
     })
   })
 
-  describe('uploadSurveyUnitCompleted', () => {
-    it('increments surveyUnitCompleted correctly', () => {
+  describe('uploadInterrogationCompleted', () => {
+    it('increments interrogationCompleted correctly', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
-        surveyUnitCompleted: 0,
+        interrogationCompleted: 0,
         total: 0,
       }
 
       const newState = reducer(
         initialState,
-        actions.uploadSurveyUnitCompleted(),
+        actions.uploadInterrogationCompleted(),
       )
 
       expect(newState).toEqual({
         ...initialState,
-        surveyUnitCompleted: initialState.surveyUnitCompleted + 1,
+        interrogationCompleted: initialState.interrogationCompleted + 1,
       })
     })
   })
@@ -468,7 +468,7 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
-        surveyUnitCompleted: 0,
+        interrogationCompleted: 0,
         total: 0,
       }
 
@@ -483,7 +483,7 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
-        surveyUnitCompleted: 0,
+        interrogationCompleted: 0,
         total: 0,
       }
 
@@ -498,8 +498,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,
@@ -521,8 +521,8 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Downloading = {
         stateDescription: 'running',
         type: 'download',
-        totalSurveyUnit: 100,
-        surveyUnitCompleted: 0,
+        totalInterrogation: 100,
+        interrogationCompleted: 0,
         totalNomenclature: Infinity,
         nomenclatureCompleted: 0,
         totalSurvey: Infinity,

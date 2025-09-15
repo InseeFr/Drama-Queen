@@ -1,14 +1,18 @@
 import type { Variable } from '@inseefr/lunatic/type.source'
 
 import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
-import type { Questionnaire, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type {
+  Interrogation,
+  InterrogationData,
+  Questionnaire,
+} from '@/core/model'
 
-/** Add external variables to the survey unit data if necessary. */
-function computeSurveyUnitDataExternalVariables(
-  surveyUnitId: string,
+/** Add external variables to the interrogation data if necessary. */
+function computeInterrogationDataExternalVariables(
+  interrogationId: string,
   questionnaireId: string,
-  data?: SurveyUnitData,
-): SurveyUnitData {
+  data?: InterrogationData,
+): InterrogationData {
   if (!EXTERNAL_RESOURCES_URL) return data ?? {}
 
   return {
@@ -16,7 +20,7 @@ function computeSurveyUnitDataExternalVariables(
     EXTERNAL: {
       ...data?.EXTERNAL,
       GLOBAL_QUESTIONNAIRE_ID: questionnaireId,
-      GLOBAL_SURVEY_UNIT_ID: surveyUnitId,
+      GLOBAL_SURVEY_UNIT_ID: interrogationId,
     },
   }
 }
@@ -47,18 +51,20 @@ export function computeSourceExternalVariables(
 }
 
 /**
- * Initialize the survey unit with the expected format since it can be empty or partial.
+ * Initialize the interrogation with the expected format since it can be empty or partial.
  */
-export function computeSurveyUnit(partial?: Partial<SurveyUnit>): SurveyUnit {
-  const surveyUnitId = partial?.id ?? ''
+export function computeInterrogation(
+  partial?: Partial<Interrogation>,
+): Interrogation {
+  const interrogationId = partial?.id ?? ''
   const questionnaireId = partial?.questionnaireId ?? ''
 
   return {
-    id: surveyUnitId,
+    id: interrogationId,
     questionnaireId,
     personalization: partial?.personalization,
-    data: computeSurveyUnitDataExternalVariables(
-      surveyUnitId,
+    data: computeInterrogationDataExternalVariables(
+      interrogationId,
       questionnaireId,
       partial?.data,
     ),

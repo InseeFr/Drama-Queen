@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import { useTranslation } from '@/i18n'
 import type { reviewLoader } from '@/routes/routing/loader'
 import { useLoaderData } from '@/routes/routing/utils'
@@ -18,7 +18,7 @@ export function Review() {
 
   const getReferentiel = reviewSurvey.getReferentiel
 
-  const onQuit = (_surveyUnit: SurveyUnit) => {
+  const onQuit = (_interrogation: Interrogation) => {
     setIsQuitModalOpen(true)
   }
 
@@ -47,7 +47,7 @@ export function Review() {
       />
       <Orchestrator
         source={loaderData.questionnaire}
-        surveyUnit={loaderData.surveyUnit}
+        interrogation={loaderData.interrogation}
         readonly={true}
         onQuit={onQuit}
         onDefinitiveQuit={onQuit}

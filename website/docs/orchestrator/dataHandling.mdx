@@ -1,8 +1,8 @@
 # Gestion de la donnée
 
-A chaque changement de page du questionnaire, on actualise le contenu d'une unité enquêtée, que ce soit pour persister sa valeur actualisée en collecte ou pour pouvoir la télécharger en visualisation.
+A chaque changement de page du questionnaire, on actualise le contenu d'une interrogation, que ce soit pour persister sa valeur actualisée en collecte ou pour pouvoir la télécharger en visualisation.
 
-L'unité enquêtée est représentée par un objet au format suivant :
+L'interrogation est représentée par un objet au format suivant :
 
 ```json
 {
@@ -24,7 +24,7 @@ L'unité enquêtée est représentée par un objet au format suivant :
 }
 ```
 
-Dans la mise à jour de l'unité enquêtée, on s'intéresse aux 2 parties :
+Dans la mise à jour de l'interrogation, on s'intéresse aux 2 parties :
 
 - `data` : données de questionnaire, correspondant aux données de Lunatic
 - `stateData` : données relatives à l'état du questionnaire
@@ -44,7 +44,7 @@ Dans le cas d'une variable de boucle (dont la valeur peut-être [null] ou [1, nu
 
 ## État du questionnaire
 
-Le stateData est facultatif pour une unité enquêtée. C'est notamment le cas pour une nouvelle unité enquêtée en collecte, ou en visualisation sans avoir renseigné de fichier de data.  
+Le stateData est facultatif pour une interrogation. C'est notamment le cas pour une nouvelle interrogation en collecte, ou en visualisation sans avoir renseigné de fichier de data.  
 Si le stateData n'est pas défini, à l'ouverture du questionnaire on l'initialise :
 
 ```json

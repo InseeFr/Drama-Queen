@@ -30,7 +30,7 @@ describe('reviewLoader', () => {
     ;(await prCore).functions.reviewSurvey.loader = mockLoader
 
     const mockParams = {
-      surveyUnitId: 'test-survey-unit-id',
+      interrogationId: 'test-survey-unit-id',
     }
 
     const mockLoaderArgs = {
@@ -40,11 +40,11 @@ describe('reviewLoader', () => {
     await reviewLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      surveyUnitId: mockParams.surveyUnitId,
+      interrogationId: mockParams.interrogationId,
     })
   })
 
-  it('should throw an exception if surveyUnitId is undefined', async () => {
+  it('should throw an exception if interrogationId is undefined', async () => {
     await expect(
       reviewLoader({
         params: {},

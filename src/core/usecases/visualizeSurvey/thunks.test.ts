@@ -38,15 +38,15 @@ describe('loader', () => {
     vi.clearAllMocks()
   })
 
-  it('should fetch and return surveyUnit correctly', async () => {
+  it('should fetch and return interrogation correctly', async () => {
     const requestUrl =
-      'http://example.com?questionnaire=my-questionnaire&data=my-surveyUnit'
+      'http://example.com?questionnaire=my-questionnaire&data=my-interrogation'
     const questionnaire = { id: 'Q001' }
-    const surveyUnit = { id: 'SU001' }
+    const interrogation = { id: 'INTERRO001' }
 
     vi.mocked(fetchUrl).mockImplementation(async ({ url }) => {
-      // since fetchUrl is called for both questionnaire and surveyUnit, needs to mock both results
-      if (url.includes('surveyUnit')) return surveyUnit
+      // since fetchUrl is called for both questionnaire and interrogation, needs to mock both results
+      if (url.includes('interrogation')) return interrogation
       return questionnaire
     })
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
@@ -54,7 +54,7 @@ describe('loader', () => {
     const result = await thunks.loader({
       requestUrl: requestUrl,
     })()
-    expect(result?.surveyUnit).toEqual(surveyUnit)
+    expect(result?.interrogation).toEqual(interrogation)
   })
 
   it('should handle a wrapped questionnaire', async () => {
@@ -73,15 +73,15 @@ describe('loader', () => {
     const requestUrl =
       'https://example.com?questionnaire=my-questionnaire&nomenclature={"countries"%3A"https%3A%2F%2Fnomenclature.com%2Fcountries"%2C"cities"%3A"https%3A%2F%2Fnomenclature.com%2Fcities"}'
     const questionnaire = { id: 'Q001' }
-    const surveyUnit = { id: 'SU001' }
+    const interrogation = { id: 'INTERRO001' }
     const nomenclatureParam = {
       countries: 'https://nomenclature.com/countries',
       cities: 'https://nomenclature.com/cities',
     }
 
     vi.mocked(fetchUrl).mockImplementation(async ({ url }) => {
-      // needs to mock result for surveyUnit & questionnaire to avoid the early fetch errors
-      if (url.includes('surveyUnit')) return surveyUnit
+      // needs to mock result for interrogation & questionnaire to avoid the early fetch errors
+      if (url.includes('interrogation')) return interrogation
       if (url.includes('questionnaire')) return questionnaire
       return url
     })

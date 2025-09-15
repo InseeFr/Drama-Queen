@@ -1,6 +1,6 @@
 import type { EventQuestionnaireState } from '@/core/model/QuestionnaireState'
 
-type UpdateSurveyUnitState = {
+type UpdateInterrogationState = {
   type: string
   command: 'UPDATE_STATE'
   interrogationId: string
@@ -15,29 +15,29 @@ type CloseQueenData = {
 
 const eventType = 'QUEEN'
 
-const sendEvent = (data: UpdateSurveyUnitState | CloseQueenData) => {
+const sendEvent = (data: UpdateInterrogationState | CloseQueenData) => {
   const event = new CustomEvent(eventType, { detail: data })
   window.dispatchEvent(event)
 }
 
 export const sendQuestionnaireStateChangedEvent = (
-  surveyUnitId: string,
+  interrogationId: string,
   state: EventQuestionnaireState,
 ) => {
-  const data: UpdateSurveyUnitState = {
+  const data: UpdateInterrogationState = {
     type: eventType,
     command: 'UPDATE_STATE',
-    interrogationId: surveyUnitId,
+    interrogationId: interrogationId,
     state: state,
   }
   sendEvent(data)
 }
 
-export const sendCloseEvent = (surveyUnitId: string) => {
+export const sendCloseEvent = (interrogationId: string) => {
   const data: CloseQueenData = {
     type: eventType,
     command: 'CLOSE_QUEEN',
-    interrogationId: surveyUnitId,
+    interrogationId: interrogationId,
   }
   sendEvent(data)
 }

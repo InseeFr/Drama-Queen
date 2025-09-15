@@ -10,23 +10,23 @@ export const reducer = null
 
 export const thunks = {
   loader:
-    (params: { surveyUnitId: string }) =>
+    (params: { interrogationId: string }) =>
     async (...args) => {
       const [, , { queenApi }] = args
 
-      const { surveyUnitId } = params
+      const { interrogationId } = params
 
-      const surveyUnit = await queenApi
-        .getSurveyUnit(surveyUnitId)
-        .then((surveyUnit) => {
-          if (!surveyUnit) {
-            throw new Error(t('surveyUnitNotFound', { surveyUnitId }))
+      const interrogation = await queenApi
+        .getInterrogation(interrogationId)
+        .then((interrogation) => {
+          if (!interrogation) {
+            throw new Error(t('interrogationNotFound', { interrogationId }))
           }
-          return surveyUnit
+          return interrogation
         })
 
       const questionnaire = await queenApi
-        .getQuestionnaire(surveyUnit.questionnaireId)
+        .getQuestionnaire(interrogation.questionnaireId)
         .then((questionnaire) => {
           if (!isSurveyCompatibleWithQueen({ questionnaire })) {
             throw new Error(t('questionnaireNotCompatible'))
@@ -34,7 +34,7 @@ export const thunks = {
           return questionnaire
         })
 
-      return { surveyUnit, questionnaire }
+      return { interrogation, questionnaire }
     },
   getReferentiel:
     (name: string) =>

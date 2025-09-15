@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 
-import type { PageTag, SurveyUnitData } from '@/core/model'
+import type { InterrogationData, PageTag } from '@/core/model'
 
 import { isIterationReachable } from './utils'
 
@@ -15,7 +15,7 @@ type LoopPanelProps = {
   subPage: number | undefined
   iteration: number | undefined
   lastReachedPage: PageTag | undefined
-  data: SurveyUnitData
+  data: InterrogationData
   goToPage: ReturnType<typeof useLunatic>['goToPage']
 }
 

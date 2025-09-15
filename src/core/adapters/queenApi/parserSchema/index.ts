@@ -1,5 +1,5 @@
 export * from './campaignSchema'
 export * from './nomenclatureSchema'
 export * from './paradataSchema'
-export * from './surveyUnitDataSchema'
-export * from './surveyUnitSchema'
+export * from './interrogationDataSchema'
+export * from './interrogationSchema'

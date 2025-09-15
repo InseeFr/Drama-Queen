@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import {
   idAndQuestionnaireIdSchema,
-  surveyUnitSchema,
-} from './surveyUnitSchema'
+  interrogationSchema,
+} from './interrogationSchema'
 
 describe('idAndQuestionnaireIdSchema', () => {
   it('should validate a valid id and questionnaireId', () => {
@@ -31,8 +31,8 @@ describe('idAndQuestionnaireIdSchema', () => {
   })
 })
 
-describe('surveyUnitSchema', () => {
-  it('should validate a valid survey unit object', () => {
+describe('interrogationSchema', () => {
+  it('should validate a valid interrogation object', () => {
     const validData = {
       id: '12345',
       questionnaireId: '67890',
@@ -58,13 +58,13 @@ describe('surveyUnitSchema', () => {
       },
     }
 
-    const result = surveyUnitSchema.safeParse(validData)
+    const result = interrogationSchema.safeParse(validData)
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(validData)
   })
 
-  it('should reject invalid survey unit objects', () => {
+  it('should reject invalid interrogation objects', () => {
     const invalidData = {
       id: 12345,
       questionnaireId: '67890',
@@ -72,7 +72,7 @@ describe('surveyUnitSchema', () => {
       data: {},
     }
 
-    const result = surveyUnitSchema.safeParse(invalidData)
+    const result = interrogationSchema.safeParse(invalidData)
 
     expect(result.success).toBe(false)
     expect(result.error).toBeDefined()
@@ -89,7 +89,7 @@ describe('surveyUnitSchema', () => {
       },
     }
 
-    const result = surveyUnitSchema.safeParse(partialData)
+    const result = interrogationSchema.safeParse(partialData)
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(partialData)
@@ -111,7 +111,7 @@ describe('surveyUnitSchema', () => {
       },
     }
 
-    const result = surveyUnitSchema.safeParse(invalidData)
+    const result = interrogationSchema.safeParse(invalidData)
 
     expect(result.success).toBe(false)
     expect(result.error).toBeDefined()

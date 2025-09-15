@@ -2,9 +2,9 @@ import { AxiosError } from 'axios'
 
 import type { Thunks } from '@/core/bootstrap'
 import type {
+  Interrogation,
   Nomenclature,
   Questionnaire,
-  SurveyUnit,
   WrappedQuestionnaire,
 } from '@/core/model'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
@@ -76,8 +76,8 @@ export const thunks = {
       throw new Error(t('questionnaireNotCompatible'))
     }
 
-    const surveyUnit = data
-      ? await fetchUrl<SurveyUnit>({
+    const interrogation = data
+      ? await fetchUrl<Interrogation>({
           url: data,
         })
       : undefined
@@ -86,6 +86,6 @@ export const thunks = {
       ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
       : undefined
 
-    return { source, surveyUnit, readonly, getReferentiel }
+    return { source, interrogation, readonly, getReferentiel }
   },
 } satisfies Thunks

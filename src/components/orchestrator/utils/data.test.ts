@@ -3,16 +3,16 @@ import { describe, expect, it, vi } from 'vitest'
 import type { PageTag } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 
-import { computeSurveyUnit } from './data'
+import { computeInterrogation } from './data'
 
-describe('computeSurveyUnit', () => {
+describe('computeInterrogation', () => {
   beforeEach(() => {
     vi.resetModules()
     vi.restoreAllMocks()
   })
 
   it('should return default structure when no input is provided', () => {
-    const result = computeSurveyUnit()
+    const result = computeInterrogation()
 
     expect(result).toEqual({
       id: '',
@@ -35,9 +35,9 @@ describe('computeSurveyUnit', () => {
       EXTERNAL_RESOURCES_URL: '',
     }))
     // Re-import after mocking
-    const { computeSurveyUnit } = await import('./data')
+    const { computeInterrogation } = await import('./data')
 
-    const result = computeSurveyUnit()
+    const result = computeInterrogation()
 
     expect(result).toEqual({
       id: '',
@@ -51,7 +51,7 @@ describe('computeSurveyUnit', () => {
 
   it('should keep existing data and inject external variables', () => {
     const partial = {
-      id: 'SU001',
+      id: 'INTERRO001',
       questionnaireId: 'Q123',
       data: {
         COLLECTED: {
@@ -65,9 +65,9 @@ describe('computeSurveyUnit', () => {
       },
     }
 
-    const result = computeSurveyUnit(partial)
+    const result = computeInterrogation(partial)
 
-    expect(result.id).toBe('SU001')
+    expect(result.id).toBe('INTERRO001')
     expect(result.questionnaireId).toBe('Q123')
     expect(result.data).toEqual({
       COLLECTED: {
@@ -78,7 +78,7 @@ describe('computeSurveyUnit', () => {
       EXTERNAL: {
         SOURCE: 'manual',
         GLOBAL_QUESTIONNAIRE_ID: 'Q123',
-        GLOBAL_SURVEY_UNIT_ID: 'SU001',
+        GLOBAL_SURVEY_UNIT_ID: 'INTERRO001',
       },
     })
   })
@@ -89,7 +89,7 @@ describe('computeSurveyUnit', () => {
       comment: { note: 'Important respondent' },
     }
 
-    const result = computeSurveyUnit(partial)
+    const result = computeInterrogation(partial)
 
     expect(result.personalization).toEqual([{ name: 'name', value: 'John' }])
     expect(result.comment).toEqual({ note: 'Important respondent' })
@@ -104,7 +104,7 @@ describe('computeSurveyUnit', () => {
       },
     }
 
-    const result = computeSurveyUnit(partial)
+    const result = computeInterrogation(partial)
 
     expect(result.stateData).toEqual({
       state: 'INIT',

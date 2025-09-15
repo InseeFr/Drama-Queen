@@ -10,10 +10,10 @@ export async function reviewLoader({ params }: LoaderFunctionArgs) {
   //Protect the route
   await userAuthentication.loginIfNotLoggedIn()
 
-  const { surveyUnitId } = params
-  assert(surveyUnitId !== undefined)
+  const { interrogationId } = params
+  assert(interrogationId !== undefined)
 
   return reviewSurvey.loader({
-    surveyUnitId,
+    interrogationId,
   })
 }

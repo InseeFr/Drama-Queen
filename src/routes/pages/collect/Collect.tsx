@@ -10,20 +10,25 @@ export function Collect() {
   >
 
   const {
-    collectSurvey: { getReferentiel, changePage, changeSurveyUnitState, quit },
+    collectSurvey: {
+      getReferentiel,
+      changePage,
+      changeInterrogationState,
+      quit,
+    },
   } = useCore().functions
 
   return (
     <Orchestrator
       initialPage={loaderData.page}
       source={loaderData.questionnaire}
-      surveyUnit={loaderData.surveyUnit}
+      interrogation={loaderData.interrogation}
       readonly={false}
       onQuit={quit}
       onDefinitiveQuit={quit}
       onChangePage={changePage}
       getReferentiel={getReferentiel}
-      onChangeSurveyUnitState={changeSurveyUnitState}
+      onChangeInterrogationState={changeInterrogationState}
     />
   )
 }

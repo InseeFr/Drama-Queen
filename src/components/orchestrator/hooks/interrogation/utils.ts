@@ -1,31 +1,31 @@
-import type { CollectedValues, SurveyUnitData } from '@/core/model'
+import type { CollectedValues, InterrogationData } from '@/core/model'
 
-export function hasDataChanged(changedData: SurveyUnitData): boolean {
+export function hasDataChanged(changedData: InterrogationData): boolean {
   if (changedData.COLLECTED) {
     return Object.keys(changedData.COLLECTED).length > 0
   }
   return false
 }
 
-/** Get updated surveyUnit data, using the current data and changed data */
+/** Get updated interrogation data, using the current data and changed data */
 export function computeUpdatedData(
-  currentSurveyUnitData: SurveyUnitData,
-  changedData: SurveyUnitData,
-): SurveyUnitData {
+  currentInterrogationData: InterrogationData,
+  changedData: InterrogationData,
+): InterrogationData {
   if (hasDataChanged(changedData)) {
     return computeFullData(
-      currentSurveyUnitData,
+      currentInterrogationData,
       cleanCollectedData(changedData),
     )
   }
-  return currentSurveyUnitData
+  return currentInterrogationData
 }
 
 /** get full data, computing current data with changed data */
 function computeFullData(
-  currentData: SurveyUnitData,
-  changedData: SurveyUnitData,
-): SurveyUnitData {
+  currentData: InterrogationData,
+  changedData: InterrogationData,
+): InterrogationData {
   return {
     CALCULATED: { ...currentData.CALCULATED, ...changedData.CALCULATED },
     EXTERNAL: { ...currentData.EXTERNAL, ...changedData.EXTERNAL },
@@ -34,7 +34,7 @@ function computeFullData(
 }
 
 /** Remove null data from COLLECTED data. */
-function cleanCollectedData(data: SurveyUnitData = {}): SurveyUnitData {
+function cleanCollectedData(data: InterrogationData = {}): InterrogationData {
   const { COLLECTED } = data || {}
 
   if (!COLLECTED) {

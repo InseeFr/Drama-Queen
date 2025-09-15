@@ -37,7 +37,7 @@ describe('useArticulationTable', () => {
 
   it('builds rows from articulation items if available', async () => {
     mockLoader.mockResolvedValue({
-      surveyUnit: { id: 'su1', data: { foo: 'bar' } },
+      interrogation: { id: 'interro1', data: { foo: 'bar' } },
       questionnaire: { id: 'q1', articulation: { items: [] } },
     })
     ;(getArticulationState as any).mockReturnValue({
@@ -73,7 +73,7 @@ describe('useArticulationTable', () => {
       ],
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'su1'))
+    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
 
     await waitFor(() => {
       expect(result.current).not.toBeNull()
@@ -85,7 +85,7 @@ describe('useArticulationTable', () => {
         { label: 'age', value: '30' },
       ])
       expect(result.current?.rows[0].url).toContain(
-        '/queen/interrogations/su1?page=1.1%231', // for the page, `#` is encoded into `%23`
+        '/queen/interrogations/interro1?page=1.1%231', // for the page, `#` is encoded into `%23`
       )
       expect(result.current?.rows[0].label).toBe('Continuer')
 
@@ -95,7 +95,7 @@ describe('useArticulationTable', () => {
         { label: 'age', value: '25' },
       ])
       expect(result.current?.rows[1].url).toContain(
-        '/queen/interrogations/su1?page=1.1%232', // for the page, `#` is encoded into `%23`
+        '/queen/interrogations/interro1?page=1.1%232', // for the page, `#` is encoded into `%23`
       )
       expect(result.current?.rows[1].label).toBe('Complété')
     })
@@ -103,20 +103,20 @@ describe('useArticulationTable', () => {
 
   it('returns null if questionnaire has no articulation', async () => {
     mockLoader.mockResolvedValue({
-      surveyUnit: { id: 'su1' },
+      interrogation: { id: 'interro1' },
       questionnaire: null,
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'su1'))
+    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
 
     await waitFor(() => {
       expect(result.current).toBeNull()
     })
   })
 
-  it('builds rows from leafStates if no surveyUnit.data', async () => {
+  it('builds rows from leafStates if no interrogation.data', async () => {
     mockLoader.mockResolvedValue({
-      surveyUnit: {
+      interrogation: {
         stateData: {
           leafStates: [
             { state: 'NOT_INIT' },
@@ -128,7 +128,7 @@ describe('useArticulationTable', () => {
       questionnaire: { articulation: { items: [] } },
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'su1'))
+    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
 
     await waitFor(() => {
       expect(result.current).not.toBeNull()
@@ -143,7 +143,7 @@ describe('useArticulationTable', () => {
 
   it('returns null if articulation items is empty', async () => {
     mockLoader.mockResolvedValue({
-      surveyUnit: { id: 'su1', data: { foo: 'bar' } },
+      interrogation: { id: 'interro1', data: { foo: 'bar' } },
       questionnaire: { id: 'q1', articulation: { items: [] } },
     })
     ;(getArticulationState as any).mockReturnValue({ items: [] })

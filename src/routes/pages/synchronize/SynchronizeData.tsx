@@ -16,7 +16,7 @@ export function SynchronizeData() {
     isDownloading,
     nomenclatureProgress,
     surveyProgress,
-    surveyUnitProgress,
+    interrogationProgress,
     externalResourcesProgress,
     externalResourcesProgressCount,
     uploadProgress,
@@ -69,8 +69,8 @@ export function SynchronizeData() {
               label: t('nomenclaturesProgress'),
             },
             {
-              progress: surveyUnitProgress,
-              label: t('surveyUnitsProgress'),
+              progress: interrogationProgress,
+              label: t('interrogationsProgress'),
             },
             // render external resources progress bar only if there are external resources
             ...(externalResourcesProgress !== undefined &&
