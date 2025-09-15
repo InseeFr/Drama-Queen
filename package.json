@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "2.7.0-rc-surveyUnit-to-interrogation.0",
+  "version": "2.7.0-rc-surveyUnit-to-interrogation.1",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
