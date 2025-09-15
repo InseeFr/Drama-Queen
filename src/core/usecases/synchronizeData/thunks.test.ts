@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { LocalSyncStorage } from '@/core/ports/LocalSyncStorage'
 
@@ -14,25 +14,25 @@ const mockGetState: () => { synchronizeData: State.NotRunning } = () => ({
 })
 
 const mockDataStore = {
-  getAllSurveyUnits: vi.fn(),
-  updateSurveyUnit: vi.fn(),
-  deleteSurveyUnit: vi.fn(),
+  getAllInterrogations: vi.fn(),
+  updateInterrogation: vi.fn(),
+  deleteInterrogation: vi.fn(),
 } as any as DataStore
 
 const mockQueenApi = {
   getCampaigns: vi.fn(),
   getQuestionnaire: vi.fn(),
-  getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: vi.fn(),
-  getSurveyUnit: vi.fn(),
-  putSurveyUnit: vi.fn(),
-  postSurveyUnitInTemp: vi.fn(),
+  getInterrogationsIdsAndQuestionnaireIdsByCampaign: vi.fn(),
+  getInterrogation: vi.fn(),
+  putInterrogation: vi.fn(),
+  postInterrogationInTemp: vi.fn(),
   getNomenclature: vi.fn(),
 }
 
 const mockLocalSyncStorage = {
   saveObject: vi.fn(),
-  addIdToSurveyUnitsSuccess: vi.fn(),
-  addIdToSurveyUnitsInTempZone: vi.fn(),
+  addIdToInterrogationsSuccess: vi.fn(),
+  addIdToInterrogationsInTempZone: vi.fn(),
   addError: vi.fn(),
 } as any as LocalSyncStorage
 
@@ -55,7 +55,7 @@ describe('download thunk', () => {
     vi.clearAllMocks()
   })
 
-  it('should successfully download campaigns, questionnaires and survey units', async () => {
+  it('should successfully download campaigns, questionnaires and interrogations', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
@@ -67,21 +67,21 @@ describe('download thunk', () => {
     vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
     vi.mocked(
-      mockQueenApi.getSurveyUnitsIdsAndQuestionnaireIdsByCampaign,
+      mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
     ).mockResolvedValue([
-      { id: 'su1', questionnaireId: 'q1' },
-      { id: 'su2', questionnaireId: 'q2' },
+      { id: 'interro1', questionnaireId: 'q1' },
+      { id: 'interro2', questionnaireId: 'q2' },
     ])
-    vi.mocked(mockQueenApi.getSurveyUnit)
-      .mockResolvedValueOnce({ id: 'su1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'su2', questionnaireId: 'q2' })
+    vi.mocked(mockQueenApi.getInterrogation)
+      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
+      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
 
     vi.mocked(mockDispatch).mockResolvedValue(undefined)
-    // Mock successful updateSurveyUnit response
-    vi.mocked(mockDataStore.updateSurveyUnit).mockResolvedValue('su1')
-    vi.mocked(mockLocalSyncStorage.addIdToSurveyUnitsSuccess).mockResolvedValue(
-      undefined,
-    )
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro1')
+    vi.mocked(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).mockResolvedValue(undefined)
     vi.mocked(mockLocalSyncStorage.addError).mockResolvedValue(undefined)
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
@@ -92,24 +92,25 @@ describe('download thunk', () => {
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadSurveyCompleted())
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.updateDownloadTotalSurveyUnit({ totalSurveyUnit: 2 }),
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
     )
 
-    // Check survey unit actions
-    const downloadSurveyUnitCalls = mockDispatch.mock.calls.filter(
-      ([action]) => action.type === actions.downloadSurveyUnitCompleted().type,
+    // Check interrogation actions
+    const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) =>
+        action.type === actions.downloadInterrogationCompleted().type,
     )
-    expect(downloadSurveyUnitCalls).toHaveLength(2)
+    expect(downloadInterrogationCalls).toHaveLength(2)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
 
     // Ensure the local sync storage actions were called
-    expect(mockLocalSyncStorage.addIdToSurveyUnitsSuccess).toHaveBeenCalledWith(
-      'su1',
-    )
-    expect(mockLocalSyncStorage.addIdToSurveyUnitsSuccess).toHaveBeenCalledWith(
-      'su2',
-    )
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro2')
   })
 
   it('should successfully fetch nomenclatures', async () => {
@@ -128,14 +129,14 @@ describe('download thunk', () => {
       suggesters: [{ name: 'Nomenclature 1' }],
     })
     vi.mocked(
-      mockQueenApi.getSurveyUnitsIdsAndQuestionnaireIdsByCampaign,
+      mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
     ).mockResolvedValue([
-      { id: 'su1', questionnaireId: 'q1' },
-      { id: 'su2', questionnaireId: 'q2' },
+      { id: 'interro1', questionnaireId: 'q1' },
+      { id: 'interro2', questionnaireId: 'q2' },
     ])
-    vi.mocked(mockQueenApi.getSurveyUnit)
-      .mockResolvedValueOnce({ id: 'su1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'su2', questionnaireId: 'q2' })
+    vi.mocked(mockQueenApi.getInterrogation)
+      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
+      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
 
     vi.mocked(mockDispatch).mockResolvedValue(undefined)
 
@@ -153,7 +154,7 @@ describe('download thunk', () => {
     )
   })
 
-  it('should handle errors during downloading survey units and resources', async () => {
+  it('should handle errors during downloading interrogations and resources', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
@@ -179,25 +180,25 @@ describe('upload thunk', () => {
     vi.clearAllMocks()
   })
 
-  it('should upload survey units successfully', async () => {
-    const surveyUnits = [{ id: '1' }, { id: '2' }]
-    vi.mocked(mockDataStore.getAllSurveyUnits).mockResolvedValue(
-      surveyUnits as SurveyUnit[],
+  it('should upload interrogations successfully', async () => {
+    const interrogations = [{ id: '1' }, { id: '2' }]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      interrogations as Interrogation[],
     )
-    vi.mocked(mockQueenApi.putSurveyUnit).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteSurveyUnit).mockResolvedValue(undefined)
+    vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningUpload())
 
-    const uploadSurveyUnitCalls = mockDispatch.mock.calls.filter(
-      ([action]) => action.type === actions.uploadSurveyUnitCompleted().type,
+    const uploadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) => action.type === actions.uploadInterrogationCompleted().type,
     )
-    expect(uploadSurveyUnitCalls).toHaveLength(2)
+    expect(uploadInterrogationCalls).toHaveLength(2)
 
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.setUploadTotal({ total: surveyUnits.length }),
+      actions.setUploadTotal({ total: interrogations.length }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
 
@@ -209,46 +210,50 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledTimes(6)
   })
 
-  it('should handle survey unit upload failure and retry posting to temp zone', async () => {
-    const surveyUnit = { id: '1' }
-    vi.mocked(mockDataStore.getAllSurveyUnits).mockResolvedValue([
-      surveyUnit,
-    ] as SurveyUnit[])
-    vi.mocked(mockQueenApi.putSurveyUnit).mockRejectedValue({
+  it('should handle interrogation upload failure and retry posting to temp zone', async () => {
+    const interrogation = { id: '1' }
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
+      interrogation,
+    ] as Interrogation[])
+    vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
-    vi.mocked(mockQueenApi.postSurveyUnitInTemp).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteSurveyUnit).mockResolvedValue(undefined)
+    vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
-    expect(mockQueenApi.postSurveyUnitInTemp).toHaveBeenCalledWith(surveyUnit)
+    expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
+      interrogation,
+    )
     expect(
-      mockLocalSyncStorage.addIdToSurveyUnitsInTempZone,
-    ).toHaveBeenCalledWith(surveyUnit.id)
+      mockLocalSyncStorage.addIdToInterrogationsInTempZone,
+    ).toHaveBeenCalledWith(interrogation.id)
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
   it('should treat 423 response as a success', async () => {
-    const surveyUnit = { id: '1' }
+    const interrogation = { id: '1' }
 
-    vi.mocked(mockDataStore.getAllSurveyUnits).mockResolvedValue([
-      surveyUnit,
-    ] as SurveyUnit[])
-    vi.mocked(mockQueenApi.putSurveyUnit).mockRejectedValue({
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
+      interrogation,
+    ] as Interrogation[])
+    vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 423 },
     })
 
-    vi.mocked(mockQueenApi.postSurveyUnitInTemp).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteSurveyUnit).mockResolvedValue(undefined)
+    vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     // Expect it to continue as if it were a success
-    expect(mockQueenApi.postSurveyUnitInTemp).not.toHaveBeenCalled()
-    expect(mockDataStore.deleteSurveyUnit).toHaveBeenCalledWith(surveyUnit.id)
+    expect(mockQueenApi.postInterrogationInTemp).not.toHaveBeenCalled()
+    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledWith(
+      interrogation.id,
+    )
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.uploadSurveyUnitCompleted(),
+      actions.uploadInterrogationCompleted(),
     )
 
     // Ensure upload completion is still dispatched
@@ -256,7 +261,7 @@ describe('upload thunk', () => {
   })
 
   it('should handle unexpected errors', async () => {
-    vi.mocked(mockDataStore.getAllSurveyUnits).mockRejectedValue(
+    vi.mocked(mockDataStore.getAllInterrogations).mockRejectedValue(
       new Error('Unexpected error'),
     )
 

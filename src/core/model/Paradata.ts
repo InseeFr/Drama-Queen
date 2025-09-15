@@ -4,7 +4,7 @@ export type Paradata = {
     type: 'click' | 'session-started' | 'orchestrator-create'
     timestamp: number
     userAgent: string
-    idSurveyUnit: string
+    idInterrogation: string
     idOrchestrator:
       | 'orchestrator-collect'
       | 'orchestrator-readonly'

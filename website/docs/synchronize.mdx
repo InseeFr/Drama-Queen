@@ -8,7 +8,7 @@ Cela assure que les données conservées sont bien celles modifiées en local pa
 ## Processus de synchronisation
 
 - envoi de toutes les unités enquêtées stockées localement
-- récupération de la liste des campagnes pour lesquelles l'utilisateur au moins une unité enquêtée qui lui est affectée
+- récupération de la liste des campagnes pour lesquelles l'utilisateur au moins une interrogation qui lui est affectée
 - récupération du modèle de questionnaire pour chacune de ces campagnes
 - récupération, en parallèle :
   - des unités enquêtées pour chacune de ces campagnes
@@ -62,14 +62,14 @@ Phase de suppression du cache des ressources externes qui ne sont plus nécessai
 
 ## Gestion des erreurs
 
-| Action                                                                                                                                    | Type d'erreur      | Conséquence                                                                                                        |
-| ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Récupération<ul><li>d'une campagne</li><li>d'un modèle de questionnaire</li><li>d'une unité enquêtée</li><li>d'une nomenclature</li></ul> | format non reconnu | Arrêt de la synchronisation                                                                                        |
-| Récupération d'une unité enquêtée                                                                                                         | 400, 403, 404, 500 | Unité non récupérée, poursuite de la synchronisation                                                               |
-| Envoi d'une unité enquêtée                                                                                                                | 400, 403, 404, 500 | Unité non mise à jour, suppression de l'unité en locale (déplacée en "temp zone"), poursuite de la synchronisation |
-| Envoi d'une unité enquêtée en "temp zone"                                                                                                 | 400, 403, 404, 500 | Arrêt de la synchronisation                                                                                        |
-| Récupération da la liste des questionnaires externes                                                                                      | 400, 403, 404, 500 | Arrêt de la synchronisation                                                                                        |
-| Récupération das ressources d'un questionnaire externe                                                                                    | toutes             | Ressource non récupérée, poursuite de la synchronisation                                                           |
+| Action                                                                                                                                   | Type d'erreur      | Conséquence                                                                                                        |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Récupération<ul><li>d'une campagne</li><li>d'un modèle de questionnaire</li><li>d'une interrogation</li><li>d'une nomenclature</li></ul> | format non reconnu | Arrêt de la synchronisation                                                                                        |
+| Récupération d'une interrogation                                                                                                         | 400, 403, 404, 500 | Unité non récupérée, poursuite de la synchronisation                                                               |
+| Envoi d'une interrogation                                                                                                                | 400, 403, 404, 500 | Unité non mise à jour, suppression de l'unité en locale (déplacée en "temp zone"), poursuite de la synchronisation |
+| Envoi d'une interrogation en "temp zone"                                                                                                 | 400, 403, 404, 500 | Arrêt de la synchronisation                                                                                        |
+| Récupération da la liste des questionnaires externes                                                                                     | 400, 403, 404, 500 | Arrêt de la synchronisation                                                                                        |
+| Récupération das ressources d'un questionnaire externe                                                                                   | toutes             | Ressource non récupérée, poursuite de la synchronisation                                                           |
 
 ## Appels Api
 
@@ -87,10 +87,10 @@ Phase de suppression du cache des ressources externes qui ne sont plus nécessai
 
 ### Unités enquêtées
 
-| Type | Route                              | Description               | Sécurisé par Bearer token | Exemple de réponse |
-| ---- | ---------------------------------- | ------------------------- | ------------------------- | ------------------ |
-| GET  | `/api/survey-unit/${surveyUnitId}` | Récupère l'unité enquêtée | oui                       | `json {}`          |
-| PUT  | `/api/survey-unit/${surveyUnitId}` | Envoie l'unité enquêtée   | oui                       | `json {}`          |
+| Type | Route                                 | Description              | Sécurisé par Bearer token | Exemple de réponse |
+| ---- | ------------------------------------- | ------------------------ | ------------------------- | ------------------ |
+| GET  | `/api/survey-unit/${interrogationId}` | Récupère l'interrogation | oui                       | `json {}`          |
+| PUT  | `/api/survey-unit/${interrogationId}` | Envoie l'interrogation   | oui                       | `json {}`          |
 
 ### Nomenclatures
 

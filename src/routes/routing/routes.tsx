@@ -33,12 +33,12 @@ const getChildrenRoutes = () => {
       loader: protectedRouteLoader,
     },
     {
-      path: '/interrogations/:surveyUnitId',
+      path: '/interrogations/:interrogationId',
       Component: Collect, // This route do not contains UI components, all things are done in loader, if not there is an error
       loader: collectLoader,
     },
     {
-      path: `/review/interrogations/:surveyUnitId`,
+      path: `/review/interrogations/:interrogationId`,
       Component: Review,
       loader: reviewLoader,
     },

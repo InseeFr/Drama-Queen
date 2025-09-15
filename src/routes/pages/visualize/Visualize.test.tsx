@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import { useLoaderData } from '@/routes/routing/utils'
 import { downloadAsJson } from '@/utils/files'
 
@@ -35,7 +35,7 @@ describe('Visualize Component', () => {
   it('renders Orchestrator when loaderData is available', async () => {
     const mockLoaderData = {
       source: 'mockSource',
-      surveyUnit: { id: 'mockSurveyUnit' },
+      interrogation: { id: 'mockInterrogation' },
       readonly: true,
       getReferentiel: vi.fn(),
     }
@@ -47,7 +47,7 @@ describe('Visualize Component', () => {
     expect(Orchestrator).toHaveBeenCalledWith(
       expect.objectContaining({
         source: mockLoaderData.source,
-        surveyUnit: mockLoaderData.surveyUnit,
+        interrogation: mockLoaderData.interrogation,
         readonly: mockLoaderData.readonly,
         onQuit: expect.any(Function),
         onDefinitiveQuit: expect.any(Function),
@@ -66,10 +66,10 @@ describe('Visualize Component', () => {
     expect(VisualizeForm).toHaveBeenCalled()
   })
 
-  it('calls onQuit with surveyUnit and navigates to /visualize', async () => {
+  it('calls onQuit with interrogation and navigates to /visualize', async () => {
     const mockLoaderData = {
       source: 'mockSource',
-      surveyUnit: { id: 'mockSurveyUnit' },
+      interrogation: { id: 'mockInterrogation' },
       readonly: true,
       getReferentiel: vi.fn(),
     }
@@ -85,11 +85,11 @@ describe('Visualize Component', () => {
     const { onQuit } = vi.mocked(Orchestrator).mock.calls[0][0]
 
     if (onQuit) {
-      onQuit(mockLoaderData.surveyUnit as SurveyUnit)
+      onQuit(mockLoaderData.interrogation as Interrogation)
     }
 
     expect(downloadAsJson).toHaveBeenCalledWith({
-      data: mockLoaderData.surveyUnit,
+      data: mockLoaderData.interrogation,
     })
     expect(mockNavigate).toHaveBeenCalledWith('/visualize')
   })

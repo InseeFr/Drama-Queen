@@ -27,7 +27,7 @@ describe('collectLoader', () => {
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
     const mockParams = {
-      surveyUnitId: 'test-survey-unit-id',
+      interrogationId: 'test-survey-unit-id',
     }
 
     const mockLoaderArgs = {
@@ -37,11 +37,11 @@ describe('collectLoader', () => {
     await collectLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      surveyUnitId: mockParams.surveyUnitId,
+      interrogationId: mockParams.interrogationId,
     })
   })
 
-  it('should throw an exception if surveyUnitId is undefined', async () => {
+  it('should throw an exception if interrogationId is undefined', async () => {
     await expect(
       collectLoader({
         params: {},
@@ -54,12 +54,12 @@ describe('collectLoader', () => {
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
     const mockParams = {
-      surveyUnitId: 'test-survey-unit-id',
+      interrogationId: 'test-survey-unit-id',
     }
 
     // encode the `#` for page as `%23` in url
     const mockRequest = new Request(
-      `http://localhost/collect?suid=${mockParams.surveyUnitId}&page=12.3%235`,
+      `http://localhost/collect?suid=${mockParams.interrogationId}&page=12.3%235`,
     )
 
     const result = await collectLoader({
@@ -75,12 +75,12 @@ describe('collectLoader', () => {
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
     const mockParams = {
-      surveyUnitId: 'suid',
+      interrogationId: 'suid',
     }
 
     // page is not a valid PageTag
     const mockRequest = new Request(
-      `http://localhost/collect?suid=${mockParams.surveyUnitId}&page=15.15`,
+      `http://localhost/collect?suid=${mockParams.interrogationId}&page=15.15`,
     )
 
     const result = await collectLoader({

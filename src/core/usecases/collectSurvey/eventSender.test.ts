@@ -13,12 +13,12 @@ describe('Event Dispatchers', () => {
   })
 
   it('should dispatch a "QUEEN" event for questionnaire state change', () => {
-    const surveyUnitId = 'unit1'
+    const interrogationId = 'unit1'
     const state: EventQuestionnaireState = 'COMPLETED'
 
     const dispatchEventMock = vi.spyOn(window, 'dispatchEvent')
 
-    sendQuestionnaireStateChangedEvent(surveyUnitId, state)
+    sendQuestionnaireStateChangedEvent(interrogationId, state)
 
     expect(dispatchEventMock).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -26,7 +26,7 @@ describe('Event Dispatchers', () => {
         detail: {
           type: 'QUEEN',
           command: 'UPDATE_STATE',
-          interrogationId: surveyUnitId,
+          interrogationId: interrogationId,
           state: state,
         },
       }),
@@ -34,11 +34,11 @@ describe('Event Dispatchers', () => {
   })
 
   it('should dispatch a "QUEEN" event for closing the survey', () => {
-    const surveyUnitId = 'unit2'
+    const interrogationId = 'unit2'
 
     const dispatchEventMock = vi.spyOn(window, 'dispatchEvent')
 
-    sendCloseEvent(surveyUnitId)
+    sendCloseEvent(interrogationId)
 
     expect(dispatchEventMock).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -46,7 +46,7 @@ describe('Event Dispatchers', () => {
         detail: {
           type: 'QUEEN',
           command: 'CLOSE_QUEEN',
-          interrogationId: surveyUnitId,
+          interrogationId: interrogationId,
         },
       }),
     )

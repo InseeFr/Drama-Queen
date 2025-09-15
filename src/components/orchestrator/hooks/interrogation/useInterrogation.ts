@@ -1,32 +1,31 @@
 import { useState } from 'react'
 
-import type { PageTag, SurveyUnit, SurveyUnitData } from '@/core/model'
+import type { Interrogation, InterrogationData, PageTag } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 
 import { computeUpdatedData, hasDataChanged } from './utils'
 
-export function useSurveyUnit(
-  initialSurveyUnit: SurveyUnit,
-  /** Function to be called when the survey unit state change, provided by orchestrator mode. */
-  onChangeSurveyUnitState: (params: {
-    surveyUnitId: string
+export function useInterrogation(
+  initialInterrogation: Interrogation,
+  /** Function to be called when the interrogation state change, provided by orchestrator mode. */
+  onChangeInterrogationState: (params: {
+    interrogationId: string
     newState: QuestionnaireState
   }) => void,
 ) {
-  const [surveyUnitData, setSurveyUnitData] = useState<SurveyUnitData>(
-    initialSurveyUnit.data,
+  const [interrogationData, setInterrogationData] = useState<InterrogationData>(
+    initialInterrogation.data,
   )
-  const [surveyUnitState, setSurveyUnitState] = useState<QuestionnaireState>(
-    initialSurveyUnit.stateData?.state ?? null,
-  )
+  const [interrogationState, setInterrogationState] =
+    useState<QuestionnaireState>(initialInterrogation.stateData?.state ?? null)
 
   /** On state update we call the function provided by the orchestrator and update our React state. */
   function handleStateUpdate(newState: QuestionnaireState) {
-    onChangeSurveyUnitState({
-      surveyUnitId: initialSurveyUnit.id,
+    onChangeInterrogationState({
+      interrogationId: initialInterrogation.id,
       newState: newState,
     })
-    setSurveyUnitState(newState)
+    setInterrogationState(newState)
   }
 
   /** Compute new state and send an update if necessary. */
@@ -41,36 +40,36 @@ export function useSurveyUnit(
     }
 
     // calculates the new state : currently the only (calculable) possible change is into INIT if data changed
-    const newState = hasDataChanged ? 'INIT' : surveyUnitState
+    const newState = hasDataChanged ? 'INIT' : interrogationState
 
-    // updates state only if necessary : prevents for calling onChangeSurveyUnitState
-    if (newState !== surveyUnitState) {
+    // updates state only if necessary : prevents for calling onChangeInterrogationState
+    if (newState !== interrogationState) {
       handleStateUpdate(newState)
     }
     return newState
   }
 
   /**
-   * Compute new survey unit, and send a state update if the state (`"INIT"`,
+   * Compute new interrogation, and send a state update if the state (`"INIT"`,
    * `"COMPLETED"`...) has changed.
    */
-  function updateSurveyUnit(
-    changedData: SurveyUnitData,
+  function updateInterrogation(
+    changedData: InterrogationData,
     options: { currentPage?: PageTag; forcedState?: QuestionnaireState } = {},
-  ): SurveyUnit {
+  ): Interrogation {
     const { currentPage, forcedState } = options
     const hasDataBeenUpdated = hasDataChanged(changedData)
     let newData
     if (hasDataBeenUpdated) {
-      newData = computeUpdatedData(surveyUnitData, changedData)
-      setSurveyUnitData(newData)
+      newData = computeUpdatedData(interrogationData, changedData)
+      setInterrogationData(newData)
     }
 
     const newState = updateState(hasDataBeenUpdated, forcedState)
 
     return {
-      ...initialSurveyUnit,
-      data: hasDataBeenUpdated && newData ? newData : surveyUnitData,
+      ...initialInterrogation,
+      data: hasDataBeenUpdated && newData ? newData : interrogationData,
       // provide stateData only if there is state (exclude null state)
       ...(newState && {
         stateData: {
@@ -83,7 +82,7 @@ export function useSurveyUnit(
   }
 
   return {
-    surveyUnitData,
-    updateSurveyUnit,
+    interrogationData,
+    updateInterrogation,
   }
 }

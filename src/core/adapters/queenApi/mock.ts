@@ -1,28 +1,41 @@
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import type { QueenApi } from '@/core/ports/QueenApi'
 
 import { surveySample } from './mockData/surveySample'
 
 export function createApiClient(): QueenApi {
   return {
-    getSurveyUnitsIdsAndQuestionnaireIdsByCampaign: () =>
+    getInterrogationsIdsAndQuestionnaireIdsByCampaign: () =>
       Promise.resolve([{ id: 'id', questionnaireId: 'questionnaireId' }]),
-    getSurveyUnits: () =>
+    getInterrogations: () =>
       Promise.resolve([
-        createSUMocked({}),
-        createSUMocked({ idCampaign: 'camp2', idSu: 'su2' }),
+        createInterrogationMocked({}),
+        createInterrogationMocked({
+          idCampaign: 'camp2',
+          idInterrogation: 'interro2',
+        }),
       ]),
-    getSurveyUnit: (idSurveyUnit) =>
-      Promise.resolve(createSUMocked({ idSu: idSurveyUnit })),
-    putSurveyUnit: (surveyUnit) =>
+    getInterrogation: (idInterrogation) =>
       Promise.resolve(
-        console.log('putSurveyUnit', `id: ${surveyUnit.id}`, surveyUnit),
+        createInterrogationMocked({ idInterrogation: idInterrogation }),
       ),
-    putSurveyUnitsData: (surveyUnitsData) =>
-      Promise.resolve(console.table(surveyUnitsData)),
-    postSurveyUnitInTemp: (surveyUnit) =>
+    putInterrogation: (interrogation) =>
       Promise.resolve(
-        console.log('postSurveyUnitInTemp', `id: ${surveyUnit.id}`, surveyUnit),
+        console.log(
+          'putInterrogation',
+          `id: ${interrogation.id}`,
+          interrogation,
+        ),
+      ),
+    putInterrogationsData: (interrogationsData) =>
+      Promise.resolve(console.table(interrogationsData)),
+    postInterrogationInTemp: (interrogation) =>
+      Promise.resolve(
+        console.log(
+          'postInterrogationInTemp',
+          `id: ${interrogation.id}`,
+          interrogation,
+        ),
       ),
     getCampaigns: () =>
       Promise.resolve([
@@ -40,15 +53,15 @@ export function createApiClient(): QueenApi {
   }
 }
 
-export const mockPrefixIdSu = 'idSU'
+export const mockPrefixIdInterrogation = 'idInterrogation'
 
-function createSUMocked(props: {
-  idSu?: string
+function createInterrogationMocked(props: {
+  idInterrogation?: string
   idCampaign?: string
-}): SurveyUnit {
-  const { idSu = 'su1', idCampaign = 'campaign1' } = props
+}): Interrogation {
+  const { idInterrogation = 'interro1', idCampaign = 'campaign1' } = props
   return {
-    id: `${mockPrefixIdSu}:${idSu}`,
+    id: `${mockPrefixIdInterrogation}:${idInterrogation}`,
     questionnaireId: `idCampaign${idCampaign}`,
     personalization: [],
     data: {

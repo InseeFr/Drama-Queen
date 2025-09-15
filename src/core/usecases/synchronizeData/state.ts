@@ -21,13 +21,13 @@ export namespace State {
     export type Uploading = Common & {
       type: 'upload'
       total: number
-      surveyUnitCompleted: number
+      interrogationCompleted: number
     }
 
     export type Downloading = Common & {
       type: 'download'
-      totalSurveyUnit: number
-      surveyUnitCompleted: number
+      totalInterrogation: number
+      interrogationCompleted: number
       totalNomenclature: number
       nomenclatureCompleted: number
       totalSurvey: number
@@ -54,8 +54,8 @@ export const { reducer, actions } = createUsecaseActions({
         id<State.Running>({
           stateDescription: 'running',
           type: 'download',
-          totalSurveyUnit: Infinity,
-          surveyUnitCompleted: 0,
+          totalInterrogation: Infinity,
+          interrogationCompleted: 0,
           totalNomenclature: Infinity,
           nomenclatureCompleted: 0,
           totalSurvey: Infinity,
@@ -77,28 +77,28 @@ export const { reducer, actions } = createUsecaseActions({
           stateDescription: 'running',
           type: 'upload',
           total: Infinity,
-          surveyUnitCompleted: 0,
+          interrogationCompleted: 0,
         }),
       ),
-    updateDownloadTotalSurveyUnit: (
+    updateDownloadTotalInterrogation: (
       state,
-      { payload }: { payload: { totalSurveyUnit: number } },
+      { payload }: { payload: { totalInterrogation: number } },
     ) => {
-      const { totalSurveyUnit } = payload
+      const { totalInterrogation } = payload
       assert(state.stateDescription === 'running' && state.type === 'download')
       return {
         ...state,
-        totalSurveyUnit:
-          state.totalSurveyUnit === Infinity
-            ? totalSurveyUnit
-            : state.totalSurveyUnit + totalSurveyUnit,
+        totalInterrogation:
+          state.totalInterrogation === Infinity
+            ? totalInterrogation
+            : state.totalInterrogation + totalInterrogation,
       }
     },
-    downloadSurveyUnitCompleted: (state) => {
+    downloadInterrogationCompleted: (state) => {
       assert(state.stateDescription === 'running' && state.type === 'download')
       return {
         ...state,
-        surveyUnitCompleted: state.surveyUnitCompleted + 1,
+        interrogationCompleted: state.interrogationCompleted + 1,
       }
     },
     setDownloadTotalSurvey: (
@@ -182,11 +182,11 @@ export const { reducer, actions } = createUsecaseActions({
       assert(state.stateDescription === 'running' && state.type === 'upload')
       return { ...state, total }
     },
-    uploadSurveyUnitCompleted: (state) => {
+    uploadInterrogationCompleted: (state) => {
       assert(state.stateDescription === 'running' && state.type === 'upload')
       return {
         ...state,
-        surveyUnitCompleted: state.surveyUnitCompleted + 1,
+        interrogationCompleted: state.interrogationCompleted + 1,
       }
     },
     uploadError: (_state) => {

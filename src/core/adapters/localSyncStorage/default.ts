@@ -35,30 +35,30 @@ export function createLocalSyncStorage(params: {
   return {
     saveObject: (object) => saveDataToLocalStorage(object),
     getObject: getDataFromLocalStorage,
-    addIdToSurveyUnitsSuccess: (id) => {
+    addIdToInterrogationsSuccess: (id) => {
       const existingData = getDataFromLocalStorage()
       if (existingData === null) {
         return saveDataToLocalStorage({
           error: false,
-          surveyUnitsInTempZone: [],
-          surveyUnitsSuccess: [id],
+          interrogationsInTempZone: [],
+          interrogationsSuccess: [id],
         })
       }
-      existingData.surveyUnitsSuccess.push(id)
+      existingData.interrogationsSuccess.push(id)
       saveDataToLocalStorage(existingData)
     },
-    addIdToSurveyUnitsInTempZone: (id) => {
+    addIdToInterrogationsInTempZone: (id) => {
       const existingData = getDataFromLocalStorage()
 
       if (existingData === null) {
         return saveDataToLocalStorage({
           error: false,
-          surveyUnitsInTempZone: [id],
-          surveyUnitsSuccess: [],
+          interrogationsInTempZone: [id],
+          interrogationsSuccess: [],
         })
       }
 
-      existingData.surveyUnitsInTempZone.push(id)
+      existingData.interrogationsInTempZone.push(id)
       saveDataToLocalStorage(existingData)
     },
     addError: (error) => {
@@ -67,8 +67,8 @@ export function createLocalSyncStorage(params: {
       if (existingData === null) {
         return saveDataToLocalStorage({
           error: error,
-          surveyUnitsInTempZone: [],
-          surveyUnitsSuccess: [],
+          interrogationsInTempZone: [],
+          interrogationsSuccess: [],
         })
       }
       saveDataToLocalStorage({ ...existingData, error: error })

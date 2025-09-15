@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { Questionnaire, SurveyUnit } from '@/core/model'
+import type { Interrogation, Questionnaire } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import type { DataStore } from '@/core/ports/DataStore'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
@@ -38,8 +38,8 @@ const mockDispatch = vi.fn()
 const mockGetState = vi.fn()
 
 const mockDataStore = {
-  getSurveyUnit: vi.fn(),
-  updateSurveyUnit: vi.fn(),
+  getInterrogation: vi.fn(),
+  updateInterrogation: vi.fn(),
 } as any as DataStore
 
 const mockQueenApi = {
@@ -57,32 +57,35 @@ describe('loader', () => {
     vi.resetAllMocks()
   })
 
-  it('should return surveyUnit and questionnaire', async () => {
-    const surveyUnit = { id: 'SU001', questionnaireId: 'Q123' } as SurveyUnit
+  it('should return interrogation and questionnaire', async () => {
+    const interrogation = {
+      id: 'INTERRO001',
+      questionnaireId: 'Q123',
+    } as Interrogation
     const questionnaire = { id: 'Q123' } as Questionnaire
 
-    vi.mocked(mockDataStore.getSurveyUnit).mockResolvedValue(surveyUnit)
+    vi.mocked(mockDataStore.getInterrogation).mockResolvedValue(interrogation)
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue(questionnaire)
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
 
     const result = await thunks.loader({
-      surveyUnitId: 'SU001',
+      interrogationId: 'INTERRO001',
     })(mockDispatch, mockGetState, mockContext as any)
 
-    expect(result).toEqual({ surveyUnit, questionnaire })
+    expect(result).toEqual({ interrogation, questionnaire })
   })
 
   it('should throw error when questionnaire is not compatible', async () => {
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(false)
-    const surveyUnit = { questionnaireId: 'Q123' } as SurveyUnit
+    const interrogation = { questionnaireId: 'Q123' } as Interrogation
 
-    vi.mocked(mockDataStore.getSurveyUnit).mockResolvedValue(surveyUnit)
+    vi.mocked(mockDataStore.getInterrogation).mockResolvedValue(interrogation)
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({
       id: 'Q123',
     })
 
     await expect(
-      thunks.loader({ surveyUnitId: 'SU001' })(
+      thunks.loader({ interrogationId: 'INTERRO001' })(
         mockDispatch,
         mockGetState,
         mockContext as any,
@@ -121,70 +124,75 @@ describe('changePage', () => {
     vi.clearAllMocks()
   })
 
-  it('should call updateSurveyUnit with the correct surveyUnit', async () => {
-    const surveyUnit = { id: 'SU001', questionnaireId: 'Q123' } as SurveyUnit
+  it('should call updateInterrogation with the correct interrogation', async () => {
+    const interrogation = {
+      id: 'INTERRO001',
+      questionnaireId: 'Q123',
+    } as Interrogation
 
-    // Mock successful updateSurveyUnit response
-    vi.mocked(mockDataStore.updateSurveyUnit).mockResolvedValue('SU001')
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('INTERRO001')
 
-    thunks.changePage(surveyUnit)(
+    thunks.changePage(interrogation)(
       mockDispatch,
       mockGetState,
       mockContext as any,
     )
 
-    expect(mockDataStore.updateSurveyUnit).toHaveBeenCalledWith(surveyUnit)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith(
+      interrogation,
+    )
   })
 })
 
-describe('changeSurveyUnitState', () => {
+describe('changeInterrogationState', () => {
   afterEach(() => {
     vi.clearAllMocks()
   })
 
   it('should send STARTED state event if new state is INIT', () => {
-    const surveyUnitId = 'SU001'
+    const interrogationId = 'INTERRO001'
     const newState = 'INIT'
 
-    thunks.changeSurveyUnitState({ surveyUnitId, newState })()
+    thunks.changeInterrogationState({ interrogationId, newState })()
 
     expect(sendQuestionnaireStateChangedEvent).toHaveBeenCalledWith(
-      surveyUnitId,
+      interrogationId,
       'STARTED',
     )
   })
 
   it('should send COMPLETED state event if new state is COMPLETED', () => {
-    const surveyUnitId = 'SU001'
+    const interrogationId = 'INTERRO001'
     const newState = 'COMPLETED'
 
-    thunks.changeSurveyUnitState({ surveyUnitId, newState })()
+    thunks.changeInterrogationState({ interrogationId, newState })()
 
     expect(sendQuestionnaireStateChangedEvent).toHaveBeenCalledWith(
-      surveyUnitId,
+      interrogationId,
       'COMPLETED',
     )
   })
 
   it('should send VALIDATED state event if new state is VALIDATED', () => {
-    const surveyUnitId = 'SU001'
+    const interrogationId = 'INTERRO001'
     const newState = 'VALIDATED'
 
-    thunks.changeSurveyUnitState({ surveyUnitId, newState })()
+    thunks.changeInterrogationState({ interrogationId, newState })()
 
     expect(sendQuestionnaireStateChangedEvent).toHaveBeenCalledWith(
-      surveyUnitId,
+      interrogationId,
       'VALIDATED',
     )
   })
 
   it('should not send state event for other states : TOEXTRACT, EXTRACTED, null', () => {
-    const surveyUnitId = 'SU001'
+    const interrogationId = 'INTERRO001'
 
     const statesList: QuestionnaireState[] = ['TOEXTRACT', 'EXTRACTED', null]
 
     statesList.forEach((state) => {
-      thunks.changeSurveyUnitState({ surveyUnitId, newState: state })()
+      thunks.changeInterrogationState({ interrogationId, newState: state })()
 
       expect(sendQuestionnaireStateChangedEvent).not.toHaveBeenCalled()
     })
@@ -196,25 +204,31 @@ describe('quit', () => {
     vi.clearAllMocks()
   })
 
-  it('should dispatch changePage with the correct surveyUnit', () => {
-    const surveyUnit = { id: 'SU001', questionnaireId: 'Q123' } as SurveyUnit
+  it('should dispatch changePage with the correct interrogation', () => {
+    const interrogation = {
+      id: 'INTERRO001',
+      questionnaireId: 'Q123',
+    } as Interrogation
     const mockChangePage = vi.fn()
     thunks.changePage = mockChangePage
 
     const mockChangePageResult = vi.fn()
     mockChangePage.mockReturnValue(mockChangePageResult)
 
-    thunks.quit(surveyUnit)(mockDispatch, mockGetState, mockContext as any)
+    thunks.quit(interrogation)(mockDispatch, mockGetState, mockContext as any)
 
-    expect(mockChangePage).toHaveBeenCalledWith(surveyUnit)
+    expect(mockChangePage).toHaveBeenCalledWith(interrogation)
     expect(mockDispatch).toHaveBeenCalledWith(mockChangePageResult)
   })
 
-  it('should send a close event with the correct surveyUnit id', () => {
-    const surveyUnit = { id: 'SU001', questionnaireId: 'Q123' } as SurveyUnit
+  it('should send a close event with the correct interrogation id', () => {
+    const interrogation = {
+      id: 'INTERRO001',
+      questionnaireId: 'Q123',
+    } as Interrogation
 
-    thunks.quit(surveyUnit)(mockDispatch, mockGetState, mockContext as any)
+    thunks.quit(interrogation)(mockDispatch, mockGetState, mockContext as any)
 
-    expect(sendCloseEvent).toHaveBeenCalledWith(surveyUnit.id)
+    expect(sendCloseEvent).toHaveBeenCalledWith(interrogation.id)
   })
 })

@@ -24,16 +24,16 @@ type TableData = {
  */
 export function useArticulationTable(
   react: typeof React,
-  surveyUnitId: string,
+  interrogationId: string,
 ) {
   const [data, setData] = react.useState<TableData | null>(null)
 
   react.useEffect(() => {
     ;(async () => {
-      // Retrieve questionnaire source and survey unit data
+      // Retrieve questionnaire source and interrogation data
       const { collectSurvey } = (await prCore).functions
-      const { surveyUnit, questionnaire } = await collectSurvey.loader({
-        surveyUnitId,
+      const { interrogation, questionnaire } = await collectSurvey.loader({
+        interrogationId,
       })
 
       if (!hasArticulation(questionnaire)) {
@@ -41,13 +41,13 @@ export function useArticulationTable(
       }
 
       // Use leafState
-      if (!surveyUnit.data) {
-        if (!surveyUnit?.stateData?.leafStates) {
+      if (!interrogation.data) {
+        if (!interrogation?.stateData?.leafStates) {
           return null
         }
         setData({
           headers: [],
-          rows: surveyUnit?.stateData.leafStates.map((leafState) => ({
+          rows: interrogation?.stateData.leafStates.map((leafState) => ({
             cells: [],
             url: null,
             page: null,
@@ -59,7 +59,7 @@ export function useArticulationTable(
       }
 
       // Extract articulation data
-      const { items } = getArticulationState(questionnaire, surveyUnit.data)
+      const { items } = getArticulationState(questionnaire, interrogation.data)
       if (items.length === 0) {
         return null
       }
@@ -69,12 +69,12 @@ export function useArticulationTable(
         headers: items[0].cells.map((c) => c.label),
         rows: items.map((item) => ({
           ...item,
-          url: buildUrl(surveyUnitId, item.page),
+          url: buildUrl(interrogationId, item.page),
           label: progressLabel(item.progress),
         })),
       })
     })()
-  }, [surveyUnitId])
+  }, [interrogationId])
 
   return data
 }
@@ -85,9 +85,9 @@ function hasArticulation(
   return Boolean(source && 'articulation' in source)
 }
 
-const buildUrl = (surveyUnitId: string, page: string): string => {
+const buildUrl = (interrogationId: string, page: string): string => {
   const url = new URL(
-    `/queen/interrogations/${surveyUnitId}`,
+    `/queen/interrogations/${interrogationId}`,
     window.location.origin,
   )
   url.searchParams.set('page', page.toString())

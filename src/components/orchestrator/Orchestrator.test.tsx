@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import { TestWrapper } from '@/tests/TestWrapper'
 
 import { Orchestrator } from './Orchestrator'
@@ -36,15 +36,15 @@ describe('Orchestrator', () => {
   })
 
   describe('open WelcomeBackModal only if necessary', () => {
-    const defaultSurveyUnit: SurveyUnit = {
-      id: 'su1',
+    const defaultInterrogation: Interrogation = {
+      id: 'interro1',
       data: {},
       questionnaireId: 'q1',
     }
 
     it('should open WelcomeBackModal at start if not readonly and currentPage is not "1"', () => {
-      const surveyUnit: SurveyUnit = {
-        ...defaultSurveyUnit,
+      const interrogation: Interrogation = {
+        ...defaultInterrogation,
         stateData: {
           state: 'INIT',
           date: 17000000,
@@ -58,7 +58,7 @@ describe('Orchestrator', () => {
             readonly={false}
             source={{ components: [], variables: [] }}
             getReferentiel={vi.fn()}
-            surveyUnit={surveyUnit}
+            interrogation={interrogation}
           />
         </TestWrapper>,
       )
@@ -67,8 +67,8 @@ describe('Orchestrator', () => {
     })
 
     it('should not open WelcomeBackModal if readonly is true', () => {
-      const surveyUnit: SurveyUnit = {
-        ...defaultSurveyUnit,
+      const interrogation: Interrogation = {
+        ...defaultInterrogation,
         stateData: {
           state: 'INIT',
           date: 17000000,
@@ -82,7 +82,7 @@ describe('Orchestrator', () => {
             readonly={true} // readonly
             source={{ components: [], variables: [] }}
             getReferentiel={vi.fn()}
-            surveyUnit={surveyUnit}
+            interrogation={interrogation}
           />
         </TestWrapper>,
       )
@@ -91,8 +91,8 @@ describe('Orchestrator', () => {
     })
 
     it('should not open WelcomeBackModal if currentPage is "1"', () => {
-      const surveyUnit: SurveyUnit = {
-        ...defaultSurveyUnit,
+      const interrogation: Interrogation = {
+        ...defaultInterrogation,
         stateData: {
           state: 'INIT',
           date: 17000000,
@@ -106,7 +106,7 @@ describe('Orchestrator', () => {
             readonly={false}
             source={{ components: [], variables: [] }}
             getReferentiel={vi.fn()}
-            surveyUnit={surveyUnit}
+            interrogation={interrogation}
           />
         </TestWrapper>,
       )
