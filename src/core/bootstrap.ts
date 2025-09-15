@@ -76,15 +76,7 @@ export async function bootstrapCore(
       '@/core/adapters/datastore/default'
     )
 
-    return createDataStore({
-      name: 'Queen',
-      schema: {
-        paradata: '++id,idSU,events',
-        interrogation:
-          'id,data,stateData,personalization,comment,questionnaireId',
-      },
-      version: 3,
-    })
+    return createDataStore()
   })()
 
   const localSyncStorage = await (async () => {

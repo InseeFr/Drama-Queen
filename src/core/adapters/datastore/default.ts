@@ -9,17 +9,21 @@ type Tables = {
   paradata: Table<Paradata>
 }
 
-export function createDataStore(params: {
-  name: string
-  schema: Record<keyof Tables, string>
-  version: number
-}): DataStore {
-  const { name, schema, version } = params
+export function createDataStore(): DataStore {
+  const db = new Dexie('Queen') as InstanceType<typeof Dexie> & Tables
 
-  const db = new Dexie(name) as InstanceType<typeof Dexie> & Tables
+  db.version(2).stores({
+    paradata: '++id,idSU,events',
+    surveyUnit: 'id,data,stateData,personalization,comment,questionnaireId',
+  })
 
-  db.version(version)
-    .stores(schema)
+  // version 3 : replace surveyUnit by interrogation
+  db.version(3)
+    .stores({
+      paradata: '++id,idSU,events',
+      interrogation:
+        'id,data,stateData,personalization,comment,questionnaireId',
+    })
     .upgrade(async (tx) => {
       // migration from version 2 to version 3 : from table 'surveyUnit' to 'interrogation' with same content
       if (tx.storeNames.includes('surveyUnit')) {
