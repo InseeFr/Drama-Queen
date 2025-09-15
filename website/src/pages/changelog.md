@@ -1,3 +1,147 @@
+### 2.6.0
+
+#### Nouvelles fonctionnalités
+
+- export d'une méthode permettant de récupérer le tableau d'articulation d'une unité enquêtée.
+
+### 2.5.9
+
+#### Correction de bugs
+
+- dans les questions de type liste déroulante ou recherche sur liste, le raccourci de passage à la page suivante ne fonctionnait pas. Corrigé par Lunatic 3.6.14
+- lorsqu'une boucle paginée par occurence comporte des questions date/durée/recherche sur liste, le contenu des réponse d'une occurence s'affichait à nouveau sur l'occurence suivante. Corrigé par Lunatic 3.6.15
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.7.0
+
+### 2.5.8
+
+#### Modifications mineures
+
+- amélioration du style des boutons du rond-point en cas de focus
+- amélioration du style des infobulles
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.13
+
+### 2.5.7
+
+#### Correction de bugs
+
+- lorsqu'un rond-point contenait une seule occurence qui était filtrée, on parcourait tout de-même la boucle pour cette occurence. Désormais elle est bien filtrée. Corrigé par Lunatic 3.6.10
+- lorsqu'une modalité de choix unique ou multiple contient une demande de précision, les raccourcis associés aux modalités de réponse empêchaient de remplir correctement le champ de de précision. Corrigé par Lunatic 3.6.10
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.10
+
+### 2.5.6
+
+#### Correction de bugs
+
+- une boucle paginée par occurence (une occurence par page) faisait crash l'application
+
+### 2.5.5
+
+#### Correction de bugs
+
+- les contrôles de rond-point se déclenchaient mais ne s'affichaient pas. Corrigé par Lunatic 3.6.6
+- les contrôles de boucle paginée ne se déclenchaient parfois pas. Corrigé par Lunatic 3.6.7
+- lorsque la première occurence d'une boucle est filtrée, toutes les occurences étaient alors filtrées à tord. Apparu depuis Lunatic 3.5.0, corrigé par 3.6.8
+
+#### Modifications mineures
+
+- ajout de style sur le composant rond-point
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.8
+
+### 2.5.4
+
+#### QOL
+
+- les performances des questionnaires ont été largement améliorées. Modifié par Lunatic 3.6.5
+- amélioration des espacements entre les questions lorsqu'une page contient plusieurs questions
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.5
+
+### 2.5.3
+
+#### QOL
+
+- en mode de visualisation, le téléchargement des données comporte désormais les variables calculées
+- ajout d'un autofocus sur le champ de précision après sélection d'une modalité de question à choix unique. Ajouté par Lunatic 3.6.4
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.4
+
+### 2.5.2
+
+#### QOL
+
+- les performances des questionnaires ont été améliorées. Modifié par Lunatic 3.6.3
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.3
+
+### 2.5.1
+
+#### Nouvelles fonctionnalités
+
+- dans le cas d'une demande de précision pour une question à choix unique, il est désormais possible de définir une taille maximum de la réponse (infini par défaut). Ajouté par Lunatic 3.6.2
+
+#### Correction de bugs
+
+- question de type lien 2 à 2 : lorsque l'on modifie le nombre d'individus, toutes les données déjà renseignées étaient supprimées à tord. Désormais les liens des individus toujours existants sont conservés. Corrigé par Lunatic 3.6.2
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.2
+
+### 2.5.0
+
+#### Nouvelles fonctionnalités
+
+- il est désormais possible d'avoir des questions obligatoires (avec contrôles bloquants). Ajouté par Lunatic 3.6.0
+- il est désormais possible d'afficher un champ de réponse en lecture seule, selon une condition VTL. Ajouté par Lunatic 3.6.0
+
+#### Modifications mineures
+
+- amélioration des contrôles : affichage et réinitialisation des contrôles, meilleure gestion des NSP/Refus et bouton Continuer
+- l'état "null" d'une unité enquêté n'existe plus. Elle n'a donc aucun état (et donc pas de sauvegarde de la page courante) tant qu'aucune donnée n'a été renseignée
+
+#### Correction de bugs
+
+- lorsqu'une question est filtré, les contrôles associés se déclenchaient parfois à tord, empêchant de poursuivre le parcours du questionnaire. Corrigé par Lunatic 3.5.8
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.6.1
+
+### 2.4.3
+
+#### Nouvelles fonctionnalités
+
+- ajout des contrôles Lunatic dans le questionnaire
+
+#### Correction de bugs
+
+- dans une boucle lorsque l'on modifiait le nombre d'occurences, toutes les données de la boucle (hormi la 1e occurence) étaient supprimées. Désormais les données des occurences toujours existantes sont bien conservées. Corrigé par Lunatic 3.5.4
+- amélioration de l'accessibilité pour les questions obligatoires. Corrigé par Lunatic 3.5.4
+- question de type date : le nombre maximum d'heures était défini à 99 à tord. Il est désormais défini correctement par le questionnaire (infini par défaut). Corrigé par Lunatic 3.5.6
+- le passage automatique à la page suivante a été retiré lors de la sélection d'une modalité de question à choix unique, lorsque la modalité requiert l'ajout d'une précision
+
+#### Montée de version Lunatic
+
+Montée de version Lunatic 3.5.6
+
 ### 2.4.2
 
 #### Nouvelles fonctionnalités
