@@ -90,7 +90,7 @@ export function Header({
       <Button title={t('backToQuestionnaireStart')} onClick={goToFirstPage}>
         <img
           id="logo"
-          src={`${DYNAMIC_PUBLIC_URL}/assets/insee.png`}
+          src={`${DYNAMIC_PUBLIC_URL}/assets/insee.svg`}
           alt="Logo de L'Insee"
           className={classes.headerLogo}
         />
