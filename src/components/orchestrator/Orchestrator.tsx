@@ -5,10 +5,10 @@ import { tss } from 'tss-react/mui'
 import { useCallback, useEffect, useState } from 'react'
 
 import type {
+  Interrogation,
+  InterrogationData,
   PageTag,
   Questionnaire,
-  SurveyUnit,
-  SurveyUnitData,
 } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
@@ -18,14 +18,17 @@ import { Continue } from './Continue'
 import { LoopPanel } from './LoopPanel'
 import { WelcomeBackModal } from './WelcomeBackModal'
 import { useControls } from './hooks/controls/useControls'
-import { useSurveyUnit } from './hooks/surveyUnit/useSurveyUnit'
+import { useInterrogation } from './hooks/interrogation/useInterrogation'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { Header } from './layout/Header'
 import { useLunaticStyles } from './lunaticStyle'
 import { NavBar } from './navigationBar/NavBar'
 import { slotComponents } from './slotComponents'
 import { shouldAutoNext, shouldSkipQuestion } from './utils/autoNext'
-import { computeSourceExternalVariables, computeSurveyUnit } from './utils/data'
+import {
+  computeInterrogation,
+  computeSourceExternalVariables,
+} from './utils/data'
 import { scrollAndFocusToFirstError } from './utils/focus'
 import { computeNavigationButtonsProps } from './utils/navigation'
 
@@ -34,29 +37,29 @@ const missingShortcut = { dontKnow: 'f2', refused: 'f4' }
 type OrchestratorProps = {
   getReferentiel: GetReferentiel
   /**
-   * Whether or not we should include calculated variables in survey unit
+   * Whether or not we should include calculated variables in interrogation
    * provided to the onQuit function.
    */
   includeCalculatedVariables?: boolean
   /** Questionnaire page on which starting when the app is launched. */
   initialPage?: PageTag
   /** Action to be called when the respondent changes page. */
-  onChangePage?: (surveyUnit: SurveyUnit) => void
+  onChangePage?: (interrogation: Interrogation) => void
   /** Action to be called when the respondent's filled data enters a new state. */
-  onChangeSurveyUnitState?: (params: {
-    surveyUnitId: string
+  onChangeInterrogationState?: (params: {
+    interrogationId: string
     newState: QuestionnaireState
   }) => void
   /** Action to be called when the respondent finishes the survey. */
-  onDefinitiveQuit?: (surveyUnit: SurveyUnit) => void
+  onDefinitiveQuit?: (interrogation: Interrogation) => void
   /** Action to be called when the respondent closes the app. */
-  onQuit?: (surveyUnit: SurveyUnit) => void
+  onQuit?: (interrogation: Interrogation) => void
   /** Whether or not we should be on read only. */
   readonly: boolean
   /** Questionnaire data to be filled by the respondent. */
   source: Questionnaire
   /** Data filled by the respondent when the app is launched. */
-  surveyUnit?: SurveyUnit
+  interrogation?: Interrogation
 }
 
 /**
@@ -68,25 +71,25 @@ export function Orchestrator({
   includeCalculatedVariables = false,
   initialPage,
   onChangePage = () => {},
-  onChangeSurveyUnitState = () => {},
+  onChangeInterrogationState = () => {},
   onDefinitiveQuit = () => {},
   onQuit = () => {},
   readonly,
   source: initialSource,
-  surveyUnit,
+  interrogation,
 }: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
   const { classes: lunaticClasses } = useLunaticStyles()
 
-  const initialSurveyUnit = computeSurveyUnit(surveyUnit)
+  const initialInterrogation = computeInterrogation(interrogation)
   const source = computeSourceExternalVariables(initialSource)
   const questionnaireTitle = source.label ? source.label.value : ''
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly &&
-      initialSurveyUnit.stateData !== undefined &&
-      initialSurveyUnit.stateData.currentPage !== '1',
+      initialInterrogation.stateData !== undefined &&
+      initialInterrogation.stateData.currentPage !== '1',
   )
 
   const {
@@ -105,13 +108,13 @@ export function Orchestrator({
     pager: { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration },
     pageTag,
     Provider,
-  } = useLunatic(source, initialSurveyUnit.data, {
+  } = useLunatic(source, initialInterrogation.data, {
     activeControls: true,
     autoSuggesterLoading: true,
     dontKnowButton: t('dontKnowButtonLabel'),
     getReferentiel,
     initialPage: initialPage,
-    lastReachedPage: initialSurveyUnit.stateData?.currentPage,
+    lastReachedPage: initialInterrogation.stateData?.currentPage,
     missing: true,
     missingShortcut: missingShortcut,
     onChange: (v) => onLunaticChange(v),
@@ -155,9 +158,9 @@ export function Orchestrator({
     [obsoleteControls, getComponents, handleNextPage],
   )
 
-  const { surveyUnitData, updateSurveyUnit } = useSurveyUnit(
-    initialSurveyUnit,
-    onChangeSurveyUnitState,
+  const { interrogationData, updateInterrogation } = useInterrogation(
+    initialInterrogation,
+    onChangeInterrogationState,
   )
 
   const { orchestratorOnQuit, orchestratorOnDefinitiveQuit } =
@@ -167,7 +170,7 @@ export function Orchestrator({
       includeCalculatedVariables,
       onQuit,
       onDefinitiveQuit,
-      updateSurveyUnit,
+      updateInterrogation,
     })
 
   const isLastReachedPage =
@@ -187,7 +190,7 @@ export function Orchestrator({
       definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
 
-  // Trigger a survey unit update when the Lunatic page changes
+  // Trigger a interrogation update when the Lunatic page changes
   useEffect(() => {
     if (
       pageTag === undefined ||
@@ -197,11 +200,11 @@ export function Orchestrator({
       // do not trigger the update when we first launch the orchestrator
       return
     }
-    const surveyUnit = updateSurveyUnit(
-      getChangedData(true) as SurveyUnitData,
+    const interrogation = updateInterrogation(
+      getChangedData(true) as InterrogationData,
       { currentPage: pageTag },
     )
-    onChangePage(surveyUnit)
+    onChangePage(interrogation)
     // remove deps that should be stable, avoiding calling getChangedData on every input
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageTag, lastReachedPage, isWelcomeModalOpen])
@@ -249,7 +252,7 @@ export function Orchestrator({
                 subPage={subPage}
                 iteration={iteration}
                 lastReachedPage={lastReachedPage}
-                data={surveyUnitData}
+                data={interrogationData}
                 goToPage={handleGoToPage}
               />
             </Stack>
@@ -277,7 +280,7 @@ export function Orchestrator({
         onClose={() => setIsWelcomeModalOpen(false)}
         onGoBack={() => {
           handleGoToPage({
-            page: initialSurveyUnit.stateData?.currentPage ?? '1',
+            page: initialInterrogation.stateData?.currentPage ?? '1',
           })
           setIsWelcomeModalOpen(false)
         }}

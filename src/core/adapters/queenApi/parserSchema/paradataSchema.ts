@@ -4,7 +4,7 @@ const eventSchema = z.object({
   type: z.enum(['click', 'session-started', 'orchestrator-create']),
   timestamp: z.number().int().min(0),
   userAgent: z.string(),
-  idSurveyUnit: z.string(),
+  idInterrogation: z.string(),
   idOrchestrator: z.enum([
     'orchestrator-collect',
     'orchestrator-readonly',

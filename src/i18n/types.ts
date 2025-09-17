@@ -23,17 +23,17 @@ export type ErrorMessage =
   | '504'
   | 'shortUnknownError'
   | 'longUnknownError'
-  | 'surveyUnitNotRetrievable'
-  | { K: 'surveyUnitNotFound'; P: { surveyUnitId: string } }
+  | 'interrogationNotRetrievable'
+  | { K: 'interrogationNotFound'; P: { interrogationId: string } }
   | 'lunaticModelVersionNotFound'
   | 'questionnaireNotCompatible'
-  | { K: 'surveyUnitQuestionnaireNotFound'; P: { surveyUnitId: string } }
+  | { K: 'interrogationQuestionnaireNotFound'; P: { interrogationId: string } }
   | { K: 'questionnaireNotFound'; P: { questionnaireId: string } }
   | {
       K: 'wrongQuestionnaire'
-      P: { surveyUnitId: string; questionnaireId: string }
+      P: { interrogationId: string; questionnaireId: string }
     }
-  | 'surveyUnitUnauthorized'
+  | 'interrogationUnauthorized'
   | 'externalResourcesLoadedError'
 
 export type ModalMessage =
@@ -76,7 +76,7 @@ export type NavigationMessage =
 export type SynchronizeMessage =
   | 'synchronizationInProgress'
   | 'downloadingData'
-  | 'surveyUnitsProgress'
+  | 'interrogationsProgress'
   | 'questionnairesProgress'
   | 'nomenclaturesProgress'
   | 'externalResourcesProgress'

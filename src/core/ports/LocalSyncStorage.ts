@@ -1,13 +1,13 @@
 export type LocalStorageObject = {
   error: boolean
-  surveyUnitsSuccess: string[]
-  surveyUnitsInTempZone: string[]
+  interrogationsSuccess: string[]
+  interrogationsInTempZone: string[]
 }
 
 export type LocalSyncStorage = {
   saveObject: (object: LocalStorageObject) => void
   getObject: () => LocalStorageObject | null
-  addIdToSurveyUnitsSuccess: (id: string) => void
-  addIdToSurveyUnitsInTempZone: (id: string) => void
+  addIdToInterrogationsSuccess: (id: string) => void
+  addIdToInterrogationsInTempZone: (id: string) => void
   addError: (error: boolean) => void
 }

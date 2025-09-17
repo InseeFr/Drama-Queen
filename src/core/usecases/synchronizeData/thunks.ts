@@ -58,7 +58,7 @@ export const thunks = {
          * Survey
          */
 
-        //We need surveyResults before fetching SurveyUnit so we await.
+        //We need surveyResults before fetching Interrogation so we await.
         const surveyResults = await Promise.all(
           questionnaireIds.map((questionnaireId) =>
             queenApi
@@ -100,34 +100,34 @@ export const thunks = {
           )
 
         /*
-         * SurveyUnit
+         * Interrogation
          */
 
-        const prSurveyUnit = await Promise.all(
+        const prInterrogation = await Promise.all(
           campaignsIds.map((campaignId) =>
             queenApi
-              .getSurveyUnitsIdsAndQuestionnaireIdsByCampaign(campaignId)
+              .getInterrogationsIdsAndQuestionnaireIdsByCampaign(campaignId)
               .then((arrayOfIds) => {
                 dispatch(
-                  actions.updateDownloadTotalSurveyUnit({
-                    totalSurveyUnit: arrayOfIds.length,
+                  actions.updateDownloadTotalInterrogation({
+                    totalInterrogation: arrayOfIds.length,
                   }),
                 )
                 return Promise.all(
                   arrayOfIds.map(({ id }) =>
                     queenApi
-                      .getSurveyUnit(id)
-                      .then((surveyUnit) => {
-                        dataStore.updateSurveyUnit(surveyUnit)
+                      .getInterrogation(id)
+                      .then((interrogation) => {
+                        dataStore.updateInterrogation(interrogation)
                         return questionnaireIdInSuccess.includes(
-                          surveyUnit.questionnaireId,
+                          interrogation.questionnaireId,
                         )
                       })
                       .then((isSurveyWellDownload) => {
                         if (isSurveyWellDownload) {
-                          localSyncStorage.addIdToSurveyUnitsSuccess(id)
+                          localSyncStorage.addIdToInterrogationsSuccess(id)
                         }
-                        dispatch(actions.downloadSurveyUnitCompleted())
+                        dispatch(actions.downloadInterrogationCompleted())
                       })
                       .catch((error) => {
                         if (
@@ -136,7 +136,7 @@ export const thunks = {
                           [400, 403, 404, 500].includes(error.response.status)
                         ) {
                           console.error(
-                            `An error occurred while fetching surveyUnit : ${id}, synchronization continue`,
+                            `An error occurred while fetching interrogation : ${id}, synchronization continue`,
                             error,
                           )
                           return
@@ -282,7 +282,7 @@ export const thunks = {
         }
 
         //We await untill all the promises are finished
-        await Promise.all([prSurveyUnit, prNomenclatures])
+        await Promise.all([prInterrogation, prNomenclatures])
 
         dispatch(actions.downloadCompleted())
       } catch (error) {
@@ -313,20 +313,22 @@ export const thunks = {
       //  If localStorageData exists, we refresh it; otherwise, we initialize it.
       localSyncStorage.saveObject({
         error: false,
-        surveyUnitsInTempZone: [],
-        surveyUnitsSuccess: [],
+        interrogationsInTempZone: [],
+        interrogationsSuccess: [],
       })
 
       try {
-        const prSurveyUnits = dataStore.getAllSurveyUnits()
-        const surveyUnits = await prSurveyUnits
+        const prInterrogations = dataStore.getAllInterrogations()
+        const interrogations = await prInterrogations
 
-        if (surveyUnits) {
-          dispatch(actions.setUploadTotal({ total: surveyUnits.length ?? 0 }))
+        if (interrogations) {
+          dispatch(
+            actions.setUploadTotal({ total: interrogations.length ?? 0 }),
+          )
 
-          const surveyUnitPromises = surveyUnits.map((surveyUnit) =>
+          const interrogationPromises = interrogations.map((interrogation) =>
             queenApi
-              .putSurveyUnit(surveyUnit)
+              .putInterrogation(interrogation)
               .catch((error: AxiosError) => {
                 // handle response 423 as a success
                 if (error.response!.status === 423) {
@@ -337,15 +339,15 @@ export const thunks = {
                   [400, 403, 404, 500].includes(error.response.status)
                 ) {
                   return queenApi
-                    .postSurveyUnitInTemp(surveyUnit)
+                    .postInterrogationInTemp(interrogation)
                     .then(() =>
-                      localSyncStorage.addIdToSurveyUnitsInTempZone(
-                        surveyUnit.id,
+                      localSyncStorage.addIdToInterrogationsInTempZone(
+                        interrogation.id,
                       ),
                     )
                     .catch((postError: Error) => {
                       console.error(
-                        'Error: Unable to post surveyUnit in tempZone',
+                        'Error: Unable to post interrogation in tempZone',
                         postError,
                       )
                       throw postError
@@ -353,16 +355,16 @@ export const thunks = {
                 }
                 throw error
               })
-              .then(() => dataStore.deleteSurveyUnit(surveyUnit.id))
+              .then(() => dataStore.deleteInterrogation(interrogation.id))
               .then(() => {
-                dispatch(actions.uploadSurveyUnitCompleted())
+                dispatch(actions.uploadInterrogationCompleted())
               })
               .catch((error) => {
                 console.error('Error: Unable to upload data', error)
                 throw error
               }),
           )
-          await Promise.all(surveyUnitPromises)
+          await Promise.all(interrogationPromises)
         }
         dispatch(actions.uploadCompleted())
         dispatch(thunks.download())

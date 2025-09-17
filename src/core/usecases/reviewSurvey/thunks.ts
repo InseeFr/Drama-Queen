@@ -10,14 +10,23 @@ export const reducer = null
 
 export const thunks = {
   loader:
-    (params: { questionnaireId: string; surveyUnitId: string }) =>
+    (params: { interrogationId: string }) =>
     async (...args) => {
       const [, , { queenApi }] = args
 
-      const { questionnaireId, surveyUnitId } = params
+      const { interrogationId } = params
 
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
+      const interrogation = await queenApi
+        .getInterrogation(interrogationId)
+        .then((interrogation) => {
+          if (!interrogation) {
+            throw new Error(t('interrogationNotFound', { interrogationId }))
+          }
+          return interrogation
+        })
+
+      const questionnaire = await queenApi
+        .getQuestionnaire(interrogation.questionnaireId)
         .then((questionnaire) => {
           if (!isSurveyCompatibleWithQueen({ questionnaire })) {
             throw new Error(t('questionnaireNotCompatible'))
@@ -25,27 +34,7 @@ export const thunks = {
           return questionnaire
         })
 
-      const surveyUnitPromise = queenApi
-        .getSurveyUnit(surveyUnitId)
-        // check the association between surveyUnit and questionnaireId
-        .then((surveyUnit) => {
-          if (surveyUnit.questionnaireId !== questionnaireId) {
-            throw new Error(
-              t('wrongQuestionnaire', {
-                surveyUnitId,
-                questionnaireId,
-              }),
-            )
-          }
-          return surveyUnit
-        })
-
-      const [surveyUnit, questionnaire] = await Promise.all([
-        surveyUnitPromise,
-        questionnairePromise,
-      ])
-
-      return { surveyUnit, questionnaire }
+      return { interrogation, questionnaire }
     },
   getReferentiel:
     (name: string) =>

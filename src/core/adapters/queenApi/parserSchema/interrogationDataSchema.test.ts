@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { surveyUnitDataSchema } from './surveyUnitDataSchema'
+import { interrogationDataSchema } from './interrogationDataSchema'
 
-describe('surveyUnitDataSchema', () => {
+describe('interrogationDataSchema', () => {
   it('should validate a correct structure', () => {
     const validData = {
       CALCULATED: {
@@ -25,7 +25,7 @@ describe('surveyUnitDataSchema', () => {
       },
     }
 
-    const result = surveyUnitDataSchema.safeParse(validData)
+    const result = interrogationDataSchema.safeParse(validData)
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(validData)
@@ -40,7 +40,7 @@ describe('surveyUnitDataSchema', () => {
       COLLECTED: {},
     }
 
-    const result = surveyUnitDataSchema.safeParse(invalidData)
+    const result = interrogationDataSchema.safeParse(invalidData)
 
     expect(result.success).toBe(false)
     expect(result.error).toBeDefined()
@@ -55,7 +55,7 @@ describe('surveyUnitDataSchema', () => {
       COLLECTED: {},
     }
 
-    const result = surveyUnitDataSchema.safeParse(invalidData)
+    const result = interrogationDataSchema.safeParse(invalidData)
 
     expect(result.success).toBe(false)
     expect(result.error).toBeDefined()
@@ -72,7 +72,7 @@ describe('surveyUnitDataSchema', () => {
       },
     }
 
-    const result = surveyUnitDataSchema.safeParse(invalidData)
+    const result = interrogationDataSchema.safeParse(invalidData)
 
     expect(result.success).toBe(false)
     expect(result.error).toBeDefined()
@@ -85,7 +85,7 @@ describe('surveyUnitDataSchema', () => {
       },
     }
 
-    const result = surveyUnitDataSchema.safeParse(partialData)
+    const result = interrogationDataSchema.safeParse(partialData)
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(partialData)
@@ -94,7 +94,7 @@ describe('surveyUnitDataSchema', () => {
   it('should allow null or empty objects', () => {
     const emptyData = {}
 
-    const result = surveyUnitDataSchema.safeParse(emptyData)
+    const result = interrogationDataSchema.safeParse(emptyData)
 
     expect(result.success).toBe(true)
     expect(result.data).toEqual(emptyData)

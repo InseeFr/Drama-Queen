@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import type { PageTag, SurveyUnitData } from '@/core/model'
+import type { InterrogationData, PageTag } from '@/core/model'
 
 import { LoopPanel } from './LoopPanel'
 import { isIterationReachable } from './utils'
@@ -14,7 +14,7 @@ vi.mock('./utils', () => ({
 
 describe('LoopPanel Component', () => {
   const mockLoopVariables = ['loopTitle']
-  const mockData: SurveyUnitData = {
+  const mockData: InterrogationData = {
     COLLECTED: {
       loopTitle: {
         COLLECTED: ['Iteration 1', 'Iteration 2', 'Iteration 3'],

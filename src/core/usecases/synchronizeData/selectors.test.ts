@@ -12,8 +12,8 @@ describe('selectors', () => {
       synchronizeData: {
         stateDescription: 'running',
         type: 'download',
-        surveyUnitCompleted: 50,
-        totalSurveyUnit: 200,
+        interrogationCompleted: 50,
+        totalInterrogation: 200,
         nomenclatureCompleted: 50,
         totalNomenclature: 200,
         surveyCompleted: 50,
@@ -31,7 +31,7 @@ describe('selectors', () => {
 
     expect(result).toEqual({
       isDownloading: true,
-      surveyUnitProgress: 25,
+      interrogationProgress: 25,
       nomenclatureProgress: 25,
       surveyProgress: 25,
       externalResourcesProgress: 25,
@@ -48,7 +48,7 @@ describe('selectors', () => {
         stateDescription: 'running',
         type: 'upload',
         total: 200,
-        surveyUnitCompleted: 50,
+        interrogationCompleted: 50,
       },
     }
 

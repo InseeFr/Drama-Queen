@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import { useLoaderData } from '@/routes/routing/utils'
 
 import { Review } from './Review'
@@ -37,7 +37,7 @@ describe('Review', () => {
   it('renders Orchestrator with correct props', () => {
     const mockLoaderData = {
       questionnaire: { id: 'q1' },
-      surveyUnit: { id: 'su1' },
+      interrogation: { id: 'interro1' },
     }
 
     vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
@@ -59,7 +59,7 @@ describe('Review', () => {
     expect(Orchestrator).toHaveBeenCalledWith(
       expect.objectContaining({
         source: mockLoaderData.questionnaire,
-        surveyUnit: mockLoaderData.surveyUnit,
+        interrogation: mockLoaderData.interrogation,
         readonly: true,
         onQuit: expect.any(Function),
         onDefinitiveQuit: expect.any(Function),
@@ -73,7 +73,7 @@ describe('Review', () => {
   it('opens and closes the quit modal', () => {
     const mockLoaderData = {
       questionnaire: { id: 'q1' },
-      surveyUnit: { id: 'su1' },
+      interrogation: { id: 'interro1' },
     }
 
     vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
@@ -97,7 +97,7 @@ describe('Review', () => {
 
     if (onQuit) {
       act(() => {
-        onQuit(mockLoaderData.surveyUnit as SurveyUnit)
+        onQuit(mockLoaderData.interrogation as Interrogation)
       })
     }
 

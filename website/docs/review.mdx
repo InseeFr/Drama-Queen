@@ -1,13 +1,13 @@
 # Relecture de questionnaire
 
-Le mode de relecture de questionnaire est celui utilisé pour relire le contenu du questionnaire d'une unité enquêtée à partir des données fournies par l'api.
+Le mode de relecture de questionnaire est celui utilisé pour relire le contenu du questionnaire d'une interrogation à partir des données fournies par l'api.
 
 Le questionnaire est en lecture seule, et aucune persistance ne s'effectue.
 
 ## Récupération des ressources
 
 - récupération du modèle de questionnaire depuis l'api
-- récupération de l'unité enquêtée depuis l'api
+- récupération de l'interrogation depuis l'api
 - récupération de toutes les nomenclatures associées au modèle de questionnaire depuis l'api
 
 ## Appels api
@@ -15,7 +15,7 @@ Le questionnaire est en lecture seule, et aucune persistance ne s'effectue.
 | Type | Route                                   | Description                         | Sécurisé par Bearer token | Exemple de réponse |
 | ---- | --------------------------------------- | ----------------------------------- | ------------------------- | ------------------ |
 | GET  | `/api/questionnaire/${questionnaireId}` | Récupère le modèle de questionnaire | oui                       | `json {}`          |
-| GET  | `/api/survey-unit/${surveyUnitId}`      | Récupère l'unité enquêtée           | oui                       | `json {}`          |
+| GET  | `/api/survey-unit/${interrogationId}`   | Récupère l'interrogation            | oui                       | `json {}`          |
 | GET  | `/api/nomenclature/${nomenclatureId}`   | Récupère la nomenclature            | oui                       | `json {}`          |
 
 ## Cas d'erreur
@@ -24,5 +24,5 @@ Au chargement du questionnaire, une page d'erreur explicite s'affiche dans les c
 
 - une des ressources récupérées ne respecte pas le format attendu
 - le modèle de questionnaire n'a pas pu être récupéré (non authentifié, non habilité, questionnaire inexistant)
-- l'unité enquêtée n'a pas pu être récupérée (non authentifié, non habilité, unité inexistante)
-- l'unité enquêtée `surveyUnitId` n'est pas associée au modèle de questionnaire `questionnaireId`
+- l'interrogation n'a pas pu être récupérée (non authentifié, non habilité, unité inexistante)
+- l'interrogation `interrogationId` n'est pas associée au modèle de questionnaire `questionnaireId`

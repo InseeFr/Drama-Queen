@@ -6,10 +6,8 @@ import { isPageTag } from '@/core/tools/pageTag'
 import { prCore } from '@/createCore'
 
 export async function collectLoader({ params, request }: LoaderFunctionArgs) {
-  const { questionnaireId, surveyUnitId } = params
-
-  assert(questionnaireId !== undefined)
-  assert(surveyUnitId !== undefined)
+  const { interrogationId } = params
+  assert(interrogationId !== undefined)
 
   let page: PageTag | undefined
   if (request) {
@@ -23,8 +21,7 @@ export async function collectLoader({ params, request }: LoaderFunctionArgs) {
 
   return {
     ...(await collectSurvey.loader({
-      questionnaireId,
-      surveyUnitId,
+      interrogationId,
     })),
     page,
   }

@@ -5,19 +5,15 @@ import { prCore } from '@/createCore'
 
 export async function reviewLoader({ params }: LoaderFunctionArgs) {
   const { userAuthentication } = (await prCore).functions
+  const { reviewSurvey } = (await prCore).functions
 
   //Protect the route
   await userAuthentication.loginIfNotLoggedIn()
 
-  const { questionnaireId, surveyUnitId } = params
-
-  assert(questionnaireId !== undefined)
-  assert(surveyUnitId !== undefined)
-
-  const { reviewSurvey } = (await prCore).functions
+  const { interrogationId } = params
+  assert(interrogationId !== undefined)
 
   return reviewSurvey.loader({
-    questionnaireId,
-    surveyUnitId,
+    interrogationId,
   })
 }

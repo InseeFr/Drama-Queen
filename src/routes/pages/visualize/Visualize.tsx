@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import { visualizeLoader } from '@/routes/routing/loader/visualizeLoader'
 import { useLoaderData } from '@/routes/routing/utils'
 import { downloadAsJson } from '@/utils/files'
@@ -16,8 +16,8 @@ export function Visualize() {
 
   const navigate = useNavigate()
 
-  const onQuit = (surveyUnit: SurveyUnit) => {
-    downloadAsJson({ data: surveyUnit })
+  const onQuit = (interrogation: Interrogation) => {
+    downloadAsJson({ data: interrogation })
     navigate('/visualize')
   }
 
@@ -26,7 +26,7 @@ export function Visualize() {
       <Orchestrator
         includeCalculatedVariables={true}
         source={loaderData.source}
-        surveyUnit={loaderData.surveyUnit}
+        interrogation={loaderData.interrogation}
         readonly={loaderData.readonly}
         onQuit={onQuit}
         onDefinitiveQuit={onQuit}

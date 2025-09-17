@@ -1,11 +1,11 @@
+import type { InterrogationData } from './InterrogationData'
 import type { StateData } from './StateData'
-import type { SurveyUnitData } from './SurveyUnitData'
 
-export type SurveyUnit = {
+export type Interrogation = {
   id: string
   questionnaireId: string
   personalization?: { name: string; value: string }[]
-  data: SurveyUnitData
+  data: InterrogationData
   comment?: { [key: string]: unknown }
   stateData?: StateData
 }

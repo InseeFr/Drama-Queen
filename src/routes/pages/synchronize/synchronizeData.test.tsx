@@ -76,7 +76,7 @@ describe('SynchronizeData', () => {
       isDownloading: true,
       surveyProgress: 10,
       nomenclatureProgress: 20,
-      surveyUnitProgress: 30,
+      interrogationProgress: 30,
       externalResourcesProgress: 15,
       externalResourcesProgressCount: {
         totalExternalResources: 10,
@@ -105,7 +105,7 @@ describe('SynchronizeData', () => {
       isDownloading: true,
       surveyProgress: 10,
       nomenclatureProgress: 20,
-      surveyUnitProgress: 30,
+      interrogationProgress: 30,
       externalResourcesProgress: undefined, // No external resources
       externalResourcesProgressCount: undefined,
     } as any)

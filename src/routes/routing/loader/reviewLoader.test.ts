@@ -9,6 +9,7 @@ vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       reviewSurvey: {
+        retrieveQuestionnaireId: vi.fn(),
         loader: vi.fn(),
       },
       userAuthentication: {
@@ -29,8 +30,7 @@ describe('reviewLoader', () => {
     ;(await prCore).functions.reviewSurvey.loader = mockLoader
 
     const mockParams = {
-      questionnaireId: 'test-questionnaire-id',
-      surveyUnitId: 'test-survey-unit-id',
+      interrogationId: 'test-survey-unit-id',
     }
 
     const mockLoaderArgs = {
@@ -40,27 +40,14 @@ describe('reviewLoader', () => {
     await reviewLoader(mockLoaderArgs)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      questionnaireId: mockParams.questionnaireId,
-      surveyUnitId: mockParams.surveyUnitId,
+      interrogationId: mockParams.interrogationId,
     })
   })
 
-  it('should throw an error if questionnaireId or surveyUnitId is undefined', async () => {
+  it('should throw an exception if interrogationId is undefined', async () => {
     await expect(
       reviewLoader({
-        params: {
-          questionnaireId: undefined,
-          surveyUnitId: 'test-survey-unit-id',
-        },
-      } as unknown as LoaderFunctionArgs),
-    ).rejects.toThrow('Wrong assertion encountered')
-
-    await expect(
-      reviewLoader({
-        params: {
-          questionnaireId: 'questionnaireId',
-          surveyUnitId: undefined,
-        },
+        params: {},
       } as unknown as LoaderFunctionArgs),
     ).rejects.toThrow('Wrong assertion encountered')
   })

@@ -75,22 +75,8 @@ export async function bootstrapCore(
     const { createDataStore } = await import(
       '@/core/adapters/datastore/default'
     )
-    /**
-     * TODO : replace schema (There are impact on legacy queens)
-    schema: {
-        paradata: "idSU",
-        surveyUnit: "id",
-      }
-    version: 3,
-    */
-    return createDataStore({
-      name: 'Queen',
-      schema: {
-        paradata: '++id,idSU,events',
-        surveyUnit: 'id,data,stateData,personalization,comment,questionnaireId',
-      },
-      version: 2,
-    })
+
+    return createDataStore()
   })()
 
   const localSyncStorage = await (async () => {

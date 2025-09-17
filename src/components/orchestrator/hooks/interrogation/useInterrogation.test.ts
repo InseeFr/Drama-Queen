@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
-import { useSurveyUnit } from './useSurveyUnit'
+import { useInterrogation } from './useInterrogation'
 
 beforeAll(() => {
   vi.useFakeTimers()
@@ -12,38 +12,38 @@ afterAll(() => {
   vi.useRealTimers()
 })
 
-describe('Use survey unit', () => {
+describe('Use interrogation', () => {
   it('does not create state data if it did not exist and data did no change', () => {
-    const onChangeSurveyUnitStateMock = vi.fn()
+    const onChangeInterrogationStateMock = vi.fn()
 
     const { result } = renderHook(() =>
-      useSurveyUnit(
+      useInterrogation(
         { id: 'id', questionnaireId: 'qid', data: {} },
-        onChangeSurveyUnitStateMock,
+        onChangeInterrogationStateMock,
       ),
     )
 
     act(() => {
-      const res = result.current.updateSurveyUnit({}, { currentPage: '2' })
+      const res = result.current.updateInterrogation({}, { currentPage: '2' })
       expect(res.stateData).toBeUndefined()
     })
   })
 
-  test('inits survey unit data', async () => {
-    const onChangeSurveyUnitStateMock = vi.fn()
+  test('inits interrogation data', async () => {
+    const onChangeInterrogationStateMock = vi.fn()
 
     const { result } = renderHook(() =>
-      useSurveyUnit(
+      useInterrogation(
         { id: 'id', questionnaireId: 'qid', data: {} },
-        onChangeSurveyUnitStateMock,
+        onChangeInterrogationStateMock,
       ),
     )
 
-    expect(onChangeSurveyUnitStateMock).not.toHaveBeenCalled()
-    expect(result.current.surveyUnitData).toStrictEqual({})
+    expect(onChangeInterrogationStateMock).not.toHaveBeenCalled()
+    expect(result.current.interrogationData).toStrictEqual({})
 
     act(() => {
-      const res = result.current.updateSurveyUnit(
+      const res = result.current.updateInterrogation(
         {
           COLLECTED: { Q1: { COLLECTED: 'new data' } },
         },
@@ -65,14 +65,14 @@ describe('Use survey unit', () => {
       })
     })
 
-    expect(onChangeSurveyUnitStateMock).toHaveBeenCalledOnce()
-    expect(onChangeSurveyUnitStateMock).toHaveBeenCalledWith(
+    expect(onChangeInterrogationStateMock).toHaveBeenCalledOnce()
+    expect(onChangeInterrogationStateMock).toHaveBeenCalledWith(
       expect.objectContaining({
         newState: 'INIT',
-        surveyUnitId: 'id',
+        interrogationId: 'id',
       }),
     )
-    expect(result.current.surveyUnitData).toStrictEqual({
+    expect(result.current.interrogationData).toStrictEqual({
       CALCULATED: {},
       COLLECTED: { Q1: { COLLECTED: 'new data' } },
       EXTERNAL: {},
@@ -80,22 +80,22 @@ describe('Use survey unit', () => {
   })
 
   test('do not trigger state update if it did not change', async () => {
-    const onChangeSurveyUnitStateMock = vi.fn()
+    const onChangeInterrogationStateMock = vi.fn()
 
     const { result } = renderHook(() =>
-      useSurveyUnit(
+      useInterrogation(
         {
           id: 'id',
           questionnaireId: 'qid',
           data: {},
           stateData: { state: 'INIT', date: 123, currentPage: '1' },
         },
-        onChangeSurveyUnitStateMock,
+        onChangeInterrogationStateMock,
       ),
     )
 
     act(() => {
-      const res = result.current.updateSurveyUnit({
+      const res = result.current.updateInterrogation({
         COLLECTED: { Q1: { COLLECTED: 'new data' } },
       })
       expect(res).toStrictEqual({
@@ -114,8 +114,8 @@ describe('Use survey unit', () => {
       })
     })
 
-    expect(onChangeSurveyUnitStateMock).not.toHaveBeenCalled()
-    expect(result.current.surveyUnitData).toStrictEqual({
+    expect(onChangeInterrogationStateMock).not.toHaveBeenCalled()
+    expect(result.current.interrogationData).toStrictEqual({
       CALCULATED: {},
       COLLECTED: { Q1: { COLLECTED: 'new data' } },
       EXTERNAL: {},
@@ -123,22 +123,22 @@ describe('Use survey unit', () => {
   })
 
   test('do not trigger data update if no data change', async () => {
-    const onChangeSurveyUnitStateMock = vi.fn()
+    const onChangeInterrogationStateMock = vi.fn()
 
     const { result } = renderHook(() =>
-      useSurveyUnit(
+      useInterrogation(
         {
           id: 'id',
           questionnaireId: 'qid',
           data: { COLLECTED: { Q1: { COLLECTED: 'new data' } } },
           stateData: { state: 'INIT', date: 123, currentPage: '1' },
         },
-        onChangeSurveyUnitStateMock,
+        onChangeInterrogationStateMock,
       ),
     )
 
     act(() => {
-      const res = result.current.updateSurveyUnit(
+      const res = result.current.updateInterrogation(
         {
           COLLECTED: { Q1: { COLLECTED: 'new data' } },
         },
@@ -160,8 +160,8 @@ describe('Use survey unit', () => {
       })
     })
 
-    expect(onChangeSurveyUnitStateMock).not.toHaveBeenCalled()
-    expect(result.current.surveyUnitData).toStrictEqual({
+    expect(onChangeInterrogationStateMock).not.toHaveBeenCalled()
+    expect(result.current.interrogationData).toStrictEqual({
       CALCULATED: {},
       COLLECTED: { Q1: { COLLECTED: 'new data' } },
       EXTERNAL: {},

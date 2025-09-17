@@ -19,12 +19,13 @@ const downloadingState = createSelector(state, (state) => {
   return state
 })
 
-const surveyUnitProgress = createSelector(downloadingState, (state) => {
+const interrogationProgress = createSelector(downloadingState, (state) => {
   if (state === undefined) {
     return undefined
   }
-  if (state.surveyUnitCompleted === 0 && state.totalSurveyUnit === 0) return 100
-  return (state.surveyUnitCompleted * 100) / state.totalSurveyUnit
+  if (state.interrogationCompleted === 0 && state.totalInterrogation === 0)
+    return 100
+  return (state.interrogationCompleted * 100) / state.totalInterrogation
 })
 const nomenclatureProgress = createSelector(downloadingState, (state) => {
   if (state === undefined) {
@@ -92,13 +93,13 @@ const uploadProgress = createSelector(state, (state) => {
     return undefined
   }
 
-  if (state.total === 0 && state.surveyUnitCompleted === 0) return 100
-  return (state.surveyUnitCompleted * 100) / state.total
+  if (state.total === 0 && state.interrogationCompleted === 0) return 100
+  return (state.interrogationCompleted * 100) / state.total
 })
 
 const main = createSelector(
   state,
-  surveyUnitProgress,
+  interrogationProgress,
   nomenclatureProgress,
   surveyProgress,
   externalResourcesProgress,
@@ -106,7 +107,7 @@ const main = createSelector(
   uploadProgress,
   (
     state,
-    surveyUnitProgress,
+    interrogationProgress,
     nomenclatureProgress,
     surveyProgress,
     externalResourcesProgress,
@@ -125,12 +126,12 @@ const main = createSelector(
               uploadProgress,
             }
           case 'download':
-            assert(surveyUnitProgress !== undefined)
+            assert(interrogationProgress !== undefined)
             assert(nomenclatureProgress !== undefined)
             assert(surveyProgress !== undefined)
             return {
               isDownloading: true,
-              surveyUnitProgress,
+              interrogationProgress,
               nomenclatureProgress,
               surveyProgress,
               externalResourcesProgress,

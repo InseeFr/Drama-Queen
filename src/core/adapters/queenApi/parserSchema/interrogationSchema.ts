@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import type { PageTag, SurveyUnit } from '@/core/model'
+import type { Interrogation, PageTag } from '@/core/model'
 import { isPageTag } from '@/core/tools/pageTag'
 
-import { surveyUnitDataSchema } from './surveyUnitDataSchema'
+import { interrogationDataSchema } from './interrogationDataSchema'
 
 export const idAndQuestionnaireIdSchema = z.object({
   id: z.string(),
@@ -25,7 +25,7 @@ const stateDataSchema = z.object({
     .transform((val) => val as PageTag),
 })
 
-export const surveyUnitSchema: z.ZodType<SurveyUnit> = z.object({
+export const interrogationSchema: z.ZodType<Interrogation> = z.object({
   id: z.string(),
   questionnaireId: z.string(),
   personalization: z
@@ -36,7 +36,7 @@ export const surveyUnitSchema: z.ZodType<SurveyUnit> = z.object({
       }),
     )
     .optional(),
-  data: surveyUnitDataSchema,
+  data: interrogationDataSchema,
   comment: z.object({}).optional(), // not implemented yet, only present in test data
   stateData: stateDataSchema.optional(),
 })

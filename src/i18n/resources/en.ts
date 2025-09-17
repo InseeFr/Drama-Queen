@@ -17,21 +17,21 @@ export const translations: Translations<'en'> = {
     shortUnknownError: 'Unknown error',
     longUnknownError:
       'An unknown error has occurred, please contact support or try again later.',
-    surveyUnitNotRetrievable:
-      'An error occurred while retrieving the survey unit.',
-    surveyUnitNotFound: ({ surveyUnitId }) =>
-      `Survey unit ${surveyUnitId} not found.`,
+    interrogationNotRetrievable:
+      'An error occurred while retrieving the interrogation.',
+    interrogationNotFound: ({ interrogationId }) =>
+      `Interrogation ${interrogationId} not found.`,
     lunaticModelVersionNotFound:
       'The questionnaire has no lunaticModelVersion field',
     questionnaireNotCompatible: `The questionnaire is not compatible. The 'lunaticModelVersion' must be higher than ${LUNATIC_MODEL_VERSION_BREAKING}`,
-    surveyUnitQuestionnaireNotFound: ({ surveyUnitId }) =>
-      `Unable to retrieve the questionnaire of survey unit ${surveyUnitId}.`,
+    interrogationQuestionnaireNotFound: ({ interrogationId }) =>
+      `Unable to retrieve the questionnaire of interrogation ${interrogationId}.`,
     questionnaireNotFound: ({ questionnaireId }) =>
       `Unable to retrieve questionnaire ${questionnaireId}.`,
-    wrongQuestionnaire: ({ surveyUnitId, questionnaireId }) =>
-      `The survey unit ${surveyUnitId} is not associated with the questionnaire ${questionnaireId}.`,
-    surveyUnitUnauthorized:
-      'You are not authorized to access data from this survey unit.',
+    wrongQuestionnaire: ({ interrogationId, questionnaireId }) =>
+      `The interrogation ${interrogationId} is not associated with the questionnaire ${questionnaireId}.`,
+    interrogationUnauthorized:
+      'You are not authorized to access data from this interrogation.',
     externalResourcesLoadedError: 'Unable to load external resources.',
   },
   modalMessage: {
@@ -78,7 +78,7 @@ export const translations: Translations<'en'> = {
   synchronizeMessage: {
     synchronizationInProgress: 'Synchronization in progress',
     downloadingData: 'Downloading data...',
-    surveyUnitsProgress: 'Survey units',
+    interrogationsProgress: 'Interrogations',
     questionnairesProgress: 'Questionnaires',
     nomenclaturesProgress: 'Nomenclatures',
     externalResourcesProgress: 'External resources',

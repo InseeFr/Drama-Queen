@@ -12,7 +12,6 @@ import {
   collectLoader,
   protectedRouteLoader,
   reviewLoader,
-  surveyUnitLoader,
   visualizeLoader,
 } from './loader'
 
@@ -34,17 +33,12 @@ const getChildrenRoutes = () => {
       loader: protectedRouteLoader,
     },
     {
-      path: '/survey-unit/:surveyUnitId',
-      Component: ErrorPage, // This route do not contains UI components, all things are done in loader, if not there is an error
-      loader: surveyUnitLoader,
-    },
-    {
-      path: `/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
-      Component: Collect,
+      path: '/interrogations/:interrogationId',
+      Component: Collect, // This route do not contains UI components, all things are done in loader, if not there is an error
       loader: collectLoader,
     },
     {
-      path: `/readonly/questionnaire/:questionnaireId/survey-unit/:surveyUnitId`,
+      path: `/review/interrogations/:interrogationId`,
       Component: Review,
       loader: reviewLoader,
     },

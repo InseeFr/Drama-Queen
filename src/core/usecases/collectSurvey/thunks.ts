@@ -1,5 +1,5 @@
 import type { Thunks } from '@/core/bootstrap'
-import type { SurveyUnit } from '@/core/model'
+import type { Interrogation } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
 import { getTranslation } from '@/i18n'
@@ -16,29 +16,27 @@ export const name = 'collectSurvey'
 export const reducer = null
 
 export const thunks = {
-  retrieveQuestionnaireId:
-    (params: { surveyUnitId: string }) =>
-    (...args) => {
-      const [, , { dataStore }] = args
-      const { surveyUnitId } = params
-      return dataStore.getSurveyUnit(surveyUnitId).then((surveyUnit) => {
-        if (!surveyUnit || !surveyUnit.questionnaireId) {
-          return Promise.reject(
-            new Error(t('surveyUnitQuestionnaireNotFound', { surveyUnitId })),
-          )
-        }
-        return surveyUnit.questionnaireId
-      })
-    },
   loader:
-    (params: { questionnaireId: string; surveyUnitId: string }) =>
+    (params: { interrogationId: string }) =>
     async (...args) => {
       const [, , { queenApi, dataStore }] = args
 
-      const { questionnaireId, surveyUnitId } = params
+      const { interrogationId } = params
 
-      const questionnairePromise = queenApi
-        .getQuestionnaire(questionnaireId)
+      const interrogation = await dataStore
+        .getInterrogation(interrogationId)
+        .catch(() => {
+          throw new Error(t('interrogationNotRetrievable'))
+        })
+        .then((interrogation) => {
+          if (!interrogation) {
+            throw new Error(t('interrogationNotFound', { interrogationId }))
+          }
+          return interrogation
+        })
+
+      const questionnaire = await queenApi
+        .getQuestionnaire(interrogation.questionnaireId)
         .then((questionnaire) => {
           if (!isSurveyCompatibleWithQueen({ questionnaire })) {
             throw new Error(t('questionnaireNotCompatible'))
@@ -46,35 +44,7 @@ export const thunks = {
           return questionnaire
         })
 
-      const surveyUnitPromise = dataStore
-        .getSurveyUnit(surveyUnitId)
-        .catch(() => {
-          throw new Error(t('surveyUnitNotRetrievable'))
-        })
-        .then((surveyUnit) => {
-          if (!surveyUnit) {
-            throw new Error(t('surveyUnitNotFound', { surveyUnitId }))
-          }
-          return surveyUnit
-        })
-        .then((surveyUnit) => {
-          if (surveyUnit.questionnaireId !== questionnaireId) {
-            throw new Error(
-              t('wrongQuestionnaire', {
-                surveyUnitId,
-                questionnaireId,
-              }),
-            )
-          }
-          return surveyUnit
-        })
-
-      const [surveyUnit, questionnaire] = await Promise.all([
-        surveyUnitPromise,
-        questionnairePromise,
-      ])
-
-      return { surveyUnit, questionnaire }
+      return { interrogation, questionnaire }
     },
   getReferentiel:
     (name: string) =>
@@ -83,27 +53,28 @@ export const thunks = {
       return queenApi.getNomenclature(name)
     },
   changePage:
-    (surveyUnit: SurveyUnit) =>
+    (interrogation: Interrogation) =>
     (...args) => {
       const [, , { dataStore }] = args
 
-      dataStore.updateSurveyUnit(surveyUnit).catch((error) => {
+      dataStore.updateInterrogation(interrogation).catch((error) => {
         console.error('Error updating or inserting record:', error)
       })
     },
-  changeSurveyUnitState:
-    (params: { surveyUnitId: string; newState: QuestionnaireState }) => () => {
-      const { surveyUnitId, newState } = params
+  changeInterrogationState:
+    (params: { interrogationId: string; newState: QuestionnaireState }) =>
+    () => {
+      const { interrogationId, newState } = params
 
       // send event for changing questionnaire state
       switch (newState) {
         case 'INIT':
           // event name for 'INIT' is 'STARTED'
-          sendQuestionnaireStateChangedEvent(surveyUnitId, 'STARTED')
+          sendQuestionnaireStateChangedEvent(interrogationId, 'STARTED')
           break
         case 'COMPLETED':
         case 'VALIDATED':
-          sendQuestionnaireStateChangedEvent(surveyUnitId, newState)
+          sendQuestionnaireStateChangedEvent(interrogationId, newState)
           break
         default:
           // we do nothing for the other state values
@@ -111,14 +82,14 @@ export const thunks = {
       }
     },
   quit:
-    (surveyUnit: SurveyUnit) =>
+    (interrogation: Interrogation) =>
     (...args) => {
       const [dispatch] = args
 
       // we apply same treatments than when page changes
-      dispatch(thunks.changePage(surveyUnit))
+      dispatch(thunks.changePage(interrogation))
 
       // send event for closing Queen
-      sendCloseEvent(surveyUnit.id)
+      sendCloseEvent(interrogation.id)
     },
 } satisfies Thunks

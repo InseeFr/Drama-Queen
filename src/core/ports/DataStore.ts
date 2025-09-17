@@ -1,10 +1,10 @@
-import type { Paradata, SurveyUnit } from '@/core/model'
+import type { Interrogation, Paradata } from '@/core/model'
 
 export type DataStore = {
-  updateSurveyUnit: (surveyUnit: SurveyUnit) => Promise<string>
-  deleteSurveyUnit: (id: string) => Promise<void>
-  getAllSurveyUnits: () => Promise<SurveyUnit[] | undefined>
-  getSurveyUnit: (id: string) => Promise<SurveyUnit | undefined>
+  updateInterrogation: (interrogation: Interrogation) => Promise<string>
+  deleteInterrogation: (id: string) => Promise<void>
+  getAllInterrogations: () => Promise<Interrogation[] | undefined>
+  getInterrogation: (id: string) => Promise<Interrogation | undefined>
   getAllParadatas: () => Promise<Paradata[] | undefined>
   deleteParadata: (id: string) => Promise<void>
   getParadata: (id: string) => Promise<Paradata | undefined>

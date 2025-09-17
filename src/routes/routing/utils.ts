@@ -24,8 +24,8 @@ export function useLoaderData<
  * Define a loader using deferredLoader()
  *
  * ```js
- * export const surveyUnitLoader = deferredLoader((args) => ({
- *       questionnaireId: getQuestionnaireId(args.params.surveyUnitId),
+ * export const interrogationLoader = deferredLoader((args) => ({
+ *       questionnaireId: getQuestionnaireId(args.params.interrogationId),
  * }))
  * ```
  *
@@ -34,7 +34,7 @@ export function useLoaderData<
  * ```jsx
  *   <Await resolve={deferred.questionnaireId}>
  *     {questionnaireId => (
- *       <div>Survey Unit Mapping id : {surveyUnitId} and questionnaireId :{questionnaireId}
+ *       <div>Interrogation Mapping id : {interrogationId} and questionnaireId :{questionnaireId}
  *     )}
  *   </Await>
  * ```

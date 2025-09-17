@@ -21,7 +21,7 @@ describe('Collect Component', () => {
   it('renders Orchestrator with the correct props', () => {
     const mockLoaderData = {
       questionnaire: { id: 'q1', title: 'Questionnaire 1' },
-      surveyUnit: { id: 'su1', name: 'Survey Unit 1' },
+      interrogation: { id: 'interro1', name: 'Interrogation 1' },
     }
 
     vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
@@ -29,7 +29,7 @@ describe('Collect Component', () => {
     const mockCollectSurvey = {
       getReferentiel: vi.fn(),
       changePage: vi.fn(),
-      changeSurveyUnitState: vi.fn(),
+      changeInterrogationState: vi.fn(),
       quit: vi.fn(),
       retrieveQuestionnaireId: vi.fn(),
       loader: vi.fn(),
@@ -48,13 +48,13 @@ describe('Collect Component', () => {
     expect(Orchestrator).toHaveBeenCalledWith(
       expect.objectContaining({
         source: mockLoaderData.questionnaire,
-        surveyUnit: mockLoaderData.surveyUnit,
+        interrogation: mockLoaderData.interrogation,
         readonly: false,
         onQuit: mockCollectSurvey.quit,
         onDefinitiveQuit: mockCollectSurvey.quit,
         onChangePage: mockCollectSurvey.changePage,
         getReferentiel: mockCollectSurvey.getReferentiel,
-        onChangeSurveyUnitState: mockCollectSurvey.changeSurveyUnitState,
+        onChangeInterrogationState: mockCollectSurvey.changeInterrogationState,
       }),
       {},
     )
