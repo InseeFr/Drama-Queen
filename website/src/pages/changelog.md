@@ -1,3 +1,13 @@
+### 2.6.1
+
+#### Correction de bugs
+
+- depuis la version 2.5.7, l'authentification ne fonctionnait plus
+
+#### Modifications mineures
+
+- remplacement du logo de l'Insee
+
 ### 2.6.0
 
 #### Nouvelles fonctionnalités
