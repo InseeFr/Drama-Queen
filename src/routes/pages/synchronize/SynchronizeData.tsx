@@ -19,7 +19,8 @@ export function SynchronizeData() {
     interrogationProgress,
     externalResourcesProgress,
     externalResourcesProgressCount,
-    uploadProgress,
+    uploadInterrogationProgress,
+    uploadParadataProgress,
   } = useCoreState('synchronizeData', 'main')
 
   const { synchronizeData } = useCore().functions
@@ -51,7 +52,12 @@ export function SynchronizeData() {
         <LoadingDisplay
           progressBars={[
             {
-              progress: uploadProgress,
+              progress: uploadInterrogationProgress,
+              label: t('interrogationsProgress'),
+            },
+            {
+              progress: uploadParadataProgress,
+              label: t('paradataProgress'),
             },
           ]}
           syncStepTitle={t('uploadingData')}

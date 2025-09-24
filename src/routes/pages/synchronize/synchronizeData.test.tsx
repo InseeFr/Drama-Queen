@@ -24,7 +24,7 @@ describe('SynchronizeData', () => {
       hideProgress: false,
       isUploading: false,
       isDownloading: false,
-      uploadProgress: 0,
+      uploadInterrogationProgress: 0,
     })
 
     vi.mocked(useCore).mockReturnValue({
@@ -56,17 +56,21 @@ describe('SynchronizeData', () => {
       hideProgress: false,
       isUploading: true,
       isDownloading: false,
-      uploadProgress: 50,
+      uploadInterrogationProgress: 50,
+      uploadParadataProgress: 30,
     })
 
-    const { getByText, getByRole } = render(<SynchronizeData />)
+    const { getByText, getAllByRole } = render(<SynchronizeData />)
 
     // Check that loading display is rendered with upload progress
     expect(getByText('synchronizationInProgress')).toBeInTheDocument()
     expect(getByText('uploadingData')).toBeInTheDocument()
 
-    const uploadProgressBar = getByRole('progressbar')
-    expect(uploadProgressBar).toHaveAttribute('aria-valuenow', '50')
+    // Check that all progress bars are rendered
+    const progressBars = getAllByRole('progressbar')
+    expect(progressBars).toHaveLength(2)
+    expect(progressBars[0]).toHaveAttribute('aria-valuenow', '50') // interrogation
+    expect(progressBars[1]).toHaveAttribute('aria-valuenow', '30') // paradata
   })
 
   it('should render the loading display with download progress', () => {
@@ -93,6 +97,10 @@ describe('SynchronizeData', () => {
     // Check that all progress bars are rendered
     const progressBars = getAllByRole('progressbar')
     expect(progressBars).toHaveLength(4)
+    expect(progressBars[0]).toHaveAttribute('aria-valuenow', '10') // survey
+    expect(progressBars[1]).toHaveAttribute('aria-valuenow', '20') // nomenclature
+    expect(progressBars[2]).toHaveAttribute('aria-valuenow', '30') // interrogation
+    expect(progressBars[3]).toHaveAttribute('aria-valuenow', '15') // external resources
 
     // Check that extra title for external resources progress is displayed
     expect(getByText('externalResourcesProgress: 2 / 10')).toBeInTheDocument()

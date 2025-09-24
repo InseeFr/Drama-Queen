@@ -65,8 +65,10 @@ describe('Reducer tests', () => {
       expect(newState).toEqual({
         stateDescription: 'running',
         type: 'upload',
-        total: Infinity,
+        totalInterrogation: Infinity,
         interrogationCompleted: 0,
+        totalParadata: Infinity,
+        paradataCompleted: 0,
       })
     })
   })
@@ -419,25 +421,27 @@ describe('Reducer tests', () => {
     })
   })
 
-  describe('setUploadTotal', () => {
-    it('sets total correctly', () => {
+  describe('setUploadTotalInterrogation', () => {
+    it('sets totalInterrogation correctly', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
+        totalInterrogation: 0,
         interrogationCompleted: 0,
-        total: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
       }
 
       const newState = reducer(
         initialState,
-        actions.setUploadTotal({
-          total: 30,
+        actions.setUploadTotalInterrogation({
+          totalInterrogation: 30,
         }),
       )
 
       expect(newState).toEqual({
         ...initialState,
-        total: 30,
+        totalInterrogation: 30,
       })
     })
   })
@@ -447,8 +451,10 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
+        totalInterrogation: 0,
         interrogationCompleted: 0,
-        total: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
       }
 
       const newState = reducer(
@@ -463,13 +469,60 @@ describe('Reducer tests', () => {
     })
   })
 
+  describe('setUploadTotalParadata', () => {
+    it('sets totalParadata correctly', () => {
+      const initialState: State.Running.Uploading = {
+        stateDescription: 'running',
+        type: 'upload',
+        totalInterrogation: 0,
+        interrogationCompleted: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
+      }
+
+      const newState = reducer(
+        initialState,
+        actions.setUploadTotalParadata({
+          totalParadata: 30,
+        }),
+      )
+
+      expect(newState).toEqual({
+        ...initialState,
+        totalParadata: 30,
+      })
+    })
+  })
+
+  describe('uploadParadataCompleted', () => {
+    it('increments paradataCompleted correctly', () => {
+      const initialState: State.Running.Uploading = {
+        stateDescription: 'running',
+        type: 'upload',
+        totalInterrogation: 0,
+        interrogationCompleted: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
+      }
+
+      const newState = reducer(initialState, actions.uploadParadataCompleted())
+
+      expect(newState).toEqual({
+        ...initialState,
+        paradataCompleted: initialState.paradataCompleted + 1,
+      })
+    })
+  })
+
   describe('uploadError', () => {
     it('returns state with only stateDescription as "not running"', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
+        totalInterrogation: 0,
         interrogationCompleted: 0,
-        total: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
       }
 
       const newState = reducer(initialState, actions.uploadError())
@@ -483,8 +536,10 @@ describe('Reducer tests', () => {
       const initialState: State.Running.Uploading = {
         stateDescription: 'running',
         type: 'upload',
+        totalInterrogation: 0,
         interrogationCompleted: 0,
-        total: 0,
+        totalParadata: 0,
+        paradataCompleted: 0,
       }
 
       const newState = reducer(initialState, actions.uploadCompleted())

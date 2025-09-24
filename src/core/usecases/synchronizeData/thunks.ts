@@ -318,12 +318,18 @@ export const thunks = {
       })
 
       try {
+        /*
+         * Interrogations
+         */
+
         const prInterrogations = dataStore.getAllInterrogations()
         const interrogations = await prInterrogations
 
         if (interrogations) {
           dispatch(
-            actions.setUploadTotal({ total: interrogations.length ?? 0 }),
+            actions.setUploadTotalInterrogation({
+              totalInterrogation: interrogations.length ?? 0,
+            }),
           )
 
           const interrogationPromises = interrogations.map((interrogation) =>
@@ -366,6 +372,37 @@ export const thunks = {
           )
           await Promise.all(interrogationPromises)
         }
+
+        /*
+         * Paradata
+         */
+
+        const paradatas = await dataStore.getAllParadatas()
+        if (paradatas) {
+          dispatch(
+            actions.setUploadTotalParadata({
+              totalParadata: paradatas.length ?? 0,
+            }),
+          )
+
+          const paradataPromises = paradatas.map((paradata) =>
+            queenApi
+              .postParadata(paradata)
+              .then(() => dataStore.deleteParadata(paradata.idInterrogation))
+              .then(() => {
+                dispatch(actions.uploadParadataCompleted())
+              })
+              .catch((error) => {
+                console.error(
+                  `Error: Unable to upload paradata for interrogation ${paradata.idInterrogation}`,
+                  error,
+                )
+              }),
+          )
+
+          await Promise.all(paradataPromises)
+        }
+
         dispatch(actions.uploadCompleted())
         dispatch(thunks.download())
       } catch {

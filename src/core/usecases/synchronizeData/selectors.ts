@@ -84,7 +84,7 @@ const externalResourcesProgressCount = createSelector(
   },
 )
 
-const uploadProgress = createSelector(state, (state) => {
+const uploadingState = createSelector(state, (state) => {
   if (state.stateDescription !== 'running') {
     return undefined
   }
@@ -93,8 +93,27 @@ const uploadProgress = createSelector(state, (state) => {
     return undefined
   }
 
-  if (state.total === 0 && state.interrogationCompleted === 0) return 100
-  return (state.interrogationCompleted * 100) / state.total
+  return state
+})
+
+const uploadInterrogationProgress = createSelector(uploadingState, (state) => {
+  if (state === undefined) {
+    return undefined
+  }
+
+  if (state.totalInterrogation === 0 && state.interrogationCompleted === 0)
+    return 100
+  return (state.interrogationCompleted * 100) / state.totalInterrogation
+})
+
+const uploadParadataProgress = createSelector(uploadingState, (state) => {
+  if (state === undefined) {
+    return undefined
+  }
+
+  if (state.totalInterrogation === 0 && state.interrogationCompleted === 0)
+    return 100
+  return (state.interrogationCompleted * 100) / state.totalInterrogation
 })
 
 const main = createSelector(
@@ -104,7 +123,8 @@ const main = createSelector(
   surveyProgress,
   externalResourcesProgress,
   externalResourcesProgressCount,
-  uploadProgress,
+  uploadInterrogationProgress,
+  uploadParadataProgress,
   (
     state,
     interrogationProgress,
@@ -112,7 +132,8 @@ const main = createSelector(
     surveyProgress,
     externalResourcesProgress,
     externalResourcesProgressCount,
-    uploadProgress,
+    uploadInterrogationProgress,
+    uploadParadataProgress,
   ) => {
     switch (state.stateDescription) {
       case 'not running':
@@ -120,10 +141,12 @@ const main = createSelector(
       case 'running':
         switch (state.type) {
           case 'upload':
-            assert(uploadProgress !== undefined)
+            assert(uploadInterrogationProgress !== undefined)
+            assert(uploadParadataProgress !== undefined)
             return {
               isUploading: true as const,
-              uploadProgress,
+              uploadInterrogationProgress,
+              uploadParadataProgress,
             }
           case 'download':
             assert(interrogationProgress !== undefined)

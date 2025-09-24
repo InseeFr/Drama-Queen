@@ -20,8 +20,10 @@ export namespace State {
 
     export type Uploading = Common & {
       type: 'upload'
-      total: number
+      totalInterrogation: number
       interrogationCompleted: number
+      totalParadata: number
+      paradataCompleted: number
     }
 
     export type Downloading = Common & {
@@ -76,8 +78,10 @@ export const { reducer, actions } = createUsecaseActions({
         id<State.Running>({
           stateDescription: 'running',
           type: 'upload',
-          total: Infinity,
+          totalInterrogation: Infinity,
           interrogationCompleted: 0,
+          totalParadata: Infinity,
+          paradataCompleted: 0,
         }),
       ),
     updateDownloadTotalInterrogation: (
@@ -177,16 +181,34 @@ export const { reducer, actions } = createUsecaseActions({
         externalResourcesByQuestionnaireCompleted: 0,
       }
     },
-    setUploadTotal: (state, { payload }: { payload: { total: number } }) => {
-      const { total } = payload
+    setUploadTotalInterrogation: (
+      state,
+      { payload }: { payload: { totalInterrogation: number } },
+    ) => {
+      const { totalInterrogation } = payload
       assert(state.stateDescription === 'running' && state.type === 'upload')
-      return { ...state, total }
+      return { ...state, totalInterrogation }
     },
     uploadInterrogationCompleted: (state) => {
       assert(state.stateDescription === 'running' && state.type === 'upload')
       return {
         ...state,
         interrogationCompleted: state.interrogationCompleted + 1,
+      }
+    },
+    setUploadTotalParadata: (
+      state,
+      { payload }: { payload: { totalParadata: number } },
+    ) => {
+      const { totalParadata } = payload
+      assert(state.stateDescription === 'running' && state.type === 'upload')
+      return { ...state, totalParadata }
+    },
+    uploadParadataCompleted: (state) => {
+      assert(state.stateDescription === 'running' && state.type === 'upload')
+      return {
+        ...state,
+        paradataCompleted: state.paradataCompleted + 1,
       }
     },
     uploadError: (_state) => {

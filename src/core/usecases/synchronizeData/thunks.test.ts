@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { Interrogation } from '@/core/model'
+import {
+  TELEMETRY_EVENT_EXIT_SOURCE,
+  TELEMETRY_EVENT_TYPE,
+} from '@/constants/telemetry'
+import type { Interrogation, Paradata } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { LocalSyncStorage } from '@/core/ports/LocalSyncStorage'
 
@@ -17,6 +21,8 @@ const mockDataStore = {
   getAllInterrogations: vi.fn(),
   updateInterrogation: vi.fn(),
   deleteInterrogation: vi.fn(),
+  getAllParadatas: vi.fn(),
+  deleteParadata: vi.fn(),
 } as any as DataStore
 
 const mockQueenApi = {
@@ -27,6 +33,7 @@ const mockQueenApi = {
   putInterrogation: vi.fn(),
   postInterrogationInTemp: vi.fn(),
   getNomenclature: vi.fn(),
+  postParadata: vi.fn(),
 }
 
 const mockLocalSyncStorage = {
@@ -187,6 +194,8 @@ describe('upload thunk', () => {
     )
     vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
     vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+    // no paradata
+    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue([])
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
@@ -198,7 +207,9 @@ describe('upload thunk', () => {
     expect(uploadInterrogationCalls).toHaveLength(2)
 
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.setUploadTotal({ total: interrogations.length }),
+      actions.setUploadTotalInterrogation({
+        totalInterrogation: interrogations.length,
+      }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
 
@@ -207,7 +218,7 @@ describe('upload thunk', () => {
      * since it considers it has been called with [AsyncFunction (anonymous)]
      */
     expect(mockDispatch).toHaveBeenCalledWith(expect.any(Function))
-    expect(mockDispatch).toHaveBeenCalledTimes(6)
+    expect(mockDispatch).toHaveBeenCalledTimes(7)
   })
 
   it('should handle interrogation upload failure and retry posting to temp zone', async () => {
@@ -232,7 +243,7 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
-  it('should treat 423 response as a success', async () => {
+  it('should treat 423 response for interrogation as a success', async () => {
     const interrogation = { id: '1' }
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
@@ -260,7 +271,7 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
-  it('should handle unexpected errors', async () => {
+  it('should handle unexpected errors for interrogations', async () => {
     vi.mocked(mockDataStore.getAllInterrogations).mockRejectedValue(
       new Error('Unexpected error'),
     )
@@ -269,5 +280,104 @@ describe('upload thunk', () => {
 
     expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadError())
+  })
+
+  it('should upload paradatas successfully', async () => {
+    const paradatas: Paradata[] = [
+      {
+        idInterrogation: 'interro001',
+        events: [
+          {
+            idInterrogation: 'interro001',
+            type: TELEMETRY_EVENT_TYPE.INIT,
+            date: '133142424',
+          },
+          {
+            idInterrogation: 'interro001',
+            type: TELEMETRY_EVENT_TYPE.EXIT,
+            source: TELEMETRY_EVENT_EXIT_SOURCE.QUIT,
+            date: '199894200',
+          },
+        ],
+      },
+      {
+        idInterrogation: 'interro002',
+        events: [
+          {
+            idInterrogation: 'interro002',
+            type: TELEMETRY_EVENT_TYPE.INIT,
+            date: '129031420',
+          },
+          {
+            idInterrogation: 'interro002',
+            type: TELEMETRY_EVENT_TYPE.EXIT,
+            source: TELEMETRY_EVENT_EXIT_SOURCE.QUIT,
+            date: '174294290',
+          },
+        ],
+      },
+    ]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockQueenApi.postParadata).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteParadata).mockResolvedValue(undefined)
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.setUploadTotalParadata({ totalParadata: 2 }),
+    )
+    // every paradata has been sent to api
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[0])
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[1])
+
+    // every paradata is deleted in datastore after successful POST
+    expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(
+      paradatas[0].idInterrogation,
+    )
+    expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(
+      paradatas[1].idInterrogation,
+    )
+
+    // every paradata upload is completed
+    const uploadParadataCalls = mockDispatch.mock.calls.filter(
+      ([action]) => action.type === actions.uploadParadataCompleted().type,
+    )
+    expect(uploadParadataCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.setUploadTotalParadata({
+        totalParadata: paradatas.length,
+      }),
+    )
+    expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
+  })
+
+  it('should keep paradata when upload fails', async () => {
+    const paradatas: Paradata[] = [
+      {
+        idInterrogation: 'interro001',
+        events: [
+          {
+            idInterrogation: 'interro001',
+            type: TELEMETRY_EVENT_TYPE.INIT,
+            date: '133142424',
+          },
+        ],
+      },
+    ]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockQueenApi.postParadata).mockRejectedValue({
+      response: { status: 500 },
+    })
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[0])
+
+    // paradata is not deleted in datastore because POST failed
+    expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()
+    expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 })

@@ -81,6 +81,7 @@ export const translations: Translations<'fr'> = {
     synchronizationInProgress: 'Synchronisation en cours',
     downloadingData: 'Téléchargement des données...',
     interrogationsProgress: 'Unités enquêtées',
+    paradataProgress: 'Paradonnées',
     questionnairesProgress: 'Questionnaires',
     nomenclaturesProgress: 'Nomenclatures',
     externalResourcesProgress: 'Ressources externes',
