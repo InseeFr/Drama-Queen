@@ -36,6 +36,11 @@ export function createDataStore(): DataStore {
       }
     })
 
+  db.version(4).stores({
+    paradata: 'idInterrogation', // primary key is interrogation id, and no need migration of previous version
+    interrogation: 'id,data,stateData,personalization,comment,questionnaireId',
+  })
+
   return {
     updateInterrogation: (interrogation) => db.interrogation.put(interrogation),
     deleteInterrogation: (id) => db.interrogation.delete(id),
@@ -45,7 +50,21 @@ export function createDataStore(): DataStore {
         .toArray(),
     getInterrogation: (id) => db.interrogation.get(id),
     getAllParadatas: () => db.paradata.toArray(),
-    deleteParadata: (id) => db.paradata.delete(id),
-    getParadata: (id) => db.paradata.get(id),
+    deleteParadata: (interrogationId) => db.paradata.delete(interrogationId),
+    getParadata: (interrogationId) => db.paradata.get(interrogationId),
+    updateParadata: async (interrogationId, newEvents) => {
+      const existing = await db.paradata.get(interrogationId)
+      if (existing) {
+        await db.paradata.put({
+          idInterrogation: interrogationId,
+          events: [...existing.events, ...newEvents],
+        })
+      } else {
+        await db.paradata.put({
+          idInterrogation: interrogationId,
+          events: newEvents,
+        })
+      }
+    },
   }
 }

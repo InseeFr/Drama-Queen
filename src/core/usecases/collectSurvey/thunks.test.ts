@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { Interrogation, Questionnaire } from '@/core/model'
+import { TELEMETRY_EVENT_TYPE } from '@/constants/telemetry'
+import type { Interrogation, Paradata, Questionnaire } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import type { DataStore } from '@/core/ports/DataStore'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
@@ -40,6 +41,7 @@ const mockGetState = vi.fn()
 const mockDataStore = {
   getInterrogation: vi.fn(),
   updateInterrogation: vi.fn(),
+  updateParadata: vi.fn(),
 } as any as DataStore
 
 const mockQueenApi = {
@@ -230,5 +232,42 @@ describe('quit', () => {
     thunks.quit(interrogation)(mockDispatch, mockGetState, mockContext as any)
 
     expect(sendCloseEvent).toHaveBeenCalledWith(interrogation.id)
+  })
+})
+
+describe('addParadata', () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('should call updateParadata with the correct params', async () => {
+    const paradata: Paradata = {
+      idInterrogation: 'INTERRO001',
+      events: [
+        {
+          idInterrogation: 'INTERRO001',
+          date: '1893193180',
+          type: TELEMETRY_EVENT_TYPE.NEW_PAGE,
+          page: 'lunatic-page',
+          pageTag: '2',
+        },
+        {
+          idInterrogation: 'INTERRO001',
+          date: '893193181',
+          type: TELEMETRY_EVENT_TYPE.NEW_PAGE,
+          page: 'lunatic-page',
+          pageTag: '3',
+        },
+      ],
+    }
+
+    vi.mocked(mockDataStore.updateInterrogation)
+
+    thunks.addParadata(paradata)(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDataStore.updateParadata).toHaveBeenCalledWith(
+      paradata.idInterrogation,
+      paradata.events,
+    )
   })
 })
