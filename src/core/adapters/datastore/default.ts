@@ -20,7 +20,6 @@ export function createDataStore(): DataStore {
   // version 3 : replace surveyUnit by interrogation
   db.version(3)
     .stores({
-      paradata: '++id,idSU,events',
       interrogation:
         'id,data,stateData,personalization,comment,questionnaireId',
     })
@@ -36,9 +35,15 @@ export function createDataStore(): DataStore {
       }
     })
 
+  // version 4 : remove old paradata and surveyUnit tables
   db.version(4).stores({
-    paradata: 'idInterrogation', // primary key is interrogation id, and no need migration of previous version
-    interrogation: 'id,data,stateData,personalization,comment,questionnaireId',
+    paradata: null,
+    surveyUnit: null,
+  })
+
+  // version 5 : create paradata table with new schema
+  db.version(5).stores({
+    paradata: '++idInterrogation',
   })
 
   return {
