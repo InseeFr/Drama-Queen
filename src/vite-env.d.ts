@@ -9,6 +9,8 @@ type ImportMetaEnv = {
   VITE_OIDC_ISSUER: string
   VITE_OIDC_CLIENT_ID: string
   VITE_TELEMETRY_DISABLED: string
+  VITE_TELEMETRY_MAX_DELAY: string
+  VITE_TELEMETRY_MAX_LENGTH: string
   BASE_URL: string
   MODE: string
   DEV: boolean

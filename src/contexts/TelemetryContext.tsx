@@ -14,6 +14,7 @@ import type {
   TelemetryParadata,
 } from '@/core/model/telemetry'
 import { useBatch } from '@/hooks/useBatch'
+import { computeDataMaxLength, computeInactivityDelay } from '@/utils/telemetry'
 
 type TelemetryContextType = {
   isTelemetryDisabled: boolean
@@ -81,7 +82,11 @@ export function TelemetryProvider({
     [addParadata],
   )
 
-  const { addDatum, triggerTimeoutEvent } = useBatch(pushEvents)
+  const { addDatum, triggerTimeoutEvent } = useBatch(
+    pushEvents,
+    computeDataMaxLength(),
+    computeInactivityDelay(),
+  )
 
   /** Add the event to a batch mechanism. */
   const pushEvent = useCallback(

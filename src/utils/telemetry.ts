@@ -77,3 +77,29 @@ export function computeControlSkipEvent({
     type: TELEMETRY_EVENT_TYPE.CONTROL_SKIP,
   }
 }
+
+/**
+ * Compute batch parameters based on environment variable
+ * `VITE_TELEMETRY_MAX_LENGTH` for max data to send in one batch.
+ */
+export function computeDataMaxLength(): number | undefined {
+  const envVar = import.meta.env.VITE_TELEMETRY_MAX_LENGTH
+  if (envVar) {
+    const parsedEnvVar = parseInt(envVar, 10)
+    if (!isNaN(parsedEnvVar) && parsedEnvVar > 0) return parsedEnvVar
+  }
+  return undefined
+}
+
+/**
+ * Compute batch parameters based on environment variable
+ * `VITE_TELEMETRY_MAX_DELAY` for max delay to wait before sending a batch.
+ */
+export function computeInactivityDelay(): number | undefined {
+  const envVar = import.meta.env.VITE_TELEMETRY_MAX_DELAY
+  if (envVar) {
+    const parsedEnvVar = parseInt(envVar, 10)
+    if (!isNaN(parsedEnvVar) && parsedEnvVar > 0) return parsedEnvVar
+  }
+  return undefined
+}
