@@ -58,7 +58,12 @@ describe('Reducer tests', () => {
   })
 
   describe('runningUpload', () => {
-    it('sets initial state for upload', () => {
+    beforeEach(() => {
+      vi.resetModules()
+      vi.restoreAllMocks()
+    })
+
+    it('sets initial state for upload if telemetry is enabled', () => {
       const initialState: State.NotRunning = { stateDescription: 'not running' }
       const newState = reducer(initialState, actions.runningUpload())
 
@@ -68,6 +73,27 @@ describe('Reducer tests', () => {
         totalInterrogation: Infinity,
         interrogationCompleted: 0,
         totalParadata: Infinity,
+        paradataCompleted: 0,
+      })
+    })
+
+    it('sets initial state for upload if telemetry is disabled', async () => {
+      // override global mock value fir disabling telemetry
+      vi.doMock('@/core/constants', () => ({
+        IS_TELEMETRY_DISABLED: true,
+      }))
+      // Re-import after mocking
+      const { reducer, actions } = await import('./state')
+
+      const initialState: State.NotRunning = { stateDescription: 'not running' }
+      const newState = reducer(initialState, actions.runningUpload())
+
+      expect(newState).toEqual({
+        stateDescription: 'running',
+        type: 'upload',
+        totalInterrogation: Infinity,
+        interrogationCompleted: 0,
+        totalParadata: undefined,
         paradataCompleted: 0,
       })
     })

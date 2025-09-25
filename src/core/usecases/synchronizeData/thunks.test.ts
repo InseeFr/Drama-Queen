@@ -183,6 +183,14 @@ describe('download thunk', () => {
 })
 
 describe('upload thunk', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.restoreAllMocks()
+
+    // mock console.error to avoid useless logs during tests
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
   afterEach(() => {
     vi.clearAllMocks()
   })
@@ -378,6 +386,25 @@ describe('upload thunk', () => {
 
     // paradata is not deleted in datastore because POST failed
     expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()
+    expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
+  })
+
+  it('should skip paradata step when telemetry is disabled', async () => {
+    // override global mock value for disabling telemetry
+    vi.doMock('@/core/constants', () => ({
+      IS_TELEMETRY_DISABLED: true,
+    }))
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDataStore.getAllParadatas).not.toHaveBeenCalled()
+    expect(mockQueenApi.postParadata).not.toHaveBeenCalled()
+    expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()
+
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 })

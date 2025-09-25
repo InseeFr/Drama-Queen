@@ -111,9 +111,13 @@ const uploadParadataProgress = createSelector(uploadingState, (state) => {
     return undefined
   }
 
-  if (state.totalInterrogation === 0 && state.interrogationCompleted === 0)
-    return 100
-  return (state.interrogationCompleted * 100) / state.totalInterrogation
+  // if total of paradata is undefined (only happening when telemetry is disabled), we don't show the progress bar
+  if (state.totalParadata === undefined) {
+    return undefined
+  }
+
+  if (state.totalParadata === 0 && state.paradataCompleted === 0) return 100
+  return (state.paradataCompleted * 100) / state.totalParadata
 })
 
 const main = createSelector(
@@ -142,7 +146,6 @@ const main = createSelector(
         switch (state.type) {
           case 'upload':
             assert(uploadInterrogationProgress !== undefined)
-            assert(uploadParadataProgress !== undefined)
             return {
               isUploading: true as const,
               uploadInterrogationProgress,

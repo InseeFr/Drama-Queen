@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react'
 
+import { IS_TELEMETRY_DISABLED } from '@/core/constants'
 import type {
   DefaultParadataValues,
   Paradata,
@@ -62,8 +63,6 @@ export function TelemetryProvider({
   children: React.ReactElement
   addParadata: (paradata: Paradata) => Promise<void>
 }>) {
-  const isTelemetryDisabled = import.meta.env.VITE_TELEMETRY_DISABLED === 'true'
-
   const [defaultValues, setDefaultValues] = useState<DefaultParadataValues>({
     idInterrogation: '',
     userAgent: navigator.userAgent,
@@ -109,12 +108,12 @@ export function TelemetryProvider({
 
   const telemetryContextValues = useMemo(
     () => ({
-      isTelemetryDisabled,
+      isTelemetryDisabled: IS_TELEMETRY_DISABLED,
       pushEvent,
       setDefaultValues: updateDefaultValues,
       triggerBatchTelemetryCallback: triggerTimeoutEvent,
     }),
-    [isTelemetryDisabled, pushEvent, triggerTimeoutEvent, updateDefaultValues],
+    [pushEvent, triggerTimeoutEvent, updateDefaultValues],
   )
 
   return (

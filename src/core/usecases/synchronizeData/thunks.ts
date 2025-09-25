@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 
 import type { Thunks } from '@/core/bootstrap'
-import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
+import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_DISABLED } from '@/core/constants'
 import type { Questionnaire } from '@/core/model'
 import {
   getExternalQuestionnaireFiltered,
@@ -377,30 +377,32 @@ export const thunks = {
          * Paradata
          */
 
-        const paradatas = await dataStore.getAllParadatas()
-        if (paradatas) {
-          dispatch(
-            actions.setUploadTotalParadata({
-              totalParadata: paradatas.length ?? 0,
-            }),
-          )
-
-          const paradataPromises = paradatas.map((paradata) =>
-            queenApi
-              .postParadata(paradata)
-              .then(() => dataStore.deleteParadata(paradata.idInterrogation))
-              .then(() => {
-                dispatch(actions.uploadParadataCompleted())
-              })
-              .catch((error) => {
-                console.error(
-                  `Error: Unable to upload paradata for interrogation ${paradata.idInterrogation}`,
-                  error,
-                )
+        if (!IS_TELEMETRY_DISABLED) {
+          const paradatas = await dataStore.getAllParadatas()
+          if (paradatas) {
+            dispatch(
+              actions.setUploadTotalParadata({
+                totalParadata: paradatas.length ?? 0,
               }),
-          )
+            )
 
-          await Promise.all(paradataPromises)
+            const paradataPromises = paradatas.map((paradata) =>
+              queenApi
+                .postParadata(paradata)
+                .then(() => dataStore.deleteParadata(paradata.idInterrogation))
+                .then(() => {
+                  dispatch(actions.uploadParadataCompleted())
+                })
+                .catch((error) => {
+                  console.error(
+                    `Error: Unable to upload paradata for interrogation ${paradata.idInterrogation}`,
+                    error,
+                  )
+                }),
+            )
+
+            await Promise.all(paradataPromises)
+          }
         }
 
         dispatch(actions.uploadCompleted())

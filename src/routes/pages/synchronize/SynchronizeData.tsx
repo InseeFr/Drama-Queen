@@ -55,10 +55,15 @@ export function SynchronizeData() {
               progress: uploadInterrogationProgress,
               label: t('interrogationsProgress'),
             },
-            {
-              progress: uploadParadataProgress,
-              label: t('paradataProgress'),
-            },
+            // render paradata progress bar only if telemetry is enabled
+            ...(uploadParadataProgress !== undefined
+              ? [
+                  {
+                    progress: uploadParadataProgress,
+                    label: t('paradataProgress'),
+                  },
+                ]
+              : []),
           ]}
           syncStepTitle={t('uploadingData')}
         />
