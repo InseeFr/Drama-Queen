@@ -20,7 +20,6 @@ export function createDataStore(): DataStore {
   // version 3 : replace surveyUnit by interrogation
   db.version(3)
     .stores({
-      paradata: '++id,idSU,events',
       interrogation:
         'id,data,stateData,personalization,comment,questionnaireId',
     })
@@ -36,6 +35,17 @@ export function createDataStore(): DataStore {
       }
     })
 
+  // version 4 : remove old paradata and surveyUnit tables
+  db.version(4).stores({
+    paradata: null,
+    surveyUnit: null,
+  })
+
+  // version 5 : create paradata table with new schema
+  db.version(5).stores({
+    paradata: '++idInterrogation',
+  })
+
   return {
     updateInterrogation: (interrogation) => db.interrogation.put(interrogation),
     deleteInterrogation: (id) => db.interrogation.delete(id),
@@ -45,7 +55,21 @@ export function createDataStore(): DataStore {
         .toArray(),
     getInterrogation: (id) => db.interrogation.get(id),
     getAllParadatas: () => db.paradata.toArray(),
-    deleteParadata: (id) => db.paradata.delete(id),
-    getParadata: (id) => db.paradata.get(id),
+    deleteParadata: (interrogationId) => db.paradata.delete(interrogationId),
+    getParadata: (interrogationId) => db.paradata.get(interrogationId),
+    updateParadata: async (interrogationId, newEvents) => {
+      const existing = await db.paradata.get(interrogationId)
+      if (existing) {
+        await db.paradata.put({
+          idInterrogation: interrogationId,
+          events: [...existing.events, ...newEvents],
+        })
+      } else {
+        await db.paradata.put({
+          idInterrogation: interrogationId,
+          events: newEvents,
+        })
+      }
+    },
   }
 }

@@ -1,4 +1,4 @@
-import type { Interrogation, Paradata } from '@/core/model'
+import type { Interrogation, Paradata, TelemetryEvent } from '@/core/model'
 
 export type DataStore = {
   updateInterrogation: (interrogation: Interrogation) => Promise<string>
@@ -8,4 +8,8 @@ export type DataStore = {
   getAllParadatas: () => Promise<Paradata[] | undefined>
   deleteParadata: (id: string) => Promise<void>
   getParadata: (id: string) => Promise<Paradata | undefined>
+  updateParadata: (
+    interrogationId: string,
+    newEvents: TelemetryEvent[],
+  ) => Promise<void>
 }

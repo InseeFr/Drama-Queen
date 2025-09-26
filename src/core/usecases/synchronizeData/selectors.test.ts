@@ -47,8 +47,10 @@ describe('selectors', () => {
       synchronizeData: {
         stateDescription: 'running',
         type: 'upload',
-        total: 200,
+        totalInterrogation: 200,
         interrogationCompleted: 50,
+        totalParadata: 200,
+        paradataCompleted: 50,
       },
     }
 
@@ -58,7 +60,8 @@ describe('selectors', () => {
 
     expect(result).toEqual({
       isUploading: true,
-      uploadProgress: 25,
+      uploadInterrogationProgress: 25,
+      uploadParadataProgress: 25,
     })
   })
 
