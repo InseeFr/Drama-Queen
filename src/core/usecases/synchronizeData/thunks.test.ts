@@ -290,6 +290,48 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadError())
   })
 
+  it('should delete paradata without sending it when interrogation upload fails', async () => {
+    const interrogation = { id: '1' }
+    const paradatas: Paradata[] = [
+      {
+        idInterrogation: '1',
+        events: [
+          {
+            idInterrogation: '1',
+            type: TELEMETRY_EVENT_TYPE.INIT,
+            date: '133142424',
+          },
+        ],
+      },
+    ]
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
+      interrogation,
+    ] as Interrogation[])
+    vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
+      response: { status: 400 },
+    })
+    vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockDataStore.deleteParadata).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    // The post to temp should happen
+    expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
+      interrogation,
+    )
+    // The paradata for this interrogation should be deleted
+    expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(interrogation.id)
+
+    // The paradata for this interrogation should not have been sent
+    expect(mockQueenApi.postParadata).not.toHaveBeenCalled()
+
+    // Upload completion dispatched
+    expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
+  })
+
   it('should upload paradatas successfully', async () => {
     const paradatas: Paradata[] = [
       {
@@ -401,7 +443,6 @@ describe('upload thunk', () => {
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
-    expect(mockDataStore.getAllParadatas).not.toHaveBeenCalled()
     expect(mockQueenApi.postParadata).not.toHaveBeenCalled()
     expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()
 

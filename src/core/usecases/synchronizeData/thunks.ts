@@ -322,8 +322,10 @@ export const thunks = {
          * Interrogations
          */
 
-        const prInterrogations = dataStore.getAllInterrogations()
-        const interrogations = await prInterrogations
+        const interrogations = await dataStore.getAllInterrogations()
+        const paradatas = await dataStore.getAllParadatas()
+        // Track deleted paradata IDs
+        const deletedParadataIds = new Set<string>()
 
         if (interrogations) {
           dispatch(
@@ -346,11 +348,13 @@ export const thunks = {
                 ) {
                   return queenApi
                     .postInterrogationInTemp(interrogation)
-                    .then(() =>
+                    .then(() => {
                       localSyncStorage.addIdToInterrogationsInTempZone(
                         interrogation.id,
-                      ),
-                    )
+                      )
+                      dataStore.deleteParadata(interrogation.id)
+                      deletedParadataIds.add(interrogation.id)
+                    })
                     .catch((postError: Error) => {
                       console.error(
                         'Error: Unable to post interrogation in tempZone',
@@ -378,15 +382,19 @@ export const thunks = {
          */
 
         if (!IS_TELEMETRY_DISABLED) {
-          const paradatas = await dataStore.getAllParadatas()
-          if (paradatas) {
+          // filter paradatas to only send those that weren’t deleted before
+          const paradatasToUpload = paradatas?.filter(
+            (paradata) => !deletedParadataIds.has(paradata.idInterrogation),
+          )
+
+          if (paradatasToUpload) {
             dispatch(
               actions.setUploadTotalParadata({
-                totalParadata: paradatas.length ?? 0,
+                totalParadata: paradatasToUpload.length ?? 0,
               }),
             )
 
-            const paradataPromises = paradatas.map((paradata) =>
+            const paradataPromises = paradatasToUpload.map((paradata) =>
               queenApi
                 .postParadata(paradata)
                 .then(() => dataStore.deleteParadata(paradata.idInterrogation))
