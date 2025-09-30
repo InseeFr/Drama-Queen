@@ -58,18 +58,14 @@ export function createDataStore(): DataStore {
     deleteParadata: (interrogationId) => db.paradata.delete(interrogationId),
     getParadata: (interrogationId) => db.paradata.get(interrogationId),
     updateParadata: async (interrogationId, newEvents) => {
+      // check if a paradata already exists in datastore for this interrogation
       const existing = await db.paradata.get(interrogationId)
-      if (existing) {
-        await db.paradata.put({
-          idInterrogation: interrogationId,
-          events: [...existing.events, ...newEvents],
-        })
-      } else {
-        await db.paradata.put({
-          idInterrogation: interrogationId,
-          events: newEvents,
-        })
-      }
+      // if paradata already exists, we merge the new events into the existing events table
+      const events = existing ? [...existing.events, ...newEvents] : newEvents
+      await db.paradata.put({
+        idInterrogation: interrogationId,
+        events: events,
+      })
     },
   }
 }
