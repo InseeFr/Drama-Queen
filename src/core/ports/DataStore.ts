@@ -5,7 +5,7 @@ export type DataStore = {
   deleteInterrogation: (id: string) => Promise<void>
   getAllInterrogations: () => Promise<Interrogation[] | undefined>
   getInterrogation: (id: string) => Promise<Interrogation | undefined>
-  getAllParadatas: () => Promise<Paradata[] | undefined>
+  getAllParadata: () => Promise<Paradata[] | undefined>
   deleteParadata: (id: string) => Promise<void>
   getParadata: (id: string) => Promise<Paradata | undefined>
   updateParadata: (

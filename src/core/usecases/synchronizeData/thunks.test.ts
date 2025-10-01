@@ -21,7 +21,7 @@ const mockDataStore = {
   getAllInterrogations: vi.fn(),
   updateInterrogation: vi.fn(),
   deleteInterrogation: vi.fn(),
-  getAllParadatas: vi.fn(),
+  getAllParadata: vi.fn(),
   deleteParadata: vi.fn(),
 } as any as DataStore
 
@@ -203,7 +203,7 @@ describe('upload thunk', () => {
     vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
     vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
     // no paradata
-    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue([])
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue([])
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
@@ -292,7 +292,7 @@ describe('upload thunk', () => {
 
   it('should delete paradata without sending it when interrogation upload fails', async () => {
     const interrogation = { id: '1' }
-    const paradatas: Paradata[] = [
+    const allParadata: Paradata[] = [
       {
         idInterrogation: '1',
         events: [
@@ -312,7 +312,7 @@ describe('upload thunk', () => {
       response: { status: 400 },
     })
     vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue(allParadata)
     vi.mocked(mockDataStore.deleteParadata).mockResolvedValue(undefined)
     vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
 
@@ -332,8 +332,8 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
-  it('should upload paradatas successfully', async () => {
-    const paradatas: Paradata[] = [
+  it('should upload all paradata successfully', async () => {
+    const allParadata: Paradata[] = [
       {
         idInterrogation: 'interro001',
         events: [
@@ -368,7 +368,7 @@ describe('upload thunk', () => {
       },
     ]
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
-    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue(allParadata)
     vi.mocked(mockQueenApi.postParadata).mockResolvedValue(undefined)
     vi.mocked(mockDataStore.deleteParadata).mockResolvedValue(undefined)
 
@@ -378,15 +378,15 @@ describe('upload thunk', () => {
       actions.setUploadTotalParadata({ totalParadata: 2 }),
     )
     // every paradata has been sent to api
-    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[0])
-    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[1])
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(allParadata[0])
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(allParadata[1])
 
     // every paradata is deleted in datastore after successful POST
     expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(
-      paradatas[0].idInterrogation,
+      allParadata[0].idInterrogation,
     )
     expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(
-      paradatas[1].idInterrogation,
+      allParadata[1].idInterrogation,
     )
 
     // every paradata upload is completed
@@ -397,14 +397,14 @@ describe('upload thunk', () => {
 
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.setUploadTotalParadata({
-        totalParadata: paradatas.length,
+        totalParadata: allParadata.length,
       }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 
   it('should keep paradata when upload fails', async () => {
-    const paradatas: Paradata[] = [
+    const allParadata: Paradata[] = [
       {
         idInterrogation: 'interro001',
         events: [
@@ -417,14 +417,14 @@ describe('upload thunk', () => {
       },
     ]
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
-    vi.mocked(mockDataStore.getAllParadatas).mockResolvedValue(paradatas)
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue(allParadata)
     vi.mocked(mockQueenApi.postParadata).mockRejectedValue({
       response: { status: 500 },
     })
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
-    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(paradatas[0])
+    expect(mockQueenApi.postParadata).toHaveBeenCalledWith(allParadata[0])
 
     // paradata is not deleted in datastore because POST failed
     expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()

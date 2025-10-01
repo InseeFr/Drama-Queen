@@ -54,7 +54,7 @@ export function createDataStore(): DataStore {
         .filter(({ id }) => !id.startsWith(mockPrefixIdInterrogation))
         .toArray(),
     getInterrogation: (id) => db.interrogation.get(id),
-    getAllParadatas: () => db.paradata.toArray(),
+    getAllParadata: () => db.paradata.toArray(),
     deleteParadata: (interrogationId) => db.paradata.delete(interrogationId),
     getParadata: (interrogationId) => db.paradata.get(interrogationId),
     updateParadata: async (interrogationId, newEvents) => {

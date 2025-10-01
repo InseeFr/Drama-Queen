@@ -323,7 +323,7 @@ export const thunks = {
          */
 
         const interrogations = await dataStore.getAllInterrogations()
-        const paradatas = await dataStore.getAllParadatas()
+        const allParadata = await dataStore.getAllParadata()
         // Track deleted paradata IDs
         const deletedParadataIds = new Set<string>()
 
@@ -382,19 +382,19 @@ export const thunks = {
          */
 
         if (!IS_TELEMETRY_DISABLED) {
-          // filter paradatas to only send those that weren’t deleted before
-          const paradatasToUpload = paradatas?.filter(
+          // filter allParadata to only send those that weren’t deleted before
+          const paradataToUpload = allParadata?.filter(
             (paradata) => !deletedParadataIds.has(paradata.idInterrogation),
           )
 
-          if (paradatasToUpload) {
+          if (paradataToUpload) {
             dispatch(
               actions.setUploadTotalParadata({
-                totalParadata: paradatasToUpload.length ?? 0,
+                totalParadata: paradataToUpload.length ?? 0,
               }),
             )
 
-            const paradataPromises = paradatasToUpload.map((paradata) =>
+            const paradataPromises = paradataToUpload.map((paradata) =>
               queenApi
                 .postParadata(paradata)
                 .then(() => dataStore.deleteParadata(paradata.idInterrogation))

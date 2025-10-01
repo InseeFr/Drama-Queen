@@ -83,9 +83,9 @@ Chaque étape de la synchronisation est suivie par des actions Redux pour permet
   - Supprime l’interrogation locale après envoi (succès ou zone temporaire).
   - Déclenche l’action de progression.
 
-#### c. Envoi des paradatas (si la télémétrie n’est pas désactivée)
+#### c. Envoi des paradata (si la télémétrie n’est pas désactivée)
 
-- Récupère tous les paradatas locaux non supprimés.
+- Récupère tous les paradata locaux non supprimés.
 - Pour chaque paradata :
   - Tente de l’envoyer via l’API.
   - Supprime le paradata local après envoi.
@@ -115,7 +115,7 @@ Chaque étape de la synchronisation est suivie par des actions Redux pour permet
 - La synchronisation est robuste : la plupart des erreurs sont loggées et n’arrêtent pas le processus, sauf cas critiques.
 - Les actions Redux permettent de suivre la progression et l’état de la synchronisation.
 - Les interrogations non envoyées sont placées en zone temporaire pour une tentative ultérieure.
-- Les paradatas sont envoyés uniquement si la télémétrie est activée.
+- Les paradata sont envoyés uniquement si la télémétrie est activée.
 
 ---
 
