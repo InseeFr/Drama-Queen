@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 
 import type { Thunks } from '@/core/bootstrap'
-import { EXTERNAL_RESOURCES_URL } from '@/core/constants'
+import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_DISABLED } from '@/core/constants'
 import type { Questionnaire } from '@/core/model'
 import {
   getExternalQuestionnaireFiltered,
@@ -318,12 +318,20 @@ export const thunks = {
       })
 
       try {
-        const prInterrogations = dataStore.getAllInterrogations()
-        const interrogations = await prInterrogations
+        /*
+         * Interrogations
+         */
+
+        const interrogations = await dataStore.getAllInterrogations()
+        const allParadata = await dataStore.getAllParadata()
+        // Track deleted paradata IDs
+        const deletedParadataIds = new Set<string>()
 
         if (interrogations) {
           dispatch(
-            actions.setUploadTotal({ total: interrogations.length ?? 0 }),
+            actions.setUploadTotalInterrogation({
+              totalInterrogation: interrogations.length ?? 0,
+            }),
           )
 
           const interrogationPromises = interrogations.map((interrogation) =>
@@ -340,11 +348,13 @@ export const thunks = {
                 ) {
                   return queenApi
                     .postInterrogationInTemp(interrogation)
-                    .then(() =>
+                    .then(() => {
                       localSyncStorage.addIdToInterrogationsInTempZone(
                         interrogation.id,
-                      ),
-                    )
+                      )
+                      dataStore.deleteParadata(interrogation.id)
+                      deletedParadataIds.add(interrogation.id)
+                    })
                     .catch((postError: Error) => {
                       console.error(
                         'Error: Unable to post interrogation in tempZone',
@@ -366,6 +376,43 @@ export const thunks = {
           )
           await Promise.all(interrogationPromises)
         }
+
+        /*
+         * Paradata
+         */
+
+        if (!IS_TELEMETRY_DISABLED) {
+          // filter allParadata to only send those that weren’t deleted before
+          const paradataToUpload = allParadata?.filter(
+            (paradata) => !deletedParadataIds.has(paradata.idInterrogation),
+          )
+
+          if (paradataToUpload) {
+            dispatch(
+              actions.setUploadTotalParadata({
+                totalParadata: paradataToUpload.length ?? 0,
+              }),
+            )
+
+            const paradataPromises = paradataToUpload.map((paradata) =>
+              queenApi
+                .postParadata(paradata)
+                .then(() => dataStore.deleteParadata(paradata.idInterrogation))
+                .then(() => {
+                  dispatch(actions.uploadParadataCompleted())
+                })
+                .catch((error) => {
+                  console.error(
+                    `Error: Unable to upload paradata for interrogation ${paradata.idInterrogation}`,
+                    error,
+                  )
+                }),
+            )
+
+            await Promise.all(paradataPromises)
+          }
+        }
+
         dispatch(actions.uploadCompleted())
         dispatch(thunks.download())
       } catch {

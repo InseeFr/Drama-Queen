@@ -9,7 +9,6 @@ vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
       collectSurvey: {
-        retrieveQuestionnaireId: vi.fn(),
         loader: vi.fn(),
       },
     },

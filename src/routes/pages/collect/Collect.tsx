@@ -1,4 +1,5 @@
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
+import { TelemetryProvider } from '@/contexts/TelemetryContext'
 import { useCore } from '@/core'
 import type { collectLoader } from '@/routes/routing/loader'
 import { useLoaderData } from '@/routes/routing/utils'
@@ -11,6 +12,7 @@ export function Collect() {
 
   const {
     collectSurvey: {
+      addParadata,
       getReferentiel,
       changePage,
       changeInterrogationState,
@@ -19,16 +21,18 @@ export function Collect() {
   } = useCore().functions
 
   return (
-    <Orchestrator
-      initialPage={loaderData.page}
-      source={loaderData.questionnaire}
-      interrogation={loaderData.interrogation}
-      readonly={false}
-      onQuit={quit}
-      onDefinitiveQuit={quit}
-      onChangePage={changePage}
-      getReferentiel={getReferentiel}
-      onChangeInterrogationState={changeInterrogationState}
-    />
+    <TelemetryProvider addParadata={addParadata}>
+      <Orchestrator
+        initialPage={loaderData.page}
+        source={loaderData.questionnaire}
+        interrogation={loaderData.interrogation}
+        readonly={false}
+        onQuit={quit}
+        onDefinitiveQuit={quit}
+        onChangePage={changePage}
+        getReferentiel={getReferentiel}
+        onChangeInterrogationState={changeInterrogationState}
+      />
+    </TelemetryProvider>
   )
 }

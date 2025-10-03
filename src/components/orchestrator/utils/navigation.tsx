@@ -17,8 +17,8 @@ type UseNavigationButtonsProps = {
   hasPageResponse: () => boolean
   goPreviousPage: GoPreviousPage
   goNextPage: GoNextPage
-  quit: () => void
-  definitiveQuit: () => void
+  quit: () => Promise<void>
+  definitiveQuit: () => Promise<void>
 }
 
 export function computeNavigationButtonsProps({

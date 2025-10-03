@@ -1,0 +1,54 @@
+import '@testing-library/jest-dom'
+import { renderHook } from '@testing-library/react'
+
+import { computeInitEvent } from '@/utils/telemetry'
+
+import { TelemetryContext, useTelemetry } from './TelemetryContext'
+
+describe('Telemetry context', () => {
+  test('push events', () => {
+    const pushEvent = vi.fn()
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <TelemetryContext.Provider
+        value={{
+          isTelemetryDisabled: false,
+          pushEvent,
+          setDefaultValues: () => {},
+        }}
+      >
+        {children}
+      </TelemetryContext.Provider>
+    )
+
+    const { result } = renderHook(() => useTelemetry(), { wrapper })
+
+    const myEvent = computeInitEvent()
+    result.current.pushEvent(myEvent)
+
+    expect(pushEvent).toHaveBeenCalledWith(myEvent)
+  })
+
+  test('set default values', () => {
+    const mock = vi.fn()
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <TelemetryContext.Provider
+        value={{
+          isTelemetryDisabled: false,
+          pushEvent: () => {},
+          setDefaultValues: mock,
+        }}
+      >
+        {children}
+      </TelemetryContext.Provider>
+    )
+
+    const { result } = renderHook(() => useTelemetry(), { wrapper })
+
+    const myValues = { idInterrogation: 'abc' }
+    result.current.setDefaultValues(myValues)
+
+    expect(mock).toHaveBeenCalledWith(myValues)
+  })
+})

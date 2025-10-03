@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 
+import { TELEMETRY_EVENT_TYPE } from '@/constants/telemetry'
+
 import { useControls } from './useControls'
 
 describe('Use controls', () => {
@@ -22,6 +24,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -58,6 +61,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -92,6 +96,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -127,6 +132,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -158,6 +164,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -196,6 +203,7 @@ describe('Use controls', () => {
         goNextPage: vi.fn(),
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
+        pushEvent: vi.fn(),
       }),
     )
 
@@ -261,5 +269,88 @@ describe('Use controls', () => {
 
     expect(result.current.isBlocking).toBeFalsy()
     expect(result.current.activeErrors).toBeUndefined()
+  })
+
+  test('sends telemetry event for blocking errors', async () => {
+    const compileControlsMock = vi.fn()
+    const pushEventMock = vi.fn()
+
+    compileControlsMock.mockReturnValueOnce({
+      currentErrors: {
+        Q1: [
+          { id: 'id1', criticality: 'ERROR', errorMessage: 'blocking error' },
+          { id: 'id2', criticality: 'ERROR', errorMessage: 'blocking error' },
+        ],
+        Q2: [
+          { id: 'id3', criticality: 'ERROR', errorMessage: 'blocking error' },
+        ],
+      },
+    })
+
+    const { result } = renderHook(() =>
+      useControls({
+        compileControls: compileControlsMock,
+        goNextPage: vi.fn(),
+        goPreviousPage: vi.fn(),
+        goToPage: vi.fn(),
+        pushEvent: pushEventMock,
+        isTelemetryInitialized: true, // ensure telemetry is active
+      }),
+    )
+
+    act(() => result.current.handleNextPage())
+
+    expect(result.current.isBlocking).toBeTruthy()
+    expect(pushEventMock).toHaveBeenCalledTimes(1)
+    expect(pushEventMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: TELEMETRY_EVENT_TYPE.CONTROL,
+        controlIds: ['Q1', 'Q2'], // ids of current errors
+      }),
+    )
+  })
+
+  test('sends telemetry event when a warning is skipped', async () => {
+    const compileControlsMock = vi.fn()
+    const pushEventMock = vi.fn()
+    const goNextPageMock = vi.fn()
+
+    const { result } = renderHook(() =>
+      useControls({
+        compileControls: compileControlsMock,
+        goNextPage: goNextPageMock,
+        goPreviousPage: vi.fn(),
+        goToPage: vi.fn(),
+        pushEvent: pushEventMock,
+        isTelemetryInitialized: true, // ensure telemetry is active
+      }),
+    )
+
+    // First time, triggers warning control
+    compileControlsMock.mockReturnValueOnce({
+      currentErrors: {
+        Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+      },
+    })
+
+    act(() => result.current.handleNextPage())
+
+    expect(pushEventMock).not.toHaveBeenCalled() // warning display does not send "skip" event
+
+    // Second time, same warning triggers skip
+    compileControlsMock.mockReturnValueOnce({
+      currentErrors: {
+        Q1: [{ id: 'id1', criticality: 'WARN', errorMessage: 'warning' }],
+      },
+    })
+    act(() => result.current.handleNextPage())
+
+    expect(pushEventMock).toHaveBeenCalledTimes(1)
+    expect(pushEventMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: TELEMETRY_EVENT_TYPE.CONTROL_SKIP,
+        controlIds: ['Q1'],
+      }),
+    )
   })
 })

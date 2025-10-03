@@ -19,7 +19,8 @@ export function SynchronizeData() {
     interrogationProgress,
     externalResourcesProgress,
     externalResourcesProgressCount,
-    uploadProgress,
+    uploadInterrogationProgress,
+    uploadParadataProgress,
   } = useCoreState('synchronizeData', 'main')
 
   const { synchronizeData } = useCore().functions
@@ -51,8 +52,18 @@ export function SynchronizeData() {
         <LoadingDisplay
           progressBars={[
             {
-              progress: uploadProgress,
+              progress: uploadInterrogationProgress,
+              label: t('interrogationsProgress'),
             },
+            // render paradata progress bar only if telemetry is enabled
+            ...(uploadParadataProgress !== undefined
+              ? [
+                  {
+                    progress: uploadParadataProgress,
+                    label: t('paradataProgress'),
+                  },
+                ]
+              : []),
           ]}
           syncStepTitle={t('uploadingData')}
         />
