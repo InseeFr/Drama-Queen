@@ -1,14 +1,14 @@
 import { fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ShortCut } from '@/components/ui/ShortCut'
-import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
+import { SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
 import { TestWrapper } from '@/tests/TestWrapper'
 
+import { useShortcut } from '../hooks/useShortcut'
 import { PrevNext } from './PrevNext'
 
-vi.mock('@/components/ui/ShortCut', () => ({
-  ShortCut: vi.fn(),
+vi.mock('../hooks/useShortcut', () => ({
+  useShortcut: vi.fn(),
 }))
 
 vi.mock('@/i18n', () => ({
@@ -87,7 +87,7 @@ describe('PrevNext Component', () => {
     expect(onNextMock).toHaveBeenCalledTimes(1)
   })
 
-  it('renders ShortCut component for enabled buttons with correct key', () => {
+  it('enables shortcut for previous if enabled, with correct key', () => {
     render(
       <TestWrapper>
         <PrevNext
@@ -99,26 +99,14 @@ describe('PrevNext Component', () => {
       </TestWrapper>,
     )
 
-    // renders ShortCut for previous button
-    expect(ShortCut).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shortCutKey: SHORTCUT_PREVIOUS,
-        onClickMethod: onPreviousMock,
-      }),
-      {},
-    )
-
-    // renders ShortCut for next button
-    expect(ShortCut).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shortCutKey: SHORTCUT_NEXT,
-        onClickMethod: onNextMock,
-      }),
-      {},
+    expect(useShortcut).toHaveBeenCalledWith(
+      SHORTCUT_PREVIOUS,
+      onPreviousMock,
+      true,
     )
   })
 
-  it('does not render ShortCut component for disabled buttons', () => {
+  it('does not enable shortcut for previous if disabled', () => {
     render(
       <TestWrapper>
         <PrevNext
@@ -130,6 +118,10 @@ describe('PrevNext Component', () => {
       </TestWrapper>,
     )
 
-    expect(ShortCut).not.toHaveBeenCalled()
+    expect(useShortcut).toHaveBeenCalledWith(
+      SHORTCUT_PREVIOUS,
+      onPreviousMock,
+      false,
+    )
   })
 })
