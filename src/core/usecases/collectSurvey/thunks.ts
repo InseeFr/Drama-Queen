@@ -1,5 +1,5 @@
 import type { Thunks } from '@/core/bootstrap'
-import type { Interrogation } from '@/core/model'
+import type { Interrogation, Paradata } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
 import { getTranslation } from '@/i18n'
@@ -91,5 +91,11 @@ export const thunks = {
 
       // send event for closing Queen
       sendCloseEvent(interrogation.id)
+    },
+  addParadata:
+    (paradata: Paradata) =>
+    async (...args) => {
+      const [, , { dataStore }] = args
+      await dataStore.updateParadata(paradata.idInterrogation, paradata.events)
     },
 } satisfies Thunks

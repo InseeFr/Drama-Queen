@@ -2,7 +2,9 @@ import type { LunaticError } from '@inseefr/lunatic/use-lunatic/type'
 
 import { useState } from 'react'
 
+import type { TelemetryParadata } from '@/core/model'
 import type { CompileControls, GoToPage } from '@/models/lunaticType'
+import { computeControlEvent, computeControlSkipEvent } from '@/utils/telemetry'
 
 import {
   ErrorType,
@@ -17,6 +19,8 @@ type useControlsProps = {
   goNextPage: () => void
   goPreviousPage: () => void
   goToPage: GoToPage
+  isTelemetryInitialized?: boolean
+  pushEvent: (e: TelemetryParadata) => void | Promise<boolean>
 }
 
 /**
@@ -30,6 +34,8 @@ export function useControls({
   goNextPage,
   goPreviousPage,
   goToPage,
+  isTelemetryInitialized = false,
+  pushEvent,
 }: Readonly<useControlsProps>) {
   const [activeErrors, setActiveErrors] = useState<
     Record<string, LunaticError[]> | undefined
@@ -53,6 +59,13 @@ export function useControls({
     const errorType = computeErrorType(newErrors)
     switch (errorType) {
       case ErrorType.BLOCKING:
+        if (isTelemetryInitialized) {
+          pushEvent(
+            computeControlEvent({
+              controlIds: Object.keys(newErrors!),
+            }),
+          )
+        }
         // If error is blocking we prevent further navigation no matter what
         setIsBlocking(true)
         setActiveErrors(newErrors)
@@ -67,6 +80,13 @@ export function useControls({
           activeErrors &&
           isSameErrors(newErrors, activeErrors)
         ) {
+          if (isTelemetryInitialized) {
+            pushEvent(
+              computeControlSkipEvent({
+                controlIds: Object.keys(newErrors),
+              }),
+            )
+          }
           resetControls()
           goNextPage()
           return

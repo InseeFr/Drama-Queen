@@ -1,5 +1,4 @@
 export * from './campaignSchema'
 export * from './nomenclatureSchema'
-export * from './paradataSchema'
 export * from './interrogationDataSchema'
 export * from './interrogationSchema'

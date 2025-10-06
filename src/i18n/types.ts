@@ -77,6 +77,7 @@ export type SynchronizeMessage =
   | 'synchronizationInProgress'
   | 'downloadingData'
   | 'interrogationsProgress'
+  | 'paradataProgress'
   | 'questionnairesProgress'
   | 'nomenclaturesProgress'
   | 'externalResourcesProgress'

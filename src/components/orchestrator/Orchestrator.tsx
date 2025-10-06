@@ -4,6 +4,7 @@ import { tss } from 'tss-react/mui'
 
 import { useCallback, useEffect, useState } from 'react'
 
+import { useTelemetry } from '@/contexts/TelemetryContext'
 import type {
   Interrogation,
   InterrogationData,
@@ -13,6 +14,7 @@ import type {
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { useTranslation } from '@/i18n'
 import type { GetReferentiel, ValueChange } from '@/models/lunaticType'
+import { computeInitEvent, computeNewPageEvent } from '@/utils/telemetry'
 
 import { Continue } from './Continue'
 import { LoopPanel } from './LoopPanel'
@@ -92,6 +94,17 @@ export function Orchestrator({
       initialInterrogation.stateData.currentPage !== '1',
   )
 
+  // Allow to send telemetry events once interrogation id has been set
+  const [isTelemetryInitialized, setIsTelemetryInitialized] =
+    useState<boolean>(false)
+
+  const {
+    isTelemetryDisabled,
+    pushEvent,
+    setDefaultValues,
+    triggerBatchTelemetryCallback,
+  } = useTelemetry()
+
   const {
     compileControls,
     getChangedData,
@@ -135,6 +148,8 @@ export function Orchestrator({
     goNextPage,
     goPreviousPage,
     goToPage,
+    isTelemetryInitialized,
+    pushEvent,
   })
 
   /** Focus on the first input with an error. */
@@ -171,6 +186,9 @@ export function Orchestrator({
       onQuit,
       onDefinitiveQuit,
       updateInterrogation,
+      isTelemetryInitialized,
+      pushEvent,
+      triggerBatchTelemetryCallback,
     })
 
   const isLastReachedPage =
@@ -190,6 +208,21 @@ export function Orchestrator({
       definitiveQuit: () => orchestratorOnDefinitiveQuit(pageTag),
     })
 
+  // Telemetry initialization
+  useEffect(() => {
+    if (!isTelemetryDisabled) {
+      setDefaultValues({ idInterrogation: initialInterrogation?.id })
+      setIsTelemetryInitialized(true)
+    }
+  }, [isTelemetryDisabled, setDefaultValues, initialInterrogation?.id])
+
+  // Initialization event
+  useEffect(() => {
+    if (isTelemetryInitialized) {
+      pushEvent(computeInitEvent())
+    }
+  }, [isTelemetryInitialized, pushEvent])
+
   // Trigger a interrogation update when the Lunatic page changes
   useEffect(() => {
     if (
@@ -200,6 +233,16 @@ export function Orchestrator({
       // do not trigger the update when we first launch the orchestrator
       return
     }
+
+    if (isTelemetryInitialized) {
+      pushEvent(
+        computeNewPageEvent({
+          page: 'lunaticPage',
+          pageTag,
+        }),
+      )
+    }
+
     const interrogation = updateInterrogation(
       getChangedData(true) as InterrogationData,
       { currentPage: pageTag },
