@@ -1,6 +1,5 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 
-import { SHORTCUT_NEXT } from '@/constants/shortcuts'
 import { getTranslation } from '@/i18n'
 import type { GoNextPage, GoPreviousPage } from '@/models/lunaticType'
 
@@ -59,8 +58,6 @@ export function computeNavigationButtonsProps({
     }
   }
 
-  const continueShortCutKey = SHORTCUT_NEXT
-
   const continueShortCutLabel = 'alt + ENTRÉE'
 
   const isPreviousEnabled = !isFirstPage
@@ -76,7 +73,6 @@ export function computeNavigationButtonsProps({
       isEnabled: !isBlocking,
       isVisible: isContinueVisible,
       endIcon: getEndIcon(continueAction),
-      shortCutKey: continueShortCutKey,
       shortCutLabel: continueShortCutLabel,
       onContinue,
     },
