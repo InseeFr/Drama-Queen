@@ -11,9 +11,24 @@ export function useShortcut(
   onClickMethod: () => void,
   isShortcutEnabled: boolean = true,
 ) {
+  const requiresAlt = shortCutKey.toLowerCase().includes('alt+')
+  const requiresCtrl = shortCutKey.toLowerCase().includes('ctrl+')
+  const requiresShift = shortCutKey.toLowerCase().includes('shift+')
+
   useHotkeys(
     shortCutKey,
     (event) => {
+      // With `useKey` option activated, currently shortcut is triggered even if ctrl/alt/shift key is not pressed.
+      // This is a quick fix to remove when it will be handled by the library.
+      // See https://github.com/JohannesKlauss/react-hotkeys-hook/issues/1274
+      if (
+        (requiresAlt && !event.altKey) ||
+        (requiresCtrl && !event.ctrlKey) ||
+        (requiresShift && !event.shiftKey)
+      ) {
+        return
+      }
+
       event.preventDefault()
       onClickMethod()
     },
