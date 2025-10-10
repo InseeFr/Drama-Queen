@@ -1,11 +1,11 @@
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
+import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/constants/shortcuts'
 import type { Overview } from '@/models/lunaticType'
 import { TestWrapper } from '@/tests/TestWrapper'
 
-import { useShortcut } from '../hooks/useShortcut'
 import { Breadcrumb } from './Breadcrumb'
 import { Header } from './Header'
 import { Menu } from './Menu'
@@ -18,8 +18,8 @@ vi.mock('./Breadcrumb', () => ({
   Breadcrumb: vi.fn(),
 }))
 
-vi.mock('../hooks/useShortcut', () => ({
-  useShortcut: vi.fn(),
+vi.mock('@/components/ui/ShortCut', () => ({
+  ShortCut: vi.fn(),
 }))
 
 vi.mock('@/i18n', () => ({
@@ -186,20 +186,29 @@ describe('Header Component', () => {
     )
   })
 
-  it('enables shortcut for menu and quit', () => {
+  it('renders ShortCut components for menu and quit buttons', () => {
     render(
       <TestWrapper>
         <Header {...defaultProps} />
       </TestWrapper>,
     )
 
-    // shortCut for quit
-    expect(useShortcut).toHaveBeenCalledWith(SHORTCUT_QUIT, defaultProps.quit)
+    // renders ShortCut for quit button
+    expect(ShortCut).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shortCutKey: SHORTCUT_QUIT,
+        onClickMethod: defaultProps.quit,
+      }),
+      {},
+    )
 
-    // shortCut for menu
-    expect(useShortcut).toHaveBeenCalledWith(
-      SHORTCUT_MENU,
-      expect.any(Function),
+    // renders ShortCut for menu button
+    expect(ShortCut).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shortCutKey: SHORTCUT_MENU,
+        onClickMethod: expect.any(Function),
+      }),
+      {},
     )
   })
 })

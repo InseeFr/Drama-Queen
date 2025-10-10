@@ -61,9 +61,9 @@ importers:
       react-hook-form:
         specifier: ^7.51.1
         version: 7.62.0(react@18.3.1)
-      react-hotkeys-hook:
-        specifier: ^5.1.0
-        version: 5.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-hot-keys:
+        specifier: ^2.7.3
+        version: 2.7.3(@babel/runtime@7.28.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom:
         specifier: ^6.26.2
         version: 6.30.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4396,6 +4396,12 @@ packages:
         integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==,
       }
 
+  hotkeys-js@3.13.7:
+    resolution:
+      {
+        integrity: sha512-ygFIdTqqwG4fFP7kkiYlvayZppeIQX2aPpirsngkv1xM1lP0piDY5QEh68nQnIKvz64hfocxhBaD/uK3sSK1yQ==,
+      }
+
   html-encoding-sniffer@3.0.0:
     resolution:
       {
@@ -5876,14 +5882,15 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-hotkeys-hook@5.1.0:
+  react-hot-keys@2.7.3:
     resolution:
       {
-        integrity: sha512-GCNGXjBzV9buOS3REoQFmSmE4WTvBhYQ0YrAeeMZI83bhXg3dRWsLHXDutcVDdEjwJqJCxk5iewWYX5LtFUd7g==,
+        integrity: sha512-OoX1kTookqQx/OBXBgBLQCANpw3KGUcJNOl+MNv8xJYyH/Rojv+jTjQbksDGQMIOWVfvLqOZi/ZVcVdsWUAUWg==,
       }
     peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
+      '@babel/runtime': '>=7.10.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   react-is@16.13.1:
     resolution:
@@ -10235,6 +10242,8 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
+  hotkeys-js@3.13.7: {}
+
   html-encoding-sniffer@3.0.0:
     dependencies:
       whatwg-encoding: 2.0.0
@@ -11180,8 +11189,11 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  react-hotkeys-hook@5.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-hot-keys@2.7.3(@babel/runtime@7.28.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
+      '@babel/runtime': 7.28.3
+      hotkeys-js: 3.13.7
+      prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
