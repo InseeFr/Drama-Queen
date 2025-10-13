@@ -3,13 +3,13 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 
-import { useShortcut } from '@/components/orchestrator/hooks/useShortcut'
-import { SHORTCUT_NEXT } from '@/constants/shortcuts'
+import { ShortCut } from '@/components/ui/ShortCut'
 import { useTranslation } from '@/i18n'
 
 type ContinueProps = {
   label: string
   endIcon: JSX.Element | undefined
+  shortCutKey: string
   shortCutLabel: string
   onContinue: () => void
   isEnabled?: boolean
@@ -19,13 +19,12 @@ export function Continue({
   label,
   isEnabled = true,
   endIcon,
+  shortCutKey,
   shortCutLabel,
   onContinue,
 }: Readonly<ContinueProps>) {
   const { classes } = useStyles()
   const { t } = useTranslation('navigationMessage')
-
-  useShortcut(SHORTCUT_NEXT, onContinue, isEnabled)
 
   return (
     <Stack direction={'row'} className={classes.continueWrapper}>
@@ -36,6 +35,9 @@ export function Continue({
         disabled={!isEnabled}
       >
         {label}
+        {isEnabled ? (
+          <ShortCut shortCutKey={shortCutKey} onClickMethod={onContinue} />
+        ) : null}
       </Button>
       <Typography variant="caption" color="#777777">
         {t('continueHelper')}
