@@ -117,6 +117,7 @@ export function Orchestrator({
     isFirstPage,
     isLastPage,
     loopVariables,
+    roundaboutLoopVariables,
     overview,
     pager: { maxPage, page, subPage, nbSubPages, lastReachedPage, iteration },
     pageTag,
@@ -291,6 +292,7 @@ export function Orchestrator({
             <Stack className={classes.loopPanel}>
               <LoopPanel
                 loopVariables={loopVariables}
+                roundaboutLoopVariables={roundaboutLoopVariables}
                 page={page}
                 subPage={subPage}
                 iteration={iteration}

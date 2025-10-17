@@ -11,6 +11,7 @@ import { isIterationReachable } from './utils'
 
 type LoopPanelProps = {
   loopVariables: string[]
+  roundaboutLoopVariables: string[]
   page: number
   subPage: number | undefined
   iteration: number | undefined
@@ -21,6 +22,7 @@ type LoopPanelProps = {
 
 export function LoopPanel({
   loopVariables,
+  roundaboutLoopVariables,
   page,
   iteration,
   lastReachedPage,
@@ -29,12 +31,22 @@ export function LoopPanel({
 }: Readonly<LoopPanelProps>) {
   const { classes, cx } = useStyles()
 
-  if (!loopVariables[0] || !lastReachedPage || !data.COLLECTED) {
+  const isSimpleLoop = loopVariables.length > 0
+  const isRoundaboutLoop = roundaboutLoopVariables.length > 0
+
+  // we don't display anything outside a loop
+  if (
+    (!isSimpleLoop && !isRoundaboutLoop) ||
+    !lastReachedPage ||
+    !data.COLLECTED
+  ) {
     return null
   }
 
   // find the depending variable of the loop
-  const titleVariable = loopVariables[0]
+  const titleVariable = isSimpleLoop
+    ? loopVariables[0]
+    : roundaboutLoopVariables[0]
 
   // get its collected value for every iteration
   const titleData = data.COLLECTED[titleVariable]?.COLLECTED
@@ -43,9 +55,9 @@ export function LoopPanel({
     return null
   }
 
-  // panel is disabled if you cannot reach the first subPage of the iteration
+  // panel is disabled if you cannot reach the first subPage of the iteration, and always disabled for roundabout loop
   const isDisabledButton = (iteration: number) =>
-    !isIterationReachable(page, lastReachedPage, iteration)
+    isRoundaboutLoop || !isIterationReachable(page, lastReachedPage, iteration)
 
   // redirects to the first subPage of an iteration (in the same loop so "page" does not change)
   const goToIteration = (index: number) => () =>
@@ -95,6 +107,9 @@ const useStyles = tss.create(({ theme }) => ({
     '&:hover,&:focus': {
       backgroundColor: 'white',
       color: '#455a79',
+    },
+    '&:disabled': {
+      border: '2px solid #455a79',
     },
   },
   notCurrentIteration: {
