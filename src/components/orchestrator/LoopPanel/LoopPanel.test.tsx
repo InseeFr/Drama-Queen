@@ -29,8 +29,8 @@ describe('LoopPanel Component', () => {
       loopVariables: mockLoopVariables,
       roundaboutLoopVariables: [],
       page: 1,
-      subPage: undefined,
-      iteration: undefined,
+      subPage: 1,
+      iteration: 0,
       lastReachedPage: mockLastReachedPage,
       data: mockData,
       goToPage: mockGoToPage,
@@ -65,7 +65,7 @@ describe('LoopPanel Component', () => {
       expect(buttons[2]).not.toBeDisabled()
     })
 
-    it('go to the page {page, subPage:0} page on button click', () => {
+    it('goes to the page {page, subPage:0} on button click', () => {
       const { getAllByRole } = render(<LoopPanel {...defaultProps} />)
 
       const buttons = getAllByRole('button')
@@ -97,6 +97,20 @@ describe('LoopPanel Component', () => {
       expect(buttons[1].className).toContain('currentIteration')
       expect(buttons[2].className).toContain('notCurrentIteration')
     })
+
+    it('displays the right arrow icon for every iteration, even disabled ones', () => {
+      // we mock the isIterationReachable function : every iteration is reachable except iteration 1
+      vi.mocked(isIterationReachable).mockImplementation(
+        (_page, _lastReachedPage, iteration) => iteration !== 1,
+      )
+
+      const { container } = render(<LoopPanel {...defaultProps} />)
+
+      const arrowIcon = container.querySelectorAll(
+        'svg[data-testid="ChevronRightIcon"]',
+      )
+      expect(arrowIcon.length).toBe(3)
+    })
   })
 
   describe('roundabout loop', () => {
@@ -104,8 +118,8 @@ describe('LoopPanel Component', () => {
       loopVariables: [],
       roundaboutLoopVariables: mockRoundaboutLoopVariables,
       page: 1,
-      subPage: undefined,
-      iteration: undefined,
+      subPage: 1,
+      iteration: 0,
       lastReachedPage: mockLastReachedPage,
       data: mockData,
       goToPage: mockGoToPage,
@@ -143,6 +157,20 @@ describe('LoopPanel Component', () => {
       expect(buttons[0].className).toContain('notCurrentIteration')
       expect(buttons[1].className).toContain('currentIteration')
       expect(buttons[2].className).toContain('notCurrentIteration')
+    })
+
+    it('does not display the right arrow icon on any iteration', () => {
+      // we mock the isIterationReachable function : every iteration is reachable except iteration 1
+      vi.mocked(isIterationReachable).mockImplementation(
+        (_page, _lastReachedPage, iteration) => iteration !== 1,
+      )
+
+      const { container } = render(<LoopPanel {...defaultProps} />)
+
+      const arrowIcon = container.querySelectorAll(
+        'svg[data-testid="ChevronRightIcon"]',
+      )
+      expect(arrowIcon.length).toBe(0)
     })
   })
 
