@@ -75,7 +75,7 @@ export function LoopPanel({
           )}
           disabled={isDisabledButton(index)}
           disableRipple
-          endIcon={<ChevronRightIcon />}
+          endIcon={isSimpleLoop && <ChevronRightIcon />}
           onClick={goToIteration(index)}
         >
           <Typography>{`${value}`}</Typography>
