@@ -2,7 +2,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 
 import { SHORTCUT_NEXT } from '@/constants/shortcuts'
 import { getTranslation } from '@/i18n'
-import type { GoNextPage, GoPreviousPage } from '@/models/lunaticType'
+import type { GoPreviousPage } from '@/models/lunaticType'
 
 const { t } = getTranslation('navigationMessage')
 
@@ -16,7 +16,7 @@ type UseNavigationButtonsProps = {
   isLastReachedPage: boolean
   hasPageResponse: () => boolean
   goPreviousPage: GoPreviousPage
-  goNextPage: GoNextPage
+  goNextPage: (ignoreNonMandatoryErrors?: boolean) => void
   quit: () => Promise<void>
   definitiveQuit: () => Promise<void>
 }
@@ -81,7 +81,7 @@ export function computeNavigationButtonsProps({
       onContinue,
     },
     previousProps: { isPreviousEnabled, onPrevious: goPreviousPage },
-    nextProps: { isNextEnabled, onNext: goNextPage },
+    nextProps: { isNextEnabled, onNext: () => goNextPage() },
   }
 }
 
