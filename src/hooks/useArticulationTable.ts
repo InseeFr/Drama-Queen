@@ -7,6 +7,7 @@ import type { LeafStateState } from '@/core/model'
 import { prCore } from '@/createCore'
 
 type TableData = {
+  dates?: number[]
   headers: string[]
   rows: {
     cells: { label: string; value: ReactNode }[]
@@ -46,6 +47,7 @@ export function useArticulationTable(
           return null
         }
         setData({
+          dates: interrogation?.stateData?.leafStates.map((s) => s.date),
           headers:
             interrogation?.stateData.leafStates[0]?.cells?.map(
               (c) => c.label,
@@ -69,6 +71,7 @@ export function useArticulationTable(
 
       // Update the state
       return setData({
+        dates: interrogation?.stateData?.leafStates?.map((s) => s.date),
         headers: items[0].cells.map((c) => c.label),
         rows: items.map((item) => ({
           ...item,
