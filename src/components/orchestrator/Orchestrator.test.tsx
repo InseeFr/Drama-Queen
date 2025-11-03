@@ -161,7 +161,7 @@ describe('Orchestrator', () => {
         <TestWrapper>
           <TelemetryContext.Provider
             value={{
-              isTelemetryDisabled: false,
+              isTelemetryEnabled: true,
               pushEvent,
               setDefaultValues: () => {},
             }}
@@ -192,7 +192,7 @@ describe('Orchestrator', () => {
         <TestWrapper>
           <TelemetryContext.Provider
             value={{
-              isTelemetryDisabled: true,
+              isTelemetryEnabled: false,
               pushEvent,
               setDefaultValues: () => {},
             }}
@@ -221,7 +221,7 @@ describe('Orchestrator', () => {
         <TestWrapper>
           <TelemetryContext.Provider
             value={{
-              isTelemetryDisabled: false,
+              isTelemetryEnabled: true,
               pushEvent,
               setDefaultValues: () => {},
             }}
@@ -271,7 +271,7 @@ describe('Orchestrator', () => {
         <TestWrapper>
           <TelemetryContext.Provider
             value={{
-              isTelemetryDisabled: false,
+              isTelemetryEnabled: true,
               pushEvent,
               setDefaultValues: () => {},
               triggerBatchTelemetryCallback,
@@ -311,7 +311,7 @@ describe('Orchestrator', () => {
         <TestWrapper>
           <TelemetryContext.Provider
             value={{
-              isTelemetryDisabled: false,
+              isTelemetryEnabled: true,
               pushEvent,
               setDefaultValues: () => {},
               triggerBatchTelemetryCallback,

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 
-import { IS_TELEMETRY_DISABLED } from '@/core/constants'
+import { IS_TELEMETRY_ENABLED } from '@/core/constants'
 import type {
   DefaultParadataValues,
   Paradata,
@@ -18,7 +18,7 @@ import { useBatch } from '@/hooks/useBatch'
 import { computeDataMaxLength, computeInactivityDelay } from '@/utils/telemetry'
 
 type TelemetryContextType = {
-  isTelemetryDisabled: boolean
+  isTelemetryEnabled: boolean
   pushEvent: (e: TelemetryParadata) => void | Promise<boolean>
   setDefaultValues: (e: DefaultParadataValues) => void
   triggerBatchTelemetryCallback?: () => Promise<void>
@@ -26,7 +26,7 @@ type TelemetryContextType = {
 
 /** Mandatory values used as a context's last-resort fallback. */
 const defaultValues = {
-  isTelemetryDisabled: true,
+  isTelemetryEnabled: false,
   pushEvent: (_: TelemetryParadata) => {},
   setDefaultValues: (_: DefaultParadataValues) => {},
 }
@@ -107,7 +107,7 @@ export function TelemetryProvider({
 
   const telemetryContextValues = useMemo(
     () => ({
-      isTelemetryDisabled: IS_TELEMETRY_DISABLED,
+      isTelemetryEnabled: IS_TELEMETRY_ENABLED,
       pushEvent,
       setDefaultValues: updateDefaultValues,
       triggerBatchTelemetryCallback: triggerTimeoutEvent,

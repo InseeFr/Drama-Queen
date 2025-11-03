@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 
 import type { Thunks } from '@/core/bootstrap'
-import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_DISABLED } from '@/core/constants'
+import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_ENABLED } from '@/core/constants'
 import type { Questionnaire } from '@/core/model'
 import {
   getExternalQuestionnaireFiltered,
@@ -381,7 +381,7 @@ export const thunks = {
          * Paradata
          */
 
-        if (!IS_TELEMETRY_DISABLED) {
+        if (IS_TELEMETRY_ENABLED) {
           // filter allParadata to only send those that weren’t deleted before
           const paradataToUpload = allParadata?.filter(
             (paradata) => !deletedParadataIds.has(paradata.idInterrogation),
