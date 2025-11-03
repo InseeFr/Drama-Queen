@@ -99,7 +99,7 @@ export function Orchestrator({
     useState<boolean>(false)
 
   const {
-    isTelemetryDisabled,
+    isTelemetryEnabled,
     pushEvent,
     setDefaultValues,
     triggerBatchTelemetryCallback,
@@ -211,11 +211,11 @@ export function Orchestrator({
 
   // Telemetry initialization
   useEffect(() => {
-    if (!isTelemetryDisabled) {
+    if (isTelemetryEnabled) {
       setDefaultValues({ idInterrogation: initialInterrogation?.id })
       setIsTelemetryInitialized(true)
     }
-  }, [isTelemetryDisabled, setDefaultValues, initialInterrogation?.id])
+  }, [isTelemetryEnabled, setDefaultValues, initialInterrogation?.id])
 
   // Initialization event
   useEffect(() => {
