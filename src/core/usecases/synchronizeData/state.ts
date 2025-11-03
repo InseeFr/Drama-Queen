@@ -2,7 +2,7 @@ import { createUsecaseActions } from 'redux-clean-architecture'
 import { assert } from 'tsafe/assert'
 import { id } from 'tsafe/id'
 
-import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_DISABLED } from '@/core/constants'
+import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_ENABLED } from '@/core/constants'
 
 export type State = State.NotRunning | State.Running
 
@@ -80,7 +80,7 @@ export const { reducer, actions } = createUsecaseActions({
           type: 'upload',
           totalInterrogation: Infinity,
           interrogationCompleted: 0,
-          totalParadata: IS_TELEMETRY_DISABLED ? undefined : Infinity,
+          totalParadata: IS_TELEMETRY_ENABLED ? Infinity : undefined,
           paradataCompleted: 0,
         }),
       ),

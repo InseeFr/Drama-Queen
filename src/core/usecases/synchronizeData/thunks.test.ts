@@ -196,6 +196,12 @@ describe('upload thunk', () => {
   })
 
   it('should upload interrogations successfully', async () => {
+    // override global mock value for enable telemetry
+    vi.doMock('@/core/constants', () => ({
+      IS_TELEMETRY_ENABLED: true,
+    }))
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
     const interrogations = [{ id: '1' }, { id: '2' }]
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
       interrogations as Interrogation[],
@@ -333,6 +339,12 @@ describe('upload thunk', () => {
   })
 
   it('should upload all paradata successfully', async () => {
+    // override global mock value for enable telemetry
+    vi.doMock('@/core/constants', () => ({
+      IS_TELEMETRY_ENABLED: true,
+    }))
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
     const allParadata: Paradata[] = [
       {
         idInterrogation: 'interro001',
@@ -404,6 +416,12 @@ describe('upload thunk', () => {
   })
 
   it('should keep paradata when upload fails', async () => {
+    // override global mock value for enable telemetry
+    vi.doMock('@/core/constants', () => ({
+      IS_TELEMETRY_ENABLED: true,
+    }))
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
     const allParadata: Paradata[] = [
       {
         idInterrogation: 'interro001',
@@ -432,13 +450,6 @@ describe('upload thunk', () => {
   })
 
   it('should skip paradata step when telemetry is disabled', async () => {
-    // override global mock value for disabling telemetry
-    vi.doMock('@/core/constants', () => ({
-      IS_TELEMETRY_DISABLED: true,
-    }))
-    // Re-import after mocking
-    const { thunks } = await import('./thunks')
-
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
