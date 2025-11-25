@@ -28,6 +28,17 @@
       "labels": ["lunatic"]
     },
     {
+      "matchPaths": ["package.json"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "oidc",
+      "groupSlug": "oidc",
+      "matchPackagePatterns": ["oidc-spa.*"],
+      "labels": ["dependencies", "oidc"],
+      "bumpVersion": "minor",
+      "dependencyDashboardApproval": true
+    },
+    {
       "matchPaths": ["website/**"],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch"],
