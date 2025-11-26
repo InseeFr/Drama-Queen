@@ -140,6 +140,59 @@ describe('useArticulationTable', () => {
     })
   })
 
+  it('builds rows from leafStates cells if no interrogation.data', async () => {
+    mockLoader.mockResolvedValue({
+      interrogation: {
+        stateData: {
+          leafStates: [
+            {
+              state: 'NOT_INIT',
+              cells: [
+                { label: 'Prénom', value: 'Bob' },
+                { label: 'Sexe', value: 'Homme' },
+                { label: 'Age', value: '23 ans' },
+              ],
+            },
+            {
+              state: 'INIT',
+              cells: [
+                { label: 'Prénom', value: 'Lucas' },
+                { label: 'Sexe', value: 'Homme' },
+                { label: 'Age', value: '34 ans' },
+              ],
+            },
+            {
+              state: 'COMPLETED',
+              cells: [
+                { label: 'Prénom', value: 'Sofia' },
+                { label: 'Sexe', value: 'Femme' },
+                { label: 'Age', value: '26 ans' },
+              ],
+            },
+          ],
+        },
+      },
+      questionnaire: { articulation: { items: [] } },
+    })
+
+    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
+
+    await waitFor(() => {
+      expect(result.current).not.toBeNull()
+      expect(result.current?.rows).toHaveLength(3)
+      expect(result.current?.rows.map((r) => r.label)).toEqual([
+        'Commencer',
+        'Continuer',
+        'Complété',
+      ])
+      expect(result.current?.rows[0].cells).toEqual([
+        { label: 'Prénom', value: 'Bob' },
+        { label: 'Sexe', value: 'Homme' },
+        { label: 'Age', value: '23 ans' },
+      ])
+    })
+  })
+
   it('returns null if articulation items is empty', async () => {
     mockLoader.mockResolvedValue({
       interrogation: { id: 'interro1', data: { foo: 'bar' } },
