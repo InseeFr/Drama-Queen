@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.1.8",
+  "version": "3.1.9-rc-fix-auth.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
@@ -34,7 +34,7 @@
     "evt": "^2.5.7",
     "i18nifty": "^3.2.1",
     "jwt-decode": "^4.0.0",
-    "oidc-spa": "6.14.2",
+    "oidc-spa": "6.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.1",
