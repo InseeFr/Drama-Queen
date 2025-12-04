@@ -2,16 +2,63 @@
 
 Ce module gère la synchronisation des données entre le client et le serveur via deux opérations principales :
 
-- **download** : Téléchargement des données du serveur vers le client.
 - **upload** : Envoi des données locales du client vers le serveur.
+- **download** : Téléchargement des données du serveur vers le client.
 
 Chaque étape de la synchronisation est suivie par des actions Redux pour permettre le suivi de la progression et la gestion des états.
+
+Dans l'ordre: 
+1. **upload**
+2. **download**
+
+(**upload** appel la fonction **download** quand **upload** est bien terminée)
+
+---
+
+### 1. Envoi (`upload`)
+
+#### a. Initialisation
+
+- Vérifie que la synchronisation n’est pas déjà en cours.
+- Déclenche l’action `runningUpload`.
+- Initialise le stockage local pour la synchronisation.
+
+#### b. Envoi des interrogations
+
+- Récupère toutes les interrogations locales.
+- Pour chaque interrogation :
+  - Tente de l’envoyer via l’API.
+  - **Gestion d’erreur** :
+    - Si le serveur répond 423, considère comme succès.
+    - Si le serveur répond 400, 403, 404 ou 500 :
+      - Tente de l’envoyer dans une zone temporaire.
+      - Marque l’interrogation comme envoyée en zone temporaire.
+      - Supprime le paradata associé.
+      - Si l’envoi en zone temporaire échoue, log l’erreur et arrête la synchronisation.
+    - Pour toute autre erreur, log et arrête la synchronisation.
+  - Supprime l’interrogation locale après envoi (succès ou zone temporaire).
+  - Déclenche l’action de progression.
+
+#### c. Envoi des paradata (si la télémétrie n’est pas désactivée)
+
+- Récupère tous les paradata locaux non supprimés.
+- Pour chaque paradata :
+  - Tente de l’envoyer via l’API.
+  - Supprime le paradata local après envoi.
+  - Déclenche l’action de progression.
+  - **Gestion d’erreur** : Log l’erreur en cas d’échec, mais continue la synchronisation.
+
+#### d. Finalisation
+
+- Déclenche l’action `uploadCompleted`.
+- lance un téléchargement pour rafraîchir les données locales.
+- **Gestion d’erreur globale** : Si une erreur non gérée survient, marque une erreur dans le stockage local et déclenche l’action `uploadError`.
 
 ---
 
 ## Fonctionnement étape par étape
 
-### 1. Téléchargement (`download`)
+### 2. Téléchargement (`download`)
 
 #### a. Initialisation
 
@@ -57,46 +104,7 @@ Chaque étape de la synchronisation est suivie par des actions Redux pour permet
 - Déclenche l’action `downloadCompleted`.
 - **Gestion d’erreur globale** : Si une erreur non gérée survient, log l’erreur, marque une erreur dans le stockage local, et déclenche l’action `downloadFailed`.
 
----
 
-### 2. Envoi (`upload`)
-
-#### a. Initialisation
-
-- Vérifie que la synchronisation n’est pas déjà en cours.
-- Déclenche l’action `runningUpload`.
-- Initialise le stockage local pour la synchronisation.
-
-#### b. Envoi des interrogations
-
-- Récupère toutes les interrogations locales.
-- Pour chaque interrogation :
-  - Tente de l’envoyer via l’API.
-  - **Gestion d’erreur** :
-    - Si le serveur répond 423, considère comme succès.
-    - Si le serveur répond 400, 403, 404 ou 500 :
-      - Tente de l’envoyer dans une zone temporaire.
-      - Marque l’interrogation comme envoyée en zone temporaire.
-      - Supprime le paradata associé.
-      - Si l’envoi en zone temporaire échoue, log l’erreur et arrête la synchronisation.
-    - Pour toute autre erreur, log et arrête la synchronisation.
-  - Supprime l’interrogation locale après envoi (succès ou zone temporaire).
-  - Déclenche l’action de progression.
-
-#### c. Envoi des paradata (si la télémétrie n’est pas désactivée)
-
-- Récupère tous les paradata locaux non supprimés.
-- Pour chaque paradata :
-  - Tente de l’envoyer via l’API.
-  - Supprime le paradata local après envoi.
-  - Déclenche l’action de progression.
-  - **Gestion d’erreur** : Log l’erreur en cas d’échec, mais continue la synchronisation.
-
-#### d. Finalisation
-
-- Déclenche l’action `uploadCompleted`.
-- Relance un téléchargement pour rafraîchir les données locales.
-- **Gestion d’erreur globale** : Si une erreur non gérée survient, marque une erreur dans le stockage local et déclenche l’action `uploadError`.
 
 ---
 
