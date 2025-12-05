@@ -50,8 +50,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       oidc-spa:
-        specifier: 6.8.2
-        version: 6.8.2(@types/react@18.3.26)(react@18.3.1)
+        specifier: 8.6.11
+        version: 8.6.11(@types/react@18.3.26)(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -2174,6 +2174,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-arm-musl@2.5.1':
     resolution:
@@ -2183,6 +2184,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-linux-arm64-glibc@2.5.1':
     resolution:
@@ -2192,6 +2194,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-musl@2.5.1':
     resolution:
@@ -2201,6 +2204,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-linux-x64-glibc@2.5.1':
     resolution:
@@ -2210,6 +2214,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.5.1':
     resolution:
@@ -2219,6 +2224,7 @@ packages:
     engines: { node: '>= 10.0.0' }
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-win32-arm64@2.5.1':
     resolution:
@@ -2416,6 +2422,7 @@ packages:
       }
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.52.5':
     resolution:
@@ -2424,6 +2431,7 @@ packages:
       }
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.52.5':
     resolution:
@@ -2432,6 +2440,7 @@ packages:
       }
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.52.5':
     resolution:
@@ -2440,6 +2449,7 @@ packages:
       }
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loong64-gnu@4.52.5':
     resolution:
@@ -2448,6 +2458,7 @@ packages:
       }
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-ppc64-gnu@4.52.5':
     resolution:
@@ -2456,6 +2467,7 @@ packages:
       }
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.52.5':
     resolution:
@@ -2464,6 +2476,7 @@ packages:
       }
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.52.5':
     resolution:
@@ -2472,6 +2485,7 @@ packages:
       }
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.52.5':
     resolution:
@@ -2480,6 +2494,7 @@ packages:
       }
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.52.5':
     resolution:
@@ -2488,6 +2503,7 @@ packages:
       }
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.52.5':
     resolution:
@@ -2496,6 +2512,7 @@ packages:
       }
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-openharmony-arm64@4.52.5':
     resolution:
@@ -5607,18 +5624,36 @@ packages:
       }
     engines: { node: '>= 0.4' }
 
-  oidc-spa@6.8.2:
+  oidc-spa@8.6.11:
     resolution:
       {
-        integrity: sha512-R27+BDg9RW/eI0uZLDnBC/BzKdhkPcOrLIyFwnwCLeL9D9oe+YGXt0LlxSHlgU1DQ3ElLEWNCCNQc9bjpb4oeg==,
+        integrity: sha512-0K4vq4fkm+BXXOLHtd1+1wH+BidPnN25CrX9PY6pjSUmIuFbnWVuPAl1zzEM6GfmjnU4oVf16ww3fCjbK1M/cA==,
       }
     peerDependencies:
+      '@angular/common': '*'
+      '@angular/core': '*'
+      '@angular/router': '*'
+      '@tanstack/react-router': '*'
+      '@tanstack/react-start': '*'
       '@types/react': '*'
       react: '*'
+      rxjs: '*'
     peerDependenciesMeta:
+      '@angular/common':
+        optional: true
+      '@angular/core':
+        optional: true
+      '@angular/router':
+        optional: true
+      '@tanstack/react-router':
+        optional: true
+      '@tanstack/react-start':
+        optional: true
       '@types/react':
         optional: true
       react:
+        optional: true
+      rxjs:
         optional: true
 
   once@1.4.0:
@@ -11109,7 +11144,7 @@ snapshots:
       has-symbols: 1.1.0
       object-keys: 1.1.1
 
-  oidc-spa@6.8.2(@types/react@18.3.26)(react@18.3.1):
+  oidc-spa@8.6.11(@types/react@18.3.26)(react@18.3.1):
     optionalDependencies:
       '@types/react': 18.3.26
       react: 18.3.1
