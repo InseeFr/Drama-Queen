@@ -1,0 +1,87 @@
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+
+import Roundabout from '../mocks/roundabout.json'
+
+const app = new Hono()
+
+const waitTime = 0 // Wait duration to fake a slow API
+const questionnaireId = 'q1'
+
+// Fake the database with an in memory map
+const interrogations = new Map(
+  Array.from({ length: 2 }).map((_, k) => {
+    const id = `i${k}`
+    return [
+      id,
+      {
+        id: id,
+        questionnaireId: questionnaireId,
+        personalization: [],
+        data: {
+          EXTERNAL: {
+            NB_HAB: 2,
+          },
+          COLLECTED: {
+            PRENOMS: { COLLECTED: ['John', 'Jane'] },
+          },
+        },
+        comment: {},
+        stateData: {
+          state: 'INIT',
+          date: 0,
+          currentPage: '1',
+        },
+      },
+    ]
+  }),
+)
+
+app.use('/api/*', cors())
+
+app.use(async (_, next) => {
+  await new Promise((resolve) => setTimeout(resolve, waitTime))
+  await next()
+})
+
+app.put('/api/interrogations/:id', async (c) => {
+  const data = await c.req.json()
+  interrogations.set(c.req.param('id'), data)
+  return c.json({})
+})
+
+app.get('/api/campaigns', (c) => {
+  return c.json([
+    {
+      id: 'c1',
+      label: 'Campaign 1',
+      sensitivity: 'NORMAL',
+      questionnaireIds: [questionnaireId],
+      metadata: 'string',
+    },
+  ])
+})
+
+app.get('/api/questionnaire/:id', (c) => {
+  return c.json({ value: Roundabout })
+})
+
+app.get('/api/campaign/:id/interrogations', (c) => {
+  return c.json(
+    Array.from(interrogations.values()).map((interrogation) => ({
+      id: interrogation.id,
+      questionnaireId: interrogation.questionnaireId,
+    })),
+  )
+})
+
+app.get('/api/interrogations/:id', (c) => {
+  return c.json(interrogations.get(c.req.param('id')))
+})
+
+console.log('== Starting fake Queen API Server on http://localhost:3000')
+
+export default {
+  port: 3000,
+  fetch: app.fetch,
+}

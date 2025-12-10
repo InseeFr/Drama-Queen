@@ -34,6 +34,8 @@ export default defineConfig({
       exposes: {
         './DramaIndex': './src/bootstrap.tsx',
         './useArticulationTable': './src/hooks/useArticulationTable.ts',
+        './partialResetInterrogation':
+          './src/core/usecases/partialResetInterrogation.ts',
       },
       shared: ['react', 'react-dom'],
     }),
