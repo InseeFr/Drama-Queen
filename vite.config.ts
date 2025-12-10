@@ -1,6 +1,5 @@
 import federation from '@originjs/vite-plugin-federation'
 import react from '@vitejs/plugin-react'
-import { oidcSpa } from 'oidc-spa/vite-plugin'
 import { defineConfig } from 'vite'
 import { viteEnvs } from 'vite-envs'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -10,9 +9,6 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [
     react(),
-    oidcSpa({
-      enableTokenExfiltrationDefense: true,
-    }),
     viteEnvs({
       nameOfTheGlobal: '__QUEEN_ENVS',
       computedEnv: async ({ resolvedConfig }) => {

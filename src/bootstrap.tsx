@@ -1,3 +1,4 @@
+import { oidcEarlyInit } from 'oidc-spa/entrypoint'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
@@ -19,6 +20,12 @@ const mount = ({
   routingStrategy?: RoutingStrategy
 }) => {
   console.log('Mount Drama Queen')
+
+  // initialize oidc : cannot use the vite-plugin because of MFE usecase
+  oidcEarlyInit({
+    BASE_URL: '/queen',
+    enableTokenExfiltrationDefense: true,
+  })
 
   // unsubscribe to old SW
   unsubscribeOldSW()
