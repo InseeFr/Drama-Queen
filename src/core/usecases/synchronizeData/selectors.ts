@@ -46,24 +46,28 @@ const progressBars = createSelector(state, (state: State) => {
   }
 
   // Downloading bars
-  bars.push({
-    progress: computeProgress(state.surveyCompleted, state.totalSurvey),
-    label: t('questionnairesProgress'),
-  })
-  bars.push({
-    progress: computeProgress(
-      state.nomenclatureCompleted,
-      state.totalNomenclature,
-    ),
-    label: t('nomenclaturesProgress'),
-  })
-  bars.push({
-    progress: computeProgress(
-      state.interrogationCompleted,
-      state.totalInterrogation,
-    ),
-    label: t('interrogationsProgress'),
-  })
+  bars.push(
+    ...[
+      {
+        progress: computeProgress(state.surveyCompleted, state.totalSurvey),
+        label: t('questionnairesProgress'),
+      },
+      {
+        progress: computeProgress(
+          state.nomenclatureCompleted,
+          state.totalNomenclature,
+        ),
+        label: t('nomenclaturesProgress'),
+      },
+      {
+        progress: computeProgress(
+          state.interrogationCompleted,
+          state.totalInterrogation,
+        ),
+        label: t('interrogationsProgress'),
+      },
+    ],
+  )
   if (state.totalExternalResources !== undefined) {
     bars.push({
       progress: computeProgress(
