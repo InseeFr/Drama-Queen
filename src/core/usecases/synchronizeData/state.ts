@@ -220,6 +220,13 @@ export const { reducer, actions } = createUsecaseActions({
     downloadCompleted: (state) => {
       return state
     },
+    runningSync: (state) => {
+      state.stateDescription = 'running'
+      return state
+    },
+    syncCompleted: (_state) => {
+      return { stateDescription: 'not running' }
+    },
     downloadFailed: (_state) => {
       return { stateDescription: 'not running' }
     },

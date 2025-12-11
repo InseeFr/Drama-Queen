@@ -14,6 +14,7 @@ import { handleAxiosError } from '@/core/tools/axiosError'
 import {
   campaignSchema,
   idAndQuestionnaireIdSchema,
+  idsSchema,
   interrogationSchema,
   nomenclatureSchema,
   requiredNomenclaturesSchema,
@@ -98,6 +99,11 @@ export function createApiClient(params: {
       axiosInstance
         .post(`api/interrogations/${idInterrogation}/synchronize`)
         .then(({ data }) => interrogationSchema.parse(data)),
+
+    fetchMoved: () =>
+      axiosInstance
+        .get(`api/interrogations/state-data?stateData=IS_MOVED`)
+        .then(({ data }) => idsSchema.parse(data)),
 
     getCampaigns: () =>
       axiosInstance

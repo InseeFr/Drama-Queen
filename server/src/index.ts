@@ -5,7 +5,7 @@ import Roundabout from '../mocks/roundabout.json'
 
 const app = new Hono()
 
-const waitTime = 0 // Wait duration to fake a slow API
+const waitTime = 1000 // Wait duration to fake a slow API
 const questionnaireId = 'q1'
 
 const defaultStateData = {
@@ -16,7 +16,7 @@ const defaultStateData = {
 
 // Fake the database with an in memory map
 const interrogations = new Map(
-  Array.from({ length: 2 }).map((_, k) => {
+  Array.from({ length: 5 }).map((_, k) => {
     const id = `i${k}`
     return [
       id,
@@ -44,6 +44,10 @@ app.use('/api/*', cors())
 app.use(async (_, next) => {
   await new Promise((resolve) => setTimeout(resolve, waitTime))
   await next()
+})
+
+app.get('/api/interrogations/state-data', (c) => {
+  return c.json([{ id: 'i2' }, { id: 'i3' }])
 })
 
 app.put('/api/interrogations/:id', async (c) => {
