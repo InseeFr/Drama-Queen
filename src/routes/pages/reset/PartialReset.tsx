@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 
 import type { FormEventHandler } from 'react'
 
-import { partialResetInterrogation } from '@/core/usecases/partialResetInterrogation'
+import { partialResetInterrogation } from '@/federation/partialResetInterrogation'
 
 export function PartialReset() {
   const onSubmit: FormEventHandler = (e) => {

@@ -46,6 +46,10 @@ app.use(async (_, next) => {
   await next()
 })
 
+app.get('/api/healthcheck', (c) => {
+  return c.json({})
+})
+
 app.get('/api/interrogations/state-data', (c) => {
   return c.json([{ id: 'i2' }, { id: 'i3' }])
 })
@@ -97,9 +101,11 @@ app.get('/api/interrogations/:id', (c) => {
   return c.json(interrogations.get(c.req.param('id')))
 })
 
-console.log('== Starting fake Queen API Server on http://localhost:3000')
+const port = 5000
+
+console.log(`== Starting fake Queen API Server on http://localhost:${port}`)
 
 export default {
-  port: 3000,
+  port,
   fetch: app.fetch,
 }
