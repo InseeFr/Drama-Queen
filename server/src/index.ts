@@ -8,6 +8,12 @@ const app = new Hono()
 const waitTime = 0 // Wait duration to fake a slow API
 const questionnaireId = 'q1'
 
+const defaultStateData = {
+  state: 'INIT',
+  date: 0,
+  currentPage: '1',
+}
+
 // Fake the database with an in memory map
 const interrogations = new Map(
   Array.from({ length: 2 }).map((_, k) => {
@@ -27,11 +33,7 @@ const interrogations = new Map(
           },
         },
         comment: {},
-        stateData: {
-          state: 'INIT',
-          date: 0,
-          currentPage: '1',
-        },
+        stateData: defaultStateData,
       },
     ]
   }),
@@ -48,6 +50,18 @@ app.put('/api/interrogations/:id', async (c) => {
   const data = await c.req.json()
   interrogations.set(c.req.param('id'), data)
   return c.json({})
+})
+
+app.post('/api/interrogations/:id/synchronize', async (c) => {
+  const interrogationId = c.req.param('id')
+  const interrogation = interrogations.get(interrogationId)
+  if (!interrogation) {
+    throw new Error(`Cannot find interrogation ${interrogationId}`)
+  }
+  return c.json({
+    ...interrogation,
+    stateData: defaultStateData,
+  })
 })
 
 app.get('/api/campaigns', (c) => {

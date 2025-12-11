@@ -8,13 +8,12 @@ export async function partialResetInterrogation(interrogationId: string) {
   const queen = await createQueenClient(CORE_PROVIDER_CONTEXT, getOidc)
 
   // Retrieve information from IndexedDB
-  const interrogation = await store
-    .getInterrogation(interrogationId)
-    .catch(() => {
-      throw new Error('Cannot retrieve interrogations from indexedDB')
-    })
+  const interrogation = await store.getInterrogation(interrogationId)
 
   if (!interrogation) {
+    console.error(
+      `Cannot find interrogation ${interrogation} in the local store`,
+    )
     return
   }
 
@@ -24,6 +23,9 @@ export async function partialResetInterrogation(interrogationId: string) {
   )
 
   if (!questionnaire) {
+    console.error(
+      `Cannot find questionnaire ${interrogation.questionnaireId} from the API`,
+    )
     return
   }
 

@@ -84,6 +84,7 @@ export const translations: Translations<'en'> = {
     nomenclaturesProgress: 'Nomenclatures',
     externalResourcesProgress: 'External resources',
     uploadingData: 'Sending data...',
+    takingControl: 'Taking control of the questionnaire...',
   },
   visualizeMessage: {
     visualizePage: 'Questionnaire viewer page',

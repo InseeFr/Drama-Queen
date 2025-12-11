@@ -94,6 +94,11 @@ export function createApiClient(params: {
         .post(`api/interrogations/${interrogation.id}/temp-zone`, interrogation)
         .then(() => undefined),
 
+    syncInterrogation: (idInterrogation) =>
+      axiosInstance
+        .post(`api/interrogations/${idInterrogation}/synchronize`)
+        .then(({ data }) => interrogationSchema.parse(data)),
+
     getCampaigns: () =>
       axiosInstance
         .get<Campaign>(`api/campaigns`)

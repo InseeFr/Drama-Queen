@@ -86,6 +86,7 @@ export const translations: Translations<'fr'> = {
     nomenclaturesProgress: 'Nomenclatures',
     externalResourcesProgress: 'Ressources externes',
     uploadingData: 'Envoi des données...',
+    takingControl: 'Reprise du questionnaire...',
   },
   visualizeMessage: {
     visualizePage: 'Page de visualisation de questionnaire',
