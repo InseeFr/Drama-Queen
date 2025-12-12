@@ -23,7 +23,7 @@ export function SynchronizeData() {
       (data) => (data.action === 'redirect' ? [data] : null),
       ctx,
       () => {
-        //window.location.href = window.location.origin
+        window.location.href = window.location.origin
       },
     )
   }, [])

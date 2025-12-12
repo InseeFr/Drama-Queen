@@ -9,7 +9,7 @@ bun run dev
 Then, in the Drama queen .env set
 
 ```env
-VITE_QUEEN_API_URL=http://localhost:3000
+VITE_QUEEN_API_URL=http://localhost:5000
 ```
 
 Then you can request a synchronization (http://localhost:5001/queen/synchronize) to get fake data from this API

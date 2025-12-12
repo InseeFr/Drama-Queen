@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
 
 import Roundabout from '../mocks/roundabout.json'
@@ -16,8 +17,8 @@ const defaultStateData = {
 
 // Fake the database with an in memory map
 const interrogations = new Map(
-  Array.from({ length: 5 }).map((_, k) => {
-    const id = `i${k}`
+  Array.from({ length: 10 }).map((_, k) => {
+    const id = `su${k}`
     return [
       id,
       {
@@ -39,7 +40,7 @@ const interrogations = new Map(
   }),
 )
 
-app.use('/api/*', cors())
+app.use('/*', cors())
 
 app.use(async (_, next) => {
   await new Promise((resolve) => setTimeout(resolve, waitTime))
@@ -50,14 +51,11 @@ app.get('/api/healthcheck', (c) => {
   return c.json({})
 })
 
+/**
+ * Interrogations
+ */
 app.get('/api/interrogations/state-data', (c) => {
-  return c.json([{ id: 'i2' }, { id: 'i3' }])
-})
-
-app.put('/api/interrogations/:id', async (c) => {
-  const data = await c.req.json()
-  interrogations.set(c.req.param('id'), data)
-  return c.json({})
+  return c.json([{ id: 'su2' }, { id: 'su3' }])
 })
 
 app.post('/api/interrogations/:id/synchronize', async (c) => {
@@ -72,6 +70,19 @@ app.post('/api/interrogations/:id/synchronize', async (c) => {
   })
 })
 
+app.get('/api/interrogations/:id', (c) => {
+  return c.json(interrogations.get(c.req.param('id')))
+})
+
+app.put('/api/interrogations/:id', async (c) => {
+  const data = await c.req.json()
+  interrogations.set(c.req.param('id'), data)
+  return c.json({})
+})
+
+/**
+ * Campaigns
+ */
 app.get('/api/campaigns', (c) => {
   return c.json([
     {
@@ -84,10 +95,6 @@ app.get('/api/campaigns', (c) => {
   ])
 })
 
-app.get('/api/questionnaire/:id', (c) => {
-  return c.json({ value: Roundabout })
-})
-
 app.get('/api/campaign/:id/interrogations', (c) => {
   return c.json(
     Array.from(interrogations.values()).map((interrogation) => ({
@@ -97,13 +104,14 @@ app.get('/api/campaign/:id/interrogations', (c) => {
   )
 })
 
-app.get('/api/interrogations/:id', (c) => {
-  return c.json(interrogations.get(c.req.param('id')))
+app.get('/api/questionnaire/:id', (c) => {
+  return c.json({ value: Roundabout })
 })
 
-const port = 5000
+// Serve static files for all non-API routes
+app.use('/*', serveStatic({ root: '../dist' }))
 
-console.log(`== Starting fake Queen API Server on http://localhost:${port}`)
+const port = 5000
 
 export default {
   port,
