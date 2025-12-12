@@ -12,7 +12,7 @@ type LoadingDisplayProps = {
   progressBars: {
     progress: number
     label?: string
-    extraTitle?: string
+    count?: string
   }[]
 }
 
@@ -33,7 +33,7 @@ export function LoadingDisplay({
         </Typography>
       </Stack>
       <Stack spacing={2}>
-        {progressBars.map(({ label, progress, extraTitle }) => (
+        {progressBars.map(({ label, progress, count }) => (
           <Fragment key={`${label}-${progress}`}>
             <Stack spacing={1}>
               {label !== undefined && (
@@ -43,7 +43,7 @@ export function LoadingDisplay({
                   className={classes.lightText}
                 >
                   {label}
-                  {extraTitle ? `: ${extraTitle}` : ''}
+                  {count ? `: ${count}` : ''}
                 </Typography>
               )}
               <LinearProgress

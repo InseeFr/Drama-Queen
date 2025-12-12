@@ -7,7 +7,7 @@ const mockStore = (state: any) => ({
 })
 
 describe('selectors', () => {
-  it('should return main selector for running download state', () => {
+  it('should return progress bars for running download state', () => {
     const runningDownloadState = {
       synchronizeData: {
         stateDescription: 'running',
@@ -27,22 +27,22 @@ describe('selectors', () => {
 
     const store = mockStore(runningDownloadState)
 
-    const result = selectors.main(store.getState())
+    const bars = selectors.progressBars(store.getState())
+    const stepTitle = selectors.stepTitle(store.getState())
 
-    expect(result).toEqual({
-      isDownloading: true,
-      interrogationProgress: 25,
-      nomenclatureProgress: 25,
-      surveyProgress: 25,
-      externalResourcesProgress: 25,
-      externalResourcesProgressCount: {
-        externalResourcesCompleted: 50,
-        totalExternalResources: 200,
-      },
-    })
+    expect(bars).toHaveLength(4)
+    // questionnaires, nomenclatures, interrogations, external resources
+    expect(bars.map((b: any) => Math.round(b.progress))).toEqual([
+      25, 25, 25, 25,
+    ])
+    // last bar should include a count string "completed / total"
+    expect(bars[3].count).toBe('50 / 200')
+    // step title for download should be a non-empty string
+    expect(typeof stepTitle).toBe('string')
+    expect(stepTitle.length).toBeGreaterThan(0)
   })
 
-  it('should return main selector for running upload state', () => {
+  it('should return progress bars for running upload state', () => {
     const runningUploadState = {
       synchronizeData: {
         stateDescription: 'running',
@@ -56,16 +56,16 @@ describe('selectors', () => {
 
     const store = mockStore(runningUploadState)
 
-    const result = selectors.main(store.getState())
+    const bars = selectors.progressBars(store.getState())
+    const stepTitle = selectors.stepTitle(store.getState())
 
-    expect(result).toEqual({
-      isUploading: true,
-      uploadInterrogationProgress: 25,
-      uploadParadataProgress: 25,
-    })
+    expect(bars).toHaveLength(2)
+    expect(bars.map((b: any) => Math.round(b.progress))).toEqual([25, 25])
+    expect(typeof stepTitle).toBe('string')
+    expect(stepTitle.length).toBeGreaterThan(0)
   })
 
-  it('should return main selector for not running state', () => {
+  it('should return empty progress bars and empty title for not running state', () => {
     const notRunningState = {
       synchronizeData: {
         stateDescription: 'not running',
@@ -74,8 +74,10 @@ describe('selectors', () => {
 
     const store = mockStore(notRunningState)
 
-    const result = selectors.main(store.getState())
+    const bars = selectors.progressBars(store.getState())
+    const stepTitle = selectors.stepTitle(store.getState())
 
-    expect(result).toEqual({ hideProgress: true })
+    expect(bars).toEqual([])
+    expect(stepTitle).toBe('')
   })
 })

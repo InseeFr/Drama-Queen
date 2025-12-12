@@ -33,7 +33,9 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './DramaIndex': './src/bootstrap.tsx',
-        './useArticulationTable': './src/hooks/useArticulationTable.ts',
+        './getArticulationTable': './src/federation/getArticulationTable.ts',
+        './partialResetInterrogation':
+          './src/federation/partialResetInterrogation.ts',
       },
       shared: ['react', 'react-dom'],
     }),

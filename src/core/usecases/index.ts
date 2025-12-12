@@ -1,4 +1,5 @@
 import * as collectSurvey from './collectSurvey'
+import * as takeControl from './interrogation/takeControl'
 import * as reviewSurvey from './reviewSurvey'
 import * as synchronizeData from './synchronizeData'
 import * as userAuthentication from './userAuthentication'
@@ -10,4 +11,5 @@ export const usecases = {
   visualizeSurvey,
   collectSurvey,
   reviewSurvey,
+  takeControl,
 }

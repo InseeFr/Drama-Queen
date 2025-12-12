@@ -35,7 +35,7 @@ describe('LoadingDisplay Component', () => {
       syncStepTitle: 'sync step',
       progressBars: [
         { label: 'Progress 1', progress: 50 },
-        { label: 'Progress 2', progress: 75, extraTitle: 'Extra Info' },
+        { label: 'Progress 2', progress: 75, count: 'Extra Info' },
       ],
     }
 
