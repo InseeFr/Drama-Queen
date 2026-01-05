@@ -16,7 +16,7 @@ const EXTERNAL_RESOURCES_ROOT_CACHE_NAME = 'cache-root-external'
 
 export const thunks = {
   // Sync the data (upload first, download last)
-  sync: (params: { resetMoved: true }) => async (dispatch, getState) => {
+  sync: (params: { resetMoved: boolean }) => async (dispatch, getState) => {
     const state = getState()[name]
     if (state.stateDescription === 'running') {
       return

@@ -13,7 +13,8 @@ export function SynchronizeData() {
   const { synchronizeData } = useCore().functions
 
   useEffect(() => {
-    synchronizeData.sync({ resetMoved: true })
+    const resetMovedEnabled = import.meta.env.VITE_RESET_MOVED_ENABLED === "true";
+    synchronizeData.sync({ resetMoved: resetMovedEnabled })
   }, [synchronizeData])
 
   const { evtSynchronizeData } = useCore().evts

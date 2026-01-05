@@ -3,7 +3,6 @@ import { Collect } from '@/routes/pages/collect/Collect'
 import { DisplayEnvValues } from '@/routes/pages/env/DisplayEnvValues'
 import { ErrorPage } from '@/routes/pages/error/Error'
 import { ExternalRessources } from '@/routes/pages/external/External'
-import { PartialReset } from '@/routes/pages/reset/PartialReset'
 import { Review } from '@/routes/pages/review/Review'
 import { SynchronizeData } from '@/routes/pages/synchronize/SynchronizeData'
 import { SynchronizeInterrogation } from '@/routes/pages/synchronize/SynchronizeInterrogation'
@@ -28,10 +27,6 @@ const getChildrenRoutes = () => {
       path: '/visualize',
       Component: Visualize,
       loader: visualizeLoader,
-    },
-    {
-      path: '/reset',
-      Component: PartialReset,
     },
     {
       path: '/synchronize',

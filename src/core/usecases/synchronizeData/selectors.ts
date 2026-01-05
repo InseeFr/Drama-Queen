@@ -89,9 +89,9 @@ const stepTitle = createSelector(state, (state: State) => {
   }
   switch (state.type) {
     case 'upload':
-      return t('interrogationsProgress')
+      return t('uploadingData')
     case 'download':
-      return t('questionnairesProgress')
+      return t('downloadingData')
     default:
       return ''
   }
