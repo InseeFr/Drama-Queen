@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 
-import type { Thunks } from '@/core/bootstrap'
+import { type Thunks } from '@/core/bootstrap'
 import { EXTERNAL_RESOURCES_URL, IS_TELEMETRY_ENABLED } from '@/core/constants'
 import type { Questionnaire } from '@/core/model'
 import {
@@ -15,6 +15,92 @@ import { actions, name } from './state'
 const EXTERNAL_RESOURCES_ROOT_CACHE_NAME = 'cache-root-external'
 
 export const thunks = {
+  // Sync the data (upload first, download last)
+  sync: (params: { resetMoved: boolean }) => async (dispatch, getState) => {
+    const state = getState()[name]
+    if (state.stateDescription === 'running') {
+      return
+    }
+
+    dispatch(actions.runningSync())
+    if (params.resetMoved) {
+      await dispatch(thunks.resetMoved())
+    }
+    await dispatch(thunks.upload())
+    await dispatch(thunks.download())
+    dispatch(actions.syncCompleted())
+  },
+
+  // Reset data for interrogations where the interrogated moved
+  resetMoved: () => async (dispatch, _getState, context) => {
+    const { queenApi } = context
+    dispatch(actions.runningDownload())
+    try {
+      const ids = await queenApi.fetchMoved()
+      dispatch(
+        actions.updateDownloadTotalInterrogation({
+          totalInterrogation: ids.length,
+        }),
+      )
+      for (const { id } of ids) {
+        await dispatch(thunks.partialReset({ interrogationId: id }))
+        dispatch(actions.downloadInterrogationCompleted())
+      }
+      dispatch(actions.downloadCompleted)
+    } catch (e) {
+      dispatch(actions.uploadError())
+      throw e
+    }
+  },
+
+  // Reset data for a specific interrogation
+  partialReset:
+    (params: { interrogationId: string }) =>
+    async (_dispatch, _getState, context) => {
+      const { queenApi, dataStore } = context
+      const interrogation = await dataStore.getInterrogation(
+        params.interrogationId,
+      )
+
+      if (!interrogation) {
+        console.error(
+          `Cannot find interrogation ${interrogation} in the local store`,
+        )
+        return
+      }
+
+      // Retrieve questionnaire from the API
+      const questionnaire = await queenApi.getQuestionnaire(
+        interrogation.questionnaireId,
+      )
+
+      if (!questionnaire) {
+        console.error(
+          `Cannot find questionnaire ${interrogation.questionnaireId} from the API`,
+        )
+        return
+      }
+
+      // Reset data
+      interrogation.data.CALCULATED = {}
+      interrogation.data.COLLECTED = {}
+      // Reset external variables
+      for (const variable of questionnaire.variables) {
+        if (
+          variable.variableType === 'EXTERNAL' &&
+          variable.isDeletedOnReset &&
+          // eslint-disable-next-line no-prototype-builtins
+          interrogation.data.EXTERNAL?.hasOwnProperty(variable.name)
+        ) {
+          delete interrogation.data.EXTERNAL[variable.name]
+        }
+      }
+      delete interrogation.stateData
+
+      await dataStore.updateInterrogation(interrogation)
+    },
+
+  // Download the fresh data from the server
   download:
     () =>
     async (...args) => {
@@ -24,7 +110,7 @@ export const thunks = {
       {
         const state = getState()[name]
 
-        if (state.stateDescription === 'running') {
+        if (state.stateDescription === 'running' && state.type === 'download') {
           return
         }
       }
@@ -102,7 +188,6 @@ export const thunks = {
         /*
          * Interrogation
          */
-
         const prInterrogation = await Promise.all(
           campaignsIds.map((campaignId) =>
             queenApi
@@ -292,20 +377,21 @@ export const thunks = {
         )
         localSyncStorage.addError(true)
         dispatch(actions.downloadFailed())
+        throw error
       }
     },
+
+  // Upload the data to the server
   upload:
     () =>
     async (...args) => {
       const [dispatch, getState, { dataStore, queenApi, localSyncStorage }] =
         args
 
-      {
-        const state = getState()[name]
+      const state = getState()[name]
 
-        if (state.stateDescription === 'running') {
-          return
-        }
+      if (state.stateDescription === 'running' && state.type === 'upload') {
+        return
       }
 
       dispatch(actions.runningUpload())
@@ -414,10 +500,10 @@ export const thunks = {
         }
 
         dispatch(actions.uploadCompleted())
-        dispatch(thunks.download())
-      } catch {
+      } catch (e) {
         localSyncStorage.addError(true)
         dispatch(actions.uploadError())
+        throw e
       }
     },
 } satisfies Thunks

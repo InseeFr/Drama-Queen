@@ -1,173 +1,103 @@
 import { createSelector } from 'redux-clean-architecture'
-import { assert } from 'tsafe/assert'
 
 import type { State as RootState } from '@/core/bootstrap'
+import { getTranslation } from '@/i18n'
 
-import { name } from './state'
+import { type State, name } from './state'
+
+const { t } = getTranslation('synchronizeMessage')
 
 const state = (rootState: RootState) => rootState[name]
 
-const downloadingState = createSelector(state, (state) => {
+const computeProgress = (count: number, total: number) => {
+  if (count === 0 && total === 0) return 100
+  return (count * 100) / total
+}
+
+type ProgressBar = { progress: number; label: string; count?: string }
+
+const progressBars = createSelector(state, (state: State) => {
+  const bars = [] as ProgressBar[]
+
   if (state.stateDescription !== 'running') {
-    return undefined
+    return []
   }
 
-  if (state.type !== 'download') {
-    return undefined
+  if (state.type !== 'upload' && state.type !== 'download') {
+    return []
   }
 
-  return state
-})
+  // Uploading progress bars
+  if (state.type === 'upload') {
+    bars.push({
+      progress: computeProgress(
+        state.interrogationCompleted,
+        state.totalInterrogation,
+      ),
+      label: t('interrogationsProgress'),
+    })
+    if (state.totalParadata !== undefined) {
+      bars.push({
+        progress: computeProgress(state.paradataCompleted, state.totalParadata),
+        label: t('paradataProgress'),
+      })
+    }
+    return bars
+  }
 
-const interrogationProgress = createSelector(downloadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-  if (state.interrogationCompleted === 0 && state.totalInterrogation === 0)
-    return 100
-  return (state.interrogationCompleted * 100) / state.totalInterrogation
-})
-const nomenclatureProgress = createSelector(downloadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-  if (state.nomenclatureCompleted === 0 && state.totalNomenclature === 0)
-    return 100
-  return (state.nomenclatureCompleted * 100) / state.totalNomenclature
-})
-const surveyProgress = createSelector(downloadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-  if (state.surveyCompleted === 0 && state.totalSurvey === 0) return 100
-  return (state.surveyCompleted * 100) / state.totalSurvey
-})
-
-const externalResourcesProgress = createSelector(downloadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-  // if there is no external resources, we don't show the progress bar
-  if (state.totalExternalResourcesByQuestionnaire === undefined) {
-    return undefined
-  }
-  if (
-    state.externalResourcesByQuestionnaireCompleted === 0 &&
-    state.totalExternalResourcesByQuestionnaire === 0
+  // Downloading bars
+  bars.push(
+    ...[
+      {
+        progress: computeProgress(state.surveyCompleted, state.totalSurvey),
+        label: t('questionnairesProgress'),
+      },
+      {
+        progress: computeProgress(
+          state.nomenclatureCompleted,
+          state.totalNomenclature,
+        ),
+        label: t('nomenclaturesProgress'),
+      },
+      {
+        progress: computeProgress(
+          state.interrogationCompleted,
+          state.totalInterrogation,
+        ),
+        label: t('interrogationsProgress'),
+      },
+    ],
   )
-    return 100
-  return (
-    (state.externalResourcesByQuestionnaireCompleted * 100) /
-    state.totalExternalResourcesByQuestionnaire
-  )
+  if (state.totalExternalResources !== undefined) {
+    bars.push({
+      progress: computeProgress(
+        state.externalResourcesCompleted,
+        state.totalExternalResources,
+      ),
+      label: t('externalResourcesProgress'),
+      count: Number.isFinite(state.totalExternalResources)
+        ? `${state.externalResourcesCompleted} / ${state.totalExternalResources}`
+        : undefined,
+    })
+  }
+  return bars
 })
 
-const externalResourcesProgressCount = createSelector(
-  downloadingState,
-  (state) => {
-    if (state === undefined) {
-      return undefined
-    }
-    // if there is no external resources, we don't show the progress bar
-    if (state.totalExternalResources === undefined) {
-      return undefined
-    }
-    if (
-      state.totalExternalResources === 0 &&
-      state.externalResourcesCompleted === 0
-    )
-      return undefined
-    return {
-      externalResourcesCompleted: state.externalResourcesCompleted,
-      totalExternalResources: state.totalExternalResources,
-    }
-  },
-)
-
-const uploadingState = createSelector(state, (state) => {
+const stepTitle = createSelector(state, (state: State) => {
   if (state.stateDescription !== 'running') {
-    return undefined
+    return ''
   }
-
-  if (state.type !== 'upload') {
-    return undefined
+  switch (state.type) {
+    case 'upload':
+      return t('uploadingData')
+    case 'download':
+      return t('downloadingData')
+    default:
+      return ''
   }
-
-  return state
 })
-
-const uploadInterrogationProgress = createSelector(uploadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-
-  if (state.totalInterrogation === 0 && state.interrogationCompleted === 0)
-    return 100
-  return (state.interrogationCompleted * 100) / state.totalInterrogation
-})
-
-const uploadParadataProgress = createSelector(uploadingState, (state) => {
-  if (state === undefined) {
-    return undefined
-  }
-
-  // if total of paradata is undefined (only happening when telemetry is disabled), we don't show the progress bar
-  if (state.totalParadata === undefined) {
-    return undefined
-  }
-
-  if (state.totalParadata === 0 && state.paradataCompleted === 0) return 100
-  return (state.paradataCompleted * 100) / state.totalParadata
-})
-
-const main = createSelector(
-  state,
-  interrogationProgress,
-  nomenclatureProgress,
-  surveyProgress,
-  externalResourcesProgress,
-  externalResourcesProgressCount,
-  uploadInterrogationProgress,
-  uploadParadataProgress,
-  (
-    state,
-    interrogationProgress,
-    nomenclatureProgress,
-    surveyProgress,
-    externalResourcesProgress,
-    externalResourcesProgressCount,
-    uploadInterrogationProgress,
-    uploadParadataProgress,
-  ) => {
-    switch (state.stateDescription) {
-      case 'not running':
-        return { hideProgress: true as const }
-      case 'running':
-        switch (state.type) {
-          case 'upload':
-            assert(uploadInterrogationProgress !== undefined)
-            return {
-              isUploading: true as const,
-              uploadInterrogationProgress,
-              uploadParadataProgress,
-            }
-          case 'download':
-            assert(interrogationProgress !== undefined)
-            assert(nomenclatureProgress !== undefined)
-            assert(surveyProgress !== undefined)
-            return {
-              isDownloading: true,
-              interrogationProgress,
-              nomenclatureProgress,
-              surveyProgress,
-              externalResourcesProgress,
-              externalResourcesProgressCount,
-            }
-        }
-    }
-  },
-)
 
 export const selectors = {
-  main,
+  progressBars,
+  stepTitle,
 }

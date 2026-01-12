@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
     "test": "vitest run",
+    "check": "tsc",
     "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
     "build": "tsc && vite build",

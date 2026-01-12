@@ -1,12 +1,10 @@
 import { getArticulationState } from '@inseefr/lunatic'
-import { renderHook, waitFor } from '@testing-library/react'
+import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-import React from 'react'
 
 import { prCore } from '@/createCore'
 
-import { useArticulationTable } from './useArticulationTable'
+import { getArticulationTable } from './getArticulationTable'
 
 vi.mock('@/createCore', () => {
   return {
@@ -26,7 +24,7 @@ vi.mock('@inseefr/lunatic', () => ({
 
 const mockLoader = vi.fn()
 
-describe('useArticulationTable', () => {
+describe('getArticulationTable', () => {
   beforeEach(async () => {
     const core = await prCore
     core.functions.collectSurvey.loader = mockLoader
@@ -72,31 +70,31 @@ describe('useArticulationTable', () => {
       ],
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
+    const data = await getArticulationTable('interro1')
 
     await waitFor(() => {
-      expect(result.current).not.toBeNull()
-      expect(result.current?.headers).toEqual(['name', 'age'])
+      expect(data).not.toBeNull()
+      expect(data?.headers).toEqual(['name', 'age'])
 
       // first item
-      expect(result.current?.rows[0].cells).toEqual([
+      expect(data?.rows[0].cells).toEqual([
         { label: 'name', value: 'Alice' },
         { label: 'age', value: '30' },
       ])
-      expect(result.current?.rows[0].url).toContain(
+      expect(data?.rows[0].url).toContain(
         '/queen/interrogations/interro1?page=1.1%231', // for the page, `#` is encoded into `%23`
       )
-      expect(result.current?.rows[0].label).toBe('Continuer')
+      expect(data?.rows[0].label).toBe('Continuer')
 
       // second item
-      expect(result.current?.rows[1].cells).toEqual([
+      expect(data?.rows[1].cells).toEqual([
         { label: 'name', value: 'Patrick' },
         { label: 'age', value: '25' },
       ])
-      expect(result.current?.rows[1].url).toContain(
+      expect(data?.rows[1].url).toContain(
         '/queen/interrogations/interro1?page=1.1%232', // for the page, `#` is encoded into `%23`
       )
-      expect(result.current?.rows[1].label).toBe('Complété')
+      expect(data?.rows[1].label).toBe('Complété')
     })
   })
 
@@ -106,10 +104,10 @@ describe('useArticulationTable', () => {
       questionnaire: null,
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
+    const data = await getArticulationTable('interro1')
 
     await waitFor(() => {
-      expect(result.current).toBeNull()
+      expect(data).toBeNull()
     })
   })
 
@@ -127,12 +125,12 @@ describe('useArticulationTable', () => {
       questionnaire: { articulation: { items: [] } },
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
+    const data = await getArticulationTable('interro1')
 
     await waitFor(() => {
-      expect(result.current).not.toBeNull()
-      expect(result.current?.rows).toHaveLength(3)
-      expect(result.current?.rows.map((r) => r.label)).toEqual([
+      expect(data).not.toBeNull()
+      expect(data?.rows).toHaveLength(3)
+      expect(data?.rows.map((r) => r.label)).toEqual([
         'Commencer',
         'Continuer',
         'Complété',
@@ -175,17 +173,17 @@ describe('useArticulationTable', () => {
       questionnaire: { articulation: { items: [] } },
     })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'interro1'))
+    const data = await getArticulationTable('interro1')
 
     await waitFor(() => {
-      expect(result.current).not.toBeNull()
-      expect(result.current?.rows).toHaveLength(3)
-      expect(result.current?.rows.map((r) => r.label)).toEqual([
+      expect(data).not.toBeNull()
+      expect(data?.rows).toHaveLength(3)
+      expect(data?.rows.map((r) => r.label)).toEqual([
         'Commencer',
         'Continuer',
         'Complété',
       ])
-      expect(result.current?.rows[0].cells).toEqual([
+      expect(data?.rows[0].cells).toEqual([
         { label: 'Prénom', value: 'Bob' },
         { label: 'Sexe', value: 'Homme' },
         { label: 'Age', value: '23 ans' },
@@ -200,10 +198,10 @@ describe('useArticulationTable', () => {
     })
     ;(getArticulationState as any).mockReturnValue({ items: [] })
 
-    const { result } = renderHook(() => useArticulationTable(React, 'su4'))
+    const data = await getArticulationTable('su4')
 
     await waitFor(() => {
-      expect(result.current).toBeNull()
+      expect(data).toBeNull()
     })
   })
 })

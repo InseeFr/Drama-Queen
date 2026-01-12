@@ -13,8 +13,12 @@ import { actions } from './state'
 import { thunks } from './thunks'
 
 const mockDispatch = vi.fn()
-const mockGetState: () => { synchronizeData: State.NotRunning } = () => ({
+const mockGetState: () => {
+  synchronizeData: State.NotRunning
+  takeControl: any
+} = () => ({
   synchronizeData: { stateDescription: 'not running' },
+  takeControl: {} as any,
 })
 
 const mockDataStore = {
@@ -32,6 +36,8 @@ const mockQueenApi = {
   getInterrogation: vi.fn(),
   putInterrogation: vi.fn(),
   postInterrogationInTemp: vi.fn(),
+  fetchMoved: vi.fn(),
+  syncInterrogation: vi.fn(),
   getNomenclature: vi.fn(),
   postParadata: vi.fn(),
 }
@@ -66,6 +72,7 @@ describe('download thunk', () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -124,6 +131,7 @@ describe('download thunk', () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -165,6 +173,7 @@ describe('download thunk', () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -175,7 +184,9 @@ describe('download thunk', () => {
       new Error('Failed to fetch questionnaire'),
     )
 
-    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+    await expect(() =>
+      thunks.download()(mockDispatch, mockGetState, mockContext as any),
+    ).rejects.toThrowError()
 
     expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
@@ -199,6 +210,7 @@ describe('upload thunk', () => {
     // override global mock value for enable telemetry
     vi.doMock('@/core/constants', () => ({
       IS_TELEMETRY_ENABLED: true,
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -231,8 +243,7 @@ describe('upload thunk', () => {
      * Cannot do directly expect(mockDispatch).toHaveBeenCalledWith(thunks.download())
      * since it considers it has been called with [AsyncFunction (anonymous)]
      */
-    expect(mockDispatch).toHaveBeenCalledWith(expect.any(Function))
-    expect(mockDispatch).toHaveBeenCalledTimes(7)
+    expect(mockDispatch).toHaveBeenCalledTimes(6)
   })
 
   it('should handle interrogation upload failure and retry posting to temp zone', async () => {
@@ -290,7 +301,9 @@ describe('upload thunk', () => {
       new Error('Unexpected error'),
     )
 
-    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+    await expect(() =>
+      thunks.upload()(mockDispatch, mockGetState, mockContext as any),
+    ).rejects.toThrowError()
 
     expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadError())
@@ -342,6 +355,7 @@ describe('upload thunk', () => {
     // override global mock value for enable telemetry
     vi.doMock('@/core/constants', () => ({
       IS_TELEMETRY_ENABLED: true,
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -419,6 +433,7 @@ describe('upload thunk', () => {
     // override global mock value for enable telemetry
     vi.doMock('@/core/constants', () => ({
       IS_TELEMETRY_ENABLED: true,
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')

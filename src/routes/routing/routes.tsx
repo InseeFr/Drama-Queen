@@ -5,6 +5,7 @@ import { ErrorPage } from '@/routes/pages/error/Error'
 import { ExternalRessources } from '@/routes/pages/external/External'
 import { Review } from '@/routes/pages/review/Review'
 import { SynchronizeData } from '@/routes/pages/synchronize/SynchronizeData'
+import { SynchronizeInterrogation } from '@/routes/pages/synchronize/SynchronizeInterrogation'
 import { Visualize } from '@/routes/pages/visualize/Visualize'
 
 import { Layout } from './Layout'
@@ -36,6 +37,11 @@ const getChildrenRoutes = () => {
       path: '/interrogations/:interrogationId',
       Component: Collect, // This route do not contains UI components, all things are done in loader, if not there is an error
       loader: collectLoader,
+    },
+    {
+      path: '/interrogations/:interrogationId/synchronize',
+      Component: SynchronizeInterrogation,
+      loader: protectedRouteLoader,
     },
     {
       path: `/review/interrogations/:interrogationId`,

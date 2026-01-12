@@ -21,6 +21,8 @@ export type QueenApi = {
   getInterrogations: () => Promise<Interrogation[]>
   getInterrogation: (idInterrogation: string) => Promise<Interrogation>
   putInterrogation: (interrogation: Interrogation) => Promise<void>
+  syncInterrogation: (idInterrogation: string) => Promise<Interrogation>
+  fetchMoved: () => Promise<{ id: string }[]>
   /**
    * Endpoint in development
    * @param

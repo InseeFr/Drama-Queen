@@ -82,6 +82,7 @@ export type SynchronizeMessage =
   | 'nomenclaturesProgress'
   | 'externalResourcesProgress'
   | 'uploadingData'
+  | 'takingControl'
 
 export type VisualizeMessage =
   | 'visualizePage'
