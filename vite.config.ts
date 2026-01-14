@@ -70,6 +70,9 @@ export const buildViteConf = (withFederation: boolean) => {
       : defaultPlugin,
     build: {
       target: 'esnext',
+      minify: false,
+      sourcemap: true,
+      modulePreload: false,
     },
     define: {
       global: 'window',
