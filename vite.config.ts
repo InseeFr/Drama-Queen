@@ -56,7 +56,7 @@ export const buildViteConf = (withFederation: boolean) => {
           ...defaultPlugin,
           federation({
             name: 'drama-queen',
-            filename: 'remoteEntry.js',
+            filename: 'assets/remoteEntry.js',
             exposes: {
               './DramaIndex': './src/bootstrap.tsx',
               './getArticulationTable':
@@ -73,17 +73,6 @@ export const buildViteConf = (withFederation: boolean) => {
     },
     define: {
       global: 'window',
-    },
-    // https://vite.dev/guide/build.html#advanced-base-options
-    experimental: {
-      renderBuiltUrl(_filename, { hostType }) {
-        /**
-         * For js files,
-         * We need the urls to be relative not absolute (fix issue when we load directly /questionnaire/{id}),
-         * But as for the rest, it must remain absolute to allow application works in legacy and with the new application.
-         */
-        if (hostType === 'js') return { relative: true }
-      },
     },
   }
 }
