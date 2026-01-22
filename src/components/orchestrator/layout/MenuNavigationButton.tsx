@@ -7,8 +7,8 @@ type MenuNaviGationButtonProps = {
   className?: string
   label: string | ReactNode
   disabled?: boolean
-  startIcon?: JSX.Element
-  endIcon?: JSX.Element
+  startIcon?: React.JSX.Element
+  endIcon?: React.JSX.Element
   autofocus?: boolean
   onClick: () => void
 }

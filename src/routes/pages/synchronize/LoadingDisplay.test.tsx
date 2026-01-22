@@ -52,14 +52,14 @@ describe('LoadingDisplay Component', () => {
         variant: 'determinate',
         value: 50,
       }),
-      {},
+      undefined,
     )
     expect(LinearProgress).toHaveBeenCalledWith(
       expect.objectContaining({
         variant: 'determinate',
         value: 75,
       }),
-      {},
+      undefined,
     )
   })
 
@@ -78,14 +78,14 @@ describe('LoadingDisplay Component', () => {
         variant: 'determinate',
         value: 50,
       }),
-      {},
+      undefined,
     )
     expect(LinearProgress).toHaveBeenCalledWith(
       expect.objectContaining({
         variant: 'determinate',
         value: 75,
       }),
-      {},
+      undefined,
     )
   })
 

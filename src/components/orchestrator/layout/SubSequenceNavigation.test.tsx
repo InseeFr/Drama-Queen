@@ -67,7 +67,7 @@ describe('SubSequenceNavigation Component', () => {
         label: defaultProps.sequence.label,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -102,7 +102,7 @@ describe('SubSequenceNavigation Component', () => {
         disabled: false,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
 
     // second subSequence
@@ -112,7 +112,7 @@ describe('SubSequenceNavigation Component', () => {
         disabled: true,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 

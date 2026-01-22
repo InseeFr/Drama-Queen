@@ -127,7 +127,7 @@ describe('Header Component', () => {
         quit: defaultProps.quit,
         definitiveQuit: defaultProps.definitiveQuit,
       }),
-      {},
+      undefined,
     )
   })
 
@@ -182,7 +182,7 @@ describe('Header Component', () => {
         sequence: props.overview[1],
         subSequence: props.overview[1].children[0],
       }),
-      {},
+      undefined,
     )
   })
 
@@ -199,7 +199,7 @@ describe('Header Component', () => {
         shortCutKey: SHORTCUT_QUIT,
         onClickMethod: defaultProps.quit,
       }),
-      {},
+      undefined,
     )
 
     // renders ShortCut for menu button
@@ -208,7 +208,7 @@ describe('Header Component', () => {
         shortCutKey: SHORTCUT_MENU,
         onClickMethod: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 })
