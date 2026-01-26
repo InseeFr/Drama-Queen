@@ -74,7 +74,7 @@ describe('Continue Component', () => {
         shortCutKey: defaultProps.shortCutKey,
         onClickMethod: onContinueMock,
       }),
-      {},
+      undefined,
     )
   })
 })

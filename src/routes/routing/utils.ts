@@ -59,7 +59,7 @@ export interface AwaitProps<T> {
   resolve: Promise<T>
 }
 
-export function Await<T>(props: AwaitProps<T>): JSX.Element {
+export function Await<T>(props: AwaitProps<T>): React.JSX.Element {
   return RrdAwait(props)
 }
 

@@ -73,7 +73,7 @@ describe('SequenceNavigation Component', () => {
         endIcon: undefined,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
 
     // second sequence
@@ -84,7 +84,7 @@ describe('SequenceNavigation Component', () => {
         endIcon: undefined,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -122,7 +122,7 @@ describe('SequenceNavigation Component', () => {
         label: defaultProps.overview[0].label,
         className: expect.stringContaining('sequenceOpen'),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -169,7 +169,7 @@ describe('SequenceNavigation Component', () => {
         label: props.overview[2].label,
         endIcon: expect.anything(),
       }),
-      {},
+      undefined,
     )
 
     // First sequence dos not have subSequences
@@ -178,7 +178,7 @@ describe('SequenceNavigation Component', () => {
         label: defaultProps.overview[0].label,
         endIcon: undefined,
       }),
-      {},
+      undefined,
     )
   })
 })

@@ -8,7 +8,7 @@ import { useTranslation } from '@/i18n'
 
 type ContinueProps = {
   label: string
-  endIcon: JSX.Element | undefined
+  endIcon: React.JSX.Element | undefined
   shortCutKey: string
   shortCutLabel: string
   onContinue: () => void

@@ -66,7 +66,7 @@ describe('Review', () => {
         onChangePage: undefined,
         getReferentiel: mockReviewSurvey.getReferentiel,
       }),
-      {},
+      undefined,
     )
   })
 
@@ -111,7 +111,7 @@ describe('Review', () => {
         ]),
         onClose: expect.any(Function),
       }),
-      expect.anything(),
+      undefined,
     )
 
     // Simulate Modal's onClose call
@@ -124,7 +124,7 @@ describe('Review', () => {
       expect.objectContaining({
         isOpen: false,
       }),
-      expect.anything(),
+      undefined,
     )
   })
 })
