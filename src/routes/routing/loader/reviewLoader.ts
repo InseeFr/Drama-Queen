@@ -1,9 +1,12 @@
-import { type LoaderFunctionArgs } from 'react-router-dom'
-import { assert } from 'tsafe'
-
 import { prCore } from '@/createCore'
 
-export async function reviewLoader({ params }: LoaderFunctionArgs) {
+type ReviewLoaderArgs = {
+  params: {
+    interrogationId?: string
+  }
+}
+
+export async function reviewLoader({ params }: ReviewLoaderArgs) {
   const { userAuthentication } = (await prCore).functions
   const { reviewSurvey } = (await prCore).functions
 
@@ -11,6 +14,7 @@ export async function reviewLoader({ params }: LoaderFunctionArgs) {
   await userAuthentication.loginIfNotLoggedIn()
 
   const { interrogationId } = params
+
   assert(interrogationId !== undefined)
 
   return reviewSurvey.loader({

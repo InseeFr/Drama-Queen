@@ -1,0 +1,1 @@
+export { SynchronizeData } from '@/routes/pages/synchronize/SynchronizeData'

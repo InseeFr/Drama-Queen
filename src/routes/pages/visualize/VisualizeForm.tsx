@@ -5,21 +5,20 @@ import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
 import { tss } from 'tss-react/mui'
 
 import { useTranslation } from '@/i18n'
 
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
+import { Navigate } from '@tanstack/react-router'
 
 export function VisualizeForm() {
   const { t } = useTranslation('visualizeMessage')
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
-  const [, setSearchParams] = useSearchParams()
   const onSubmit = handleSubmit((data) => {
-    setSearchParams(getSearchParams(data))
+    Navigate({ to: '/visualize', search: getSearchParams(data) })
   })
 
   return (

@@ -1,0 +1,1 @@
+export { Collect } from '@/routes/pages/collect/Collect'

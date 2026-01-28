@@ -1,8 +1,13 @@
-import type { LoaderFunctionArgs } from 'react-router-dom'
-
 import { prCore } from '@/createCore'
 
-export async function visualizeLoader({ request }: LoaderFunctionArgs) {
+type VisualizeLoaderArgs = {
+  location: {
+    href: string
+  }
+}
+
+export async function visualizeLoader({ location }: VisualizeLoaderArgs) {
+  console.log('toto', location.href)
   const { visualizeSurvey } = (await prCore).functions
-  return visualizeSurvey.loader({ requestUrl: request.url })
+  return visualizeSurvey.loader({ requestUrl: location.href })
 }

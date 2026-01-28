@@ -2,15 +2,18 @@ import { Alert } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { Navigate, useParams } from 'react-router-dom'
 import { assert } from 'tsafe'
 
 import { useEffect } from 'react'
 
 import { useCore, useCoreState } from '@/core'
+import { useNavigate } from '@tanstack/react-router'
+
+import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/synchronize-interrogation/route'
 
 export function SynchronizeInterrogation() {
-  const { interrogationId } = useParams()
+  const { interrogationId } = SynchronizeInterrogationRoute.useParams()
+  const navigate = useNavigate()
 
   assert(typeof interrogationId === 'string')
 
@@ -23,16 +26,18 @@ export function SynchronizeInterrogation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interrogationId])
 
+  useEffect(() => {
+    if (state.done) {
+      navigate({ to: `/interrogations/${interrogationId}` })
+    }
+  }, [interrogationId, state.done, navigate])
+
   if (state.error) {
     return (
       <Stack maxWidth={700} gap={2} marginY={10} marginX="auto">
         <Alert severity="error">{state.error}</Alert>
       </Stack>
     )
-  }
-
-  if (state.done) {
-    return <Navigate to={`/interrogations/${interrogationId}`} />
   }
 
   return (

@@ -2,11 +2,11 @@ import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { TelemetryProvider } from '@/contexts/TelemetryContext'
 import { useCore } from '@/core'
 import type { collectLoader } from '@/routes/routing/loader'
-import { useLoaderData } from '@/routes/routing/utils'
+import { Route as CollectRoute } from '@/routes/_layout/interrogations/route'
 
 export function Collect() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
-  const loaderData = useLoaderData() as Awaited<
+  const loaderData = CollectRoute.useLoaderData() as Awaited<
     ReturnType<typeof collectLoader>
   >
 

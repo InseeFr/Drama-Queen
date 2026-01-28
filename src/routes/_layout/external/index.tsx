@@ -1,0 +1,1 @@
+export { ExternalRessources } from '@/routes/pages/external/External'
