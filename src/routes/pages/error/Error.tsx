@@ -1,24 +1,26 @@
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
-
 import { ErrorComponent } from '@/components/ui/ErrorComponent'
 import { useTranslation } from '@/i18n'
 
-export function ErrorPage() {
+type Props = {
+  error: Error
+}
+
+export function ErrorPage({ error }: Props) {
   const { t } = useTranslation('errorMessage')
-  const error = useRouteError()
 
   console.error(error)
 
   if (error instanceof Error) {
     return <ErrorComponent message={error.message} />
   }
+  //TODO: Handle network errors 
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <ErrorComponent
-        message={`${t('error')} ${error.status} : ${error.statusText}`}
-      />
-    )
-  }
+  // if (error.status && error.statusText) {
+  //   return (
+  //     <ErrorComponent
+  //       message={`${t('error')} ${error.status} : ${error.statusText}`}
+  //     />
+  //   )
+  // }
   return <ErrorComponent message={t('shortUnknownError')} />
 }

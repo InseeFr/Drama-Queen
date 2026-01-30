@@ -7,7 +7,12 @@ type VisualizeLoaderArgs = {
 }
 
 export async function visualizeLoader({ location }: VisualizeLoaderArgs) {
-  console.log('toto', location.href)
+  // TODO: Check if it's the right thing to do
+  const fullUrl = location.href.startsWith('http')
+    ? location.href
+    : `${window.location.origin}${location.href}`
+
+  console.log('toto', fullUrl)
   const { visualizeSurvey } = (await prCore).functions
-  return visualizeSurvey.loader({ requestUrl: location.href })
+  return visualizeSurvey.loader({ requestUrl: fullUrl })
 }

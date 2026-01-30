@@ -6,5 +6,6 @@ import { Layout } from './index'
 
 export const Route = createFileRoute('/_layout')({
     component: Layout,
-    errorComponent: ErrorPage,
+    errorComponent: ({ error }) => <ErrorPage error={error} />,
+    notFoundComponent: () => <ErrorPage error={new Error('Page not found')} />,
 })
