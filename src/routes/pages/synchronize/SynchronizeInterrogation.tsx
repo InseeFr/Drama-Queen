@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 import { useCore, useCoreState } from '@/core'
 import { useNavigate } from '@tanstack/react-router'
 
-import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/synchronize-interrogation/route'
+import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/synchronize-interrogation/$interrogationId/route'
 
 export function SynchronizeInterrogation() {
   const { interrogationId } = SynchronizeInterrogationRoute.useParams()

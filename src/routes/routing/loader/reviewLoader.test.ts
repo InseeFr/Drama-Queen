@@ -26,7 +26,7 @@ describe('reviewLoader', () => {
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
 
-    ;(await prCore).functions.reviewSurvey.loader = mockLoader
+      ; (await prCore).functions.reviewSurvey.loader = mockLoader
 
     const mockParams = {
       interrogationId: 'test-survey-unit-id',
@@ -48,6 +48,6 @@ describe('reviewLoader', () => {
       reviewLoader({
         params: {},
       } as unknown as LoaderFunctionArgs),
-    ).rejects.toThrow('Wrong assertion encountered')
+    ).rejects.toThrow()
   })
 })

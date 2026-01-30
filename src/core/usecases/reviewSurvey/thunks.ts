@@ -11,35 +11,34 @@ export const reducer = null
 export const thunks = {
   loader:
     (params: { interrogationId: string }) =>
-    async (...args) => {
-      const [, , { queenApi }] = args
+      async (...args) => {
+        const [, , { queenApi }] = args
 
-      const { interrogationId } = params
+        const { interrogationId } = params
 
-      const interrogation = await queenApi
-        .getInterrogation(interrogationId)
-        .then((interrogation) => {
-          if (!interrogation) {
-            throw new Error(t('interrogationNotFound', { interrogationId }))
-          }
-          return interrogation
-        })
+        const interrogation = await queenApi
+          .getInterrogation(interrogationId)
 
-      const questionnaire = await queenApi
-        .getQuestionnaire(interrogation.questionnaireId)
-        .then((questionnaire) => {
-          if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-            throw new Error(t('questionnaireNotCompatible'))
-          }
-          return questionnaire
-        })
+        console.log('interrogation', interrogation)
 
-      return { interrogation, questionnaire }
-    },
+        if (!interrogation) {
+          console.log('interrogation not found', interrogationId)
+          throw new Error(t('interrogationNotFound', { interrogationId }))
+        }
+
+        const questionnaire = await queenApi
+          .getQuestionnaire(interrogation.questionnaireId)
+
+        if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+          throw new Error(t('questionnaireNotCompatible'))
+        }
+
+        return { interrogation, questionnaire }
+      },
   getReferentiel:
     (name: string) =>
-    (...args) => {
-      const [, , { queenApi }] = args
-      return queenApi.getNomenclature(name)
-    },
+      (...args) => {
+        const [, , { queenApi }] = args
+        return queenApi.getNomenclature(name)
+      },
 } satisfies Thunks

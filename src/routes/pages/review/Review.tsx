@@ -6,7 +6,7 @@ import { useCore } from '@/core'
 import type { Interrogation } from '@/core/model'
 import { useTranslation } from '@/i18n'
 import type { reviewLoader } from '@/routes/routing/loader'
-import { Route as ReviewRoute } from '@/routes/_layout/review-interrogations/route'
+import { Route as ReviewRoute } from '@/routes/_layout/review-interrogations/$interrogationId/route'
 
 export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

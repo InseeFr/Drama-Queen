@@ -1,8 +1,8 @@
-import { assert } from 'tsafe'
-
 import { prCore } from '@/createCore'
+import { getTranslation } from '@/i18n'
 
-type CollectLoaderArgs = {
+
+export type CollectLoaderArgs = {
   interrogationId?: string
   page?: string
 }
@@ -11,7 +11,11 @@ export async function collectLoader({
   interrogationId,
   page,
 }: CollectLoaderArgs) {
-  assert(interrogationId !== undefined)
+
+  const { t } = getTranslation('errorMessage')
+  if (interrogationId === undefined) {
+    throw new Error(t('interrogationNotRetrievable'))
+  }
 
   const { collectSurvey } = (await prCore).functions
 

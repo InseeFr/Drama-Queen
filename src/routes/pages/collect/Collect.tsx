@@ -2,7 +2,7 @@ import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { TelemetryProvider } from '@/contexts/TelemetryContext'
 import { useCore } from '@/core'
 import type { collectLoader } from '@/routes/routing/loader'
-import { Route as CollectRoute } from '@/routes/_layout/interrogations/route'
+import { Route as CollectRoute } from '@/routes/_layout/interrogations/$interrogationId/route'
 
 export function Collect() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

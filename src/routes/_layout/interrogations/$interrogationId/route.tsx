@@ -5,14 +5,19 @@ import { collectLoader } from '@/routes/routing/loader'
 import { Collect } from './index'
 import { isPageTag } from '@/core/tools/pageTag'
 
-export const Route = createFileRoute('/_layout/interrogations')({
+type CollectSearch = {
+    page?: string
+}
+
+export const Route = createFileRoute('/_layout/interrogations/$interrogationId')({
     component: Collect,
-    validateSearch: (search: Record<string, unknown>) => ({
+    validateSearch: (search: Record<string, unknown>): CollectSearch => ({
         page: typeof search.page === 'string' && isPageTag(search.page) ? search.page : undefined,
     }),
-    loader: ({ params, search }) =>
+    loaderDeps: ({ search }) => ({ page: search.page }),
+    loader: ({ params, deps }) =>
         collectLoader({
             interrogationId: params.interrogationId,
-            page: search.page,
+            page: deps.page,
         }),
 })

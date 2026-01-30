@@ -1,6 +1,6 @@
 import { prCore } from '@/createCore'
 
-type VisualizeLoaderArgs = {
+export type VisualizeLoaderArgs = {
   location: {
     href: string
   }
@@ -12,7 +12,6 @@ export async function visualizeLoader({ location }: VisualizeLoaderArgs) {
     ? location.href
     : `${window.location.origin}${location.href}`
 
-  console.log('toto', fullUrl)
   const { visualizeSurvey } = (await prCore).functions
   return visualizeSurvey.loader({ requestUrl: fullUrl })
 }
