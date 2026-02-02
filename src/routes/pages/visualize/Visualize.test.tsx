@@ -1,28 +1,34 @@
+import { useNavigate } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
-import { useNavigate } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import type { Interrogation } from '@/core/model'
-import { useLoaderData } from '@/routes/routing/utils'
+import { Route as VisualizeRoute } from '@/routes/_layout/visualize/route'
 import { downloadAsJson } from '@/utils/files'
 
 import { Visualize } from './Visualize'
 import { VisualizeForm } from './VisualizeForm'
 
-vi.mock('@/routes/routing/utils', () => ({
-  useLoaderData: vi.fn(),
+vi.mock('@/routes/_layout/visualize/route', () => ({
+  Route: {
+    useLoaderData: vi.fn(),
+  },
 }))
 
-vi.mock('react-router-dom', () => ({
+vi.mock('@tanstack/react-router', () => ({
   useNavigate: vi.fn(),
+  createFileRoute: vi.fn(() => vi.fn()),
 }))
+
 vi.mock('@/utils/files', () => ({
   downloadAsJson: vi.fn(),
 }))
+
 vi.mock('@/components/orchestrator/Orchestrator', () => ({
   Orchestrator: vi.fn(),
 }))
+
 vi.mock('./VisualizeForm', () => ({
   VisualizeForm: vi.fn(),
 }))
@@ -40,7 +46,7 @@ describe('Visualize Component', () => {
       getReferentiel: vi.fn(),
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(VisualizeRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     render(<Visualize />)
 
@@ -59,7 +65,7 @@ describe('Visualize Component', () => {
   })
 
   it('renders VisualizeForm when loaderData is null', async () => {
-    vi.mocked(useLoaderData).mockReturnValue(null as any) // type issue even if loaderData can be null
+    vi.mocked(VisualizeRoute.useLoaderData).mockReturnValue(null as any)
 
     render(<Visualize />)
 
@@ -74,7 +80,7 @@ describe('Visualize Component', () => {
       getReferentiel: vi.fn(),
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(VisualizeRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     const mockNavigate = vi.fn()
     vi.mocked(useNavigate).mockReturnValue(mockNavigate)
@@ -91,6 +97,6 @@ describe('Visualize Component', () => {
     expect(downloadAsJson).toHaveBeenCalledWith({
       data: mockLoaderData.interrogation,
     })
-    expect(mockNavigate).toHaveBeenCalledWith('/visualize')
+    expect(mockNavigate).toHaveBeenCalledWith({ to: '/visualize' })
   })
 })

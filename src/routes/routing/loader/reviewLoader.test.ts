@@ -1,4 +1,3 @@
-import type { LoaderFunctionArgs } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { prCore } from '@/createCore'
@@ -26,7 +25,7 @@ describe('reviewLoader', () => {
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
 
-      ; (await prCore).functions.reviewSurvey.loader = mockLoader
+    ;(await prCore).functions.reviewSurvey.loader = mockLoader
 
     const mockParams = {
       interrogationId: 'test-survey-unit-id',
@@ -34,7 +33,7 @@ describe('reviewLoader', () => {
 
     const mockLoaderArgs = {
       params: mockParams,
-    } as unknown as LoaderFunctionArgs
+    }
 
     await reviewLoader(mockLoaderArgs)
 
@@ -47,7 +46,7 @@ describe('reviewLoader', () => {
     await expect(
       reviewLoader({
         params: {},
-      } as unknown as LoaderFunctionArgs),
+      }),
     ).rejects.toThrow()
   })
 })

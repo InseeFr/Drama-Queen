@@ -1,19 +1,35 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
+import type { ReactNode } from 'react'
+
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { TelemetryProvider } from '@/contexts/TelemetryContext'
 import { useCore } from '@/core'
-import { useLoaderData } from '@/routes/routing/utils'
+import { Route as CollectRoute } from '@/routes/_layout/interrogations/$interrogationId/route'
 
 import { Collect } from './Collect'
 
 vi.mock('@/core', () => ({
   useCore: vi.fn(),
+  createCoreProvider: vi.fn(() => ({
+    CoreProvider: ({ children }: { children: ReactNode }) => children,
+    prCore: Promise.resolve({
+      functions: {
+        collectSurvey: {
+          loader: vi.fn(),
+        },
+      },
+    }),
+  })),
 }))
-vi.mock('@/routes/routing/utils', () => ({
-  useLoaderData: vi.fn(),
+
+vi.mock('@/routes/_layout/interrogations/$interrogationId/route', () => ({
+  Route: {
+    useLoaderData: vi.fn(),
+  },
 }))
+
 vi.mock('@/components/orchestrator/Orchestrator', () => ({
   Orchestrator: vi.fn(),
 }))
@@ -29,7 +45,7 @@ describe('Collect Component', () => {
       page: '2',
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(CollectRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     const mockCollectSurvey = {
       loader: vi.fn(),
@@ -72,7 +88,7 @@ describe('Collect Component', () => {
       interrogation: { id: 'interro1', name: 'Interrogation 1' },
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(CollectRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     const mockCollectSurvey = {
       loader: vi.fn(),

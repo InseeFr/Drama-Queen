@@ -1,5 +1,5 @@
+import { useNavigate } from '@tanstack/react-router'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { useSearchParams } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
 import { VisualizeForm } from './VisualizeForm'
@@ -9,11 +9,8 @@ vi.mock('@/i18n', () => ({
   useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
-vi.mock('react-router-dom', () => ({
-  useSearchParams: vi.fn(() => [
-    new URLSearchParams(), // the first value is the URLSearchParams instance
-    vi.fn(), // the second value is the setter function (setSearchParams)
-  ]),
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: vi.fn(),
 }))
 
 vi.mock('./getSearchParams', () => ({
@@ -21,7 +18,12 @@ vi.mock('./getSearchParams', () => ({
 }))
 
 describe('VisualizeForm Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
   it('renders form fields correctly', () => {
+    vi.mocked(useNavigate).mockReturnValue(vi.fn())
+
     render(<VisualizeForm />)
 
     expect(screen.getByLabelText('inputSurveyLabel')).toBeInTheDocument()
@@ -32,17 +34,14 @@ describe('VisualizeForm Component', () => {
   })
 
   it('submits form with correct parameters', async () => {
-    const mockSetSearchParams = vi.fn()
-    vi.mocked(useSearchParams).mockReturnValue([
-      new URLSearchParams(),
-      mockSetSearchParams,
-    ])
+    const mockNavigate = vi.fn()
+    vi.mocked(useNavigate).mockReturnValue(mockNavigate)
 
     // mock the getSearchParams(data) value
     const mockParams = {
       questionnaire: 'mockSurvey',
       data: 'mockData',
-      nomenclature: '{}',
+      nomenclature: {},
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
@@ -68,20 +67,28 @@ describe('VisualizeForm Component', () => {
         nomenclature: {},
         readonly: false,
       })
-      expect(mockSetSearchParams).toHaveBeenCalledWith(mockParams)
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/visualize',
+        search: mockParams,
+      })
     })
   })
 
   it('handles readonly switch', async () => {
-    const mockSetSearchParams = vi.fn()
-    vi.mocked(useSearchParams).mockReturnValue([
-      new URLSearchParams(),
-      mockSetSearchParams,
-    ])
+    const mockNavigate = vi.fn()
+    vi.mocked(useNavigate).mockReturnValue(mockNavigate)
+
+    const mockParams = {
+      questionnaire: '',
+      data: '',
+      nomenclature: {},
+      readonly: true,
+    }
+    vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
     const { getByRole } = render(<VisualizeForm />)
 
-    fireEvent.click(getByRole('checkbox'), { name: 'readonlyLabel' })
+    fireEvent.click(getByRole('checkbox', { name: 'readonlyLabel' }))
 
     fireEvent.click(
       screen.getByRole('button', { name: 'visualizeButtonLabel' }),
@@ -94,6 +101,10 @@ describe('VisualizeForm Component', () => {
         data: '',
         nomenclature: null,
         readonly: true,
+      })
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/visualize',
+        search: mockParams,
       })
     })
   })

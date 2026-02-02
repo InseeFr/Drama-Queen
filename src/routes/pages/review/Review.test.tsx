@@ -1,20 +1,41 @@
 import { act, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import type { ReactNode } from 'react'
+
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
 import type { Interrogation } from '@/core/model'
-import { useLoaderData } from '@/routes/routing/utils'
+import { Route as ReviewRoute } from '@/routes/_layout/review-interrogations/$interrogationId/route'
 
 import { Review } from './Review'
 
-vi.mock('@/routes/routing/utils', () => ({
-  useLoaderData: vi.fn(),
+vi.mock(
+  '@/routes/_layout/review-interrogations/$interrogationId/route',
+  () => ({
+    Route: {
+      useLoaderData: vi.fn(),
+    },
+  }),
+)
+
+vi.mock('@tanstack/react-router', () => ({
+  createFileRoute: vi.fn(() => vi.fn()),
 }))
 
 vi.mock('@/core', () => ({
   useCore: vi.fn(),
+  createCoreProvider: vi.fn(() => ({
+    CoreProvider: ({ children }: { children: ReactNode }) => children,
+    prCore: Promise.resolve({
+      functions: {
+        collectSurvey: {
+          loader: vi.fn(),
+        },
+      },
+    }),
+  })),
 }))
 
 vi.mock('@/i18n', () => ({
@@ -40,7 +61,7 @@ describe('Review', () => {
       interrogation: { id: 'interro1' },
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(ReviewRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     const mockReviewSurvey = {
       getReferentiel: vi.fn(),
@@ -76,7 +97,7 @@ describe('Review', () => {
       interrogation: { id: 'interro1' },
     }
 
-    vi.mocked(useLoaderData).mockReturnValue(mockLoaderData)
+    vi.mocked(ReviewRoute.useLoaderData).mockReturnValue(mockLoaderData)
 
     const mockReviewSurvey = {
       getReferentiel: vi.fn(),
@@ -111,7 +132,7 @@ describe('Review', () => {
         ]),
         onClose: expect.any(Function),
       }),
-      expect.anything(),
+      {},
     )
 
     // Simulate Modal's onClose call
@@ -124,7 +145,7 @@ describe('Review', () => {
       expect.objectContaining({
         isOpen: false,
       }),
-      expect.anything(),
+      {},
     )
   })
 })

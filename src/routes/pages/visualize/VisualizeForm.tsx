@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { tss } from 'tss-react/mui'
 
@@ -11,14 +12,15 @@ import { useTranslation } from '@/i18n'
 
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
-import { Navigate } from '@tanstack/react-router'
 
 export function VisualizeForm() {
   const { t } = useTranslation('visualizeMessage')
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
+  const navigate = useNavigate()
+
   const onSubmit = handleSubmit((data) => {
-    Navigate({ to: '/visualize', search: getSearchParams(data) })
+    navigate({ to: '/visualize', search: getSearchParams(data) })
   })
 
   return (

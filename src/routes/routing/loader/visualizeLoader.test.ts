@@ -1,9 +1,8 @@
-import { visualizeLoader } from '@/routes/routing/loader';
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { prCore } from '@/createCore'
 
-import { visualizeLoader, type VisualizeLoaderArgs } from './visualizeLoader'
+import { type VisualizeLoaderArgs, visualizeLoader } from './visualizeLoader'
 
 vi.mock('@/createCore', () => ({
   prCore: {
@@ -22,7 +21,7 @@ describe('protectedRouteLoader', () => {
 
   it('should call collectSurvey.loader with the correct parameters', async () => {
     const mockLoader = vi.fn()
-      ; (await prCore).functions.visualizeSurvey.loader = mockLoader
+    ;(await prCore).functions.visualizeSurvey.loader = mockLoader
 
     const mockParams: VisualizeLoaderArgs = {
       location: {
@@ -33,7 +32,7 @@ describe('protectedRouteLoader', () => {
     await visualizeLoader(mockParams)
 
     expect(mockLoader).toHaveBeenCalledWith({
-      "requestUrl": "http://localhost:3000/url",
+      requestUrl: 'http://localhost:3000/url',
     })
   })
 })
