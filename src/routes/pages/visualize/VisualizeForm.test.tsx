@@ -41,7 +41,7 @@ describe('VisualizeForm Component', () => {
     const mockParams = {
       questionnaire: 'mockSurvey',
       data: 'mockData',
-      nomenclature: {},
+      nomenclature: '{}',
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
@@ -81,8 +81,8 @@ describe('VisualizeForm Component', () => {
     const mockParams = {
       questionnaire: '',
       data: '',
-      nomenclature: {},
-      readonly: true,
+      nomenclature: '{}',
+      readonly: 'true',
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
