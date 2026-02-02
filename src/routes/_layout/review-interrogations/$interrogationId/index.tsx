@@ -1,1 +1,0 @@
-export { Review } from '@/routes/pages/review/Review'

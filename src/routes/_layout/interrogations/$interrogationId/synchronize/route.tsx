@@ -5,8 +5,8 @@ import { protectedRouteLoader } from '@/routes/routing/loader'
 import { SynchronizeInterrogation } from './index'
 
 export const Route = createFileRoute(
-    '/_layout/synchronize-interrogation/$interrogationId',
+  '/_layout/interrogations/$interrogationId/synchronize',
 )({
-    component: SynchronizeInterrogation,
-    loader: protectedRouteLoader,
+  component: SynchronizeInterrogation,
+  loader: protectedRouteLoader,
 })

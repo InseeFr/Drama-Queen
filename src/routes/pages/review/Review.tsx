@@ -5,12 +5,14 @@ import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
 import type { Interrogation } from '@/core/model'
 import { useTranslation } from '@/i18n'
+import { Route as ReviewRoute } from '@/routes/_layout/review/interrogations/$interrogationId/route'
 import type { reviewLoader } from '@/routes/routing/loader'
-import { Route as ReviewRoute } from '@/routes/_layout/review-interrogations/$interrogationId/route'
 
 export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635
-  const loaderData = ReviewRoute.useLoaderData() as Awaited<ReturnType<typeof reviewLoader>>
+  const loaderData = ReviewRoute.useLoaderData() as Awaited<
+    ReturnType<typeof reviewLoader>
+  >
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false)
   const { t } = useTranslation('modalMessage')
 

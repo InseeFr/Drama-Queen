@@ -7,12 +7,12 @@ import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
 import type { Interrogation } from '@/core/model'
-import { Route as ReviewRoute } from '@/routes/_layout/review-interrogations/$interrogationId/route'
+import { Route as ReviewRoute } from '@/routes/_layout/review/interrogations/$interrogationId/route'
 
 import { Review } from './Review'
 
 vi.mock(
-  '@/routes/_layout/review-interrogations/$interrogationId/route',
+  '@/routes/_layout/review/interrogations/$interrogationId/route',
   () => ({
     Route: {
       useLoaderData: vi.fn(),

@@ -2,14 +2,13 @@ import { Alert } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useNavigate } from '@tanstack/react-router'
 import { assert } from 'tsafe'
 
 import { useEffect } from 'react'
 
 import { useCore, useCoreState } from '@/core'
-import { useNavigate } from '@tanstack/react-router'
-
-import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/synchronize-interrogation/$interrogationId/route'
+import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/interrogations/$interrogationId/synchronize/route'
 
 export function SynchronizeInterrogation() {
   const { interrogationId } = SynchronizeInterrogationRoute.useParams()
