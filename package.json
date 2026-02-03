@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.2.3-rc.router-migration.0",
+  "version": "3.2.3-rc.technical-debt.0",
   "type": "module",
   "scripts": {
     "generate-routes": "tsr generate",
