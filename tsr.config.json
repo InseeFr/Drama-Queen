@@ -4,5 +4,5 @@
   "routesDirectory": "./src/routes",
   "generatedRouteTree": "./src/routeTree.gen.ts",
   "routeFileIgnorePrefix": "-",
-  "routeFileIgnorePattern": "routing|/__loader/.*index\\.tsx$|/_layout/.+/index\\.tsx$|^index\\.tsx$"
+  "routeFileIgnorePattern": "routing|/_layout/.+/index\\.tsx$|^index\\.tsx$"
 }
