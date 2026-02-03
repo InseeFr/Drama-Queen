@@ -23,26 +23,24 @@ export const thunks = {
 
       const { interrogationId } = params
 
-      const interrogation = await dataStore
-        .getInterrogation(interrogationId)
-        .catch(() => {
-          throw new Error(t('interrogationNotRetrievable'))
-        })
-        .then((interrogation) => {
-          if (!interrogation) {
-            throw new Error(t('interrogationNotFound', { interrogationId }))
-          }
-          return interrogation
-        })
+      let interrogation
+      try {
+        interrogation = await dataStore.getInterrogation(interrogationId)
+      } catch {
+        throw new Error(t('interrogationNotRetrievable'))
+      }
 
-      const questionnaire = await queenApi
-        .getQuestionnaire(interrogation.questionnaireId)
-        .then((questionnaire) => {
-          if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-            throw new Error(t('questionnaireNotCompatible'))
-          }
-          return questionnaire
-        })
+      if (!interrogation) {
+        throw new Error(t('interrogationNotFound', { interrogationId }))
+      }
+
+      const questionnaire = await queenApi.getQuestionnaire(
+        interrogation.questionnaireId,
+      )
+
+      if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+        throw new Error(t('questionnaireNotCompatible'))
+      }
 
       return { interrogation, questionnaire }
     },

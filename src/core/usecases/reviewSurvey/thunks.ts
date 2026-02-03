@@ -16,23 +16,18 @@ export const thunks = {
 
       const { interrogationId } = params
 
-      const interrogation = await queenApi
-        .getInterrogation(interrogationId)
-        .then((interrogation) => {
-          if (!interrogation) {
-            throw new Error(t('interrogationNotFound', { interrogationId }))
-          }
-          return interrogation
-        })
+      const interrogation = await queenApi.getInterrogation(interrogationId)
+      if (!interrogation) {
+        throw new Error(t('interrogationNotFound', { interrogationId }))
+      }
 
-      const questionnaire = await queenApi
-        .getQuestionnaire(interrogation.questionnaireId)
-        .then((questionnaire) => {
-          if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-            throw new Error(t('questionnaireNotCompatible'))
-          }
-          return questionnaire
-        })
+      const questionnaire = await queenApi.getQuestionnaire(
+        interrogation.questionnaireId,
+      )
+
+      if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+        throw new Error(t('questionnaireNotCompatible'))
+      }
 
       return { interrogation, questionnaire }
     },
