@@ -46,7 +46,7 @@ describe('ExternalRessources', () => {
 
     expect(ErrorComponent).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'externalResourcesLoadedError' }),
-      {},
+      undefined,
     )
   })
 })

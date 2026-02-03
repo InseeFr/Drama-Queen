@@ -54,7 +54,7 @@ describe('Visualize Component', () => {
         onChangePage: undefined,
         getReferentiel: mockLoaderData.getReferentiel,
       }),
-      {},
+      undefined,
     )
   })
 

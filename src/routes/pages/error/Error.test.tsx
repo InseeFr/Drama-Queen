@@ -35,7 +35,7 @@ describe('ErrorPage', () => {
 
     expect(ErrorComponent).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'Something went wrong' }),
-      {},
+      undefined,
     )
   })
 
@@ -50,7 +50,7 @@ describe('ErrorPage', () => {
       expect.objectContaining({
         message: 'error 404 : Not Found',
       }),
-      {},
+      undefined,
     )
   })
 })

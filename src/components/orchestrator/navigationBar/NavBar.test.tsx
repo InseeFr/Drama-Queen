@@ -74,7 +74,7 @@ describe('NavBar Component', () => {
         currentStep: 2, // index of the current sequence + 1 in the overview
         maxStep: 3, // number of sequences in the overview
       },
-      {},
+      undefined,
     )
   })
 
@@ -87,7 +87,7 @@ describe('NavBar Component', () => {
         currentPage: defaultProps.subPage + 1,
         maxPage: defaultProps.nbSubPages,
       },
-      {},
+      undefined,
     )
 
     // page count
@@ -96,7 +96,7 @@ describe('NavBar Component', () => {
         currentPage: defaultProps.subPage + 1,
         maxPage: defaultProps.nbSubPages,
       },
-      {},
+      undefined,
     )
 
     // subPage count if subPage is undefined
@@ -108,7 +108,7 @@ describe('NavBar Component', () => {
         currentPage: undefined,
         maxPage: defaultProps.nbSubPages,
       },
-      {},
+      undefined,
     )
   })
 
@@ -122,7 +122,7 @@ describe('NavBar Component', () => {
         onPrevious: defaultProps.onPrevious,
         onNext: defaultProps.onNext,
       },
-      {},
+      undefined,
     )
   })
 })
