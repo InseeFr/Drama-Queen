@@ -105,7 +105,7 @@ describe('PrevNext Component', () => {
         shortCutKey: SHORTCUT_PREVIOUS,
         onClickMethod: onPreviousMock,
       }),
-      {},
+      undefined,
     )
 
     // renders ShortCut for next button
@@ -114,7 +114,7 @@ describe('PrevNext Component', () => {
         shortCutKey: SHORTCUT_NEXT,
         onClickMethod: onNextMock,
       }),
-      {},
+      undefined,
     )
   })
 

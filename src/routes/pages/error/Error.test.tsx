@@ -29,7 +29,7 @@ describe('ErrorPage', () => {
 
     expect(ErrorComponent).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'Something went wrong' }),
-      {},
+      undefined,
     )
   })
 })

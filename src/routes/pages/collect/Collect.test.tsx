@@ -78,7 +78,7 @@ describe('Collect Component', () => {
         getReferentiel: mockCollectSurvey.getReferentiel,
         onChangeInterrogationState: mockCollectSurvey.changeInterrogationState,
       }),
-      {},
+      undefined,
     )
   })
 
@@ -112,7 +112,7 @@ describe('Collect Component', () => {
       expect.objectContaining({
         addParadata: mockCollectSurvey.addParadata,
       }),
-      expect.anything(), // children
+      undefined, // children
     )
   })
 })

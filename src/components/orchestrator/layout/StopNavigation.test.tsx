@@ -59,7 +59,7 @@ describe('StopNavigation Component', () => {
         label: '1. definitiveQuestionnaireStop',
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
 
     // temporary stop
@@ -68,7 +68,7 @@ describe('StopNavigation Component', () => {
         label: '2. temporaryQuestionnaireStop',
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -83,7 +83,7 @@ describe('StopNavigation Component', () => {
       expect.objectContaining({
         isOpen: false,
       }),
-      {},
+      undefined,
     )
   })
 
@@ -114,7 +114,7 @@ describe('StopNavigation Component', () => {
         ],
         onClose: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -145,7 +145,7 @@ describe('StopNavigation Component', () => {
         ],
         onClose: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -173,7 +173,7 @@ describe('StopNavigation Component', () => {
       expect.objectContaining({
         isOpen: false,
       }),
-      {},
+      undefined,
     )
   })
 

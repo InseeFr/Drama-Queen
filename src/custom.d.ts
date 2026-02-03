@@ -1,6 +1,6 @@
 declare module 'capmi'
 
-declare namespace JSX {
+declare namespace React.JSX {
   interface IntrinsicElements {
     'capmi-app': any
   }
