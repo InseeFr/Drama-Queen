@@ -25,7 +25,7 @@ describe('protectedRouteLoader', () => {
 
     const mockParams: VisualizeLoaderArgs = {
       location: {
-        href: '/url',
+        publicHref: '/url',
       },
     }
 

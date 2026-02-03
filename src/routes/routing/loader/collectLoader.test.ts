@@ -14,17 +14,6 @@ vi.mock('@/createCore', () => ({
   },
 }))
 
-//TODO : replace any
-export async function collectLoaderAdapter(args: any) {
-  const url = new URL(args.request.url)
-  const page = url.searchParams.get('page') || undefined
-
-  return collectLoader({
-    interrogationId: args.params.interrogationId,
-    page,
-  })
-}
-
 describe('collectLoader', () => {
   const mockParams: CollectLoaderArgs = {
     interrogationId: 'test-survey-unit-id',
@@ -51,7 +40,7 @@ describe('collectLoader', () => {
     await expect(
       collectLoader({
         page: '12.3#5',
-      } as unknown as CollectLoaderArgs),
+      } as CollectLoaderArgs),
     ).rejects.toThrow()
   })
 
@@ -59,14 +48,10 @@ describe('collectLoader', () => {
     const mockLoader = vi.fn().mockResolvedValue({ some: 'data' })
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
-    const mockRequest = new Request(
-      'http://localhost/collect/test-survey-unit-id?page=12.3%235',
-    )
-
-    const result = await collectLoaderAdapter({
-      params: { interrogationId: 'test-survey-unit-id' },
-      request: mockRequest,
-    })
+    const result = await collectLoader({
+      interrogationId: 'test-survey-unit-id',
+      page: '12.3#5',
+    } as CollectLoaderArgs)
 
     expect(result.page).toBe('12.3#5')
   })
@@ -75,19 +60,10 @@ describe('collectLoader', () => {
     const mockLoader = vi.fn().mockResolvedValue({ some: 'data' })
     ;(await prCore).functions.collectSurvey.loader = mockLoader
 
-    const mockParams = {
-      interrogationId: 'suid',
-    }
-
-    // page is not a valid PageTag
-    const mockRequest = new Request(
-      `http://localhost/collect?suid=${mockParams.interrogationId}&page=15.15`,
-    )
-
-    const result = await collectLoaderAdapter({
-      params: { interrogationId: 'test-survey-unit-id' },
-      request: mockRequest,
-    })
+    const result = await collectLoader({
+      interrogationId: 'test-survey-unit-id',
+      page: '15.5',
+    } as CollectLoaderArgs)
 
     expect(result.page).toBeUndefined()
   })

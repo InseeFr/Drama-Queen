@@ -22,8 +22,6 @@ export const reducer = null
 
 export const thunks = {
   loader: (params: { requestUrl: string }) => async () => {
-
-    console.log('visualizeSurvey loader', params.requestUrl)
     const { requestUrl } = params
     const url = new URL(requestUrl)
     const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
@@ -80,8 +78,8 @@ export const thunks = {
 
     const interrogation = data
       ? await fetchUrl<Interrogation>({
-        url: data,
-      })
+          url: data,
+        })
       : undefined
 
     const getReferentiel = nomenclature

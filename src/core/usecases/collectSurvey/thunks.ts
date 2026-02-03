@@ -18,84 +18,82 @@ export const reducer = null
 export const thunks = {
   loader:
     (params: { interrogationId: string }) =>
-      async (...args) => {
-        const [, , { queenApi, dataStore }] = args
+    async (...args) => {
+      const [, , { queenApi, dataStore }] = args
 
-        const { interrogationId } = params
+      const { interrogationId } = params
 
-        console.log('loader collectSurvey', interrogationId)
+      let interrogation
+      try {
+        interrogation = await dataStore.getInterrogation(interrogationId)
+      } catch {
+        throw new Error(t('interrogationNotRetrievable'))
+      }
 
-        let interrogation
-        try {
-          interrogation = await dataStore.getInterrogation(interrogationId)
-        } catch {
-          throw new Error(t('interrogationNotRetrievable'))
-        }
+      if (!interrogation) {
+        throw new Error(t('interrogationNotFound', { interrogationId }))
+      }
 
-        if (!interrogation) {
-          console.log('interrogation not found', interrogationId)
-          throw new Error(t('interrogationNotFound', { interrogationId }))
-        }
+      const questionnaire = await queenApi.getQuestionnaire(
+        interrogation.questionnaireId,
+      )
 
-        const questionnaire = await queenApi
-          .getQuestionnaire(interrogation.questionnaireId)
+      if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+        throw new Error(t('questionnaireNotCompatible'))
+      }
 
-        if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-          throw new Error(t('questionnaireNotCompatible'))
-        }
-
-        return { interrogation, questionnaire }
-      },
+      return { interrogation, questionnaire }
+    },
   getReferentiel:
     (name: string) =>
-      (...args) => {
-        const [, , { queenApi }] = args
-        return queenApi.getNomenclature(name)
-      },
+    (...args) => {
+      const [, , { queenApi }] = args
+      return queenApi.getNomenclature(name)
+    },
   changePage:
     (interrogation: Interrogation) =>
-      (...args) => {
-        const [, , { dataStore }] = args
+    (...args) => {
+      const [, , { dataStore }] = args
 
-        dataStore.updateInterrogation(interrogation).catch((error) => {
-          console.error('Error updating or inserting record:', error)
-        })
-      },
+      dataStore.updateInterrogation(interrogation).catch((error) => {
+        console.error('Error updating or inserting record:', error)
+      })
+    },
   changeInterrogationState:
     (params: { interrogationId: string; newState: QuestionnaireState }) =>
-      () => {
-        const { interrogationId, newState } = params
+    () => {
+      const { interrogationId, newState } = params
 
-        // send event for changing questionnaire state
-        switch (newState) {
-          case 'INIT':
-            // event name for 'INIT' is 'STARTED'
-            sendQuestionnaireStateChangedEvent(interrogationId, 'STARTED')
-            break
-          case 'COMPLETED':
-          case 'VALIDATED':
-            sendQuestionnaireStateChangedEvent(interrogationId, newState)
-            break
-          default:
-            // we do nothing for the other state values
-            break
-        }
-      },
+      // send event for changing questionnaire state
+      switch (newState) {
+        case 'INIT':
+          // event name for 'INIT' is 'STARTED'
+          sendQuestionnaireStateChangedEvent(interrogationId, 'STARTED')
+          break
+        case 'COMPLETED':
+        case 'VALIDATED':
+          sendQuestionnaireStateChangedEvent(interrogationId, newState)
+          break
+        default:
+          // we do nothing for the other state values
+          break
+      }
+    },
   quit:
     (interrogation: Interrogation) =>
-      (...args) => {
-        const [dispatch] = args
+    (...args) => {
+      const [dispatch] = args
 
-        // we apply same treatments than when page changes
-        dispatch(thunks.changePage(interrogation))
+      // we apply same treatments than when page changes
+      dispatch(thunks.changePage(interrogation))
 
-        // send event for closing Queen
-        sendCloseEvent(interrogation.id)
-      },
+      // send event for closing Queen
+      sendCloseEvent(interrogation.id)
+    },
   addParadata:
     (paradata: Paradata) =>
-      async (...args) => {
-        const [, , { dataStore }] = args
-        await dataStore.updateParadata(paradata.idInterrogation, paradata.events)
-      },
+    async (...args) => {
+      const [, , { dataStore }] = args
+      await dataStore.updateParadata(paradata.idInterrogation, paradata.events)
+    },
 } satisfies Thunks
