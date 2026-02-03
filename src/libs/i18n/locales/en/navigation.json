@@ -1,0 +1,52 @@
+{
+  "continueButton": {
+    "helper": "press",
+    "label": "Continue"
+  },
+  "header": {
+    "backToQuestionnaireStart": "Back to questionnaire start",
+    "goToSequence": "Go to sequence",
+    "goToSubSequence": "Go to subsequence"
+  },
+  "menu": {
+    "back": "Back",
+    "definitiveQuestionnaireStop": "Definitive end to interview (refusal, unable to continue, etc.)",
+    "goTo": "Go to ...",
+    "questionnaireStopNature": "What is the nature of the stop?",
+    "stopButton": "Stop",
+    "surveyButton": "Survey",
+    "temporaryQuestionnaireStop": "Temporary interruption of the interview"
+  },
+  "navigationBar": {
+    "nextButton": {
+      "helper": "NEXT"
+    },
+    "pageNumber": "page n°",
+    "previousButton": {
+      "helper": "PREV."
+    }
+  },
+  "quitModal": {
+    "review": {
+      "title": "Leaving the questionnaire",
+      "label": "If you wish to exit the questionnaire, please close the current tab."
+    },
+    "temporary": {
+      "label": "You are about to leave the questionnaire",
+      "title": "Temporary interruption",
+      "validate": "Confirm"
+    },
+    "definitive": {
+      "label": "Do you confirm the definitive stop of the questionnaire ?",
+      "title": "Definitive stop",
+      "validate": "Confirm definitive stop"
+    }
+  },
+  "validateAndQuit": "Validate and quit",
+  "welcomeModal": {
+    "backToStart": "Return to the first page",
+    "label": "You have already started filling out the questionnaire. Would you like to resume where you left off or return to the first page ?",
+    "resume": "Resume where I left off",
+    "title": "Welcome"
+  }
+}

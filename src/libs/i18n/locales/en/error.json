@@ -1,0 +1,27 @@
+{
+  "error": "Error",
+  "errorCode": {
+    "400": "Invalid request.",
+    "401": "You are not logged in. Please log in to access this resource.",
+    "403": "You are not authorized to access the requested data.",
+    "404": "Resource(s) not found.",
+    "500": "Internal server error.",
+    "502": "Bad gateway.",
+    "503": "Service unavailable.",
+    "504": "Gateway timeout."
+  },
+  "errorOccured": "An error has occured",
+  "externalResourcesLoadedError": "Unable to load external resources.",
+  "interrogationNotFound": "Interrogation {{interrogationId}} not found.",
+  "interrogationNotRetrievable": "An error occurred while retrieving the interrogation.",
+  "interrogationQuestionnaireNotFound": "Unable to retrieve the questionnaire of interrogation {{interrogationId}}.",
+  "interrogationUnauthorized": "You are not authorized to access data from this interrogation.",
+  "lunaticModelVersionNotFound": "The questionnaire has no lunaticModelVersion field",
+  "unknownError": {
+    "short": "Unknown error",
+    "long": "An unknown error has occurred, please contact support or try again later."
+  },
+  "questionnaireNotCompatible": "The questionnaire is not compatible. The 'lunaticModelVersion' must be higher than {{versionBreaking}}",
+  "questionnaireNotFound": "Unable to retrieve questionnaire {{questionnaireId}}.",
+  "wrongQuestionnaire": "The interrogation {{interrogationId}} is not associated with the questionnaire {{questionnaireId}}."
+}
