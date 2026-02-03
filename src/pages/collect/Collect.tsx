@@ -1,7 +1,7 @@
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { TelemetryProvider } from '@/contexts/TelemetryContext'
 import { useCore } from '@/core'
-import type { collectLoader } from '@/routes/routing/loader'
+import type { collectLoader } from '@/core/loader'
 import { Route as CollectRoute } from '@/routes/_layout/interrogations/$interrogationId/route'
 
 export function Collect() {

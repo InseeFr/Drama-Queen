@@ -1,1 +1,1 @@
-export { DisplayEnvValues } from '@/routes/pages/env/DisplayEnvValues'
+export { DisplayEnvValues } from '@/pages/env/DisplayEnvValues'

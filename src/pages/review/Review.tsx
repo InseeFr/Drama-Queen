@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
 import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
+import type { reviewLoader } from '@/core/loader'
 import type { Interrogation } from '@/core/model'
 import { useTranslation } from '@/i18n'
 import { Route as ReviewRoute } from '@/routes/_layout/review/interrogations/$interrogationId/route'
-import type { reviewLoader } from '@/routes/routing/loader'
 
 export function Review() {
   //Cf https://github.com/remix-run/react-router/discussions/9792#discussioncomment-5133635

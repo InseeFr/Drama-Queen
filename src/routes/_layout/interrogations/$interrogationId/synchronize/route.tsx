@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { protectedRouteLoader } from '@/routes/routing/loader'
+import { protectedRouteLoader } from '@/core/loader'
 
 import { SynchronizeInterrogation } from './index'
 

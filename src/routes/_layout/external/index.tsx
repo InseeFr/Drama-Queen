@@ -1,1 +1,1 @@
-export { ExternalRessources } from '@/routes/pages/external/External'
+export { ExternalRessources } from '@/pages/external/External'

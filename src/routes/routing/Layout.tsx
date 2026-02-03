@@ -1,10 +1,10 @@
 import { ThemeProvider } from '@mui/material/styles'
-
-import { globalStyles } from '@/routes/style/globalStyles'
-
-import { theme } from '../style/theme'
-import { NavigationManager } from './NavigationManager'
 import { Outlet } from '@tanstack/react-router'
+
+import { globalStyles } from '@/style/globalStyles'
+
+import { theme } from '../../style/theme'
+import { NavigationManager } from './NavigationManager'
 
 export function Layout() {
   return (

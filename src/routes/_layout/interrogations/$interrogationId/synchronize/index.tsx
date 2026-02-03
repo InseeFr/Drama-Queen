@@ -1,1 +1,1 @@
-export { SynchronizeInterrogation } from '@/routes/pages/synchronize/SynchronizeInterrogation'
+export { SynchronizeInterrogation } from '@/pages/synchronize/SynchronizeInterrogation'

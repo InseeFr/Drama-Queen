@@ -1,1 +1,1 @@
-export { Review } from '@/routes/pages/review/Review'
+export { Review } from '@/pages/review/Review'

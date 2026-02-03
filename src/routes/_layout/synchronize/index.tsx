@@ -1,1 +1,1 @@
-export { SynchronizeData } from '@/routes/pages/synchronize/SynchronizeData'
+export { SynchronizeData } from '@/pages/synchronize/SynchronizeData'

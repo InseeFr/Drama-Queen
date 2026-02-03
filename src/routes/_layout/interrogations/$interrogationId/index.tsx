@@ -1,1 +1,1 @@
-export { Collect } from '@/routes/pages/collect/Collect'
+export { Collect } from '@/pages/collect/Collect'

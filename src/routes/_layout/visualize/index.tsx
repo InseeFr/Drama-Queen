@@ -1,1 +1,1 @@
-export { Visualize } from '@/routes/pages/visualize/Visualize'
+export { Visualize } from '@/pages/visualize/Visualize'

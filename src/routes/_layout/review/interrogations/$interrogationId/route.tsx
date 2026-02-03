@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { reviewLoader } from '@/routes/routing/loader'
+import { reviewLoader } from '@/core/loader'
 
 import { Review } from './index'
 
