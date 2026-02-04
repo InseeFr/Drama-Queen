@@ -8,6 +8,7 @@ import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
 import type { Interrogation } from '@/core/model'
 import { Route as ReviewRoute } from '@/routes/_layout/review/interrogations/$interrogationId/route'
+import { renderWithTheme } from '@/tests/render'
 
 import { Review } from './Review'
 
@@ -36,10 +37,6 @@ vi.mock('@/core', () => ({
       },
     }),
   })),
-}))
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
 vi.mock('@/components/ui/Modal', () => ({
@@ -111,7 +108,7 @@ describe('Review', () => {
 
     vi.mocked(useCore).mockReturnValue(mockCore as any)
 
-    render(<Review />)
+    renderWithTheme(<Review />)
 
     // Simulate Orchestrator's onQuit call
     const { onQuit } = vi.mocked(Orchestrator).mock.calls[0][0]
@@ -125,10 +122,11 @@ describe('Review', () => {
     expect(Modal).toHaveBeenCalledWith(
       expect.objectContaining({
         isOpen: true,
-        dialogTitle: 'reviewQuitTitle',
-        dialogContent: 'reviewQuitContent',
+        dialogTitle: 'Leaving the questionnaire',
+        dialogContent:
+          'If you wish to exit the questionnaire, please close the current tab.',
         buttons: expect.arrayContaining([
-          expect.objectContaining({ label: 'cancel', autoFocus: false }),
+          expect.objectContaining({ label: 'Cancel', autoFocus: false }),
         ]),
         onClose: expect.any(Function),
       }),

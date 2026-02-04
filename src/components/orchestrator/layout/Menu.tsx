@@ -3,11 +3,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { useEffect, useState } from 'react'
 
-import { useTranslation } from '@/i18n'
 import type { GoToPage, Overview, OverviewItem } from '@/models/lunaticType'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
@@ -49,15 +49,17 @@ export function Menu({
   >(undefined)
 
   const { classes, theme, cx } = useStyles()
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
 
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
   const lunaticVersion = import.meta.env.LUNATIC_VERSION?.replace(/^\^/, '')
 
   const menuItems: MenuItem[] = [
-    { type: 'survey', label: t('surveyButton') },
-    ...(readonly ? [] : [{ type: 'stop', label: t('stopButton') } as MenuItem]),
+    { type: 'survey', label: t('navigation.menu.surveyButton') },
+    ...(readonly
+      ? []
+      : [{ type: 'stop', label: t('navigation.menu.stopButton') } as MenuItem]),
   ]
 
   useEffect(() => {
@@ -118,7 +120,7 @@ export function Menu({
               variant="overline"
               className={classes.goToNavigationTypography}
             >
-              {t('goTo')}
+              {t('navigation.menu.goTo')}
             </Typography>
             <Stack>
               {menuItems.map((menuItem, index) => (
@@ -145,7 +147,7 @@ export function Menu({
       {selectedMenuItem && (!selectedSequence || matchesMdBreackpoint) && (
         <Stack className={cx(classes.expanded, classes.expandedMenu)}>
           <MenuNavigationButton
-            label={t('back')}
+            label={t('navigation.menu.back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedMenu(selectedMenuItem)}
@@ -171,7 +173,7 @@ export function Menu({
       {selectedSequence && (
         <Stack className={classes.expanded}>
           <MenuNavigationButton
-            label={t('back')}
+            label={t('navigation.menu.back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedSubMenu(selectedSequence)}

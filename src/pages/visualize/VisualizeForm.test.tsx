@@ -1,13 +1,11 @@
 import { useNavigate } from '@tanstack/react-router'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+
+import { renderWithTheme } from '@/tests/render'
 
 import { VisualizeForm } from './VisualizeForm'
 import { getSearchParams } from './getSearchParams'
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: vi.fn(),
@@ -24,13 +22,15 @@ describe('VisualizeForm Component', () => {
   it('renders form fields correctly', () => {
     vi.mocked(useNavigate).mockReturnValue(vi.fn())
 
-    render(<VisualizeForm />)
+    renderWithTheme(<VisualizeForm />)
 
-    expect(screen.getByLabelText('inputSurveyLabel')).toBeInTheDocument()
-    expect(screen.getByLabelText('inputDataLabel')).toBeInTheDocument()
-    expect(screen.getByLabelText('inputNomenclatureLabel')).toBeInTheDocument()
-    expect(screen.getByLabelText('readonlyLabel')).toBeInTheDocument()
-    expect(screen.getByText('visualizeButtonLabel')).toBeInTheDocument()
+    expect(screen.getByLabelText('Questionnaire')).toBeInTheDocument()
+    expect(screen.getByLabelText('Data')).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Dictionary of nomenclatures'),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Read-only')).toBeInTheDocument()
+    expect(screen.getByText('Visualize')).toBeInTheDocument()
   })
 
   it('submits form with correct parameters', async () => {
@@ -45,19 +45,19 @@ describe('VisualizeForm Component', () => {
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
-    const { getByLabelText, getByRole } = render(<VisualizeForm />)
+    const { getByLabelText, getByRole } = renderWithTheme(<VisualizeForm />)
 
     // Fill out the form
-    fireEvent.change(getByLabelText('inputSurveyLabel'), {
+    fireEvent.change(getByLabelText('Questionnaire'), {
       target: { value: 'my-survey' },
     })
-    fireEvent.change(getByLabelText('inputDataLabel'), {
+    fireEvent.change(getByLabelText('Data'), {
       target: { value: 'my-data' },
     })
-    fireEvent.change(getByLabelText('inputNomenclatureLabel'), {
+    fireEvent.change(getByLabelText('Dictionary of nomenclatures'), {
       target: { value: '{}' },
     })
-    const submitButton = getByRole('button', { name: 'visualizeButtonLabel' })
+    const submitButton = getByRole('button', { name: 'Visualize' })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -86,13 +86,11 @@ describe('VisualizeForm Component', () => {
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
-    const { getByRole } = render(<VisualizeForm />)
+    const { getByRole } = renderWithTheme(<VisualizeForm />)
 
-    fireEvent.click(getByRole('checkbox', { name: 'readonlyLabel' }))
+    fireEvent.click(getByRole('checkbox', { name: 'Read-only' }))
 
-    fireEvent.click(
-      screen.getByRole('button', { name: 'visualizeButtonLabel' }),
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Visualize' }))
 
     // Ensure the readonly value is sent as true when the switch is toggled
     await waitFor(() => {

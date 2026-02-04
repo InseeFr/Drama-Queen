@@ -11,7 +11,7 @@
   "menu": {
     "back": "Retour",
     "definitiveQuestionnaireStop": "Arrêt définitif de l'interview (refus, impossibilité de continuer, ...)",
-    "goTo": "'Aller vers ...",
+    "goTo": "Aller vers ...",
     "questionnaireStopNature": "Quelle est la nature de l'arrêt ?",
     "stopButton": "Arrêt",
     "surveyButton": "Enquête",

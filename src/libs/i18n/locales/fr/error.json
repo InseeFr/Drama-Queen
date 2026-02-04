@@ -1,5 +1,4 @@
 {
-  "error": "Erreur",
   "errorCode": {
     "400": "Requête invalide.",
     "401": "Vous n'êtes pas connecté. Veuillez vous connecter pour accéder à cette ressource.",
@@ -14,14 +13,11 @@
   "externalResourcesLoadedError": "Impossible de charger les ressources externes.",
   "interrogationNotFound": "L'interrogation {{interrogationId}} est introuvable.",
   "interrogationNotRetrievable": "Une erreur est survenue lors de la récupération de l'interrogation.",
-  "interrogationQuestionnaireNotFound": "Impossible de récupérer le questionnaire de l'interrogation {{interrogationId}}.",
-  "interrogationUnauthorized": "Vous n'êtes pas autorisé à accéder aux données de cette interrogation.",
   "lunaticModelVersionNotFound": "Le questionnaire ne comporte pas de champ lunaticModelVersion",
   "unknownError": {
     "short": "Erreur inconnue",
     "long": "Une erreur inconnue s'est produite, veuillez contacter l'assistance ou réessayer plus tard."
   },
   "questionnaireNotCompatible": "Le questionnaire est incompatible. La version du 'lunaticModelVersion' doit être supérieure à {{versionBreaking}}",
-  "questionnaireNotFound": "Impossible de récupérer le questionnaire {{questionnaireId}}.",
-  "wrongQuestionnaire": "L'interrogation {{interrogationId}} n'est pas associée au questionnaire {{questionnaireId}}."
+  "questionnaireNotFound": "Impossible de récupérer le questionnaire {{questionnaireId}}."
 }

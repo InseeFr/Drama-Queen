@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { useState } from 'react'
 
 import { Orchestrator } from '@/components/orchestrator/Orchestrator'
@@ -5,7 +7,6 @@ import { Modal } from '@/components/ui/Modal'
 import { useCore } from '@/core'
 import type { reviewLoader } from '@/core/loader'
 import type { Interrogation } from '@/core/model'
-import { useTranslation } from '@/i18n'
 import { Route as ReviewRoute } from '@/routes/_layout/review/interrogations/$interrogationId/route'
 
 export function Review() {
@@ -14,7 +15,7 @@ export function Review() {
     ReturnType<typeof reviewLoader>
   >
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false)
-  const { t } = useTranslation('modalMessage')
+  const { t } = useTranslation()
 
   const { reviewSurvey } = useCore().functions
 
@@ -26,13 +27,13 @@ export function Review() {
 
   const quitModalOnClose = () => setIsQuitModalOpen(false)
 
-  const quitModalTitle = t('reviewQuitTitle')
+  const quitModalTitle = t('navigation.quitModal.review.title')
 
-  const quitModalContent = t('reviewQuitContent')
+  const quitModalContent = t('navigation.quitModal.review.label')
 
   const quitModalButtons = [
     {
-      label: t('cancel'),
+      label: t('common.cancel'),
       onClick: quitModalOnClose,
       autoFocus: false,
     },

@@ -1,5 +1,5 @@
 import { prCore } from '@/createCore'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 type ReviewLoaderArgs = {
   params: {
@@ -11,14 +11,12 @@ export async function reviewLoader({ params }: ReviewLoaderArgs) {
   const { userAuthentication } = (await prCore).functions
   const { reviewSurvey } = (await prCore).functions
 
-  const { t } = getTranslation('errorMessage')
-
   //Protect the route
   await userAuthentication.loginIfNotLoggedIn()
 
   const { interrogationId } = params
   if (interrogationId === undefined) {
-    throw new Error(t('interrogationNotRetrievable'))
+    throw new Error(i18n.t('error.interrogationNotRetrievable'))
   }
 
   return reviewSurvey.loader({

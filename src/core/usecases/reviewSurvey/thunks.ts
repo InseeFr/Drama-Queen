@@ -1,8 +1,7 @@
 import type { Thunks } from '@/core/bootstrap'
+import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
-import { getTranslation } from '@/i18n'
-
-const { t } = getTranslation('errorMessage')
+import i18n from '@/libs/i18n'
 
 export const name = 'reviewSurvey'
 
@@ -18,7 +17,9 @@ export const thunks = {
 
       const interrogation = await queenApi.getInterrogation(interrogationId)
       if (!interrogation) {
-        throw new Error(t('interrogationNotFound', { interrogationId }))
+        throw new Error(
+          i18n.t('error.interrogationNotFound', { interrogationId }),
+        )
       }
 
       const questionnaire = await queenApi.getQuestionnaire(
@@ -26,7 +27,11 @@ export const thunks = {
       )
 
       if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-        throw new Error(t('questionnaireNotCompatible'))
+        throw new Error(
+          i18n.t('error.questionnaireNotCompatible', {
+            versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
+          }),
+        )
       }
 
       return { interrogation, questionnaire }

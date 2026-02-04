@@ -28,8 +28,8 @@
   },
   "quitModal": {
     "review": {
-      "title": "Leaving the questionnaire",
-      "label": "If you wish to exit the questionnaire, please close the current tab."
+      "label": "If you wish to exit the questionnaire, please close the current tab.",
+      "title": "Leaving the questionnaire"
     },
     "temporary": {
       "label": "You are about to leave the questionnaire",

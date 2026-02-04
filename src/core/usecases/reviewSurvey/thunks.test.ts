@@ -5,20 +5,6 @@ import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
 
 import { thunks } from './thunks'
 
-vi.mock('@/i18n', () => ({
-  getTranslation: () => ({
-    t: (keyMessage: string, params?: Record<string, any>) => {
-      if (!params) return keyMessage
-
-      // Create a string by joining the values of params with space
-      const paramsString = Object.values(params).join(' ')
-
-      // Return the concatenated string: key + params string
-      return `${keyMessage} ${paramsString}`
-    },
-  }),
-}))
-
 vi.mock('@/core/tools/SurveyModelBreaking', () => ({
   isSurveyCompatibleWithQueen: vi.fn(),
 }))

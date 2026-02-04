@@ -1,15 +1,15 @@
-import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { useTranslation } from '@/i18n'
+import React from 'react'
 
 import './env.css'
 
 export function DisplayEnvValues() {
-  const { t } = useTranslation('envValuesMessage')
+  const { t } = useTranslation()
   return (
     <div className="App">
       <h1>Drama Queen v{import.meta.env.APP_VERSION}</h1>
-      <h3>{t('envVariables')}</h3>
+      <h3>{t('envValues.envVariables')}</h3>
       <div className="card">
         <p className="read-the-docs">
           {Object.entries(import.meta.env)
