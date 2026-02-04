@@ -2,10 +2,6 @@ import { renderWithTheme } from '@/tests/render'
 
 import { ErrorComponent } from './ErrorComponent'
 
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
-
 describe('ErrorComponent', () => {
   it('should render the error title and message', () => {
     const message = 'Something went wrong'
