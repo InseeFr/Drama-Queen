@@ -1,10 +1,10 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/constants/shortcuts'
 import type { Overview } from '@/models/lunaticType'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { Breadcrumb } from './Breadcrumb'
 import { Header } from './Header'
@@ -20,10 +20,6 @@ vi.mock('./Breadcrumb', () => ({
 
 vi.mock('@/components/ui/ShortCut', () => ({
   ShortCut: vi.fn(),
-}))
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
 describe('Header Component', () => {
@@ -54,34 +50,26 @@ describe('Header Component', () => {
   }
 
   it('renders correctly the questionnaire title', () => {
-    const { getByText, getByTitle } = render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
+    const { getByText, getByTitle } = renderWithTheme(
+      <Header {...defaultProps} />,
     )
 
     expect(getByText('Test Questionnaire')).toBeInTheDocument()
-    expect(getByTitle('backToQuestionnaireStart')).toBeInTheDocument()
-    expect(getByTitle('quit')).toBeInTheDocument()
+    expect(getByTitle('Back to questionnaire start')).toBeInTheDocument()
+    expect(getByTitle('Quit')).toBeInTheDocument()
   })
 
   it('renders the logo and triggers goToFirstPage on click', () => {
-    const { getByTitle } = render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
-    )
-    const logo = getByTitle('backToQuestionnaireStart')
+    const { getByTitle } = renderWithTheme(<Header {...defaultProps} />)
+    const logo = getByTitle('Back to questionnaire start')
 
     fireEvent.click(logo)
     expect(mockGoToPage).toHaveBeenCalledWith({ page: '1' })
   })
 
   it('toggles the drawer when the menu button is clicked', () => {
-    const { getByRole, queryByRole } = render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole, queryByRole } = renderWithTheme(
+      <Header {...defaultProps} />,
     )
     const menuButton = getByRole('button', { name: 'menu' })
 
@@ -95,23 +83,15 @@ describe('Header Component', () => {
   })
 
   it('calls quit when the quit button is clicked', () => {
-    const { getByTitle } = render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
-    )
-    const quitButton = getByTitle('quit')
+    const { getByTitle } = renderWithTheme(<Header {...defaultProps} />)
+    const quitButton = getByTitle('Quit')
 
     fireEvent.click(quitButton)
     expect(mockQuit).toHaveBeenCalledTimes(1)
   })
 
   it('renders Menu component with the correct props', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<Header {...defaultProps} />)
 
     const menuButton = getByRole('button', { name: 'menu' })
 
@@ -171,11 +151,7 @@ describe('Header Component', () => {
       overview: overview,
     }
 
-    render(
-      <TestWrapper>
-        <Header {...props} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<Header {...props} />)
 
     expect(Breadcrumb).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -187,11 +163,7 @@ describe('Header Component', () => {
   })
 
   it('renders ShortCut components for menu and quit buttons', () => {
-    render(
-      <TestWrapper>
-        <Header {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<Header {...defaultProps} />)
 
     // renders ShortCut for quit button
     expect(ShortCut).toHaveBeenCalledWith(

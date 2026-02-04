@@ -1,0 +1,52 @@
+{
+  "continueButton": {
+    "helper": "appuyer sur",
+    "label": "Continuer"
+  },
+  "header": {
+    "backToQuestionnaireStart": "Retour au début du questionnaire",
+    "goToSequence": "Aller vers la séquence",
+    "goToSubSequence": "Aller vers la sous-séquence"
+  },
+  "menu": {
+    "back": "Retour",
+    "definitiveQuestionnaireStop": "Arrêt définitif de l'interview (refus, impossibilité de continuer, ...)",
+    "goTo": "Aller vers ...",
+    "questionnaireStopNature": "Quelle est la nature de l'arrêt ?",
+    "stopButton": "Arrêt",
+    "surveyButton": "Enquête",
+    "temporaryQuestionnaireStop": "Arrêt provisoire de l'interview"
+  },
+  "navigationBar": {
+    "nextButton": {
+      "helper": "SUIV."
+    },
+    "pageNumber": "n° page",
+    "previousButton": {
+      "helper": "PREC."
+    }
+  },
+  "quitModal": {
+    "review": {
+      "title": "Sortie du questionnaire",
+      "label": "Si vous souhaitez sortir du questionnaire, veuillez fermer l'onglet actuel."
+    },
+    "temporary": {
+      "label": "Vous allez sortir du questionnaire",
+      "title": "Arrêt provisoire",
+      "validate": "Valider"
+    },
+    "definitive": {
+      "label": "Confirmez-vous l’arrêt définitif du questionnaire ?",
+      "title": "Arrêt définitif",
+      "validate": "Valider l'arrêt définitif"
+    }
+  },
+  "validateAndQuit": "Valider et quitter",
+  "welcomeModal": {
+    "backToStart": "Revenir à la première page",
+    "label": "Vous avez déjà commencé à renseigner le questionnaire. Souhaitez-vous reprendre là où vous en étiez ou revenir à la première page ?",
+    "resume": "Reprendre là où j'en étais",
+    "title": "Bienvenue"
+  }
+}

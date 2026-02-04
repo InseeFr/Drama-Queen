@@ -5,9 +5,6 @@ import { ErrorComponent } from '@/components/ui/ErrorComponent'
 
 import { ErrorPage } from './Error'
 
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 vi.mock('@/components/ui/ErrorComponent', () => ({
   ErrorComponent: vi.fn(),
 }))

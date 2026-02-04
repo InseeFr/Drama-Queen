@@ -1,17 +1,13 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ShortCut } from '@/components/ui/ShortCut'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { Continue } from './Continue'
 
 vi.mock('@/components/ui/ShortCut', () => ({
   ShortCut: vi.fn(),
-}))
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
 describe('Continue Component', () => {
@@ -29,10 +25,8 @@ describe('Continue Component', () => {
   })
 
   it('renders Button with label and endIcon', () => {
-    const { getByText, getByRole } = render(
-      <TestWrapper>
-        <Continue {...defaultProps} />
-      </TestWrapper>,
+    const { getByText, getByRole } = renderWithTheme(
+      <Continue {...defaultProps} />,
     )
 
     expect(getByText('Continue')).toBeInTheDocument()
@@ -41,33 +35,21 @@ describe('Continue Component', () => {
   })
 
   it('renders helper labels correctly', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <Continue {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByText } = renderWithTheme(<Continue {...defaultProps} />)
 
-    expect(getByText('continueHelper')).toBeInTheDocument()
+    expect(getByText('press')).toBeInTheDocument()
     expect(getByText('Press Enter')).toBeInTheDocument()
   })
 
   it('calls onContinue when button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <Continue {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<Continue {...defaultProps} />)
 
     fireEvent.click(getByRole('button', { name: /continue/i }))
     expect(onContinueMock).toHaveBeenCalledTimes(1)
   })
 
   it('renders ShortCut with correct props', () => {
-    render(
-      <TestWrapper>
-        <Continue {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<Continue {...defaultProps} />)
 
     expect(ShortCut).toHaveBeenCalledWith(
       expect.objectContaining({

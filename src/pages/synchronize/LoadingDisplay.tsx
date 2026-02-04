@@ -1,11 +1,10 @@
 import LinearProgress from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { Fragment } from 'react'
-
-import { useTranslation } from '@/i18n'
 
 type LoadingDisplayProps = {
   syncStepTitle: string
@@ -20,13 +19,13 @@ export function LoadingDisplay({
   syncStepTitle,
   progressBars,
 }: Readonly<LoadingDisplayProps>) {
-  const { t } = useTranslation('synchronizeMessage')
+  const { t } = useTranslation()
   const { classes } = useStyles()
   return (
     <Stack spacing={3} alignItems="center">
       <Stack spacing={1} alignItems="center">
         <Typography variant="h3" fontWeight="bold">
-          {t('synchronizationInProgress')}
+          {t('synchronize.synchronizationInProgress')}
         </Typography>
         <Typography variant="h6" className={classes.lightText}>
           {syncStepTitle}

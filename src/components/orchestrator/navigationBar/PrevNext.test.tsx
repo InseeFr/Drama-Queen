@@ -1,18 +1,14 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { PrevNext } from './PrevNext'
 
 vi.mock('@/components/ui/ShortCut', () => ({
   ShortCut: vi.fn(),
-}))
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
 }))
 
 describe('PrevNext Component', () => {
@@ -24,31 +20,27 @@ describe('PrevNext Component', () => {
   })
 
   it('renders previous and next buttons helper labels', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={true}
-          isNextEnabled={true}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    const { getByText } = renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={true}
+        isNextEnabled={true}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
-    expect(getByText('previousHelper')).toBeInTheDocument()
-    expect(getByText('nextHelper')).toBeInTheDocument()
+    expect(getByText('PREV.')).toBeInTheDocument()
+    expect(getByText('NEXT')).toBeInTheDocument()
   })
 
   it('renders disabled previous and next buttons when not enabled', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={false}
-          isNextEnabled={false}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={false}
+        isNextEnabled={false}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
     expect(getByRole('button', { name: 'previous' })).toBeDisabled()
@@ -56,15 +48,13 @@ describe('PrevNext Component', () => {
   })
 
   it('calls onPrevious when previous button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={true}
-          isNextEnabled={true}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={true}
+        isNextEnabled={true}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
     fireEvent.click(getByRole('button', { name: 'previous' }))
@@ -72,15 +62,13 @@ describe('PrevNext Component', () => {
   })
 
   it('calls onNext when next button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={true}
-          isNextEnabled={true}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={true}
+        isNextEnabled={true}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
     fireEvent.click(getByRole('button', { name: 'next' }))
@@ -88,15 +76,13 @@ describe('PrevNext Component', () => {
   })
 
   it('renders ShortCut component for enabled buttons with correct key', () => {
-    render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={true}
-          isNextEnabled={true}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={true}
+        isNextEnabled={true}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
     // renders ShortCut for previous button
@@ -119,15 +105,13 @@ describe('PrevNext Component', () => {
   })
 
   it('does not render ShortCut component for disabled buttons', () => {
-    render(
-      <TestWrapper>
-        <PrevNext
-          isPreviousEnabled={false}
-          isNextEnabled={false}
-          onPrevious={onPreviousMock}
-          onNext={onNextMock}
-        />
-      </TestWrapper>,
+    renderWithTheme(
+      <PrevNext
+        isPreviousEnabled={false}
+        isNextEnabled={false}
+        onPrevious={onPreviousMock}
+        onNext={onNextMock}
+      />,
     )
 
     expect(ShortCut).not.toHaveBeenCalled()

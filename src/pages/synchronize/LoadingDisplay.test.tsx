@@ -2,11 +2,9 @@ import LinearProgress from '@mui/material/LinearProgress'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { LoadingDisplay } from './LoadingDisplay'
+import { renderWithTheme } from '@/tests/render'
 
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
+import { LoadingDisplay } from './LoadingDisplay'
 
 vi.mock('@mui/material/LinearProgress', () => ({
   __esModule: true,
@@ -24,9 +22,9 @@ describe('LoadingDisplay Component', () => {
       progressBars: [{ label: 'Progress 1', progress: 50 }],
     }
 
-    const { getByText } = render(<LoadingDisplay {...props} />)
+    const { getByText } = renderWithTheme(<LoadingDisplay {...props} />)
 
-    expect(getByText('synchronizationInProgress')).toBeInTheDocument()
+    expect(getByText('Synchronization in progress')).toBeInTheDocument()
     expect(getByText('sync step')).toBeInTheDocument()
   })
 

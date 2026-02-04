@@ -3,13 +3,11 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { CenteredSpinner } from '@/components/ui/CenteredSpinner'
 import { ErrorComponent } from '@/components/ui/ErrorComponent'
+import { renderWithTheme } from '@/tests/render'
 
 import { ExternalRessources } from './External'
 import useScript from './useScript'
 
-vi.mock('@/i18n', () => ({
-  getTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 vi.mock('@/components/ui/ErrorComponent', () => ({
   ErrorComponent: vi.fn(),
 }))
@@ -42,10 +40,12 @@ describe('ExternalRessources', () => {
   it('renders ErrorComponent with correct message when status is "error"', () => {
     vi.mocked(useScript).mockReturnValue('error')
 
-    render(<ExternalRessources />)
+    renderWithTheme(<ExternalRessources />)
 
     expect(ErrorComponent).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'externalResourcesLoadedError' }),
+      expect.objectContaining({
+        message: 'Unable to load external resources.',
+      }),
       undefined,
     )
   })

@@ -7,10 +7,6 @@ vi.mock('@/constants/shortcuts', () => ({
   SHORTCUT_NEXT: 'Alt+Enter',
 }))
 
-vi.mock('@/i18n', () => ({
-  getTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
-
 vi.mock('@mui/icons-material/ArrowRightAlt', () => ({
   default: () => <svg data-testid="ArrowRightAltIcon" />,
 }))
@@ -44,7 +40,7 @@ describe('computeNavigationButtonsProps', () => {
         hasPageResponse: () => true,
       })
 
-      expect(props.continueProps.label).toBe('continue')
+      expect(props.continueProps.label).toBe('Continue')
       expect(props.continueProps.isEnabled).toBe(true)
       expect(props.continueProps.isVisible).toBe(true)
 
@@ -63,7 +59,7 @@ describe('computeNavigationButtonsProps', () => {
         hasPageResponse: () => true,
       })
 
-      expect(props.continueProps.label).toBe('validateAndQuit')
+      expect(props.continueProps.label).toBe('Validate and quit')
       expect(props.continueProps.isEnabled).toBe(true)
       expect(props.continueProps.isVisible).toBe(true)
 
@@ -78,7 +74,7 @@ describe('computeNavigationButtonsProps', () => {
         isLastPage: true,
       })
 
-      expect(props.continueProps.label).toBe('quit')
+      expect(props.continueProps.label).toBe('Quit')
       expect(props.continueProps.isEnabled).toBe(true)
       expect(props.continueProps.isVisible).toBe(true)
 

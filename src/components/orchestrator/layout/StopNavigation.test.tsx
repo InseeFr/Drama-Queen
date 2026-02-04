@@ -1,15 +1,11 @@
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { Modal } from '@/components/ui/Modal'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
 import { StopNavigation } from './StopNavigation'
-
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 
 vi.mock('./MenuNavigationButton', () => ({
   MenuNavigationButton: vi
@@ -37,26 +33,19 @@ describe('StopNavigation Component', () => {
   })
 
   it('renders the title of nature of the stop', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByText } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
-    expect(getByText('questionnaireStopNature')).toBeInTheDocument()
+    expect(getByText('What is the nature of the stop?')).toBeInTheDocument()
   })
 
   it('renders temporary stop and definitive stop items as MenuNavigationButton components', () => {
-    render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // definitive stop
     expect(MenuNavigationButton).toHaveBeenCalledWith(
       expect.objectContaining({
-        label: '1. definitiveQuestionnaireStop',
+        label:
+          '1. Definitive end to interview (refusal, unable to continue, etc.)',
         onClick: expect.any(Function),
       }),
       undefined,
@@ -65,7 +54,7 @@ describe('StopNavigation Component', () => {
     // temporary stop
     expect(MenuNavigationButton).toHaveBeenCalledWith(
       expect.objectContaining({
-        label: '2. temporaryQuestionnaireStop',
+        label: '2. Temporary interruption of the interview',
         onClick: expect.any(Function),
       }),
       undefined,
@@ -73,11 +62,7 @@ describe('StopNavigation Component', () => {
   })
 
   it('does not open the modal initially', () => {
-    render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<StopNavigation {...defaultProps} />)
 
     expect(Modal).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -88,27 +73,24 @@ describe('StopNavigation Component', () => {
   })
 
   it('opens the modal with correct content when definitive stop button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // Click on the definitive quit button
     const definitivequitButton = getByRole('button', {
-      name: '1. definitiveQuestionnaireStop',
+      name: '1. Definitive end to interview (refusal, unable to continue, etc.)',
     })
     fireEvent.click(definitivequitButton)
 
     expect(Modal).toHaveBeenCalledWith(
       expect.objectContaining({
         isOpen: true,
-        dialogTitle: 'definitiveQuitTitle',
-        dialogContent: 'definitiveQuitContent',
+        dialogTitle: 'Definitive stop',
+        dialogContent:
+          'Do you confirm the definitive stop of the questionnaire ?',
         buttons: [
-          expect.objectContaining({ label: 'cancel', autoFocus: false }),
+          expect.objectContaining({ label: 'Cancel', autoFocus: false }),
           expect.objectContaining({
-            label: 'definitiveQuitValidate',
+            label: 'Confirm definitive stop',
             autoFocus: true,
           }),
         ],
@@ -119,27 +101,23 @@ describe('StopNavigation Component', () => {
   })
 
   it('opens the modal with correct content when temporary stop button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // Click on the temporary quit button
     const temporaryQuitButton = getByRole('button', {
-      name: '2. temporaryQuestionnaireStop',
+      name: '2. Temporary interruption of the interview',
     })
     fireEvent.click(temporaryQuitButton)
 
     expect(Modal).toHaveBeenCalledWith(
       expect.objectContaining({
         isOpen: true,
-        dialogTitle: 'temporaryQuitTitle',
-        dialogContent: 'temporaryQuitContent',
+        dialogTitle: 'Temporary interruption',
+        dialogContent: 'You are about to leave the questionnaire',
         buttons: [
-          expect.objectContaining({ label: 'cancel', autoFocus: false }),
+          expect.objectContaining({ label: 'Cancel', autoFocus: false }),
           expect.objectContaining({
-            label: 'temporaryQuitValidate',
+            label: 'Confirm',
             autoFocus: true,
           }),
         ],
@@ -150,15 +128,11 @@ describe('StopNavigation Component', () => {
   })
 
   it('closes the modal when the cancel button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // Open the definitive quit modal
     const definitivequitButton = getByRole('button', {
-      name: '1. definitiveQuestionnaireStop',
+      name: '1. Definitive end to interview (refusal, unable to continue, etc.)',
     })
     fireEvent.click(definitivequitButton)
 
@@ -178,15 +152,11 @@ describe('StopNavigation Component', () => {
   })
 
   it('calls definitiveQuit function when validate button is clicked in the modal', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // Open the definitive quit modal
     const definitivequitButton = getByRole('button', {
-      name: '1. definitiveQuestionnaireStop',
+      name: '1. Definitive end to interview (refusal, unable to continue, etc.)',
     })
     fireEvent.click(definitivequitButton)
 
@@ -200,15 +170,11 @@ describe('StopNavigation Component', () => {
   })
 
   it('calls quit function when validate button is clicked in the modal', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <StopNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<StopNavigation {...defaultProps} />)
 
     // Click on the temporary quit button
     const temporaryQuitButton = getByRole('button', {
-      name: '2. temporaryQuestionnaireStop',
+      name: '2. Temporary interruption of the interview',
     })
     fireEvent.click(temporaryQuitButton)
 

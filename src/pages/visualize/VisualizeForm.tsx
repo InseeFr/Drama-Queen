@@ -6,15 +6,14 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
-
-import { useTranslation } from '@/i18n'
 
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
 
 export function VisualizeForm() {
-  const { t } = useTranslation('visualizeMessage')
+  const { t } = useTranslation()
   const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
   const navigate = useNavigate()
@@ -28,20 +27,20 @@ export function VisualizeForm() {
       <Stack spacing={3} alignItems="center">
         <Stack spacing={2}>
           <Typography variant="h3" className={classes.title}>
-            {t('visualizePage')}
+            {t('visualize.visualizePage')}
           </Typography>
           <TextField
             {...register('questionnaire')}
             name="questionnaire"
             id="questionnaire-url-form"
-            label={t('inputSurveyLabel')}
-            helperText={t('inputSurveyHelper')}
+            label={t('visualize.survey.label')}
+            helperText={t('visualize.survey.helper')}
           />
           <TextField
             {...register('data')}
             id="data-url-form"
-            label={t('inputDataLabel')}
-            helperText={t('inputDataHelper')}
+            label={t('visualize.data.label')}
+            helperText={t('visualize.data.helper')}
           />
           <TextField
             {...register('nomenclature', {
@@ -49,8 +48,8 @@ export function VisualizeForm() {
                 value ? (JSON.parse(value) as Record<string, string>) : null,
             })}
             id="nomenclature-url-form"
-            label={t('inputNomenclatureLabel')}
-            helperText={t('inputNomenclatureHelper')}
+            label={t('visualize.nomenclature.label')}
+            helperText={t('visualize.nomenclature.helper')}
           />
         </Stack>
         <Stack direction={'row'} alignItems="center">
@@ -58,11 +57,11 @@ export function VisualizeForm() {
             {...register('readonly')}
             id="readonly"
             control={<Switch />}
-            label={t('readonlyLabel')}
+            label={t('visualize.readonly')}
           />
         </Stack>
         <Button variant="contained" type="submit">
-          {t('visualizeButtonLabel')}
+          {t('visualize.visualize')}
         </Button>
       </Stack>
     </form>

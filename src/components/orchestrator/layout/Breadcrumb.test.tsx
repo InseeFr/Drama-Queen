@@ -5,10 +5,6 @@ import type { GoToPage, OverviewItem } from '@/models/lunaticType'
 
 import { Breadcrumb } from './Breadcrumb'
 
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
-
 describe('Breadcrumb Component', () => {
   const goToPageMock: GoToPage = vi.fn()
 

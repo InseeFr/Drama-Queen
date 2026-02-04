@@ -1,8 +1,8 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import type { OverviewItem } from '@/models/lunaticType'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
 import { SubSequenceNavigation } from './SubSequenceNavigation'
@@ -56,11 +56,7 @@ describe('SubSequenceNavigation Component', () => {
   }
 
   it('renders the parent sequence as a MenuNavigationButton', () => {
-    render(
-      <TestWrapper>
-        <SubSequenceNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<SubSequenceNavigation {...defaultProps} />)
 
     expect(MenuNavigationButton).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -72,10 +68,8 @@ describe('SubSequenceNavigation Component', () => {
   })
 
   it('triggers the subSequenceOnClick when the parent sequence is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <SubSequenceNavigation {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <SubSequenceNavigation {...defaultProps} />,
     )
 
     // click on the parent sequence button
@@ -89,11 +83,7 @@ describe('SubSequenceNavigation Component', () => {
   })
 
   it('renders all subSequences as a MenuNavigationButton', () => {
-    render(
-      <TestWrapper>
-        <SubSequenceNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<SubSequenceNavigation {...defaultProps} />)
 
     // first subSequence
     expect(MenuNavigationButton).toHaveBeenCalledWith(
@@ -117,10 +107,8 @@ describe('SubSequenceNavigation Component', () => {
   })
 
   it('triggers the subSequenceOnClick when a subSequence is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <SubSequenceNavigation {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <SubSequenceNavigation {...defaultProps} />,
     )
 
     // click on the first subSequence button

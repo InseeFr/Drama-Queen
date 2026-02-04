@@ -1,11 +1,9 @@
 import { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 import { ErrorPage } from '../pages/error/Error'
-
-const { t } = getTranslation('errorMessage')
 
 interface RouterContext {
   queryClient: QueryClient
@@ -13,5 +11,7 @@ interface RouterContext {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => <Outlet />,
-  notFoundComponent: () => <ErrorPage error={new Error(t('404'))} />,
+  notFoundComponent: () => (
+    <ErrorPage error={new Error(i18n.t('error.errorCode.404'))} />
+  ),
 })

@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
-
-import { useTranslation } from '@/i18n'
 
 type PageCountProps = {
   currentPage: number | undefined
@@ -10,7 +9,7 @@ type PageCountProps = {
 
 export function PageCount({ currentPage, maxPage }: Readonly<PageCountProps>) {
   const { classes } = useStyles()
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
 
   return (
     <Stack
@@ -20,7 +19,9 @@ export function PageCount({ currentPage, maxPage }: Readonly<PageCountProps>) {
         visibility: currentPage === undefined ? 'hidden' : 'visible',
       }}
     >
-      <Typography variant="caption">{t('pageNumber')}</Typography>
+      <Typography variant="caption">
+        {t('navigation.navigationBar.pageNumber')}
+      </Typography>
       <Typography variant="body2" fontWeight={'bold'}>
         {currentPage}/{maxPage}
       </Typography>

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios'
 
 import type { Thunks } from '@/core/bootstrap'
+import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
 import type {
   Interrogation,
   Nomenclature,
@@ -10,11 +11,9 @@ import type {
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
 import { fetchUrl } from '@/core/tools/fetchUrl'
 import { makeSearchParamsObjSchema } from '@/core/tools/makeSearchParamsObjectSchema'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 import { searchParamsSchema } from './parser/searchParamsSchema'
-
-const { t } = getTranslation('errorMessage')
 
 export const name = 'visualizeSurvey'
 
@@ -49,7 +48,9 @@ export const thunks = {
         error.response &&
         [400, 403, 404, 500].includes(error.response.status)
       ) {
-        throw new Error(t('questionnaireNotFound', { questionnaireId: '' }))
+        throw new Error(
+          i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+        )
       }
       throw error
     })
@@ -73,7 +74,11 @@ export const thunks = {
     })
 
     if (!isQuestionnaireCompatible) {
-      throw new Error(t('questionnaireNotCompatible'))
+      throw new Error(
+        i18n.t('error.questionnaireNotCompatible', {
+          versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
+        }),
+      )
     }
 
     const interrogation = data
