@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@mui/material/styles'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from '@tanstack/react-router'
 
-import { globalStyles } from '@/routes/style/globalStyles'
+import { globalStyles } from '@/style/globalStyles'
 
-import { theme } from '../style/theme'
+import { theme } from '../../style/theme'
 import { NavigationManager } from './NavigationManager'
 
 export function Layout() {

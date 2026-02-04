@@ -1,8 +1,6 @@
 import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
 import type { Questionnaire } from '@/core/model'
-import { getTranslation } from '@/i18n'
-
-const { t } = getTranslation('errorMessage')
+import i18n from '@/libs/i18n'
 
 const semverCompare = new Intl.Collator('en', { numeric: true }).compare
 
@@ -18,7 +16,7 @@ export const isSurveyCompatibleWithQueen = (params: {
     questionnaire: { lunaticModelVersion },
   } = params
   if (lunaticModelVersion === undefined) {
-    console.info(t('lunaticModelVersionNotFound'))
+    console.info(i18n.t('error.lunaticModelVersionNotFound'))
     return true
   }
 

@@ -1,6 +1,7 @@
-import { createBrowserRouter, createMemoryRouter } from 'react-router-dom'
-
-import { routes } from './routes'
+import { routeTree } from '@/routeTree.gen'
+import { createBrowserHistory, createMemoryHistory } from '@tanstack/history'
+import { QueryClient } from '@tanstack/react-query'
+import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 
 export type RoutingStrategy = 'memory' | 'browser'
 
@@ -9,16 +10,20 @@ type CreateRouterProps = {
   initialPathname?: string
 }
 
+const queryClient = new QueryClient();
+
 export function createRouter({
   strategy = 'memory',
   initialPathname = '/',
 }: CreateRouterProps) {
   if (strategy === 'browser') {
-    return createBrowserRouter(routes, { basename: '/queen' })
+    return createTanStackRouter({ routeTree, history: createBrowserHistory(), basepath: '/queen', context: { queryClient } })
   }
 
   const initialEntries = [initialPathname || '/']
-  return createMemoryRouter(routes, {
-    initialEntries: initialEntries,
+  return createTanStackRouter({
+    routeTree,
+    history: createMemoryHistory({ initialEntries }),
+    context: { queryClient }
   })
 }

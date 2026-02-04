@@ -1,8 +1,8 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import type { Overview } from '@/models/lunaticType'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
 import { SequenceNavigation } from './SequenceNavigation'
@@ -49,21 +49,15 @@ describe('SequenceNavigation Component', () => {
   }
 
   it('renders the questionnaire title', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <SequenceNavigation {...defaultProps} />
-      </TestWrapper>,
+    const { getByText } = renderWithTheme(
+      <SequenceNavigation {...defaultProps} />,
     )
 
     expect(getByText('Questionnaire Title')).toBeInTheDocument()
   })
 
   it('renders all sequences as MenuNavigationButton components', () => {
-    render(
-      <TestWrapper>
-        <SequenceNavigation {...defaultProps} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<SequenceNavigation {...defaultProps} />)
 
     // first sequence
     expect(MenuNavigationButton).toHaveBeenCalledWith(
@@ -73,7 +67,7 @@ describe('SequenceNavigation Component', () => {
         endIcon: undefined,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
 
     // second sequence
@@ -84,15 +78,13 @@ describe('SequenceNavigation Component', () => {
         endIcon: undefined,
         onClick: expect.any(Function),
       }),
-      {},
+      undefined,
     )
   })
 
   it('triggers the sequenceOnClick when a sequence is clicked in the menu', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <SequenceNavigation {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <SequenceNavigation {...defaultProps} />,
     )
 
     // click on the second sequence button
@@ -111,18 +103,14 @@ describe('SequenceNavigation Component', () => {
       selectedSequence: defaultProps.overview[0],
     }
 
-    render(
-      <TestWrapper>
-        <SequenceNavigation {...props} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<SequenceNavigation {...props} />)
 
     expect(MenuNavigationButton).toHaveBeenCalledWith(
       expect.objectContaining({
         label: defaultProps.overview[0].label,
         className: expect.stringContaining('sequenceOpen'),
       }),
-      {},
+      undefined,
     )
   })
 
@@ -157,11 +145,7 @@ describe('SequenceNavigation Component', () => {
       overview: overview,
     }
 
-    render(
-      <TestWrapper>
-        <SequenceNavigation {...props} />
-      </TestWrapper>,
-    )
+    renderWithTheme(<SequenceNavigation {...props} />)
 
     // Third sequence has subSequences
     expect(MenuNavigationButton).toHaveBeenCalledWith(
@@ -169,7 +153,7 @@ describe('SequenceNavigation Component', () => {
         label: props.overview[2].label,
         endIcon: expect.anything(),
       }),
-      {},
+      undefined,
     )
 
     // First sequence dos not have subSequences
@@ -178,7 +162,7 @@ describe('SequenceNavigation Component', () => {
         label: defaultProps.overview[0].label,
         endIcon: undefined,
       }),
-      {},
+      undefined,
     )
   })
 })

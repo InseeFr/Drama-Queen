@@ -1,0 +1,11 @@
+{
+  "downloadingData": "Téléchargement des données...",
+  "externalResourcesProgress": "Ressources externes",
+  "interrogationsProgress": "Interrogations",
+  "nomenclaturesProgress": "Nomenclatures",
+  "paradataProgress": "Paradonnées",
+  "questionnairesProgress": "Questionnaires",
+  "synchronizationInProgress": "Synchronisation en cours",
+  "takingControl": "Reprise du questionnaire...",
+  "uploadingData": "Envoi des données..."
+}

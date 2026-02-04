@@ -1,10 +1,8 @@
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 
 import { SHORTCUT_NEXT } from '@/constants/shortcuts'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 import type { GoPreviousPage } from '@/models/lunaticType'
-
-const { t } = getTranslation('navigationMessage')
 
 type ContinueAction = 'continue' | 'quit' | 'saveAndQuit' | undefined
 
@@ -88,11 +86,11 @@ export function computeNavigationButtonsProps({
 function getLabelFromAction(action: ContinueAction): string {
   switch (action) {
     case 'quit':
-      return t('quit')
+      return i18n.t('common.quit')
     case 'saveAndQuit':
-      return t('validateAndQuit')
+      return i18n.t('navigation.validateAndQuit')
     default:
-      return t('continue')
+      return i18n.t('translation:navigation.continueButton.label')
   }
 }
 

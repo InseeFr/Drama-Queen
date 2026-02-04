@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { useState } from 'react'
@@ -13,7 +14,6 @@ import { useState } from 'react'
 import { ShortCut } from '@/components/ui/ShortCut'
 import { SHORTCUT_MENU, SHORTCUT_QUIT } from '@/constants/shortcuts'
 import { DYNAMIC_PUBLIC_URL } from '@/core/constants'
-import { useTranslation } from '@/i18n'
 import type { GoToPage, Overview, OverviewItem } from '@/models/lunaticType'
 
 import { Breadcrumb } from './Breadcrumb'
@@ -38,7 +38,7 @@ export function Header({
 }: Readonly<HeaderProps>) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const { classes } = useStyles({ isDrawerOpen })
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
 
   const menuShortKey = SHORTCUT_MENU
   const quitShortKey = SHORTCUT_QUIT
@@ -87,7 +87,10 @@ export function Header({
         />
       </SwipeableDrawer>
 
-      <Button title={t('backToQuestionnaireStart')} onClick={goToFirstPage}>
+      <Button
+        title={t('navigation.header.backToQuestionnaireStart')}
+        onClick={goToFirstPage}
+      >
         <img
           id="logo"
           src={`${DYNAMIC_PUBLIC_URL}/assets/insee.svg`}
@@ -107,7 +110,7 @@ export function Header({
       </Stack>
       <Stack className={classes.headerClose}>
         <IconButton
-          title={t('quit')}
+          title={t('common.quit')}
           className={classes.closeIcon}
           onClick={quit}
         >

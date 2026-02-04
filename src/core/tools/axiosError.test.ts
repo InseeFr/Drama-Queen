@@ -1,11 +1,7 @@
 import { AxiosError } from 'axios'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { handleAxiosError } from './axiosError'
-
-vi.mock('@/i18n', () => ({
-  getTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
 
 describe('handleAxiosError', () => {
   it('should return a custom message for no response', () => {
@@ -35,7 +31,7 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('400')
+    expect(result.message).toBe('Invalid request.')
   })
 
   it('should return the correct message for status 401', () => {
@@ -49,7 +45,9 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('401')
+    expect(result.message).toBe(
+      'You are not logged in. Please log in to access this resource.',
+    )
   })
 
   it('should return the correct message for unknown status', () => {
@@ -63,6 +61,8 @@ describe('handleAxiosError', () => {
     } as AxiosError
 
     const result = handleAxiosError(error)
-    expect(result.message).toBe('longUnknownError')
+    expect(result.message).toBe(
+      'An unknown error has occurred, please contact support or try again later.',
+    )
   })
 })

@@ -1,57 +1,55 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { WelcomeBackModal } from './WelcomeBackModal'
 
-vi.mock('@/i18n', () => ({
-  useTranslation: () => ({ t: (keyMessage: string) => keyMessage }),
-}))
-
 describe('WelcomeBackModal', () => {
   it('is displayed when isOpen', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <WelcomeBackModal isOpen={true} onClose={vi.fn()} onGoBack={vi.fn()} />
-      </TestWrapper>,
+    const { getByText } = renderWithTheme(
+      <WelcomeBackModal isOpen={true} onClose={vi.fn()} onGoBack={vi.fn()} />,
     )
 
-    expect(getByText('welcomeModalTitle')).toBeInTheDocument()
-    expect(getByText('welcomeModalContent')).toBeInTheDocument()
-    expect(getByText('welcomeModalFirstPage')).toBeInTheDocument()
-    expect(getByText('welcomeModalGoBack')).toBeInTheDocument()
+    expect(getByText('Welcome')).toBeInTheDocument()
+    expect(
+      getByText(
+        'You have already started filling out the questionnaire. Would you like to resume where you left off or return to the first page ?',
+      ),
+    ).toBeInTheDocument()
+    expect(getByText('Return to the first page')).toBeInTheDocument()
+    expect(getByText('Resume where I left off')).toBeInTheDocument()
   })
 
   it('is not displayed when not isOpen', () => {
-    const { queryByText } = render(
-      <TestWrapper>
-        <WelcomeBackModal isOpen={false} onClose={vi.fn()} onGoBack={vi.fn()} />
-      </TestWrapper>,
+    const { queryByText } = renderWithTheme(
+      <WelcomeBackModal isOpen={false} onClose={vi.fn()} onGoBack={vi.fn()} />,
     )
 
-    expect(queryByText('welcomeModalTitle')).toBeNull()
-    expect(queryByText('welcomeModalContent')).toBeNull()
-    expect(queryByText('welcomeModalFirstPage')).toBeNull()
-    expect(queryByText('welcomeModalGoBack')).toBeNull()
+    expect(queryByText('Welcome')).toBeNull()
+    expect(
+      queryByText(
+        'You have already started filling out the questionnaire. Would you like to resume where you left off or return to the first page ?',
+      ),
+    ).toBeNull()
+    expect(queryByText('Return to the first page')).toBeNull()
+    expect(queryByText('Resume where I left off')).toBeNull()
   })
 
   it('correctly triggers button functions', () => {
     const onClose = vi.fn()
     const onGoBack = vi.fn()
 
-    const { getByText } = render(
-      <TestWrapper>
-        <WelcomeBackModal isOpen={true} onClose={onClose} onGoBack={onGoBack} />
-      </TestWrapper>,
+    const { getByText } = renderWithTheme(
+      <WelcomeBackModal isOpen={true} onClose={onClose} onGoBack={onGoBack} />,
     )
 
-    const closeButton = getByText('welcomeModalFirstPage')
+    const closeButton = getByText('Return to the first page')
     fireEvent.click(closeButton)
 
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    const goBackButton = getByText('welcomeModalGoBack')
+    const goBackButton = getByText('Resume where I left off')
     fireEvent.click(goBackButton)
 
     expect(onGoBack).toHaveBeenCalledTimes(1)

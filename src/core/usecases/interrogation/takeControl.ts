@@ -2,7 +2,7 @@ import { createSelector, createUsecaseActions } from 'redux-clean-architecture'
 import { id } from 'tsafe/id'
 
 import type { State as RootState, Thunks } from '@/core/bootstrap'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 /**
  * Cas de reprise en main d'une interrogation commencée par le web
@@ -10,7 +10,6 @@ import { getTranslation } from '@/i18n'
  * Le questionnaire a été commencé par l'utilisateur en ligne, mais l'enquêteur
  * souhaite prendre la main pour réinterroger les personnes.
  */
-const { t } = getTranslation('synchronizeMessage')
 const state = (state: RootState) => state[name]
 export const name = 'takeControl'
 
@@ -49,7 +48,7 @@ export const thunks = {
     async (...args) => {
       const [dispatch, , { queenApi, dataStore }] = args
       try {
-        dispatch(actions.message(t('takingControl')))
+        dispatch(actions.message(i18n.t('synchronize.takingControl')))
         const interrogation = await queenApi.syncInterrogation(
           params.interrogationId,
         )

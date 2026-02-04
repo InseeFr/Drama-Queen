@@ -2,10 +2,10 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
-import { useTranslation } from '@/i18n'
 
 import { ShortCut } from '../../ui/ShortCut'
 
@@ -23,7 +23,7 @@ export function PrevNext({
   onNext,
 }: PrevNextProps) {
   const { classes, cx } = useStyles()
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
 
   return (
     <Stack id="buttons" className={classes.root}>
@@ -44,7 +44,7 @@ export function PrevNext({
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          {t('previousHelper')}
+          {t('navigation.navigationBar.previousButton.helper')}
         </Typography>
       </Stack>
 
@@ -62,7 +62,7 @@ export function PrevNext({
           )}
         </IconButton>
         <Typography variant="body2" className={classes.helpLabel}>
-          {t('nextHelper')}
+          {t('navigation.navigationBar.nextButton.helper')}
         </Typography>
       </Stack>
     </Stack>

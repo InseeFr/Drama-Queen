@@ -1,8 +1,8 @@
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Button from '@mui/material/Button'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
-import { useTranslation } from '@/i18n'
 import type { GoToPage, OverviewItem } from '@/models/lunaticType'
 
 type BreadcrumbProps = {
@@ -17,7 +17,7 @@ export function Breadcrumb({
   goToPage,
 }: Readonly<BreadcrumbProps>) {
   const { classes, cx } = useStyles()
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
   const goToSubSequencePage = () =>
@@ -31,7 +31,7 @@ export function Breadcrumb({
             classes.breadcrumbButton,
             !subSequence && classes.lastButton,
           )}
-          title={`${t('goToSequence')} ${sequence.label}`}
+          title={`${t('navigation.header.goToSequence')} ${sequence.label}`}
           disableRipple
           onClick={goToSequencePage}
         >
@@ -45,7 +45,7 @@ export function Breadcrumb({
             classes.subsequenceButton,
             classes.lastButton,
           )}
-          title={`${t('goToSubSequence')} ${subSequence.label}`}
+          title={`${t('navigation.header.goToSubSequence')} ${subSequence.label}`}
           disableRipple
           onClick={goToSubSequencePage}
         >

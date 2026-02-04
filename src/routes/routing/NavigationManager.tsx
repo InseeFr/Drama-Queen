@@ -1,8 +1,6 @@
-import { matchRoutes, useLocation, useNavigate } from 'react-router-dom'
-
 import { type PropsWithChildren, useEffect } from 'react'
 
-import { routes } from './routes'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 export function NavigationManager({ children }: PropsWithChildren) {
   const location = useLocation()
@@ -11,13 +9,10 @@ export function NavigationManager({ children }: PropsWithChildren) {
   useEffect(() => {
     function shellNavigationHandler(event: Event) {
       const pathname = (event as CustomEvent<string>).detail
-      if (
-        location.pathname === pathname ||
-        !matchRoutes(routes, { pathname })
-      ) {
+      if (location.pathname === pathname) {
         return
       }
-      navigate(pathname)
+      navigate({ to: pathname })
     }
 
     window.addEventListener('[Pearl] navigated', shellNavigationHandler)

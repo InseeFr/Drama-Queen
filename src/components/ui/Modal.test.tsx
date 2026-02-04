@@ -1,6 +1,6 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { Modal } from './Modal'
 
@@ -21,11 +21,7 @@ describe('Modal', () => {
   })
 
   it('should render the modal with provided props', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <Modal {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByText } = renderWithTheme(<Modal {...defaultProps} />)
 
     expect(getByText('Modal Title')).toBeInTheDocument()
     expect(getByText('This is the modal content')).toBeInTheDocument()
@@ -34,11 +30,7 @@ describe('Modal', () => {
   })
 
   it('should close the modal when close button is clicked', () => {
-    const { getByLabelText } = render(
-      <TestWrapper>
-        <Modal {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByLabelText } = renderWithTheme(<Modal {...defaultProps} />)
     const closeButton = getByLabelText('close')
 
     fireEvent.click(closeButton)
@@ -48,11 +40,7 @@ describe('Modal', () => {
 
   it('should not close the modal when clicked outside if mandatory prop is true', () => {
     const props = { ...defaultProps, mandatory: true }
-    const { getByTestId } = render(
-      <TestWrapper>
-        <Modal {...props} />
-      </TestWrapper>,
-    )
+    const { getByTestId } = renderWithTheme(<Modal {...props} />)
 
     const backdrop = getByTestId('modal-backdrop') // Backdrop div
     fireEvent.click(backdrop)
@@ -61,11 +49,7 @@ describe('Modal', () => {
   })
 
   it('should trigger button onClick handler when buttons are clicked', () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <Modal {...defaultProps} />
-      </TestWrapper>,
-    )
+    const { getByText } = renderWithTheme(<Modal {...defaultProps} />)
 
     const confirmButton = getByText('Confirm')
     fireEvent.click(confirmButton)
@@ -83,22 +67,14 @@ describe('Modal', () => {
 
   it('should not render the close button when mandatory is true', () => {
     const props = { ...defaultProps, mandatory: true }
-    const { queryByLabelText } = render(
-      <TestWrapper>
-        <Modal {...props} />
-      </TestWrapper>,
-    )
+    const { queryByLabelText } = renderWithTheme(<Modal {...props} />)
 
     expect(queryByLabelText('close')).not.toBeInTheDocument()
   })
 
   it('should render the modal dialog as closed when isOpen is false', () => {
     const props = { ...defaultProps, isOpen: false }
-    const { queryByRole } = render(
-      <TestWrapper>
-        <Modal {...props} />
-      </TestWrapper>,
-    )
+    const { queryByRole } = renderWithTheme(<Modal {...props} />)
 
     // Expect the dialog to not be in the document
     const dialog = queryByRole('dialog')

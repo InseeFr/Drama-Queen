@@ -1,11 +1,9 @@
 import { createSelector } from 'redux-clean-architecture'
 
 import type { State as RootState } from '@/core/bootstrap'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 import { type State, name } from './state'
-
-const { t } = getTranslation('synchronizeMessage')
 
 const state = (rootState: RootState) => rootState[name]
 
@@ -34,12 +32,12 @@ const progressBars = createSelector(state, (state: State) => {
         state.interrogationCompleted,
         state.totalInterrogation,
       ),
-      label: t('interrogationsProgress'),
+      label: i18n.t('synchronize.interrogationsProgress'),
     })
     if (state.totalParadata !== undefined) {
       bars.push({
         progress: computeProgress(state.paradataCompleted, state.totalParadata),
-        label: t('paradataProgress'),
+        label: i18n.t('synchronize.paradataProgress'),
       })
     }
     return bars
@@ -50,21 +48,21 @@ const progressBars = createSelector(state, (state: State) => {
     ...[
       {
         progress: computeProgress(state.surveyCompleted, state.totalSurvey),
-        label: t('questionnairesProgress'),
+        label: i18n.t('synchronize.questionnairesProgress'),
       },
       {
         progress: computeProgress(
           state.nomenclatureCompleted,
           state.totalNomenclature,
         ),
-        label: t('nomenclaturesProgress'),
+        label: i18n.t('synchronize.nomenclaturesProgress'),
       },
       {
         progress: computeProgress(
           state.interrogationCompleted,
           state.totalInterrogation,
         ),
-        label: t('interrogationsProgress'),
+        label: i18n.t('synchronize.interrogationsProgress'),
       },
     ],
   )
@@ -74,7 +72,7 @@ const progressBars = createSelector(state, (state: State) => {
         state.externalResourcesCompleted,
         state.totalExternalResources,
       ),
-      label: t('externalResourcesProgress'),
+      label: i18n.t('synchronize.externalResourcesProgress'),
       count: Number.isFinite(state.totalExternalResources)
         ? `${state.externalResourcesCompleted} / ${state.totalExternalResources}`
         : undefined,
@@ -89,9 +87,9 @@ const stepTitle = createSelector(state, (state: State) => {
   }
   switch (state.type) {
     case 'upload':
-      return t('uploadingData')
+      return i18n.t('synchronize.uploadingData')
     case 'download':
-      return t('downloadingData')
+      return i18n.t('synchronize.downloadingData')
     default:
       return ''
   }

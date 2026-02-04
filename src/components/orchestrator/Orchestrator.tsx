@@ -1,5 +1,6 @@
 import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { useCallback, useEffect, useState } from 'react'
@@ -12,7 +13,6 @@ import type {
   Questionnaire,
 } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
-import { useTranslation } from '@/i18n'
 import type { GetReferentiel, ValueChange } from '@/models/lunaticType'
 import { computeInitEvent, computeNewPageEvent } from '@/utils/telemetry'
 
@@ -81,7 +81,7 @@ export function Orchestrator({
   interrogation,
 }: Readonly<OrchestratorProps>) {
   const { classes } = useStyles()
-  const { t } = useTranslation('navigationMessage')
+  const { t } = useTranslation()
   const { classes: lunaticClasses } = useLunaticStyles()
 
   const initialInterrogation = computeInterrogation(interrogation)
@@ -125,7 +125,7 @@ export function Orchestrator({
   } = useLunatic(source, initialInterrogation.data, {
     activeControls: true,
     autoSuggesterLoading: true,
-    dontKnowButton: t('dontKnowButtonLabel'),
+    dontKnowButton: t('common.dontKnow'),
     getReferentiel,
     initialPage: initialPage,
     lastReachedPage: initialInterrogation.stateData?.currentPage,

@@ -1,7 +1,7 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
 
@@ -11,20 +11,16 @@ describe('MenuNavigationButton Component', () => {
   const defaultProps = { label: 'button label', onClick: onClickMock }
 
   it('renders button with the correct label', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <MenuNavigationButton {...defaultProps} />,
     )
 
     expect(getByRole('button', { name: 'button label' })).toBeInTheDocument()
   })
 
   it('calls onClick when the button is clicked', () => {
-    const { getByRole } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...defaultProps} />
-      </TestWrapper>,
+    const { getByRole } = renderWithTheme(
+      <MenuNavigationButton {...defaultProps} />,
     )
 
     fireEvent.click(getByRole('button', { name: 'button label' }))
@@ -33,22 +29,14 @@ describe('MenuNavigationButton Component', () => {
 
   it('renders the button as disabled when disabled prop is true', () => {
     const props = { ...defaultProps, disabled: true }
-    const { getByRole } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...props} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<MenuNavigationButton {...props} />)
     const button = getByRole('button', { name: 'button label' })
     expect(button).toBeDisabled()
   })
 
   it('applies autofocus attribute when autofocus prop is true', () => {
     const props = { ...defaultProps, autofocus: true }
-    const { getByRole } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...props} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<MenuNavigationButton {...props} />)
     const button = getByRole('button', { name: 'button label' })
     expect(button).toHaveFocus()
   })
@@ -59,11 +47,7 @@ describe('MenuNavigationButton Component', () => {
       startIcon: <span>Start Icon</span>,
       endIcon: <span>End Icon</span>,
     }
-    const { getByText } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...props} />
-      </TestWrapper>,
-    )
+    const { getByText } = renderWithTheme(<MenuNavigationButton {...props} />)
 
     expect(getByText('Start Icon')).toBeInTheDocument()
     expect(getByText('End Icon')).toBeInTheDocument()
@@ -71,11 +55,7 @@ describe('MenuNavigationButton Component', () => {
 
   it('applies custom className', () => {
     const props = { ...defaultProps, className: 'custom-class' }
-    const { getByRole } = render(
-      <TestWrapper>
-        <MenuNavigationButton {...props} />
-      </TestWrapper>,
-    )
+    const { getByRole } = renderWithTheme(<MenuNavigationButton {...props} />)
     const button = getByRole('button', { name: 'button label' })
     expect(button).toHaveClass('custom-class')
   })

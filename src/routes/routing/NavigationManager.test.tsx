@@ -1,38 +1,17 @@
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
-import {
-  MemoryRouter,
-  matchRoutes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { NavigationManager } from './NavigationManager'
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
-  return {
-    ...actual,
-    useLocation: vi.fn(),
-    useNavigate: vi.fn(),
-    matchRoutes: vi.fn(),
-  }
-})
+vi.mock('@tanstack/react-router', () => ({
+  useLocation: vi.fn(),
+  useNavigate: vi.fn(),
+}))
 
 describe('NavigationManager', () => {
-  let useLocationMock: ReturnType<typeof vi.fn>
-  let useNavigateMock: ReturnType<typeof vi.fn>
-  let matchRoutesMock: ReturnType<typeof vi.fn>
-
   beforeEach(() => {
-    useLocationMock = vi.fn()
-    useNavigateMock = vi.fn()
-    matchRoutesMock = vi.fn()
-
-    // Mock hooks used by the component
-    vi.mocked(useLocation).mockImplementation(useLocationMock)
-    vi.mocked(useNavigate).mockImplementation(() => useNavigateMock)
-    vi.mocked(matchRoutes).mockImplementation(matchRoutesMock)
+    vi.clearAllMocks()
   })
 
   afterEach(() => {
@@ -40,46 +19,50 @@ describe('NavigationManager', () => {
   })
 
   it('does not navigate if the path is the same', () => {
-    const mockLocation = { pathname: '/same-path' }
-    const mockNavigate = vi.fn()
+    const navigate = vi.fn()
 
-    useLocationMock.mockReturnValue(mockLocation)
-    useNavigateMock.mockImplementation(() => mockNavigate)
-    matchRoutesMock.mockImplementation(
-      (_, { pathname }) => pathname === '/same-path',
-    )
+    vi.mocked(useLocation).mockReturnValue({
+      pathname: '/same-path',
+    } as any)
+
+    vi.mocked(useNavigate).mockReturnValue(navigate)
 
     render(
-      <MemoryRouter initialEntries={['/same-path']}>
-        <NavigationManager>
-          <div>Children</div>
-        </NavigationManager>
-      </MemoryRouter>,
+      <NavigationManager>
+        <div>Children</div>
+      </NavigationManager>,
     )
 
-    const event = new CustomEvent('[Pearl] navigated', { detail: '/same-path' })
-    window.dispatchEvent(event)
+    window.dispatchEvent(
+      new CustomEvent('[Pearl] navigated', {
+        detail: '/same-path',
+      }),
+    )
 
-    expect(mockNavigate).not.toHaveBeenCalled()
+    expect(navigate).not.toHaveBeenCalled()
   })
 
   it('dispatches a custom event on navigation', () => {
-    const mockLocation = { pathname: '/test-path' }
+    const navigate = vi.fn()
+    const dispatchSpy = vi.spyOn(window, 'dispatchEvent')
 
-    useLocationMock.mockReturnValue(mockLocation)
+    vi.mocked(useLocation).mockReturnValue({
+      pathname: '/test-path',
+    } as any)
 
-    const customEventSpy = vi.spyOn(window, 'dispatchEvent')
+    vi.mocked(useNavigate).mockReturnValue(navigate)
 
     render(
-      <MemoryRouter initialEntries={['/test-path']}>
-        <NavigationManager>
-          <div>Children</div>
-        </NavigationManager>
-      </MemoryRouter>,
+      <NavigationManager>
+        <div />
+      </NavigationManager>,
     )
 
-    expect(customEventSpy).toHaveBeenCalledWith(
-      new CustomEvent('[Drama Queen] navigated', { detail: '/test-path' }),
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: '[Drama Queen] navigated',
+        detail: '/test-path',
+      }),
     )
   })
 })

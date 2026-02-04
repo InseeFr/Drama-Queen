@@ -1,0 +1,1 @@
+export { Layout } from '@/routes/routing/Layout'

@@ -1,5 +1,5 @@
 import type { LunaticSource } from '@inseefr/lunatic'
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -8,7 +8,7 @@ import {
 } from '@/constants/telemetry'
 import { TelemetryContext } from '@/contexts/TelemetryContext'
 import type { Interrogation } from '@/core/model'
-import { TestWrapper } from '@/tests/TestWrapper'
+import { renderWithTheme } from '@/tests/render'
 
 import { Orchestrator } from './Orchestrator'
 
@@ -44,15 +44,13 @@ describe('Orchestrator', () => {
   it('triggers function on page change', () => {
     const onChangePageMock = vi.fn()
 
-    const { getByText } = render(
-      <TestWrapper>
-        <Orchestrator
-          readonly={false}
-          source={source}
-          getReferentiel={vi.fn()}
-          onChangePage={onChangePageMock}
-        />
-      </TestWrapper>,
+    const { getByText } = renderWithTheme(
+      <Orchestrator
+        readonly={false}
+        source={source}
+        getReferentiel={vi.fn()}
+        onChangePage={onChangePageMock}
+      />,
     )
 
     // initializes with first page
@@ -90,15 +88,13 @@ describe('Orchestrator', () => {
         },
       }
 
-      const { getByRole } = render(
-        <TestWrapper>
-          <Orchestrator
-            readonly={false}
-            source={source}
-            getReferentiel={vi.fn()}
-            interrogation={interrogation}
-          />
-        </TestWrapper>,
+      const { getByRole } = renderWithTheme(
+        <Orchestrator
+          readonly={false}
+          source={source}
+          getReferentiel={vi.fn()}
+          interrogation={interrogation}
+        />,
       )
 
       expect(getByRole('dialog')).toBeInTheDocument()
@@ -114,15 +110,13 @@ describe('Orchestrator', () => {
         },
       }
 
-      const { queryByRole } = render(
-        <TestWrapper>
-          <Orchestrator
-            readonly={true} // readonly
-            source={source}
-            getReferentiel={vi.fn()}
-            interrogation={interrogation}
-          />
-        </TestWrapper>,
+      const { queryByRole } = renderWithTheme(
+        <Orchestrator
+          readonly={true} // readonly
+          source={source}
+          getReferentiel={vi.fn()}
+          interrogation={interrogation}
+        />,
       )
 
       expect(queryByRole('dialog')).not.toBeInTheDocument()
@@ -138,15 +132,13 @@ describe('Orchestrator', () => {
         },
       }
 
-      const { queryByRole } = render(
-        <TestWrapper>
-          <Orchestrator
-            readonly={false}
-            source={source}
-            getReferentiel={vi.fn()}
-            interrogation={interrogation}
-          />
-        </TestWrapper>,
+      const { queryByRole } = renderWithTheme(
+        <Orchestrator
+          readonly={false}
+          source={source}
+          getReferentiel={vi.fn()}
+          interrogation={interrogation}
+        />,
       )
 
       expect(queryByRole('dialog')).not.toBeInTheDocument()
@@ -157,22 +149,20 @@ describe('Orchestrator', () => {
     it('triggers telemetry init event if used in telemetry provider', async () => {
       const pushEvent = vi.fn()
 
-      render(
-        <TestWrapper>
-          <TelemetryContext.Provider
-            value={{
-              isTelemetryEnabled: true,
-              pushEvent,
-              setDefaultValues: () => {},
-            }}
-          >
-            <Orchestrator
-              readonly={false}
-              source={source}
-              getReferentiel={vi.fn()}
-            />
-          </TelemetryContext.Provider>
-        </TestWrapper>,
+      renderWithTheme(
+        <TelemetryContext.Provider
+          value={{
+            isTelemetryEnabled: true,
+            pushEvent,
+            setDefaultValues: () => {},
+          }}
+        >
+          <Orchestrator
+            readonly={false}
+            source={source}
+            getReferentiel={vi.fn()}
+          />
+        </TelemetryContext.Provider>,
       )
 
       await waitFor(() => expect(pushEvent).toHaveBeenCalledOnce())
@@ -188,22 +178,20 @@ describe('Orchestrator', () => {
     it('does not trigger telemetry events if telemetry is disabled', async () => {
       const pushEvent = vi.fn()
 
-      const { getByText } = render(
-        <TestWrapper>
-          <TelemetryContext.Provider
-            value={{
-              isTelemetryEnabled: false,
-              pushEvent,
-              setDefaultValues: () => {},
-            }}
-          >
-            <Orchestrator
-              readonly={false}
-              source={source}
-              getReferentiel={vi.fn()}
-            />
-          </TelemetryContext.Provider>
-        </TestWrapper>,
+      const { getByText } = renderWithTheme(
+        <TelemetryContext.Provider
+          value={{
+            isTelemetryEnabled: false,
+            pushEvent,
+            setDefaultValues: () => {},
+          }}
+        >
+          <Orchestrator
+            readonly={false}
+            source={source}
+            getReferentiel={vi.fn()}
+          />
+        </TelemetryContext.Provider>,
       )
 
       // init event is not triggered
@@ -217,22 +205,20 @@ describe('Orchestrator', () => {
     it('triggers telemetry new page event', async () => {
       const pushEvent = vi.fn()
 
-      const { getByText, getByLabelText } = render(
-        <TestWrapper>
-          <TelemetryContext.Provider
-            value={{
-              isTelemetryEnabled: true,
-              pushEvent,
-              setDefaultValues: () => {},
-            }}
-          >
-            <Orchestrator
-              readonly={false}
-              source={source}
-              getReferentiel={vi.fn()}
-            />
-          </TelemetryContext.Provider>
-        </TestWrapper>,
+      const { getByText, getByLabelText } = renderWithTheme(
+        <TelemetryContext.Provider
+          value={{
+            isTelemetryEnabled: true,
+            pushEvent,
+            setDefaultValues: () => {},
+          }}
+        >
+          <Orchestrator
+            readonly={false}
+            source={source}
+            getReferentiel={vi.fn()}
+          />
+        </TelemetryContext.Provider>,
       )
 
       // init event
@@ -267,23 +253,21 @@ describe('Orchestrator', () => {
       const pushEvent = vi.fn()
       const triggerBatchTelemetryCallback = vi.fn(() => Promise.resolve())
 
-      const { getByRole } = render(
-        <TestWrapper>
-          <TelemetryContext.Provider
-            value={{
-              isTelemetryEnabled: true,
-              pushEvent,
-              setDefaultValues: () => {},
-              triggerBatchTelemetryCallback,
-            }}
-          >
-            <Orchestrator
-              readonly={false}
-              source={source}
-              getReferentiel={vi.fn()}
-            />
-          </TelemetryContext.Provider>
-        </TestWrapper>,
+      const { getByRole } = renderWithTheme(
+        <TelemetryContext.Provider
+          value={{
+            isTelemetryEnabled: true,
+            pushEvent,
+            setDefaultValues: () => {},
+            triggerBatchTelemetryCallback,
+          }}
+        >
+          <Orchestrator
+            readonly={false}
+            source={source}
+            getReferentiel={vi.fn()}
+          />
+        </TelemetryContext.Provider>,
       )
 
       // init event
@@ -307,23 +291,21 @@ describe('Orchestrator', () => {
       const pushEvent = vi.fn()
       const triggerBatchTelemetryCallback = vi.fn(() => Promise.resolve())
 
-      const { getByText } = render(
-        <TestWrapper>
-          <TelemetryContext.Provider
-            value={{
-              isTelemetryEnabled: true,
-              pushEvent,
-              setDefaultValues: () => {},
-              triggerBatchTelemetryCallback,
-            }}
-          >
-            <Orchestrator
-              readonly={false}
-              source={{ components: [], variables: [] }} // only 1 page in orchestrator
-              getReferentiel={vi.fn()}
-            />
-          </TelemetryContext.Provider>
-        </TestWrapper>,
+      const { getByText } = renderWithTheme(
+        <TelemetryContext.Provider
+          value={{
+            isTelemetryEnabled: true,
+            pushEvent,
+            setDefaultValues: () => {},
+            triggerBatchTelemetryCallback,
+          }}
+        >
+          <Orchestrator
+            readonly={false}
+            source={{ components: [], variables: [] }} // only 1 page in orchestrator
+            getReferentiel={vi.fn()}
+          />
+        </TelemetryContext.Provider>,
       )
 
       // init event

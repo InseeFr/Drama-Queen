@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { RouterProvider } from '@tanstack/react-router'
 
 import { CenteredSpinner } from '@/components/ui/CenteredSpinner'
 import { CoreProvider } from '@/createCore'
