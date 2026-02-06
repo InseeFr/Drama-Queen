@@ -7,7 +7,6 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
-import { tss } from 'tss-react/mui'
 
 type ModalProps = {
   isOpen: boolean
@@ -30,7 +29,6 @@ export function Modal({
   mandatory = false,
   onClose,
 }: Readonly<ModalProps>) {
-  const { classes } = useStyles()
 
   const handleClose = (event: any, reason: string) => {
     if (mandatory && ['backdropClick', 'escapeKeyDown'].includes(reason)) {
@@ -42,8 +40,8 @@ export function Modal({
 
   return (
     <Dialog open={isOpen} onClose={handleClose} data-testid="modal-backdrop">
-      <Stack className={classes.dialog}>
-        <Stack className={classes.dialogHeader}>
+      <Stack className="bg-background-default">
+        <Stack className="flex-row justify-between">
           <DialogTitle>{dialogTitle}</DialogTitle>
           <Stack justifyContent={'center'}>
             {!mandatory && (
@@ -62,7 +60,7 @@ export function Modal({
           {buttons.map((button, index) => (
             <Button
               key={`${index}-${button.label}`}
-              className={classes.button}
+              className="bg-button-main text-secondary hover:bg-white hover:text-primary focus:bg-white focus:text-primary"
               autoFocus={button.autoFocus}
               onClick={button.onClick}
             >
@@ -74,19 +72,3 @@ export function Modal({
     </Dialog>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  dialog: { backgroundColor: theme.palette.background.default },
-  dialogHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    backgroundColor: theme.palette.background.button.main,
-    color: theme.palette.secondary.main,
-    '&:hover,&:focus': {
-      backgroundColor: 'white',
-      color: theme.palette.primary.main,
-    },
-  },
-}))

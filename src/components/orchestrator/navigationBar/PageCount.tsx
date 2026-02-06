@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 type PageCountProps = {
   currentPage: number | undefined
@@ -8,12 +7,11 @@ type PageCountProps = {
 }
 
 export function PageCount({ currentPage, maxPage }: Readonly<PageCountProps>) {
-  const { classes } = useStyles()
   const { t } = useTranslation()
 
   return (
     <Stack
-      className={classes.pageCount}
+      className="text-center rounded-[5px] w-[57px] bg-white"
       id={`page-count`}
       style={{
         visibility: currentPage === undefined ? 'hidden' : 'visible',
@@ -28,12 +26,3 @@ export function PageCount({ currentPage, maxPage }: Readonly<PageCountProps>) {
     </Stack>
   )
 }
-
-const useStyles = tss.create(() => ({
-  pageCount: {
-    textAlign: 'center',
-    borderRadius: '5px',
-    width: '57px',
-    backgroundColor: 'white',
-  },
-}))

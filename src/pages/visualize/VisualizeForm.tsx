@@ -7,14 +7,12 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
 
 export function VisualizeForm() {
   const { t } = useTranslation()
-  const { classes } = useStyles()
   const { register, handleSubmit } = useForm<FormValues>()
   const navigate = useNavigate()
 
@@ -26,7 +24,7 @@ export function VisualizeForm() {
     <form onSubmit={onSubmit}>
       <Stack spacing={3} alignItems="center">
         <Stack spacing={2}>
-          <Typography variant="h3" className={classes.title}>
+          <Typography variant="h3" className="text-center">
             {t('visualize.visualizePage')}
           </Typography>
           <TextField
@@ -67,12 +65,3 @@ export function VisualizeForm() {
     </form>
   )
 }
-
-const useStyles = tss.create(() => ({
-  title: {
-    textAlign: 'center',
-  },
-  selectExample: {
-    minWidth: 120,
-  },
-}))

@@ -1,7 +1,6 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { useState } from 'react'
 
@@ -23,7 +22,6 @@ export function StopNavigation({
   quit,
   definitiveQuit,
 }: Readonly<StopNavigationProps>) {
-  const { classes } = useStyles()
   const { t } = useTranslation()
   const [isQuitOpenModal, setIsQuitOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
@@ -72,8 +70,8 @@ export function StopNavigation({
   ]
 
   return (
-    <Stack className={classes.navigationContainer}>
-      <Typography variant="overline" className={classes.typography}>
+    <Stack className="gap-6">
+      <Typography variant="overline" className="leading-6 pl-[1.2em]">
         {t('navigation.menu.questionnaireStopNature')}
       </Typography>
       <Stack>
@@ -95,11 +93,3 @@ export function StopNavigation({
     </Stack>
   )
 }
-
-const useStyles = tss.create(() => ({
-  navigationContainer: { gap: '1.5em' },
-  typography: {
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-  },
-}))

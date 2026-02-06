@@ -2,7 +2,6 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { ShortCut } from '@/components/ui/ShortCut'
 
@@ -23,13 +22,12 @@ export function Continue({
   shortCutLabel,
   onContinue,
 }: Readonly<ContinueProps>) {
-  const { classes } = useStyles()
   const { t } = useTranslation()
 
   return (
-    <Stack direction={'row'} className={classes.continueWrapper}>
+    <Stack direction={'row'} className="items-center gap-2">
       <Button
-        className={classes.button}
+        className="bg-button-main text-secondary hover:bg-white hover:text-primary focus:bg-white focus:text-primary disabled:bg-transparent disabled:text-gray-600"
         endIcon={endIcon}
         onClick={onContinue}
         disabled={!isEnabled}
@@ -46,22 +44,3 @@ export function Continue({
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  continueWrapper: {
-    alignItems: 'center',
-    gap: '0.5em',
-  },
-  button: {
-    backgroundColor: theme.palette.background.button.main,
-    color: theme.palette.secondary.main,
-    '&:hover,&:focus': {
-      backgroundColor: 'white',
-      color: theme.palette.primary.main,
-    },
-    '&:disabled': {
-      backgroundColor: 'transparent',
-      color: theme.palette.grey[600],
-    },
-  },
-}))

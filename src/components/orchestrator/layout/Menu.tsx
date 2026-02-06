@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { useEffect, useState } from 'react'
 
@@ -14,6 +13,7 @@ import { MenuNavigationButton } from './MenuNavigationButton'
 import { SequenceNavigation } from './SequenceNavigation'
 import { StopNavigation } from './StopNavigation'
 import { SubSequenceNavigation } from './SubSequenceNavigation'
+import { useTheme } from '@mui/material/styles'
 
 type MenuProps = {
   isDrawerOpen: boolean
@@ -48,9 +48,9 @@ export function Menu({
     OverviewItem | undefined
   >(undefined)
 
-  const { classes, theme, cx } = useStyles()
   const { t } = useTranslation()
 
+  const theme = useTheme()
   const matchesMdBreackpoint = useMediaQuery(theme.breakpoints.up('md'))
 
   const lunaticVersion = import.meta.env.LUNATIC_VERSION?.replace(/^\^/, '')
@@ -112,13 +112,13 @@ export function Menu({
   }
 
   return (
-    <Stack className={classes.menuContainer}>
+    <Stack className="flex-row h-full pt-[65px] overflow-y-auto">
       {(!selectedMenuItem || matchesMdBreackpoint) && (
-        <Stack className={classes.menuPanel}>
-          <Stack className={classes.navigationContainer}>
+        <Stack className="w-[250px] justify-between">
+          <Stack className="gap-6 mt-[30px]">
             <Typography
               variant="overline"
-              className={classes.goToNavigationTypography}
+              className="text-info leading-6 pl-[1.2em] mt-[30px]"
             >
               {t('navigation.menu.goTo')}
             </Typography>
@@ -127,7 +127,7 @@ export function Menu({
                 <MenuNavigationButton
                   key={`${menuItem.type}-${index}`}
                   className={
-                    selectedMenuItem === menuItem ? classes.itemOpen : undefined
+                    selectedMenuItem === menuItem ? "bg-button-light" : ''
                   }
                   label={menuItem.label}
                   endIcon={<ChevronRightIcon />}
@@ -137,7 +137,7 @@ export function Menu({
               ))}
             </Stack>
           </Stack>
-          <Stack className={classes.version}>
+          <Stack className="relative left-0 bottom-0 bg-background-default border-t border-info text-center py-0.5">
             <Typography>
               Queen : {import.meta.env.APP_VERSION} | Lunatic : {lunaticVersion}
             </Typography>
@@ -145,7 +145,7 @@ export function Menu({
         </Stack>
       )}
       {selectedMenuItem && (!selectedSequence || matchesMdBreackpoint) && (
-        <Stack className={cx(classes.expanded, classes.expandedMenu)}>
+        <Stack className="w-[250px] lg:w-[375px] border-l border-info overflow-y-auto md:bg-background-default">
           <MenuNavigationButton
             label={t('navigation.menu.back')}
             startIcon={<ChevronLeftIcon />}
@@ -153,7 +153,7 @@ export function Menu({
             onClick={() => toggleExpandedMenu(selectedMenuItem)}
           />
           {selectedMenuItem.type === 'survey' && (
-            <Stack className={classes.navigationContainer}>
+            <Stack className="gap-6 mt-[30px]">
               <SequenceNavigation
                 questionnaireTitle={questionnaireTitle}
                 overview={overview}
@@ -164,21 +164,21 @@ export function Menu({
           )}
 
           {selectedMenuItem.type === 'stop' && (
-            <Stack className={classes.navigationContainer}>
+            <Stack className="gap-6 mt-[30px]">
               <StopNavigation quit={quit} definitiveQuit={definitiveQuit} />
             </Stack>
           )}
         </Stack>
       )}
       {selectedSequence && (
-        <Stack className={classes.expanded}>
+        <Stack className="w-[250px] lg:w-[375px] border-l border-info overflow-y-auto">
           <MenuNavigationButton
             label={t('navigation.menu.back')}
             startIcon={<ChevronLeftIcon />}
             autofocus
             onClick={() => toggleExpandedSubMenu(selectedSequence)}
           />
-          <Stack className={classes.navigationContainer}>
+          <Stack className="gap-6 mt-[30px]">
             <SubSequenceNavigation
               sequence={selectedSequence}
               subSequenceOnClick={subSequenceOnClick}
@@ -189,47 +189,3 @@ export function Menu({
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  menuContainer: {
-    flexDirection: 'row',
-    height: '100%',
-    paddingTop: '65px',
-    overflowY: 'auto',
-  },
-  menuPanel: {
-    width: '250px',
-    justifyContent: 'space-between',
-  },
-  expanded: {
-    width: '250px',
-    [theme.breakpoints.up('lg')]: {
-      width: '375px',
-    },
-    borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-    overflowY: 'auto',
-  },
-  expandedMenu: {
-    [theme.breakpoints.up('md')]: {
-      backgroundColor: theme.palette.background.default,
-    },
-  },
-  navigationContainer: { gap: '1.5em', marginTop: '30px' },
-  itemOpen: { backgroundColor: theme.palette.background.button.light },
-  goToNavigationTypography: {
-    color: theme.palette.info.main,
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-    marginTop: '30px',
-  },
-  version: {
-    backgroundColor: theme.palette.background.default,
-    borderTop: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-    position: 'relative',
-    left: 0,
-    bottom: 0,
-    textAlign: 'center',
-    paddingTop: '2px',
-    paddingBottom: '2px',
-  },
-}))

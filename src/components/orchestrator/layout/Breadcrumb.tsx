@@ -1,7 +1,6 @@
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Button from '@mui/material/Button'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import type { GoToPage, OverviewItem } from '@/models/lunaticType'
 
@@ -16,7 +15,6 @@ export function Breadcrumb({
   subSequence,
   goToPage,
 }: Readonly<BreadcrumbProps>) {
-  const { classes, cx } = useStyles()
   const { t } = useTranslation()
 
   const goToSequencePage = () => sequence && goToPage({ page: sequence.page })
@@ -27,10 +25,10 @@ export function Breadcrumb({
     <Breadcrumbs separator={''} aria-label="breadcrumb">
       {sequence && (
         <Button
-          className={cx(
-            classes.breadcrumbButton,
-            !subSequence && classes.lastButton,
-          )}
+          className={`text-black rounded-none pb-0 text-[95%] hover:font-bold hover:bg-transparent
+            before:content-['\\3009'] before:mr-[0.8em] before:font-bold
+            ${subSequence ? '' : 'border-b-2 border-primary'}`
+          }
           title={`${t('navigation.header.goToSequence')} ${sequence.label}`}
           disableRipple
           onClick={goToSequencePage}
@@ -40,11 +38,8 @@ export function Breadcrumb({
       )}
       {subSequence && (
         <Button
-          className={cx(
-            classes.breadcrumbButton,
-            classes.subsequenceButton,
-            classes.lastButton,
-          )}
+          className={`text-black rounded-none pb-0 text-[95%] hover:font-bold hover:bg-transparent
+            before:content-['\\3009'] before:mr-[0.8em] before:font-bold ml-[0.8em] border-b-2 border-primary`}
           title={`${t('navigation.header.goToSubSequence')} ${subSequence.label}`}
           disableRipple
           onClick={goToSubSequencePage}
@@ -55,27 +50,3 @@ export function Breadcrumb({
     </Breadcrumbs>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  breadcrumbButton: {
-    color: theme.palette.common.black,
-    borderRadius: 0,
-    paddingBottom: 0,
-    fontSize: '95%',
-    '&:hover': {
-      fontWeight: 'bold',
-      backgroundColor: 'transparent',
-    },
-    '&::before': {
-      content: "'\u3009'",
-      marginRight: '0.8em',
-      fontWeight: 'bold',
-    },
-  },
-  subsequenceButton: {
-    marginLeft: '0.8em',
-  },
-  lastButton: {
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
-  },
-}))

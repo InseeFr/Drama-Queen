@@ -3,7 +3,6 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { SHORTCUT_NEXT, SHORTCUT_PREVIOUS } from '@/constants/shortcuts'
 
@@ -22,14 +21,13 @@ export function PrevNext({
   onPrevious,
   onNext,
 }: PrevNextProps) {
-  const { classes, cx } = useStyles()
   const { t } = useTranslation()
 
   return (
-    <Stack id="buttons" className={classes.root}>
+    <Stack id="buttons" className="gap-6">
       <Stack>
         <IconButton
-          className={cx(classes.iconButton, classes.previousIcon)}
+          className="bg-button-light text-back hover:bg-white focus:bg-white rotate-180"
           size="large"
           disabled={!isPreviousEnabled}
           onClick={onPrevious}
@@ -43,14 +41,14 @@ export function PrevNext({
             />
           )}
         </IconButton>
-        <Typography variant="body2" className={classes.helpLabel}>
+        <Typography variant="body2" className="text-center text-info">
           {t('navigation.navigationBar.previousButton.helper')}
         </Typography>
       </Stack>
 
       <Stack>
         <IconButton
-          className={classes.iconButton}
+          className="bg-button-light text-black hover:bg-white focus:bg-white"
           size="large"
           disabled={!isNextEnabled}
           onClick={onNext}
@@ -61,28 +59,10 @@ export function PrevNext({
             <ShortCut shortCutKey={SHORTCUT_NEXT} onClickMethod={onNext} />
           )}
         </IconButton>
-        <Typography variant="body2" className={classes.helpLabel}>
+        <Typography variant="body2" className="text-center text-info">
           {t('navigation.navigationBar.nextButton.helper')}
         </Typography>
       </Stack>
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  root: {
-    gap: '1.5em',
-  },
-  previousIcon: { transform: 'rotate(180deg)' },
-  iconButton: {
-    backgroundColor: theme.palette.background.button.light,
-    color: 'black',
-    '&:hover,&:focus': {
-      backgroundColor: 'white',
-    },
-  },
-  helpLabel: {
-    textAlign: 'center',
-    color: theme.palette.info.main,
-  },
-}))

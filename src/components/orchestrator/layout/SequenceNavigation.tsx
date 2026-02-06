@@ -1,7 +1,6 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { tss } from 'tss-react/mui'
 
 import type { Overview, OverviewItem } from '@/models/lunaticType'
 
@@ -20,15 +19,14 @@ export function SequenceNavigation({
   selectedSequence,
   sequenceOnClick,
 }: Readonly<SequenceNavigationProps>) {
-  const { classes } = useStyles()
 
   // display endIcon only if sequence leads to a subSequences menu
   const getSequenceEndIcon = (sequence: OverviewItem) =>
     sequence.children.length > 0 ? <ChevronRightIcon /> : undefined
 
   return (
-    <Stack className={classes.navigationContainer}>
-      <Typography variant="overline" className={classes.typography}>
+    <Stack className="gap-6">
+      <Typography variant="overline" className="leading-6 pl-[1.2em]">
         {questionnaireTitle}
       </Typography>
       <Stack>
@@ -37,7 +35,7 @@ export function SequenceNavigation({
           <MenuNavigationButton
             key={sequence.id}
             className={
-              selectedSequence === sequence ? classes.sequenceOpen : ''
+              selectedSequence === sequence ? 'bg-button-light' : ''
             }
             label={sequence.label}
             disabled={!sequence.reached}
@@ -49,12 +47,3 @@ export function SequenceNavigation({
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  navigationContainer: { gap: '1.5em' },
-  typography: {
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-  },
-  sequenceOpen: { backgroundColor: theme.palette.background.button.light },
-}))

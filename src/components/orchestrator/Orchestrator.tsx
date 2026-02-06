@@ -1,7 +1,6 @@
 import { LunaticComponents, useLunatic } from '@inseefr/lunatic'
 import Stack from '@mui/material/Stack'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { useCallback, useEffect, useState } from 'react'
 
@@ -23,7 +22,6 @@ import { useControls } from './hooks/controls/useControls'
 import { useInterrogation } from './hooks/interrogation/useInterrogation'
 import { useQueenNavigation } from './hooks/useQueenNavigation'
 import { Header } from './layout/Header'
-import { useLunaticStyles } from './lunaticStyle'
 import { NavBar } from './navigationBar/NavBar'
 import { slotComponents } from './slotComponents'
 import { shouldAutoNext, shouldSkipQuestion } from './utils/autoNext'
@@ -72,17 +70,15 @@ export function Orchestrator({
   getReferentiel,
   includeCalculatedVariables = false,
   initialPage,
-  onChangePage = () => {},
-  onChangeInterrogationState = () => {},
-  onDefinitiveQuit = () => {},
-  onQuit = () => {},
+  onChangePage = () => { },
+  onChangeInterrogationState = () => { },
+  onDefinitiveQuit = () => { },
+  onQuit = () => { },
   readonly,
   source: initialSource,
   interrogation,
 }: Readonly<OrchestratorProps>) {
-  const { classes } = useStyles()
   const { t } = useTranslation()
-  const { classes: lunaticClasses } = useLunaticStyles()
 
   const initialInterrogation = computeInterrogation(interrogation)
   const source = computeSourceExternalVariables(initialSource)
@@ -90,8 +86,8 @@ export function Orchestrator({
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly &&
-      initialInterrogation.stateData !== undefined &&
-      initialInterrogation.stateData.currentPage !== '1',
+    initialInterrogation.stateData !== undefined &&
+    initialInterrogation.stateData.currentPage !== '1',
   )
 
   // Allow to send telemetry events once interrogation id has been set
@@ -256,7 +252,7 @@ export function Orchestrator({
   const components = getComponents()
 
   return (
-    <Stack className={classes.orchestrator}>
+    <Stack className="h-screen">
       <Header
         questionnaireTitle={questionnaireTitle}
         readonly={readonly}
@@ -265,10 +261,13 @@ export function Orchestrator({
         quit={() => orchestratorOnQuit(pageTag)}
         definitiveQuit={() => orchestratorOnDefinitiveQuit(pageTag)}
       />
-      <Stack className={classes.bodyContainer}>
-        <Stack className={classes.mainContainer}>
-          <Stack className={classes.centerSection}>
-            <Stack className={classes.activeSection}>
+      <Stack className="flex-row flex-1 bg-background-default pt-16.25 w-[calc(100%-60px)] h-[calc(100%-65px)]">
+        <Stack className="flex-col flex-1 h-full ">
+          <Stack className="flex-row flex-1 justify-between h-full overflow-hidden">
+            <Stack className="flex-col h-full w-[80%] overflow-y-auto
+            [&>div:first-of-type]:flex-col [&>div:first-of-type]:h-full
+            [&>div:first-of-type>div]:max-w-[calc(100%-100px)] [&>div:first-of-type>div]:pl-25 [&>div:first-of-type>div]:mt-12 [&>div:first-of-type>div]:grow [&>div:first-of-type>div]:overflow-y-auto
+            ">
               <Provider>
                 <LunaticComponents
                   components={components}
@@ -280,7 +279,7 @@ export function Orchestrator({
                   autoFocusKey={pageTag}
                   wrapper={({ children, id, componentType }) => (
                     <div
-                      className={`${lunaticClasses.lunatic} ${componentType}`}
+                      className={`lunatic ${componentType}`}
                       key={`component-${id}`}
                     >
                       {children}
@@ -289,7 +288,7 @@ export function Orchestrator({
                 />
               </Provider>
             </Stack>
-            <Stack className={classes.loopPanel}>
+            <Stack className="mt-12 mx-2 w-[20%] overflow-y-auto">
               <LoopPanel
                 loopVariables={loopVariables}
                 roundaboutLoopVariables={roundaboutLoopVariables}
@@ -302,11 +301,11 @@ export function Orchestrator({
               />
             </Stack>
           </Stack>
-          <Stack className={classes.continue}>
+          <Stack className="items-end mb-4 mt-8 mr-16 min-h-[2.3em]">
             {continueProps.isVisible && <Continue {...continueProps} />}
           </Stack>
         </Stack>
-        <Stack className={classes.navBarContainer}>
+        <Stack className="fixed right-0 bg-background-default h-[calc(100vh - 65px - 2em)] w-15 items-center justify-end pb-8 border-l border-info">
           <NavBar
             overview={overview}
             page={page}
@@ -333,72 +332,3 @@ export function Orchestrator({
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  orchestrator: { height: '100vh' },
-  bodyContainer: {
-    flexDirection: 'row',
-    backgroundColor: theme.palette.background.default,
-    paddingTop: '65px',
-    flex: 1,
-    width: 'calc(100% - 60px)',
-    height: 'calc(100vh - 65px)',
-  },
-  mainContainer: {
-    flex: 1,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  centerSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'space-between',
-    height: '100%',
-    overflow: 'hidden',
-  },
-  activeSection: {
-    flexDirection: 'column',
-    height: '100%',
-    width: '80%',
-    overflowY: 'auto',
-    '& > div:first-of-type': {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-    },
-    '& > div:first-of-type > div': {
-      maxWidth: 'calc(100% - 100px)',
-      paddingLeft: '100px',
-      marginTop: '3em',
-      flexGrow: 1,
-      overflowY: 'auto',
-    },
-  },
-  loopPanel: {
-    marginTop: '3em',
-    marginLeft: '0.5em',
-    marginRight: '0.5em',
-    width: '20%',
-    overflowY: 'auto',
-  },
-  continue: {
-    alignItems: 'end',
-    marginBottom: '1em',
-    marginTop: '2em',
-    marginRight: '4em',
-    minHeight: '2.3em',
-  },
-  navBarContainer: {
-    backgroundColor: theme.palette.background.default,
-    height: 'calc(100vh - 65px - 2em)',
-    right: '0',
-    position: 'fixed',
-    justifyContent: 'flex-end',
-    paddingBottom: '2em',
-    alignItems: 'center',
-    borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-    width: '60px',
-  },
-}))

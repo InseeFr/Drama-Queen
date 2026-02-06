@@ -1,5 +1,4 @@
 import Stack from '@mui/material/Stack'
-import { tss } from 'tss-react/mui'
 
 import type { OverviewItem } from '@/models/lunaticType'
 
@@ -14,10 +13,9 @@ export function SubSequenceNavigation({
   sequence,
   subSequenceOnClick,
 }: Readonly<subSequenceNavigationProps>) {
-  const { classes } = useStyles()
 
   return (
-    <Stack className={classes.navigationContainer}>
+    <Stack className="gap-6">
       <MenuNavigationButton
         key={sequence.id}
         label={sequence.label}
@@ -37,7 +35,3 @@ export function SubSequenceNavigation({
     </Stack>
   )
 }
-
-const useStyles = tss.create(() => ({
-  navigationContainer: { gap: '1.5em' },
-}))

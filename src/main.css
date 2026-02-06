@@ -1,0 +1,1039 @@
+@layer theme, base, mui, components, utilities;
+
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #085394;
+  --color-secondary: #ffffff;
+  --color-info: #777777;
+  --color-background-default: #eeeeee;
+  --color-button-main: #085394;
+  --color-button-light: #9fc5f8;
+  --color-declaration-main: #085394;
+  --color-declaration-instruction: #085394;
+  --color-declaration-help: #000000;
+  --border-color: #777777;
+  --border-width: 1px;
+}
+
+@layer base {
+  body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
+    background-color: var(--color-background-default);
+  }
+}
+
+@layer components {
+  .lunatic {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lunatic input::-webkit-outer-spin-button,
+  .lunatic input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .lunatic.Loop .button-lunatic {
+    margin-top: 1em;
+  }
+
+  .lunatic .lunatic-table {
+    margin: 1em;
+    border-collapse: collapse;
+  }
+
+  .lunatic .lunatic-table .lunatic-table-tr,
+  .lunatic .lunatic-table .lunatic-table-th,
+  .lunatic .lunatic-table .lunatic-table-td {
+    border: 0.15em solid #555;
+    padding: 0.2em 1em;
+  }
+
+  .lunatic .lunatic-table .lunatic-table-td > .field-container {
+    margin-top: 1rem;
+  }
+
+  .lunatic.Loop {
+    display: block;
+  }
+
+  .lunatic .sequence-lunatic,
+  .lunatic .subsequence-lunatic {
+    background-color: transparent;
+    color: black;
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 2rem;
+    font-weight: bold;
+  }
+
+  .lunatic .subsequence-lunatic {
+    font-size: 1.1em;
+  }
+
+  .lunatic input,
+  .lunatic textarea {
+    font-size: 1rem;
+  }
+
+  .lunatic:is(.Question, .Loop, .Roundabout) .lunatic-errors {
+    margin: 1rem 0;
+    color: #db0202;
+  }
+
+  .lunatic input[type='text']:not(.datepicker *),
+  .lunatic input[type='number']:not(.datepicker *) {
+    -moz-appearance: textfield;
+    padding: 0.45rem 0 0.45rem 0.45rem;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: white;
+  }
+
+  .lunatic input[type='text']:not(.datepicker *) {
+    min-width: 40%;
+  }
+
+  .lunatic input[type='number']:not(.datepicker *) {
+    margin-bottom: 1em;
+  }
+
+  .lunatic .lunatic-input .field-with-count,
+  .lunatic .lunatic-textarea .field-with-count {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+    gap: 0.5rem;
+  }
+
+  .lunatic .lunatic-input .field-with-count .characters-count,
+  .lunatic .lunatic-textarea .field-with-count .characters-count {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #666666;
+    text-align: right;
+  }
+
+  .lunatic .lunatic-input .field-with-count .max-length-reached,
+  .lunatic .lunatic-textarea .field-with-count .max-length-reached {
+    color: red;
+  }
+
+  .lunatic .lunatic-input .field-with-count {
+    width: 40%;
+  }
+
+  .lunatic .lunatic-table .lunatic-input .field-with-count {
+    width: auto;
+  }
+
+  .lunatic .lunatic-textarea .field-with-count {
+    width: 80%;
+  }
+
+  .lunatic .lunatic-textarea .field-with-count textarea {
+    resize: vertical;
+  }
+
+  .lunatic .lunatic-input-number > span {
+    position: relative;
+    left: 0.5em;
+    font-weight: bold;
+  }
+
+  .lunatic .list-icon {
+    position: absolute;
+    margin-top: -0.2rem;
+  }
+
+  .lunatic .lunaticDatepickerFields {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .lunatic .lunaticDatepickerField input,
+  .lunatic .lunaticDatepickerFieldLarge input {
+    width: 4rem;
+  }
+
+  .lunatic .lunaticDatepickerHint {
+    display: flex;
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+
+  .lunatic .duration-fields {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .lunatic .duration-field input {
+    min-width: 4rem;
+  }
+
+  .lunatic .declarations-lunatic,
+  .lunatic:is(.Sequence, .Subsequence) .label-description {
+    margin-bottom: 2rem;
+    font-size: 0.92rem;
+  }
+
+  .lunatic .declaration-lunatic {
+    margin-bottom: 1em;
+  }
+
+  .lunatic:not(.Question) .declaration-lunatic.declaration-help {
+    color: var(--color-declaration-help);
+  }
+
+  .lunatic:not(.Question) .declaration-lunatic.declaration-instruction,
+  .lunatic:not(.Question) .declaration-lunatic.declaration-statement,
+  .lunatic:not(.Question) .declaration-lunatic.declaration-codecard {
+    color: var(--color-declaration-instruction);
+  }
+
+  .lunatic.Question > .declarations-lunatic .declaration-help {
+    color: var(--color-declaration-instruction);
+  }
+
+  .lunatic.Question > .field-container .declarations-lunatic .declaration-help {
+    color: var(--color-declaration-help);
+  }
+
+  .lunatic.Question
+    > .field-container
+    .declarations-lunatic
+    .declaration-instruction,
+  .lunatic.Question
+    > .field-container
+    .declarations-lunatic
+    .declaration-statement,
+  .lunatic.Question
+    > .field-container
+    .declarations-lunatic
+    .declaration-codecard {
+    color: var(--color-declaration-instruction);
+  }
+
+  .lunatic:is(.Question, .Loop) .lunatic-component .label-description {
+    font-weight: 400;
+    font-size: 0.92rem;
+  }
+
+  .lunatic .label-top label {
+    font-weight: bold;
+  }
+
+  .lunatic:not(.Loop) .lunatic-component fieldset:not(.datepicker *) legend,
+  .lunatic:not(.Question, .Loop) fieldset:not(.datepicker *) legend {
+    font-weight: bold;
+    max-width: 90%;
+    color: initial;
+    background-color: initial;
+    font-size: initial;
+    margin-bottom: 2em;
+    line-height: 1.3em;
+  }
+
+  .lunatic.Question .lunatic-component .field-container {
+    margin-top: 0;
+  }
+
+  .lunatic.Question
+    .lunatic-component
+    > .field-container
+    > .field
+    > :not(:last-child, .sequence-lunatic) {
+    margin-block-end: 3rem;
+  }
+
+  .lunatic .lunatic-textarea textarea {
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid #767676;
+    height: 10em;
+  }
+
+  .lunatic .lunatic-textarea textarea:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--color-declaration-main);
+  }
+
+  .lunatic .input-lunatic {
+    padding-right: 0.5em;
+    font-size: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid #767676;
+    width: 55%;
+    min-width: 200px;
+    height: 1.5em;
+  }
+
+  .lunatic .input-lunatic:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--color-declaration-main);
+  }
+
+  .lunatic .input-lunatic[type='number'] {
+    width: 7em;
+    min-width: 7em;
+  }
+
+  .lunatic.CheckboxOne .code-modality,
+  .lunatic.Radio .code-modality {
+    border-radius: 15px;
+  }
+
+  .lunatic.Question
+    .lunatic-table
+    fieldset:is(.lunatic-radio-group, .lunatic-checkbox-one)
+    .code-modality {
+    border-radius: 5px;
+  }
+
+  .lunatic.Question
+    fieldset:is(.lunatic-radio-group, .lunatic-checkbox-one)
+    .code-modality {
+    border-radius: 15px;
+  }
+
+  .lunatic .lunatic-component fieldset,
+  .lunatic fieldset {
+    padding: 0;
+    margin: 0;
+  }
+
+  .lunatic .lunatic-component fieldset:not(.datepicker *),
+  .lunatic fieldset:not(.datepicker *) {
+    border: none;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox {
+    border-radius: 5px;
+    border: 1px solid #aaaaaa;
+    background-color: #d6d6d6;
+    margin-bottom: 12px;
+    width: 70%;
+    padding: 0.5rem;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox
+    .lunatic-input-checkbox__icon {
+    display: none;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox
+    > .lunatic-label {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox:hover {
+    font-weight: bold;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox:hover
+    .code-modality {
+    color: white;
+    background-color: var(--color-declaration-main);
+    border-color: var(--color-declaration-main);
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox[aria-checked='true'] {
+    background-color: var(--color-button-light);
+    border-color: #1d63a0;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox[aria-checked='true']
+    * {
+    font-weight: bold;
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox[aria-checked='true']
+    label::after {
+    margin-left: auto;
+    content: '✓';
+  }
+
+  .lunatic
+    .lunatic-component
+    fieldset:not(:has(.lunatic-checkbox-boolean))
+    .lunatic-input-checkbox[aria-checked='true']
+    .code-modality {
+    color: white;
+    background-color: var(--color-declaration-main);
+    border-color: var(--color-declaration-main);
+  }
+
+  .lunatic .code-modality {
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    font-weight: bold;
+    border: 1px solid #aaaaaa;
+    background-color: white;
+    border-radius: 5px;
+    margin-right: 1em;
+    height: min-content;
+  }
+
+  .lunatic .lunatic-checkbox-boolean .lunatic-input-checkbox__icon {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    padding: 0.1em;
+    flex: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: white;
+    border: 2px solid #aaaaaa;
+  }
+
+  .lunatic .lunatic-checkbox-boolean .lunatic-input-checkbox__icon svg {
+    transform: scale(0.7);
+  }
+
+  .lunatic
+    .lunatic-checkbox-boolean
+    .lunatic-input-checkbox[aria-checked='true']
+    .lunatic-input-checkbox__icon {
+    background-color: var(--color-button-main);
+    border-color: #1d63a0;
+  }
+
+  .lunatic .lunatic-input > .lunatic-label,
+  .lunatic .lunatic-textarea > .lunatic-label,
+  .lunatic .lunatic-input-number > .lunatic-label,
+  .lunatic .lunatic-dropdown > .lunatic-label,
+  .lunatic .lunatic-combo-box-container > .lunatic-label,
+  .lunatic .field-container > .field .lunatic-input > .lunatic-label,
+  .lunatic .lunatic-input > label,
+  .lunatic .lunatic-textarea > label,
+  .lunatic .lunatic-input-number > label,
+  .lunatic .lunatic-dropdown > label,
+  .lunatic .lunatic-combo-box-container > label,
+  .lunatic .field-container > .field .lunatic-input > label {
+    background-color: transparent;
+    font-size: 1em;
+    color: black;
+    display: block;
+    margin-bottom: 2rem;
+    font-weight: bold;
+  }
+
+  .lunatic:is(.Question, .Loop)
+    .field-container
+    > .field
+    > fieldset
+    > legend
+    > h3 {
+    background-color: transparent;
+    font-size: 1em;
+    color: black;
+    display: block;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    margin-top: 0;
+  }
+
+  .lunatic:is(.Question, .Loop)
+    .field-container
+    > .field
+    > fieldset
+    > legend
+    > p:not(:has(*)) {
+    display: none;
+  }
+
+  .lunatic.Question:has(> .declarations-lunatic),
+  .lunatic.Loop:has(> .declarations-lunatic) {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .lunatic.Question .field fieldset:not(.datepicker *),
+  .lunatic.Loop .field fieldset:not(.datepicker *) {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .lunatic.Question .field fieldset:not(.datepicker *) legend,
+  .lunatic.Loop .field fieldset:not(.datepicker *) legend {
+    grid-row: 1;
+  }
+
+  .lunatic.Question .field fieldset:not(.datepicker *) legend:not(:has(*)),
+  .lunatic.Loop .field fieldset:not(.datepicker *) legend:not(:has(*)) {
+    display: none;
+  }
+
+  .lunatic.Question .field fieldset:not(.datepicker *) .declarations-lunatic,
+  .lunatic.Loop .field fieldset:not(.datepicker *) .declarations-lunatic {
+    grid-row: 2;
+  }
+
+  .lunatic.Question
+    .field
+    fieldset:not(.datepicker *)
+    .lunatic.lunatic-component,
+  .lunatic.Loop .field fieldset:not(.datepicker *) .lunatic.lunatic-component {
+    grid-row: 3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .lunatic:not(.Loop, .PairwiseLinks) .missing-buttons {
+    position: fixed;
+    bottom: 1em;
+  }
+
+  .lunatic.Loop .missing-buttons,
+  .lunatic.PairwiseLinks .missing-buttons {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .lunatic .lunatic-component .missing-buttons,
+  .lunatic .missing-buttons {
+    display: flex;
+    gap: 1em;
+  }
+
+  .lunatic .lunatic-component .missing-buttons .button-lunatic,
+  .lunatic .missing-buttons .button-lunatic {
+    margin-top: 0;
+    height: 100%;
+  }
+
+  .lunatic .missing-button-rf,
+  .lunatic .missing-button-rf-active,
+  .lunatic .missing-button-dk,
+  .lunatic .missing-button-dk-active,
+  .lunatic .button-lunatic {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    background-color: #666666;
+    border: none;
+    border-radius: 4px;
+    line-height: 1.75;
+    font-size: 0.875rem;
+    width: 170px;
+    text-align: left;
+  }
+
+  .lunatic .missing-button-rf::before,
+  .lunatic .missing-button-rf-active::before,
+  .lunatic .missing-button-dk::before,
+  .lunatic .missing-button-dk-active::before,
+  .lunatic .button-lunatic::before {
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    margin: 0.5em;
+    color: #666666;
+    font-weight: bold;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  .lunatic .missing-button-rf::after,
+  .lunatic .missing-button-rf-active::after,
+  .lunatic .missing-button-dk::after,
+  .lunatic .missing-button-dk-active::after,
+  .lunatic .button-lunatic::after {
+    content: none;
+    width: 1em;
+    font-size: 125%;
+    font-weight: bold;
+    padding-right: 0.5em;
+  }
+
+  .lunatic .missing-button.missing-button-dk,
+  .lunatic .missing-button.missing-button-dk .button-lunatic,
+  .lunatic .missing-button-active.missing-button-dk-active,
+  .lunatic .missing-button-active.missing-button-dk-active .button-lunatic {
+    color: #b45f06;
+  }
+
+  .lunatic .missing-button.missing-button-dk:hover,
+  .lunatic .missing-button.missing-button-dk:focus,
+  .lunatic .missing-button.missing-button-dk .button-lunatic:hover,
+  .lunatic .missing-button.missing-button-dk .button-lunatic:focus,
+  .lunatic .missing-button-active.missing-button-dk-active:hover,
+  .lunatic .missing-button-active.missing-button-dk-active:focus,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic:hover,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic:focus {
+    background-color: #f9cb9c;
+    color: #b45f06;
+  }
+
+  .lunatic .missing-button.missing-button-dk:hover *,
+  .lunatic .missing-button.missing-button-dk:focus *,
+  .lunatic .missing-button.missing-button-dk .button-lunatic:hover *,
+  .lunatic .missing-button.missing-button-dk .button-lunatic:focus *,
+  .lunatic .missing-button-active.missing-button-dk-active:hover *,
+  .lunatic .missing-button-active.missing-button-dk-active:focus *,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic:hover
+    *,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic:focus
+    * {
+    background-color: #f9cb9c;
+    color: #b45f06;
+  }
+
+  .lunatic .missing-button.missing-button-dk::before,
+  .lunatic .missing-button.missing-button-dk .button-lunatic::before,
+  .lunatic .missing-button-active.missing-button-dk-active::before,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic::before {
+    content: 'F2';
+  }
+
+  .lunatic .missing-button-active.missing-button-dk-active,
+  .lunatic .missing-button-active.missing-button-dk-active .button-lunatic {
+    background-color: #f9cb9c;
+    color: #b45f06;
+  }
+
+  .lunatic .missing-button-active.missing-button-dk-active *,
+  .lunatic .missing-button-active.missing-button-dk-active .button-lunatic * {
+    background-color: #f9cb9c;
+    color: #b45f06;
+  }
+
+  .lunatic .missing-button-active.missing-button-dk-active::before,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic::before {
+    color: white;
+    background-color: #b45f06;
+  }
+
+  .lunatic .missing-button-active.missing-button-dk-active::after,
+  .lunatic
+    .missing-button-active.missing-button-dk-active
+    .button-lunatic::after {
+    content: '✓';
+  }
+
+  .lunatic .missing-button.missing-button-rf,
+  .lunatic .missing-button.missing-button-rf .button-lunatic,
+  .lunatic .missing-button-active.missing-button-rf-active,
+  .lunatic .missing-button-active.missing-button-rf-active .button-lunatic {
+    color: #990000;
+  }
+
+  .lunatic .missing-button.missing-button-rf:hover,
+  .lunatic .missing-button.missing-button-rf:focus,
+  .lunatic .missing-button.missing-button-rf .button-lunatic:hover,
+  .lunatic .missing-button.missing-button-rf .button-lunatic:focus,
+  .lunatic .missing-button-active.missing-button-rf-active:hover,
+  .lunatic .missing-button-active.missing-button-rf-active:focus,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic:hover,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic:focus {
+    background-color: #ea9999;
+    color: #990000;
+  }
+
+  .lunatic .missing-button.missing-button-rf:hover *,
+  .lunatic .missing-button.missing-button-rf:focus *,
+  .lunatic .missing-button.missing-button-rf .button-lunatic:hover *,
+  .lunatic .missing-button.missing-button-rf .button-lunatic:focus *,
+  .lunatic .missing-button-active.missing-button-rf-active:hover *,
+  .lunatic .missing-button-active.missing-button-rf-active:focus *,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic:hover
+    *,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic:focus
+    * {
+    background-color: #ea9999;
+    color: #990000;
+  }
+
+  .lunatic .missing-button.missing-button-rf::before,
+  .lunatic .missing-button.missing-button-rf .button-lunatic::before,
+  .lunatic .missing-button-active.missing-button-rf-active::before,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic::before {
+    content: 'F4';
+  }
+
+  .lunatic .missing-button-active.missing-button-rf-active,
+  .lunatic .missing-button-active.missing-button-rf-active .button-lunatic {
+    background-color: #ea9999;
+    color: #990000;
+  }
+
+  .lunatic .missing-button-active.missing-button-rf-active *,
+  .lunatic .missing-button-active.missing-button-rf-active .button-lunatic * {
+    background-color: #ea9999;
+    color: #990000;
+  }
+
+  .lunatic .missing-button-active.missing-button-rf-active::before,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic::before {
+    color: white;
+    background-color: #990000;
+  }
+
+  .lunatic .missing-button-active.missing-button-rf-active::after,
+  .lunatic
+    .missing-button-active.missing-button-rf-active
+    .button-lunatic::after {
+    content: '✓';
+  }
+
+  .lunatic .lunatic-combo-box-container.default-style {
+    position: relative;
+    margin-bottom: 10px;
+  }
+
+  .lunatic .lunatic-combo-box-container.default-style .lunatic-combo-box {
+    min-height: 30px;
+    min-width: 260px;
+    width: 100%;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content {
+    width: 70%;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection {
+    height: 34px;
+    line-height: 34px;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: white;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    .placeholder {
+    color: gray;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    > .placeholder,
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    > .selection {
+    padding-left: 4px;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    .lunatic-combo-box-input {
+    height: 34px;
+    line-height: 34px;
+    text-indent: 4px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: 1px solid black;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    .lunatic-combo-box-input::placeholder {
+    font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-selection
+    .lunatic-combo-box-selected.disabled {
+    background-color: #dcdcdc;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel {
+    padding-top: 5px;
+    text-indent: 10px;
+    background-color: white;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel.expanded {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: solid 1px;
+    min-height: 30px;
+    max-height: 50vh;
+    overflow: auto;
+    box-shadow: 0 2px 2px grey;
+    border-radius: 4px;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-combo-box-option,
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-dropdown-option {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 0.1em;
+    line-height: 2rem;
+    display: block;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-combo-box-option.selected,
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-dropdown-option.selected {
+    color: var(--color-primary);
+    background-color: #eaeaea;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-combo-box-option:hover,
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box
+    .lunatic-combo-box-content
+    .lunatic-combo-box-panel
+    .lunatic-dropdown-option:hover {
+    background-color: var(--color-primary);
+    color: white;
+    cursor: pointer;
+  }
+
+  .lunatic .lunatic-combo-box-container.default-style .lunatic-combo-box-fab {
+    position: absolute;
+    top: 60px;
+    left: 70.5%;
+    background-color: var(--color-button-main);
+    border-radius: 50%;
+    border: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box-fab
+    .lunatic-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .lunatic
+    .lunatic-combo-box-container.default-style
+    .lunatic-combo-box-fab
+    .lunatic-icon
+    svg {
+    fill: white;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+  }
+
+  .lunatic.Question .lunatic-combo-box-container:has(.lunatic-combo-box-fab) {
+    display: grid;
+    grid-template-columns: 70% auto;
+    grid-template-rows: auto auto;
+    column-gap: 0.5em;
+  }
+
+  .lunatic.Question
+    .lunatic-combo-box-container:has(.lunatic-combo-box-fab)
+    .lunatic-combo-box {
+    grid-column: 1;
+  }
+
+  .lunatic.Question
+    .lunatic-combo-box-container:has(.lunatic-combo-box-fab)
+    .lunatic-combo-box
+    .lunatic-combo-box-content {
+    width: unset;
+  }
+
+  .lunatic.Question
+    .lunatic-combo-box-container:has(.lunatic-combo-box-fab)
+    .lunatic-combo-box-fab {
+    grid-column: 2;
+    position: unset;
+    left: unset;
+    align-self: center;
+  }
+
+  .lunatic.Question
+    .lunatic-combo-box-container:has(.lunatic-combo-box-fab)
+    .lunatic-errors {
+    grid-row: 2;
+    grid-column: 1 / 3;
+  }
+
+  .lunatic.Roundabout .lunatic-roundabout__label {
+    max-width: 90%;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 1em;
+  }
+
+  .lunatic.Roundabout .label-description {
+    font-size: 1em;
+    margin-top: 1em;
+  }
+
+  .lunatic.Roundabout .lunatic-roundabout__items > .lunatic-roundabout__item {
+    font-size: 1em;
+    margin-top: 3em;
+  }
+
+  .lunatic.Roundabout
+    .lunatic-roundabout__items
+    > .lunatic-roundabout__item
+    > .lunatic-roundabout__description {
+    font-size: 1em;
+    margin-top: 3em;
+  }
+
+  .lunatic.Roundabout .lunatic-roundabout__items > .lunatic-roundabout__item,
+  .lunatic.Roundabout label {
+    font-size: 1em;
+    margin-bottom: 3em;
+  }
+
+  .lunatic.Roundabout .button-lunatic {
+    background-color: var(--color-button-main);
+    color: var(--color-secondary);
+    padding: 0.5em 1em;
+    margin-top: 2em;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+
+  .lunatic.Roundabout .button-lunatic:hover {
+    background-color: white;
+    color: var(--color-primary);
+  }
+
+  .lunatic.Roundabout .button-lunatic:focus {
+    border: 3px solid #9ed2ffff !important;
+  }
+
+  .lunatic .link-md {
+    color: #0063cb;
+    text-decoration: underline;
+    text-decoration-color: #0063cb;
+    text-decoration-style: dotted;
+    text-underline-offset: 0.2rem;
+    cursor: help;
+  }
+
+  .lunatic .link-md:after {
+    content: ' 🛈';
+  }
+
+  .lunatic .tooltip-content {
+    max-width: 50%;
+    border-radius: 5px;
+    opacity: 1;
+    font-weight: 400 !important;
+  }
+}

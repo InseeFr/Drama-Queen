@@ -8,6 +8,8 @@ import {
   createRouter,
 } from '@/routes/routing/createRouter'
 import { unsubscribeOldSW } from '@/unsubscribe_old_sw'
+import '@/main.css'
+import { StyledEngineProvider } from '@mui/material/styles'
 
 const mount = ({
   mountPoint,
@@ -26,9 +28,11 @@ const mount = ({
   const router = createRouter({ strategy: routingStrategy, initialPathname })
   const root = createRoot(mountPoint)
   root.render(
-    <CoreProvider fallback={<CenteredSpinner />}>
-      <RouterProvider router={router} />
-    </CoreProvider>,
+    <StyledEngineProvider enableCssLayer>
+      <CoreProvider fallback={<CenteredSpinner />}>
+        <RouterProvider router={router} />
+      </CoreProvider>
+    </StyledEngineProvider>
   )
 
   return () => queueMicrotask(() => root.unmount())

@@ -1,5 +1,4 @@
 import Stack from '@mui/material/Stack'
-import { tss } from 'tss-react/mui'
 
 import type { Overview } from '@/models/lunaticType'
 
@@ -30,7 +29,6 @@ export function NavBar({
   onPrevious,
   onNext,
 }: Readonly<NavBarProps>) {
-  const { classes } = useStyles()
 
   const currentSequenceIndex = overview.findIndex(
     (sequence) => sequence.current,
@@ -41,8 +39,8 @@ export function NavBar({
   const currentSubPage = subPage === undefined ? subPage : subPage + 1
 
   return (
-    <Stack className={classes.root}>
-      <Stack className={classes.progressBar}>
+    <Stack className='gap-8 items-center w-[60px] h-full mt-8'>
+      <Stack className="flex flex-grow">
         <StepProgressBar
           currentStep={currentSequenceIndex + 1}
           maxStep={nbMaxSequence}
@@ -59,20 +57,3 @@ export function NavBar({
     </Stack>
   )
 }
-
-const useStyles = tss.create(() => ({
-  root: {
-    gap: '2em',
-    alignItems: 'center',
-    width: '60px',
-    height: '100%',
-    marginTop: '2em',
-  },
-  progressBar: {
-    display: 'flex',
-    flexGrow: 1,
-    '@media (max-height: 500px)': {
-      display: 'none',
-    },
-  },
-}))

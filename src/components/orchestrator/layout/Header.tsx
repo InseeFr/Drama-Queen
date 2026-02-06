@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { useState } from 'react'
 
@@ -37,7 +36,6 @@ export function Header({
   definitiveQuit,
 }: Readonly<HeaderProps>) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const { classes } = useStyles({ isDrawerOpen })
   const { t } = useTranslation()
 
   const menuShortKey = SHORTCUT_MENU
@@ -55,10 +53,13 @@ export function Header({
     : undefined
 
   return (
-    <AppBar className={classes.root} elevation={0}>
-      <Stack className={classes.headerMenu}>
+    <AppBar
+      className="flex flex-row items-center bg-white gap-2 border-b border-info"
+      elevation={0}
+    >
+      <Stack className="border-r border-info">
         <IconButton
-          className={classes.menuIcon}
+          className={`${isDrawerOpen ? 'text-[#E30342]' : 'text-black'} [&>svg]:text-[2em]`}
           onClick={() => handleDrawerToggle(!isDrawerOpen)}
           aria-label="menu"
         >
@@ -70,10 +71,11 @@ export function Header({
         </IconButton>
       </Stack>
       <SwipeableDrawer
-        className={classes.menu}
+        className='z-1000'
         open={isDrawerOpen}
         onOpen={handleOpen}
         onClose={handleClose}
+        PaperProps={{ className: 'min-w-[250px]' }}
       >
         <Menu
           isDrawerOpen={isDrawerOpen}
@@ -95,11 +97,11 @@ export function Header({
           id="logo"
           src={`${DYNAMIC_PUBLIC_URL}/assets/insee.svg`}
           alt="Logo de L'Insee"
-          className={classes.headerLogo}
+          className="h-12.5"
         />
       </Button>
-      <Stack className={classes.headerTitle}>
-        <Typography className={classes.questionnaireTitle} variant="h1">
+      <Stack className="pl-4">
+        <Typography className="text-black uppercase text-[0.8em]" variant="h1">
           {questionnaireTitle}
         </Typography>
         <Breadcrumb
@@ -108,10 +110,10 @@ export function Header({
           goToPage={goToPage}
         />
       </Stack>
-      <Stack className={classes.headerClose}>
+      <Stack className="ml-auto border-l border-info w-15">
         <IconButton
           title={t('common.quit')}
-          className={classes.closeIcon}
+          className="text-black [&>svg]:text-[2em]"
           onClick={quit}
         >
           <ExitToAppIcon />
@@ -127,49 +129,3 @@ function findCurrentOverviewItem(
 ): OverviewItem | undefined {
   return overviewItems.find((item) => item.current)
 }
-
-const useStyles = tss
-  .withParams<{ isDrawerOpen: boolean }>()
-  .create(({ theme, isDrawerOpen }) => ({
-    root: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      columnGap: '0.5em',
-      borderBottom: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-    },
-    menuIcon: {
-      color: isDrawerOpen ? '#E30342' : 'black',
-      '& svg': { fontSize: '2em' },
-    },
-    menu: {
-      zIndex: 1000,
-      '& .MuiDrawer-paper': {
-        minWidth: '250px',
-      },
-    },
-    headerClose: {
-      marginLeft: 'auto',
-      borderLeft: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-      width: '60px',
-    },
-    headerLogo: {
-      height: '50px',
-    },
-    closeIcon: {
-      color: 'black',
-      '& svg': { fontSize: '2em' },
-    },
-    headerTitle: {
-      paddingLeft: '1em',
-    },
-    questionnaireTitle: {
-      color: 'black',
-      textTransform: 'uppercase',
-      fontSize: '80%',
-    },
-    headerMenu: {
-      borderRight: `${theme.border.borderWidth} solid ${theme.border.borderColor}`,
-    },
-  }))

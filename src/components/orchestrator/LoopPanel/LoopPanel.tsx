@@ -3,7 +3,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { tss } from 'tss-react/mui'
 
 import type { InterrogationData, PageTag } from '@/core/model'
 
@@ -29,7 +28,6 @@ export function LoopPanel({
   data,
   goToPage,
 }: Readonly<LoopPanelProps>) {
-  const { classes, cx } = useStyles()
 
   const isSimpleLoop = loopVariables.length > 0
   const isRoundaboutLoop = roundaboutLoopVariables.length > 0
@@ -64,15 +62,15 @@ export function LoopPanel({
     goToPage({ page: page, subPage: 0, iteration: index })
 
   return (
-    <Stack className={classes.panelContainer}>
+    <Stack className="gap-4 self-center min-w-[70%]">
       {titleData.map((value, index) => (
         <Button
-          className={cx(
-            classes.panelButton,
-            index === iteration
-              ? classes.currentIteration
-              : classes.notCurrentIteration,
-          )}
+          className={`justify-between p-4 text-[0.5em] disabled:bg-transparent disabled:border disabled:border-info disabled:border-solid
+            ${index === iteration
+              ? "bg-[#455a79] text-white hover:bg-white hover:text-[#455a79] focus:bg-white focus:text-[#455a79] disabled:border-2 disabled:border-[#455a79]"
+              : "bg-[#6f90c0] text-white hover:bg-white hover:text-[#6f90c0] focus:bg-white focus:text-[#6f90c0]"
+            }
+            `}
           disabled={isDisabledButton(index)}
           disableRipple
           endIcon={isSimpleLoop && <ChevronRightIcon />}
@@ -84,40 +82,3 @@ export function LoopPanel({
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  panelContainer: {
-    gap: '1em',
-    alignSelf: 'center',
-    minWidth: '70%',
-  },
-  panelButton: {
-    padding: '1em',
-    justifyContent: 'space-between',
-    fontSize: '0.5em',
-    '&:disabled': {
-      background: 'transparent',
-      borderColor: theme.palette.info.main,
-      border: '1px solid rgba(0, 0, 0, .125)',
-    },
-  },
-  currentIteration: {
-    backgroundColor: '#455a79',
-    color: 'white',
-    '&:hover,&:focus': {
-      backgroundColor: 'white',
-      color: '#455a79',
-    },
-    '&:disabled': {
-      border: '2px solid #455a79',
-    },
-  },
-  notCurrentIteration: {
-    backgroundColor: '#6f90c0',
-    color: 'white',
-    '&:hover,&:focus': {
-      backgroundColor: 'white',
-      color: '#6f90c0',
-    },
-  },
-}))

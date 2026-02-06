@@ -30,9 +30,9 @@ describe('StepProgressBar', () => {
     // Check that the first three steps are marked as active
     steps.forEach((step, index) => {
       if (index < 3) {
-        expect(step).toHaveClass(/active/) // cannot check 'active' directly since tss-react generates dynamic class name with prefix
+        expect(step).toHaveAttribute('data-active', 'true') // cannot check 'active' directly since tss-react generates dynamic class name with prefix
       } else {
-        expect(step).not.toHaveClass(/active/)
+        expect(step).toHaveAttribute('data-active', 'false')
       }
     })
   })

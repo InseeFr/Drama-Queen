@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button'
-import { tss } from 'tss-react/mui'
 
 import type { ReactNode } from 'react'
 
@@ -22,11 +21,14 @@ export function MenuNavigationButton({
   autofocus,
   onClick,
 }: Readonly<MenuNaviGationButtonProps>) {
-  const { classes, cx } = useStyles()
 
   return (
     <Button
-      className={cx(classes.navigationButton, className)}
+      className={`normal-case justify-start text-left text-primary leading-6 pl-[1.2em]
+        rounded-none hover:font-bold hover:bg-button-light focus:font-bold focus:bg-button-light
+        [&_.MuiButton-endIcon]:absolute [&_.MuiButton-endIcon]:right-[10px]
+        ${className ?? ''}`
+      }
       autoFocus={autofocus}
       size="small"
       disableRipple
@@ -39,23 +41,3 @@ export function MenuNavigationButton({
     </Button>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  navigationButton: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    color: theme.palette.primary.main,
-    lineHeight: '1.5em',
-    paddingLeft: '1.2em',
-    borderRadius: 0,
-    '&:hover, &:focus': {
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.background.button.light,
-    },
-    '& .MuiButton-endIcon': {
-      position: 'absolute',
-      right: '10px',
-    },
-  },
-}))

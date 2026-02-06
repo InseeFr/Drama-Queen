@@ -1,33 +1,23 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 type ErrorComponentProps = {
   message: string
 }
 
 export function ErrorComponent({ message }: Readonly<ErrorComponentProps>) {
-  const { classes } = useStyles()
 
   const { t } = useTranslation()
 
   return (
-    <Stack className={classes.errorContainer}>
-      <Typography className={classes.errorTitle} variant="h3">
+    <Stack className="p-12 text-center">
+      <Typography className="text-red-500" variant="h3">
         {t('error.errorOccured')}
       </Typography>
-      <Typography className={classes.errorMessage} variant="h4">
+      <Typography className="mt-8" variant="h4">
         {message}
       </Typography>
     </Stack>
   )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-  errorContainer: { padding: '3em', textAlign: 'center' },
-  errorTitle: {
-    color: theme.palette.error.main,
-  },
-  errorMessage: { marginTop: '2em' },
-}))

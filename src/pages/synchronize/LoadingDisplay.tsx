@@ -2,7 +2,6 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
-import { tss } from 'tss-react/mui'
 
 import { Fragment } from 'react'
 
@@ -20,14 +19,13 @@ export function LoadingDisplay({
   progressBars,
 }: Readonly<LoadingDisplayProps>) {
   const { t } = useTranslation()
-  const { classes } = useStyles()
   return (
     <Stack spacing={3} alignItems="center">
       <Stack spacing={1} alignItems="center">
         <Typography variant="h3" fontWeight="bold">
           {t('synchronize.synchronizationInProgress')}
         </Typography>
-        <Typography variant="h6" className={classes.lightText}>
+        <Typography variant="h6" className="opacity-75">
           {syncStepTitle}
         </Typography>
       </Stack>
@@ -39,7 +37,7 @@ export function LoadingDisplay({
                 <Typography
                   variant="body2"
                   fontWeight="bold"
-                  className={classes.lightText}
+                  className="opacity-75"
                 >
                   {label}
                   {count ? `: ${count}` : ''}
@@ -48,7 +46,7 @@ export function LoadingDisplay({
               <LinearProgress
                 variant="determinate"
                 value={progress}
-                className={classes.progressBar}
+                className="max-w-[700px] w-[80vw] h-2.5 rounded-full"
               />
             </Stack>
           </Fragment>
@@ -57,19 +55,3 @@ export function LoadingDisplay({
     </Stack>
   )
 }
-
-const useStyles = tss.create(() => ({
-  lightText: {
-    opacity: 0.75,
-  },
-  spinner: {
-    width: 200,
-    height: 200,
-  },
-  progressBar: {
-    maxWidth: 700,
-    width: '80vw',
-    height: 10,
-    borderRadius: 10,
-  },
-}))
