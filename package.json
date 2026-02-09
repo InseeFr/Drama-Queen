@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.2.2",
+  "version": "3.2.3",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
@@ -23,7 +23,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@inseefr/lunatic": "^3.11.0",
+    "@inseefr/lunatic": "^3.11.1",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@mui/x-date-pickers": "^7.28.2",
