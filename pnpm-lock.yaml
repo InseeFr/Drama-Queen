@@ -48,8 +48,8 @@ importers:
         specifier: ^3.2.7
         version: 3.2.7
       dexie-react-hooks:
-        specifier: ^1.1.7
-        version: 1.1.7(@types/react@19.2.14)(dexie@3.2.7)(react@19.2.4)
+        specifier: ^4.0.0
+        version: 4.2.0(@types/react@19.2.14)(dexie@3.2.7)(react@19.2.4)
       evt:
         specifier: ^2.5.7
         version: 2.5.9
@@ -2534,11 +2534,11 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
-  dexie-react-hooks@1.1.7:
-    resolution: {integrity: sha512-Lwv5W0Hk+uOW3kGnsU9GZoR1er1B7WQ5DSdonoNG+focTNeJbHW6vi6nBoX534VKI3/uwHebYzSw1fwY6a7mTw==}
+  dexie-react-hooks@4.2.0:
+    resolution: {integrity: sha512-u7KqTX9JpBQK8+tEyA9X0yMGXlSCsbm5AU64N6gjvGk/IutYDpLBInMYEAEC83s3qhIvryFS+W+sqLZUBEvePQ==}
     peerDependencies:
       '@types/react': '>=16'
-      dexie: ^3.2 || ^4.0.1-alpha
+      dexie: '>=4.2.0-alpha.1 <5.0.0'
       react: '>=16'
 
   dexie@3.2.7:
@@ -4556,6 +4556,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -7144,7 +7145,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  dexie-react-hooks@1.1.7(@types/react@19.2.14)(dexie@3.2.7)(react@19.2.4):
+  dexie-react-hooks@4.2.0(@types/react@19.2.14)(dexie@3.2.7)(react@19.2.4):
     dependencies:
       '@types/react': 19.2.14
       dexie: 3.2.7
