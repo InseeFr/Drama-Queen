@@ -1,11 +1,11 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
 import { useState } from 'react'
 
 import { Modal } from '@/components/ui/Modal'
-import { useTranslation } from '@/i18n'
 
 import { MenuNavigationButton } from './MenuNavigationButton'
 
@@ -24,31 +24,30 @@ export function StopNavigation({
   definitiveQuit,
 }: Readonly<StopNavigationProps>) {
   const { classes } = useStyles()
-  const { t } = useTranslation('navigationMessage')
-  const { t: t2 } = useTranslation('modalMessage')
+  const { t } = useTranslation()
   const [isQuitOpenModal, setIsQuitOpenModal] = useState<boolean>(false)
   const [isDefinitiveModal, setIsDefinitiveModal] = useState<boolean>(false)
 
   const stopItems: StopItem[] = [
     {
       definitive: true,
-      label: t('definitiveQuestionnaireStop'),
+      label: t('navigation.menu.definitiveQuestionnaireStop'),
     },
     {
       definitive: false,
-      label: t('temporaryQuestionnaireStop'),
+      label: t('navigation.menu.temporaryQuestionnaireStop'),
     },
   ]
 
   const quitModalTitle = isDefinitiveModal
-    ? t2('definitiveQuitTitle')
-    : t2('temporaryQuitTitle')
+    ? t('navigation.quitModal.definitive.title')
+    : t('navigation.quitModal.temporary.title')
   const quitModalContent = isDefinitiveModal
-    ? t2('definitiveQuitContent')
-    : t2('temporaryQuitContent')
+    ? t('navigation.quitModal.definitive.label')
+    : t('navigation.quitModal.temporary.label')
   const quitModalValidateLabel = isDefinitiveModal
-    ? t2('definitiveQuitValidate')
-    : t2('temporaryQuitValidate')
+    ? t('navigation.quitModal.definitive.validate')
+    : t('navigation.quitModal.temporary.validate')
 
   const quitModalOnOpen = (definitive: boolean) => {
     setIsQuitOpenModal(true)
@@ -61,7 +60,7 @@ export function StopNavigation({
 
   const quitModalButtons = [
     {
-      label: t2('cancel'),
+      label: t('common.cancel'),
       onClick: quitModalOnClose,
       autoFocus: false,
     },
@@ -75,7 +74,7 @@ export function StopNavigation({
   return (
     <Stack className={classes.navigationContainer}>
       <Typography variant="overline" className={classes.typography}>
-        {t('questionnaireStopNature')}
+        {t('navigation.menu.questionnaireStopNature')}
       </Typography>
       <Stack>
         {stopItems.map((item, index) => (

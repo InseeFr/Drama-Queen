@@ -1,8 +1,7 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
-
-import { useTranslation } from '@/i18n'
 
 type ErrorComponentProps = {
   message: string
@@ -11,12 +10,12 @@ type ErrorComponentProps = {
 export function ErrorComponent({ message }: Readonly<ErrorComponentProps>) {
   const { classes } = useStyles()
 
-  const { t } = useTranslation('errorMessage')
+  const { t } = useTranslation()
 
   return (
     <Stack className={classes.errorContainer}>
       <Typography className={classes.errorTitle} variant="h3">
-        {t('errorOccured')}
+        {t('error.errorOccured')}
       </Typography>
       <Typography className={classes.errorMessage} variant="h4">
         {message}

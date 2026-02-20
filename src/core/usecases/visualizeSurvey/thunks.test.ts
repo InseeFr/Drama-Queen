@@ -14,20 +14,6 @@ vi.mock('@/core/tools/SurveyModelBreaking', () => ({
   isSurveyCompatibleWithQueen: vi.fn(),
 }))
 
-vi.mock('@/i18n', () => ({
-  getTranslation: () => ({
-    t: (keyMessage: string, params?: Record<string, any>) => {
-      if (!params) return keyMessage
-
-      // Create a string by joining the values of params with space
-      const paramsString = Object.values(params).join(' ')
-
-      // Return the concatenated string: key + params string
-      return `${keyMessage} ${paramsString}`
-    },
-  }),
-}))
-
 describe('loader', () => {
   beforeEach(() => {
     // mock console.error to avoid useless logs during tests
@@ -117,7 +103,7 @@ describe('loader', () => {
     vi.mocked(fetchUrl).mockRejectedValue(axiosError)
 
     await expect(thunks.loader({ requestUrl: requestUrl })()).rejects.toThrow(
-      'questionnaireNotFound',
+      'Unable to retrieve questionnaire .',
     )
   })
 
@@ -127,7 +113,7 @@ describe('loader', () => {
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(false)
 
     await expect(thunks.loader({ requestUrl: requestUrl })()).rejects.toThrow(
-      'questionnaireNotCompatible',
+      "The questionnaire is not compatible. The 'lunaticModelVersion' must be higher than 2.2.10",
     )
   })
 })

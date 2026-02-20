@@ -1,4 +1,4 @@
-import { useTranslation } from '@/i18n'
+import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../ui/Modal'
 
@@ -17,14 +17,22 @@ export function WelcomeBackModal({
   onClose,
   onGoBack,
 }: Readonly<WelcomeBackModalProps>) {
-  const { t } = useTranslation('modalMessage')
+  const { t } = useTranslation()
 
-  const welcomeModalTitle = t('welcomeModalTitle')
-  const welcomeModalContent = t('welcomeModalContent')
+  const welcomeModalTitle = t('navigation.welcomeModal.title')
+  const welcomeModalContent = t('navigation.welcomeModal.label')
 
   const welcomeModalButtons = [
-    { label: t('welcomeModalFirstPage'), onClick: onClose, autoFocus: false },
-    { label: t('welcomeModalGoBack'), onClick: onGoBack, autoFocus: true },
+    {
+      label: t('navigation.welcomeModal.backToStart'),
+      onClick: onClose,
+      autoFocus: false,
+    },
+    {
+      label: t('navigation.welcomeModal.resume'),
+      onClick: onGoBack,
+      autoFocus: true,
+    },
   ]
 
   return (

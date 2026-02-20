@@ -1,15 +1,14 @@
 import type { Thunks } from '@/core/bootstrap'
+import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
 import type { Interrogation, Paradata } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
-import { getTranslation } from '@/i18n'
+import i18n from '@/libs/i18n'
 
 import {
   sendCloseEvent,
   sendQuestionnaireStateChangedEvent,
 } from './eventSender'
-
-const { t } = getTranslation('errorMessage')
 
 export const name = 'collectSurvey'
 
@@ -23,26 +22,30 @@ export const thunks = {
 
       const { interrogationId } = params
 
-      const interrogation = await dataStore
-        .getInterrogation(interrogationId)
-        .catch(() => {
-          throw new Error(t('interrogationNotRetrievable'))
-        })
-        .then((interrogation) => {
-          if (!interrogation) {
-            throw new Error(t('interrogationNotFound', { interrogationId }))
-          }
-          return interrogation
-        })
+      let interrogation
+      try {
+        interrogation = await dataStore.getInterrogation(interrogationId)
+      } catch {
+        throw new Error(i18n.t('error.interrogationNotRetrievable'))
+      }
 
-      const questionnaire = await queenApi
-        .getQuestionnaire(interrogation.questionnaireId)
-        .then((questionnaire) => {
-          if (!isSurveyCompatibleWithQueen({ questionnaire })) {
-            throw new Error(t('questionnaireNotCompatible'))
-          }
-          return questionnaire
-        })
+      if (!interrogation) {
+        throw new Error(
+          i18n.t('error.interrogationNotFound', { interrogationId }),
+        )
+      }
+
+      const questionnaire = await queenApi.getQuestionnaire(
+        interrogation.questionnaireId,
+      )
+
+      if (!isSurveyCompatibleWithQueen({ questionnaire })) {
+        throw new Error(
+          i18n.t('error.questionnaireNotCompatible', {
+            versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
+          }),
+        )
+      }
 
       return { interrogation, questionnaire }
     },

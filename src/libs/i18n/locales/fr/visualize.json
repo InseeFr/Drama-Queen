@@ -1,0 +1,17 @@
+{
+  "data": {
+    "label": "Données",
+    "helper": "L'url d'un json de données (de réponse)"
+  },
+  "nomenclature": {
+    "label": "Dictionnaire de nomenclatures",
+    "helper": "Dictionnaire avec en clé le nom de la nomenclature et en valeur l'url"
+  },
+  "readonly": "Lecture seule",
+  "survey": {
+    "label": "Questionnaire",
+    "helper": "L'url d'un json de questionnaire au format Lunatic-model"
+  },
+  "visualize": "Visualize",
+  "visualizePage": "Page de visualisation de questionnaire"
+}
