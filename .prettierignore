@@ -2,3 +2,4 @@ node_modules/
 /.yarn_home/
 /dist/
 /public/
+**/routeTree.gen.ts
