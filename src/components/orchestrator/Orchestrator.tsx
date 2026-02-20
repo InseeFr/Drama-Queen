@@ -140,18 +140,19 @@ export function Orchestrator({
 
   const {
     activeErrors,
+    isBlocking,
     handleGoToPage,
     handleNextPage,
     handlePreviousPage,
-    isBlocking,
     obsoleteControls,
+    resetControls,
   } = useControls({
+    isTelemetryInitialized,
     compileControls,
     goNextPage,
     goPreviousPage,
     goToPage,
-    isTelemetryInitialized,
-    pushEvent,
+    pushTelemetryEvent: pushEvent,
   })
 
   /*
@@ -163,9 +164,9 @@ export function Orchestrator({
   const previousSubPage = usePrevious(subPage)
   useEffect(() => {
     if (isRoundabout && previousSubPage === undefined) {
-      obsoleteControls()
+      resetControls()
     }
-  }, [isRoundabout, previousSubPage, obsoleteControls])
+  }, [isRoundabout, previousSubPage, resetControls])
 
   /* Focus on the first input with an error. */
   useEffect(() => {

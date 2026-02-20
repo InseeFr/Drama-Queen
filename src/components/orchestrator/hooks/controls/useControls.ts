@@ -1,9 +1,11 @@
-import type { LunaticError } from '@inseefr/lunatic/use-lunatic/type'
+import type {
+  LunaticError,
+  LunaticState,
+} from '@inseefr/lunatic/use-lunatic/type'
 
 import { useState } from 'react'
 
 import type { TelemetryParadata } from '@/core/model'
-import type { CompileControls, GoToPage } from '@/models/lunaticType'
 import { computeControlEvent, computeControlSkipEvent } from '@/utils/telemetry'
 
 import {
@@ -14,13 +16,14 @@ import {
   sortErrors,
 } from './utils'
 
-type useControlsProps = {
-  compileControls: CompileControls
-  goNextPage: () => void
-  goPreviousPage: () => void
-  goToPage: GoToPage
+type Props = {
+  /** Whether we should handle telemetry events. */
   isTelemetryInitialized?: boolean
-  pushEvent: (e: TelemetryParadata) => void | Promise<boolean>
+  compileControls: LunaticState['compileControls']
+  goNextPage: LunaticState['goNextPage']
+  goPreviousPage: LunaticState['goPreviousPage']
+  goToPage: LunaticState['goToPage']
+  pushTelemetryEvent: (e: TelemetryParadata) => void | Promise<boolean>
 }
 
 /**
@@ -35,8 +38,8 @@ export function useControls({
   goPreviousPage,
   goToPage,
   isTelemetryInitialized = false,
-  pushEvent,
-}: Readonly<useControlsProps>) {
+  pushTelemetryEvent,
+}: Readonly<Props>) {
   const [activeErrors, setActiveErrors] = useState<
     Record<string, LunaticError[]> | undefined
   >(undefined)
@@ -60,7 +63,7 @@ export function useControls({
     switch (errorType) {
       case ErrorType.BLOCKING:
         if (isTelemetryInitialized) {
-          pushEvent(
+          pushTelemetryEvent(
             computeControlEvent({
               controlIds: Object.keys(newErrors!),
             }),
@@ -81,7 +84,7 @@ export function useControls({
           isSameErrors(newErrors, activeErrors)
         ) {
           if (isTelemetryInitialized) {
-            pushEvent(
+            pushTelemetryEvent(
               computeControlSkipEvent({
                 controlIds: Object.keys(newErrors),
               }),
@@ -105,7 +108,7 @@ export function useControls({
     goPreviousPage()
   }
 
-  const handleGoToPage: GoToPage = (page) => {
+  const handleGoToPage: LunaticState['goToPage'] = (page) => {
     resetControls()
     goToPage(page)
   }
@@ -124,6 +127,12 @@ export function useControls({
   return {
     /** Errors to be displayed by Lunatic components. */
     activeErrors,
+    /**
+     * Whether the respondent should be blocked from further navigation
+     * until the filled input is changed. Should be used to set navigation
+     * buttons as disabled.
+     */
+    isBlocking,
     /** Go to page handler which reset controls (e.g. active errors). */
     handleGoToPage,
     /** Go to next page handler which check controls shenanigans. */
@@ -131,16 +140,15 @@ export function useControls({
     /** Go to previous page handler which reset controls (e.g. active errors). */
     handlePreviousPage,
     /**
-     * Whether or not the respondent should be blocked from further navigation
-     * until the filled input is changed. Should be used to set navigation
-     * buttons as disabled.
-     */
-    isBlocking,
-    /**
      * Allow to manually set acknowledgement as obsolete (e.g. when the input is
      * changed) so that new controls can trigger the same warning again but do
      * not erase the displayed errors.
      */
     obsoleteControls,
+    /**
+     * Allow to manually reset controls (e.g. after a page change not triggered
+     * by our various page handler).
+     */
+    resetControls,
   }
 }

@@ -1,5 +1,4 @@
 import { act, renderHook } from '@testing-library/react'
-import { describe, expect, test, vi } from 'vitest'
 
 import { TELEMETRY_EVENT_TYPE } from '@/constants/telemetry'
 
@@ -24,7 +23,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -61,7 +60,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -96,7 +95,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -132,7 +131,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -164,7 +163,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -203,7 +202,7 @@ describe('Use controls', () => {
         goNextPage: vi.fn(),
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: vi.fn(),
+        pushTelemetryEvent: vi.fn(),
       }),
     )
 
@@ -293,7 +292,7 @@ describe('Use controls', () => {
         goNextPage: vi.fn(),
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: pushEventMock,
+        pushTelemetryEvent: pushEventMock,
         isTelemetryInitialized: true, // ensure telemetry is active
       }),
     )
@@ -321,7 +320,7 @@ describe('Use controls', () => {
         goNextPage: goNextPageMock,
         goPreviousPage: vi.fn(),
         goToPage: vi.fn(),
-        pushEvent: pushEventMock,
+        pushTelemetryEvent: pushEventMock,
         isTelemetryInitialized: true, // ensure telemetry is active
       }),
     )
