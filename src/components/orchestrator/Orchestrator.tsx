@@ -13,6 +13,7 @@ import type {
   Questionnaire,
 } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
+import usePrevious from '@/hooks/usePrevious'
 import type { GetReferentiel, ValueChange } from '@/models/lunaticType'
 import { computeInitEvent, computeNewPageEvent } from '@/utils/telemetry'
 
@@ -153,7 +154,20 @@ export function Orchestrator({
     pushEvent,
   })
 
-  /** Focus on the first input with an error. */
+  /*
+   * Since the roundabout "start / edit" buttons for each occurences is handled
+   * by Lunatic, we do not have the usual "handleNextPage" which resets
+   * controls. We need to obsolete them manually when we enter an occurence.
+   */
+  const isRoundabout = roundaboutLoopVariables?.length > 0
+  const previousSubPage = usePrevious(subPage)
+  useEffect(() => {
+    if (isRoundabout && previousSubPage === undefined) {
+      obsoleteControls()
+    }
+  }, [isRoundabout, previousSubPage, obsoleteControls])
+
+  /* Focus on the first input with an error. */
   useEffect(() => {
     if (activeErrors) scrollAndFocusToFirstError()
   }, [activeErrors])
