@@ -112,7 +112,7 @@ describe('filterTransformedManifest', () => {
 
   beforeAll(() => {
     // Mock the global caches object
-    ;(global as any).caches = {
+    ;(globalThis as any).caches = {
       open: vi.fn().mockImplementation(async (cacheName: string) => {
         return getMockCache(cacheName)
       }),
@@ -271,7 +271,7 @@ describe('getOldExternalCacheNames', () => {
 
   beforeAll(() => {
     // Mock the global caches object
-    ;(global as any).caches = mockCaches
+    ;(globalThis as any).caches = mockCaches
   })
 
   beforeEach(() => {

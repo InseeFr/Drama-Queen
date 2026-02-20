@@ -1,6 +1,4 @@
 import { Evt } from 'evt'
-import { afterEach } from 'node:test'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createEvt } from './evt'
 
