@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.4](https://github.com/InseeFr/Drama-Queen/releases/tag/3.2.4) - 2026-02-26
+
+### Fixed
+
+- Continue button is no more disabled when entering a rondabout iteration after triggering blocking controls.
+
 ## [3.2.3](https://github.com/InseeFr/Drama-Queen/releases/tag/3.2.3) - 2026-02-20
 
 ### Changed
