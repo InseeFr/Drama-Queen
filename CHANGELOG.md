@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.3.0) - 2026-02-26
+
+### Added
+
+- Radio, Dropdown and CheckboxOne can now have options based on a variable. Added by Lunatic 3.12.0.
+- Enable Pairwise component to be paginated in a loop. Added by Lunatic 3.12.0.
+
 ## [3.2.4](https://github.com/InseeFr/Drama-Queen/releases/tag/3.2.4) - 2026-02-26
 
 ### Fixed
