@@ -8,11 +8,14 @@ export type VisualizeSearch = {
   questionnaire?: string
   data?: string
   nomenclature?: string
-  readonly?: string
+  readonly?: boolean
 }
 
 const parseStringSearch = (value: unknown) =>
   typeof value === 'string' ? value : undefined
+
+const parseBooleanSearch = (value: unknown) =>
+  typeof value === 'boolean' ? value : undefined
 
 export const Route = createFileRoute('/_layout/visualize')({
   component: Visualize,
@@ -21,6 +24,6 @@ export const Route = createFileRoute('/_layout/visualize')({
     questionnaire: parseStringSearch(search.questionnaire),
     data: parseStringSearch(search.data),
     nomenclature: parseStringSearch(search.nomenclature),
-    readonly: parseStringSearch(search.readonly),
+    readonly: parseBooleanSearch(search.readonly),
   }),
 })
