@@ -12,6 +12,6 @@
     "label": "Questionnaire",
     "helper": "L'url d'un json de questionnaire au format Lunatic-model"
   },
-  "visualize": "Visualize",
+  "visualize": "Visualiser",
   "visualizePage": "Page de visualisation de questionnaire"
 }
