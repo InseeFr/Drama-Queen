@@ -76,7 +76,7 @@ describe('download thunk', () => {
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     localStorage.setItem(
-      'LIST_INTERROGATIONS',
+      'SYNCHRONIZATION_INTERROGATION_IDS',
       JSON.stringify(['interro1', 'interro2']),
     )
     // Re-import after mocking
@@ -119,7 +119,7 @@ describe('download thunk', () => {
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     localStorage.setItem(
-      'LIST_INTERROGATIONS',
+      'SYNCHRONIZATION_INTERROGATION_IDS',
       JSON.stringify(['interro1', 'interro2']),
     )
     // Re-import after mocking
@@ -160,7 +160,7 @@ describe('download thunk', () => {
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
     localStorage.setItem(
-      'LIST_INTERROGATIONS',
+      'SYNCHRONIZATION_INTERROGATION_IDS',
       JSON.stringify(['interro1', 'interro2']),
     )
     // Re-import after mocking
@@ -202,7 +202,10 @@ describe('download thunk', () => {
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
-    localStorage.setItem('LIST_INTERROGATIONS', JSON.stringify([]))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify([]),
+    )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
@@ -224,7 +227,10 @@ describe('download thunk', () => {
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
-    localStorage.setItem('LIST_INTERROGATIONS', JSON.stringify(['interro1']))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1']),
+    )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 

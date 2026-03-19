@@ -17,7 +17,8 @@ import {
 import { actions, name } from './state'
 
 const EXTERNAL_RESOURCES_ROOT_CACHE_NAME = 'cache-root-external'
-const LIST_INTERROGATIONS_LOCAL_STORAGE_KEY = 'LIST_INTERROGATIONS'
+const INTERROGATIONS_LIST_LOCAL_STORAGE_KEY =
+  'SYNCHRONIZATION_INTERROGATION_IDS'
 
 export const thunks = {
   // Sync the data (upload first, download last)
@@ -509,7 +510,7 @@ function deduplicate<T>(items: (T | undefined)[]): T[] {
 
 function getInterrogationIds() {
   const localStorageInterrogationsValue = localStorage.getItem(
-    LIST_INTERROGATIONS_LOCAL_STORAGE_KEY,
+    INTERROGATIONS_LIST_LOCAL_STORAGE_KEY,
   )
 
   if (!localStorageInterrogationsValue) {
