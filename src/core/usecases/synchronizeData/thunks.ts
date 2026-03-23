@@ -362,6 +362,8 @@ export const thunks = {
       // We await untill all the promises are finished
       await Promise.all([prInterrogations, prNomenclatures])
 
+      clearInterrogationIds()
+
       dispatch(actions.downloadCompleted())
     } catch (error) {
       console.error(
@@ -369,6 +371,7 @@ export const thunks = {
         error,
       )
       localSyncStorage.addError(true)
+      clearInterrogationIds()
       dispatch(actions.downloadFailed())
       throw error
     }
@@ -508,6 +511,9 @@ function deduplicate<T>(items: (T | undefined)[]): T[] {
   return [...new Set(items.filter((data) => !!data))] as T[]
 }
 
+/**
+ * Get the list of interrogations ids from local storage
+ */
 function getInterrogationIds() {
   const localStorageInterrogationsValue = localStorage.getItem(
     INTERROGATIONS_LIST_LOCAL_STORAGE_KEY,
@@ -532,6 +538,13 @@ function getInterrogationIds() {
     console.error('Unable to parse interrogation ids from localStorage', error)
     return undefined
   }
+}
+
+/**
+ * Clear the list of interrogation ids from local storage
+ */
+function clearInterrogationIds() {
+  localStorage.removeItem(INTERROGATIONS_LIST_LOCAL_STORAGE_KEY)
 }
 
 /**

@@ -110,6 +110,9 @@ describe('download thunk', () => {
     expect(
       mockLocalSyncStorage.addIdToInterrogationsSuccess,
     ).toHaveBeenCalledWith('interro2')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
   })
 
   it('should successfully download questionnaires', async () => {
@@ -244,6 +247,9 @@ describe('download thunk', () => {
 
     expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
   })
 
   describe('legacy strategy', () => {
