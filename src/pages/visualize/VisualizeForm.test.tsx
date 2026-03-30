@@ -82,7 +82,7 @@ describe('VisualizeForm Component', () => {
       questionnaire: '',
       data: '',
       nomenclature: '{}',
-      readonly: 'true',
+      readonly: true,
     }
     vi.mocked(getSearchParams).mockReturnValue(mockParams)
 
