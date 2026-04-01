@@ -7,4 +7,4 @@ import('./bootstrap').then(({ mount }) => {
   })
 })
 
-export {}
+export { }

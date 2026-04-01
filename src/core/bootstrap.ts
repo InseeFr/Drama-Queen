@@ -5,6 +5,7 @@ import type { Oidc } from '@/core/ports/Oidc'
 import type { QueenApi } from '@/core/ports/QueenApi'
 
 import type { LocalSyncStorage } from './ports/LocalSyncStorage'
+import { getParentGetAccessToken } from './sharedAuth'
 import { usecases } from './usecases'
 
 type ParamsOfBootstrapCore = {
@@ -35,12 +36,20 @@ export async function bootstrapCore(
   params: ParamsOfBootstrapCore,
 ): Promise<{ core: Core }> {
   const { apiUrl, oidcParams } = params
+  const parentGetAccessToken = getParentGetAccessToken()
+  console.log('toto', parentGetAccessToken)
 
   const getOidc = await (async () => {
-    if (oidcParams === undefined || oidcParams.issuerUri === '') {
+    if (
+      oidcParams === undefined ||
+      oidcParams.issuerUri === '' ||
+      parentGetAccessToken !== undefined
+    ) {
+      console.log('create mock')
       const { createOidc } = await import('@/core/adapters/oidc/mock')
       return createOidc({ isUserLoggedIn: true })
     }
+    console.log('create default')
     const { createOidc } = await import('@/core/adapters/oidc/default')
 
     return createOidc({
@@ -60,29 +69,29 @@ export async function bootstrapCore(
 
     return createApiClient({
       apiUrl,
-      getAccessToken: async () => {
-        const oidc = await getOidc()
+      getAccessToken:
+        parentGetAccessToken ??
+        (async () => {
+          const oidc = await getOidc()
 
-        if (!oidc.isUserLoggedIn) {
-          return undefined
-        }
-        return oidc.getTokens().accessToken
-      },
+          if (!oidc.isUserLoggedIn) {
+            return undefined
+          }
+          return (await oidc.getTokens()).accessToken
+        }),
     })
   })()
 
   const dataStore = await (async () => {
-    const { createDataStore } = await import(
-      '@/core/adapters/datastore/default'
-    )
+    const { createDataStore } =
+      await import('@/core/adapters/datastore/default')
 
     return createDataStore()
   })()
 
   const localSyncStorage = await (async () => {
-    const { createLocalSyncStorage } = await import(
-      '@/core/adapters/localSyncStorage/default'
-    )
+    const { createLocalSyncStorage } =
+      await import('@/core/adapters/localSyncStorage/default')
 
     return createLocalSyncStorage({ localStorageKey: 'QUEEN_SYNC_RESULT' })
   })()

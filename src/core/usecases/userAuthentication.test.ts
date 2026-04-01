@@ -1,4 +1,4 @@
-import type { Oidc } from 'oidc-spa'
+import type { Oidc } from 'oidc-spa/core'
 import { describe, expect, it, vi } from 'vitest'
 
 import { thunks } from './userAuthentication'

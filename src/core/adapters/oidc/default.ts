@@ -1,4 +1,4 @@
-import { createOidc as createOidcSpa } from 'oidc-spa'
+import { createOidc as createOidcSpa } from 'oidc-spa/core'
 
 import type { Oidc } from '@/core/ports/Oidc'
 
@@ -22,7 +22,6 @@ export function createOidc(params: {
         oidc = await createOidcSpa({
           issuerUri,
           clientId,
-          homeUrl: '/queen',
         })
       } catch (e) {
         console.error(e)

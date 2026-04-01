@@ -1,6 +1,7 @@
 import federation from '@originjs/vite-plugin-federation'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
+import { oidcSpa } from 'oidc-spa/vite-plugin'
 import { defineConfig } from 'vite'
 import { viteEnvs } from 'vite-envs'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -62,6 +63,7 @@ export default defineConfig({
       },
     }),
     tanstackRouter(),
+    oidcSpa(),
     react(),
   ],
   build: {

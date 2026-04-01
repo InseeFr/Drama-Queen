@@ -32,7 +32,7 @@ export const getMockedOidc = (isUserLoggedIn: boolean) => {
   return id<Oidc.LoggedIn>({
     isUserLoggedIn: true,
     logout: () => new Promise<never>(() => {}),
-    getTokens: () => ({
+    getTokens: async () => ({
       accessToken: '',
       idToken: '',
       refreshToken: '',

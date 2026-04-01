@@ -8,17 +8,24 @@ import {
   createRouter,
 } from '@/routes/routing/createRouter'
 import { unsubscribeOldSW } from '@/unsubscribe_old_sw'
+import { setParentGetAccessToken, type GetAccessToken } from './core/sharedAuth'
 
 const mount = ({
   mountPoint,
   initialPathname,
   routingStrategy,
+  getAccessToken
 }: {
   mountPoint: HTMLElement
   initialPathname?: string
   routingStrategy?: RoutingStrategy
+  getAccessToken?: GetAccessToken
 }) => {
   console.log('Mount Drama Queen')
+
+  console.log("parent acess token", getAccessToken)
+
+  setParentGetAccessToken(getAccessToken)
 
   // unsubscribe to old SW
   unsubscribeOldSW()

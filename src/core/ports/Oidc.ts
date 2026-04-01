@@ -9,7 +9,7 @@ export declare namespace Oidc {
   export type LoggedIn = {
     isUserLoggedIn: true
     logout: () => Promise<never>
-    getTokens: () => Tokens
+    getTokens: () => Promise<Tokens>
   }
 
   export type Tokens = {
