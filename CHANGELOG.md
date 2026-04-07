@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Visualize route are now handle correctly all query params
 - Suggester synonyms now handle uppercase. Fixed by Lunatic 3.12.1
 - Suggester synonyms now sort correctly the results. Fixed by Lunatic 3.12.2
 - In dropdown selection, the options id is not longer displayed. Only the label is now displayed. Fixed by Lunatic 3.12.3
