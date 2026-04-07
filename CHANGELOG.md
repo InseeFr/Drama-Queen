@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Suggester synonyms now handle uppercase. Fixed by Lunatic 3.12.1
 
+### Changed
+
+- Improve synchronization performance : for download step, the list of interrogations is now retrieved from local storage (given by the parent app). If there is nothing in local storage, we keep the old implementation using api.
+
 ## [3.3.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.3.0) - 2026-02-26
 
 ### Added
