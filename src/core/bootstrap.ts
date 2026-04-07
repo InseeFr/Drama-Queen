@@ -4,6 +4,7 @@ import type { DataStore } from '@/core/ports/DataStore'
 import type { Oidc } from '@/core/ports/Oidc'
 import type { QueenApi } from '@/core/ports/QueenApi'
 
+import { DYNAMIC_PUBLIC_URL } from './constants'
 import type { LocalSyncStorage } from './ports/LocalSyncStorage'
 import { getParentGetAccessToken } from './sharedAuth'
 import { usecases } from './usecases'
@@ -32,18 +33,19 @@ export type State = Core['types']['State']
 export type Thunks = Core['types']['Thunks']
 export type CreateEvt = Core['types']['CreateEvt']
 
+export const isStandAlone = DYNAMIC_PUBLIC_URL === window.location.origin
+
 export async function bootstrapCore(
   params: ParamsOfBootstrapCore,
 ): Promise<{ core: Core }> {
   const { apiUrl, oidcParams } = params
-  const parentGetAccessToken = getParentGetAccessToken()
-  console.log('toto', parentGetAccessToken)
+  console.log('toto', DYNAMIC_PUBLIC_URL, window.location.origin)
 
   const getOidc = await (async () => {
     if (
       oidcParams === undefined ||
       oidcParams.issuerUri === '' ||
-      parentGetAccessToken !== undefined
+      !isStandAlone
     ) {
       console.log('create mock')
       const { createOidc } = await import('@/core/adapters/oidc/mock')
@@ -67,18 +69,22 @@ export async function bootstrapCore(
 
     const { createApiClient } = await import('@/core/adapters/queenApi/default')
 
+    const parentGetAccessToken = getParentGetAccessToken()
+
     return createApiClient({
       apiUrl,
-      getAccessToken:
-        parentGetAccessToken ??
-        (async () => {
-          const oidc = await getOidc()
+      getAccessToken: !isStandAlone
+        ? parentGetAccessToken
+          ? parentGetAccessToken
+          : async () => undefined
+        : async () => {
+            const oidc = await getOidc()
 
-          if (!oidc.isUserLoggedIn) {
-            return undefined
-          }
-          return (await oidc.getTokens()).accessToken
-        }),
+            if (!oidc.isUserLoggedIn) {
+              return undefined
+            }
+            return (await oidc.getTokens()).accessToken
+          },
     })
   })()
 

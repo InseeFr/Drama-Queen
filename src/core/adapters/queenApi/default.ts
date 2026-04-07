@@ -32,6 +32,7 @@ export function createApiClient(params: {
     // Type issue https://github.com/axios/axios/issues/5494
     const onRequest = async (config: any) => {
       const accessToken = await getAccessToken()
+      console.log('accessToken', accessToken)
 
       return {
         ...config,

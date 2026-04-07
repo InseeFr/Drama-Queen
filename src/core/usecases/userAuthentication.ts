@@ -1,6 +1,4 @@
-import type { Thunks } from '@/core/bootstrap'
-
-import { getParentGetAccessToken } from '../sharedAuth'
+import { type Thunks, isStandAlone } from '@/core/bootstrap'
 
 export const name = 'userAuthentication'
 
@@ -12,9 +10,7 @@ export const thunks = {
     async (...args) => {
       const [, , { getOidc }] = args
 
-      const parentGetAccessToken = getParentGetAccessToken()
-
-      if (parentGetAccessToken) return
+      if (!isStandAlone) return
 
       const oidc = await getOidc()
 
