@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Pairwise: do not display error when person is empty. Fixed by Luantic 3.13.4
+
 ## [3.3.1](https://github.com/InseeFr/Drama-Queen/releases/tag/3.3.1) - 2026-04-13
 
 ### Fixed
