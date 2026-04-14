@@ -18,7 +18,7 @@ describe('getSearchParams', () => {
       questionnaire: 'my-survey',
       data: 'my-data',
       nomenclature: '{"key":"value"}',
-      readonly: 'false',
+      readonly: false,
     })
   })
 
@@ -34,7 +34,7 @@ describe('getSearchParams', () => {
 
     expect(result).toEqual({
       questionnaire: 'my-survey',
-      readonly: 'false',
+      readonly: false,
     })
   })
 
@@ -49,7 +49,7 @@ describe('getSearchParams', () => {
     const result = getSearchParams(input)
 
     expect(result).toEqual({
-      readonly: 'false',
+      readonly: false,
     })
   })
 
@@ -67,7 +67,7 @@ describe('getSearchParams', () => {
       questionnaire: 'my-survey',
       data: 'my-data',
       nomenclature: '{"key1":"value1","key2":"value2"}',
-      readonly: 'false',
+      readonly: false,
     })
   })
 
@@ -86,10 +86,10 @@ describe('getSearchParams', () => {
     const result2 = getSearchParams(input2)
 
     expect(result).toEqual({
-      readonly: 'false',
+      readonly: false,
     })
     expect(result2).toEqual({
-      readonly: 'true',
+      readonly: true,
     })
   })
 })
