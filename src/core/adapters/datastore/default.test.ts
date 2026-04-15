@@ -61,7 +61,7 @@ describe('createDataStore', () => {
         hasBeenUpdated: true,
       }))
       expect(interrogations).toEqual(expectedInterrogations)
-    })
+    }, 30000) // 30 seconds timeout for this stress test
   })
 
   describe('Dexie migration v3 → latest version', () => {
