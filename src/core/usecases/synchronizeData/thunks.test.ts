@@ -506,7 +506,7 @@ describe('upload thunk', () => {
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as LocalInterrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
@@ -535,7 +535,7 @@ describe('upload thunk', () => {
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as any)
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 423 },
     })
@@ -595,7 +595,7 @@ describe('upload thunk', () => {
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as any)
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
