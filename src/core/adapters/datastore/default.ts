@@ -106,19 +106,14 @@ export function dbVersion6(db: Dexie) {
     })
     .upgrade(async (tx) => {
       try {
-        const table = tx.table<LocalInterrogation, string>('interrogation')
-        const interrogations = await table.toArray()
-
-        // Set hasBeenUpdated: true for all existing interrogation
-        // Ensure all the interrogations updated before this migration will be sent at the next synchronization.
-        await Promise.all(
-          interrogations.map(async (interrogation) => {
-            await table.put({
-              ...interrogation,
-              hasBeenUpdated: true,
-            })
-          }),
-        )
+        return tx
+          .table<LocalInterrogation, string>('interrogation')
+          .toCollection()
+          .modify((interrogation) => {
+            // Set hasBeenUpdated: true for all existing interrogation
+            // Ensure all the interrogations updated before this migration will be sent at the next synchronization.
+            interrogation.hasBeenUpdated = true
+          })
       } catch (err) {
         console.error('Error during hasBeenUpdated migration', err)
       }
