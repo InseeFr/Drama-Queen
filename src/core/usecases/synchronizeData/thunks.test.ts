@@ -430,7 +430,7 @@ describe('upload thunk', () => {
         questionnaireId: 'q1',
         data: { COLLECTED: {} },
         stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
-      }, // undefined `hasBeenUpdated` should be treated as false
+      }, // undefined `hasBeenUpdated` should be treated as true
     ]
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
@@ -447,19 +447,22 @@ describe('upload thunk', () => {
     const uploadInterrogationCalls = mockDispatch.mock.calls.filter(
       ([action]) => action.type === actions.uploadInterrogationCompleted().type,
     )
-    expect(uploadInterrogationCalls).toHaveLength(2)
+    expect(uploadInterrogationCalls).toHaveLength(3)
 
-    expect(mockQueenApi.putInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledTimes(3)
     expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
       interrogationFromLocalInterrogation(interrogations[0]),
     )
     expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
       interrogationFromLocalInterrogation(interrogations[2]),
     )
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[3]),
+    )
 
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.setUploadTotalInterrogation({
-        totalInterrogation: 2,
+        totalInterrogation: 3,
       }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
@@ -468,7 +471,7 @@ describe('upload thunk', () => {
      * Cannot do directly expect(mockDispatch).toHaveBeenCalledWith(thunks.download())
      * since it considers it has been called with [AsyncFunction (anonymous)]
      */
-    expect(mockDispatch).toHaveBeenCalledTimes(6)
+    expect(mockDispatch).toHaveBeenCalledTimes(7)
   })
 
   it('should set interrogations as not updated after successful upload', async () => {

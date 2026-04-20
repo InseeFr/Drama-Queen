@@ -16,7 +16,6 @@ export function createDataStore(): DataStore & { db: Dexie & Tables } {
   dbVersion3(db)
   dbVersion4(db)
   dbVersion5(db)
-  dbVersion6(db)
 
   return {
     db, // only used for tests
@@ -93,29 +92,4 @@ export function dbVersion5(db: Dexie) {
   db.version(5).stores({
     paradata: '++idInterrogation',
   })
-}
-
-/**
- * Adds hasBeenUpdated field to interrogation table.
- */
-export function dbVersion6(db: Dexie) {
-  db.version(6)
-    .stores({
-      interrogation:
-        'id,data,stateData,personalization,comment,questionnaireId,hasBeenUpdated',
-    })
-    .upgrade(async (tx) => {
-      try {
-        return tx
-          .table<LocalInterrogation, string>('interrogation')
-          .toCollection()
-          .modify((interrogation) => {
-            // Set hasBeenUpdated: true for all existing interrogation
-            // Ensure all the interrogations updated before this migration will be sent at the next synchronization.
-            interrogation.hasBeenUpdated = true
-          })
-      } catch (err) {
-        console.error('Error during hasBeenUpdated migration', err)
-      }
-    })
 }

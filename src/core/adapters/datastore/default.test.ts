@@ -1,18 +1,8 @@
 import Dexie from 'dexie'
 
-import type {
-  Interrogation,
-  InterrogationData,
-  LocalInterrogation,
-} from '@/core/model'
+import type { Interrogation, InterrogationData } from '@/core/model'
 
-import {
-  createDataStore,
-  dbVersion2,
-  dbVersion3,
-  dbVersion4,
-  dbVersion5,
-} from './default'
+import { createDataStore, dbVersion2, dbVersion3, dbVersion4 } from './default'
 
 describe('createDataStore', () => {
   describe('Dexie migration v2 → latest version', () => {
@@ -55,12 +45,7 @@ describe('createDataStore', () => {
 
       // Check all surveyUnits have been migrated into interrogations in interrogation table
       const interrogations = await store.getAllInterrogations()
-      // After migration, all interrogations should have hasBeenUpdated: true
-      const expectedInterrogations = surveyUnits.map((su) => ({
-        ...su,
-        hasBeenUpdated: true,
-      }))
-      expect(interrogations).toEqual(expectedInterrogations)
+      expect(interrogations).toEqual(surveyUnits)
     }, 30000) // 30 seconds timeout for this stress test
   })
 
@@ -90,12 +75,8 @@ describe('createDataStore', () => {
       // Create new data store to trigger migration
       const store = createDataStore()
 
-      // Check that interrogations remain untouched but now have hasBeenUpdated field
-      const migratedInterrogations =
-        (await store.getAllInterrogations()) as LocalInterrogation[]
-      expect(migratedInterrogations).toEqual([
-        { ...interrogation, hasBeenUpdated: true },
-      ])
+      // Check that interrogations remain untouched
+      expect(await store.getAllInterrogations()).toEqual([interrogation])
 
       // Check that surveyUnit table has been removed
       const tableNames = store.db.tables.map((t) => t.name)
@@ -134,65 +115,12 @@ describe('createDataStore', () => {
       // Create new data store to trigger migration
       const store = createDataStore()
 
-      // Check that interrogations remain untouched but now have hasBeenUpdated field
-      const migratedInterrogations =
-        (await store.getAllInterrogations()) as LocalInterrogation[]
-      expect(migratedInterrogations).toEqual([
-        { ...interrogation, hasBeenUpdated: true },
-      ])
+      // Check that interrogations remain untouched
+      expect(await store.getAllInterrogations()).toEqual([interrogation])
 
       // Check new paradata table exists and is empty
       const paradata = await store.getAllParadata()
       expect(paradata).toEqual([])
-    })
-  })
-
-  describe('Dexie migration v5 → latest version', () => {
-    beforeEach(async () => {
-      await Dexie.delete('Queen')
-    })
-
-    it('adds hasBeenUpdated field to existing interrogations', async () => {
-      // Create DB at version 5
-      const dbV5 = new Dexie('Queen')
-      dbVersion2(dbV5)
-      dbVersion3(dbV5)
-      dbVersion4(dbV5)
-      dbVersion5(dbV5)
-
-      const interrogations: Interrogation[] = [
-        {
-          id: 'INTERRO001',
-          questionnaireId: 'Q1',
-          data: { COLLECTED: { prenom: { COLLECTED: 'Paul' } } },
-          stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
-        },
-        {
-          id: 'INTERRO002',
-          questionnaireId: 'Q2',
-          data: { COLLECTED: { nom: { COLLECTED: 'Dupont' } } },
-          stateData: { state: 'COMPLETED', date: 17000000, currentPage: '5' },
-        },
-      ]
-
-      await dbV5.table('interrogation').bulkPut(interrogations)
-
-      // Close the database before applying the migration
-      dbV5.close()
-
-      // Create new data store to trigger migration
-      const store = createDataStore()
-
-      // Check that interrogations remain untouched but now have hasBeenUpdated field with `true` value
-      const migratedInterrogations =
-        (await store.getAllInterrogations()) as LocalInterrogation[]
-      const expectedMigratedInterrogations = interrogations.map(
-        (interrogation) => ({
-          ...interrogation,
-          hasBeenUpdated: true,
-        }),
-      )
-      expect(migratedInterrogations).toEqual(expectedMigratedInterrogations)
     })
   })
 })

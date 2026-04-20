@@ -413,7 +413,7 @@ export const thunks = {
         if (interrogations) {
           // Filter interrogations to only upload those that have been updated
           const interrogationsToUpload = interrogations.filter(
-            (interrogation) => interrogation.hasBeenUpdated === true,
+            (interrogation) => (interrogation.hasBeenUpdated ?? true) === true,
           )
 
           dispatch(
