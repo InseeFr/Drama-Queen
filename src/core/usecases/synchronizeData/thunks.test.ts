@@ -4,7 +4,7 @@ import {
   TELEMETRY_EVENT_EXIT_SOURCE,
   TELEMETRY_EVENT_TYPE,
 } from '@/constants/telemetry'
-import type { LocalInterrogation, Paradata } from '@/core/model'
+import type { Interrogation, LocalInterrogation, Paradata } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { LocalSyncStorage } from '@/core/ports/LocalSyncStorage'
 import { interrogationFromLocalInterrogation } from '@/utils/interrogation'
@@ -83,9 +83,20 @@ describe('download thunk', () => {
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q1',
+      data: {},
+    }
+
     vi.mocked(mockQueenApi.getInterrogation)
-      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q1' })
+      .mockResolvedValueOnce(interro1)
+      .mockResolvedValueOnce(interro2)
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
@@ -94,6 +105,17 @@ describe('download thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
     )
+
+    // insert interrogations in data store, setting them as not updated locally
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro1,
+      hasBeenUpdated: false,
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro2,
+      hasBeenUpdated: false,
+    })
 
     // Check interrogation actions
     const downloadInterrogationCalls = mockDispatch.mock.calls.filter(

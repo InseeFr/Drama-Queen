@@ -212,7 +212,10 @@ export const thunks = {
 
         prInterrogations = Promise.all(
           interrogations.map((interrogation) => {
-            dataStore.updateInterrogation(interrogation)
+            dataStore.updateInterrogation({
+              ...interrogation,
+              hasBeenUpdated: false,
+            })
             if (
               questionnaireIdsInSuccess.includes(interrogation.questionnaireId)
             ) {
