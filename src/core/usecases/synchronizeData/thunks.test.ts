@@ -769,3 +769,187 @@ describe('upload thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
   })
 })
+
+describe('cleanupInterrogations thunk', () => {
+  // Base test data to avoid duplication
+  const baseInterrogations = [
+    {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    },
+    {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    },
+  ]
+
+  beforeEach(() => {
+    vi.resetModules()
+    vi.restoreAllMocks()
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+    localStorage.clear()
+  })
+
+  it('should delete differential interrogations', async () => {
+    // GIVEN: local storage contains interro1 and interro2, database contains interro1, interro2, and interro3 (orphan)
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    const allInterrogations = [
+      {
+        id: 'interro1',
+        questionnaireId: 'q1',
+        data: {},
+      },
+      {
+        id: 'interro2',
+        questionnaireId: 'q2',
+        data: {},
+      },
+      {
+        id: 'interro3',
+        questionnaireId: 'q3',
+        data: {},
+      }, // This should be deleted as it's not in local storage
+    ]
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should be called only for the orphan interrogation (interro3)
+    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledTimes(1)
+    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledWith('interro3')
+
+    // AND: deleteInterrogation should NOT be called for interrogations that are in local storage
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalledWith(
+      'interro1',
+    )
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalledWith(
+      'interro2',
+    )
+  })
+
+  it('should do nothing when no interrogations to delete', async () => {
+    // GIVEN: local storage and database contain the same interrogations
+    const allInterrogations = [...baseInterrogations] // Use base interrogations
+
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(allInterrogations.map((i) => i.id)),
+    )
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle empty local storage', async () => {
+    // GIVEN: local storage is empty (no SYNCHRONIZATION_INTERROGATION_IDS key)
+    // Database contains some interrogations
+    const allInterrogations = [...baseInterrogations]
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle empty database', async () => {
+    // GIVEN: local storage contains interrogation IDs
+    // Database is empty
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    // Mock empty database
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle errors during cleanup', async () => {
+    // GIVEN: local storage contains interrogation IDs
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    // Mock database error
+    vi.mocked(mockDataStore.getAllInterrogations).mockRejectedValue(
+      new Error('Database error'),
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    // THEN: it should throw an error
+    await expect(() =>
+      thunks.cleanupInterrogations()(
+        mockDispatch,
+        mockGetState,
+        mockContext as any,
+      ),
+    ).rejects.toThrowError('Database error')
+  })
+})

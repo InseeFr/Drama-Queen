@@ -34,6 +34,7 @@ export const thunks = {
       await dispatch(thunks.resetMoved())
     }
     await dispatch(thunks.upload())
+    await dispatch(thunks.cleanupInterrogations())
     await dispatch(thunks.download())
     dispatch(actions.syncCompleted())
   },
@@ -377,6 +378,52 @@ export const thunks = {
       localSyncStorage.addError(true)
       clearInterrogationIds()
       dispatch(actions.downloadFailed())
+      throw error
+    }
+  },
+
+  // Clean up interrogations by removing those not in local storage
+  cleanupInterrogations: () => async (_dispatch, _getState, context) => {
+    const { dataStore } = context
+
+    try {
+      // Get interrogation IDs from local storage (provided by pilotage)
+      const localStorageInterrogationIds = getInterrogationIds()
+
+      // No interrogation IDs found in local storage, skipping cleanup
+      if (!localStorageInterrogationIds) {
+        return
+      }
+
+      // Get all interrogations from the browser questionnaire database (indexedDB)
+      const allInterrogations = await dataStore.getAllInterrogations()
+
+      // No interrogations found in database, skipping cleanup'
+      if (!allInterrogations || allInterrogations.length === 0) {
+        return
+      }
+
+      // Create a Set of IDs from local storage for faster lookup
+      const localStorageIdsSet = new Set(localStorageInterrogationIds)
+
+      // Find interrogations that are in the database but not in local storage
+      const interrogationsToDelete = allInterrogations.filter(
+        (interrogation) => !localStorageIdsSet.has(interrogation.id),
+      )
+
+      // No differential interrogations found, skipping cleanup
+      if (interrogationsToDelete.length === 0) {
+        return
+      }
+
+      // Delete the differential interrogations
+      await Promise.all(
+        interrogationsToDelete.map((interrogation) =>
+          dataStore.deleteInterrogation(interrogation.id),
+        ),
+      )
+    } catch (error) {
+      console.error('Error during interrogation cleanup:', error)
       throw error
     }
   },
