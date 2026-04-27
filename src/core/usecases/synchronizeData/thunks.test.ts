@@ -4,9 +4,10 @@ import {
   TELEMETRY_EVENT_EXIT_SOURCE,
   TELEMETRY_EVENT_TYPE,
 } from '@/constants/telemetry'
-import type { Interrogation, Paradata } from '@/core/model'
+import type { Interrogation, LocalInterrogation, Paradata } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { LocalSyncStorage } from '@/core/ports/LocalSyncStorage'
+import { interrogationFromLocalInterrogation } from '@/utils/interrogation'
 
 import { type State } from './state'
 import { actions } from './state'
@@ -82,9 +83,20 @@ describe('download thunk', () => {
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q1',
+      data: {},
+    }
+
     vi.mocked(mockQueenApi.getInterrogation)
-      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q1' })
+      .mockResolvedValueOnce(interro1)
+      .mockResolvedValueOnce(interro2)
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
@@ -93,6 +105,17 @@ describe('download thunk', () => {
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
     )
+
+    // insert interrogations in data store, setting them as not updated locally
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro1,
+      hasBeenUpdated: false,
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro2,
+      hasBeenUpdated: false,
+    })
 
     // Check interrogation actions
     const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
@@ -394,7 +417,7 @@ describe('upload thunk', () => {
     vi.clearAllMocks()
   })
 
-  it('should upload interrogations successfully', async () => {
+  it('should only upload interrogations that have been updated locally', async () => {
     // override global mock value for enable telemetry
     vi.doMock('@/core/constants', () => ({
       IS_TELEMETRY_ENABLED: true,
@@ -402,12 +425,40 @@ describe('upload thunk', () => {
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
-    const interrogations = [{ id: '1' }, { id: '2' }]
+    const interrogations: LocalInterrogation[] = [
+      {
+        id: '1',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: true,
+      },
+      {
+        id: '2',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: false,
+      },
+      {
+        id: '3',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: true,
+      },
+      {
+        id: '4',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      }, // undefined `hasBeenUpdated` should be treated as true
+    ]
+
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
-      interrogations as Interrogation[],
+      interrogations as LocalInterrogation[],
     )
     vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
     // no paradata
     vi.mocked(mockDataStore.getAllParadata).mockResolvedValue([])
 
@@ -418,11 +469,22 @@ describe('upload thunk', () => {
     const uploadInterrogationCalls = mockDispatch.mock.calls.filter(
       ([action]) => action.type === actions.uploadInterrogationCompleted().type,
     )
-    expect(uploadInterrogationCalls).toHaveLength(2)
+    expect(uploadInterrogationCalls).toHaveLength(3)
+
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledTimes(3)
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[0]),
+    )
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[2]),
+    )
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[3]),
+    )
 
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.setUploadTotalInterrogation({
-        totalInterrogation: interrogations.length,
+        totalInterrogation: 3,
       }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
@@ -431,14 +493,45 @@ describe('upload thunk', () => {
      * Cannot do directly expect(mockDispatch).toHaveBeenCalledWith(thunks.download())
      * since it considers it has been called with [AsyncFunction (anonymous)]
      */
-    expect(mockDispatch).toHaveBeenCalledTimes(6)
+    expect(mockDispatch).toHaveBeenCalledTimes(7)
+  })
+
+  it('should set interrogations as not updated after successful upload', async () => {
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
+      interrogation,
+    ])
+    vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue([])
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    // Should set interrogation locally as not updated
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interrogation,
+      hasBeenUpdated: false,
+    })
   })
 
   it('should handle interrogation upload failure and retry posting to temp zone', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
+
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
@@ -448,7 +541,7 @@ describe('upload thunk', () => {
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
-      interrogation,
+      interrogationFromLocalInterrogation(interrogation),
     )
     expect(
       mockLocalSyncStorage.addIdToInterrogationsInTempZone,
@@ -457,25 +550,32 @@ describe('upload thunk', () => {
   })
 
   it('should treat 423 response for interrogation as a success', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 423 },
     })
 
     vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('1')
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     // Expect it to continue as if it were a success
     expect(mockQueenApi.postInterrogationInTemp).not.toHaveBeenCalled()
-    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledWith(
-      interrogation.id,
-    )
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interrogation,
+      hasBeenUpdated: false,
+    })
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.uploadInterrogationCompleted(),
     )
@@ -498,7 +598,13 @@ describe('upload thunk', () => {
   })
 
   it('should delete paradata without sending it when interrogation upload fails', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
     const allParadata: Paradata[] = [
       {
         idInterrogation: '1',
@@ -514,7 +620,7 @@ describe('upload thunk', () => {
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
@@ -527,7 +633,7 @@ describe('upload thunk', () => {
 
     // The post to temp should happen
     expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
-      interrogation,
+      interrogationFromLocalInterrogation(interrogation),
     )
     // The paradata for this interrogation should be deleted
     expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(interrogation.id)

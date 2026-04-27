@@ -37,13 +37,16 @@ describe('createDataStore', () => {
       // Insert all surveyUnits in surveyUnit table
       await dbV2.table('surveyUnit').bulkPut(surveyUnits)
 
+      // Close the database before applying the migration
+      dbV2.close()
+
       // Create new data store to trigger migration to latest version
       const store = createDataStore()
 
       // Check all surveyUnits have been migrated into interrogations in interrogation table
       const interrogations = await store.getAllInterrogations()
       expect(interrogations).toEqual(surveyUnits)
-    })
+    }, 30000) // 30 seconds timeout for this stress test
   })
 
   describe('Dexie migration v3 → latest version', () => {
@@ -65,6 +68,9 @@ describe('createDataStore', () => {
       }
 
       await dbV3.table('interrogation').put(interrogation)
+
+      // Close the database before applying the migration
+      dbV3.close()
 
       // Create new data store to trigger migration
       const store = createDataStore()
@@ -102,6 +108,9 @@ describe('createDataStore', () => {
       // Check paradata table does not exist in v4 db
       const tableNames = dbV4.tables.map((t) => t.name)
       expect(tableNames).not.toContain('paradata')
+
+      // Close the database before applying the migration
+      dbV4.close()
 
       // Create new data store to trigger migration
       const store = createDataStore()

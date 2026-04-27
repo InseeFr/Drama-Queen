@@ -13,6 +13,7 @@ import {
   getOldExternalCacheNames,
   getResourcesFromExternalQuestionnaire,
 } from '@/core/tools/externalResources'
+import { interrogationFromLocalInterrogation } from '@/utils/interrogation'
 
 import { actions, name } from './state'
 
@@ -211,7 +212,10 @@ export const thunks = {
 
         prInterrogations = Promise.all(
           interrogations.map((interrogation) => {
-            dataStore.updateInterrogation(interrogation)
+            dataStore.updateInterrogation({
+              ...interrogation,
+              hasBeenUpdated: false,
+            })
             if (
               questionnaireIdsInSuccess.includes(interrogation.questionnaireId)
             ) {
@@ -410,51 +414,68 @@ export const thunks = {
         const deletedParadataIds = new Set<string>()
 
         if (interrogations) {
+          // Filter interrogations to only upload those that have been updated
+          const interrogationsToUpload = interrogations.filter(
+            (interrogation) => (interrogation.hasBeenUpdated ?? true) === true,
+          )
+
           dispatch(
             actions.setUploadTotalInterrogation({
-              totalInterrogation: interrogations.length ?? 0,
+              totalInterrogation: interrogationsToUpload.length ?? 0,
             }),
           )
 
-          const interrogationPromises = interrogations.map((interrogation) =>
-            queenApi
-              .putInterrogation(interrogation)
-              .catch((error: AxiosError) => {
-                // handle response 423 as a success
-                if (error.response!.status === 423) {
-                  return Promise.resolve()
-                }
-                if (
-                  error.response &&
-                  [400, 403, 404, 500].includes(error.response.status)
-                ) {
-                  return queenApi
-                    .postInterrogationInTemp(interrogation)
-                    .then(() => {
-                      localSyncStorage.addIdToInterrogationsInTempZone(
-                        interrogation.id,
-                      )
-                      dataStore.deleteParadata(interrogation.id)
-                      deletedParadataIds.add(interrogation.id)
-                    })
-                    .catch((postError: Error) => {
-                      console.error(
-                        'Error: Unable to post interrogation in tempZone',
-                        postError,
-                      )
-                      throw postError
-                    })
-                }
-                throw error
-              })
-              .then(() => dataStore.deleteInterrogation(interrogation.id))
-              .then(() => {
-                dispatch(actions.uploadInterrogationCompleted())
-              })
-              .catch((error) => {
-                console.error('Error: Unable to upload data', error)
-                throw error
-              }),
+          const interrogationPromises = interrogationsToUpload.map(
+            (localInterrogation) => {
+              // Create a copy of the interrogation without the hasBeenUpdated field for API
+              const interrogation =
+                interrogationFromLocalInterrogation(localInterrogation)
+
+              return queenApi
+                .putInterrogation(interrogation)
+                .catch((error: AxiosError) => {
+                  // handle response 423 as a success
+                  if (error.response!.status === 423) {
+                    return Promise.resolve()
+                  }
+                  if (
+                    error.response &&
+                    [400, 403, 404, 500].includes(error.response.status)
+                  ) {
+                    return queenApi
+                      .postInterrogationInTemp(interrogation)
+                      .then(() => {
+                        localSyncStorage.addIdToInterrogationsInTempZone(
+                          interrogation.id,
+                        )
+                        dataStore.deleteParadata(interrogation.id)
+                        deletedParadataIds.add(interrogation.id)
+                      })
+                      .catch((postError: Error) => {
+                        console.error(
+                          'Error: Unable to post interrogation in tempZone',
+                          postError,
+                        )
+                        throw postError
+                      })
+                  }
+                  throw error
+                })
+                .then(() => {
+                  // Set locally the interrogation as not updated after successful upload.
+                  return dataStore.updateInterrogation({
+                    ...localInterrogation,
+                    hasBeenUpdated: false,
+                  })
+                })
+                .then(() => {
+                  dispatch(actions.uploadInterrogationCompleted())
+                })
+                .catch((error) => {
+                  console.error('Error: Unable to upload data', error)
+                  throw error
+                })
+            },
           )
           await Promise.all(interrogationPromises)
         }
