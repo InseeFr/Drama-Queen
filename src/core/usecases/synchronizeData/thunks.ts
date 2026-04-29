@@ -143,48 +143,72 @@ export const thunks = {
           (interrogation) => interrogation.id,
         )
 
-        // create list of interrogation ids that are not currently in local datastore
+        // create list of expected interrogation ids that are already in local datastore
+        const existingInterrogationIds = expectedInterrogationIds.filter((id) =>
+          localInterrogationIds.includes(id),
+        )
+
+        // create list of expected interrogation ids that are not already in local datastore
         const newInterrogationIds = expectedInterrogationIds.filter(
           (id) => !localInterrogationIds.includes(id),
         )
 
         dispatch(
           actions.updateDownloadTotalInterrogation({
-            totalInterrogation: newInterrogationIds.length,
+            totalInterrogation: expectedInterrogationIds.length,
           }),
         )
 
         // get only new interrogations
-        const newInterrogations = await Promise.all(
-          newInterrogationIds.map((id) =>
-            queenApi.getInterrogation(id).catch((error) => {
-              if (
-                error instanceof AxiosError &&
-                error.response &&
-                [400, 403, 404, 500].includes(error.response.status)
-              ) {
-                console.error(
-                  `An error occurred while fetching interrogation : ${id}, synchronization continue`,
-                  error,
-                )
-                return
-              }
-              throw error
-            }),
-          ),
-        )
-
-        const interrogations = newInterrogations.filter(
+        const newInterrogations = (
+          await Promise.all(
+            newInterrogationIds.map((id) =>
+              queenApi.getInterrogation(id).catch((error) => {
+                if (
+                  error instanceof AxiosError &&
+                  error.response &&
+                  [400, 403, 404, 500].includes(error.response.status)
+                ) {
+                  console.error(
+                    `An error occurred while fetching interrogation : ${id}, synchronization continue`,
+                    error,
+                  )
+                  return
+                }
+                throw error
+              }),
+            ),
+          )
+        ).filter(
           (interrogation): interrogation is Interrogation => !!interrogation,
         )
+
+        /*
+         * update existing interrogations
+         */
+
+        // get actualized link between interrogation*questionnaire for interrogations that are already in local datastore
+        const existingInterrogationsQuestionnairesIds =
+          existingInterrogationIds.length > 0
+            ? await queenApi.getInterrogationsQuestionnaireLink(
+                existingInterrogationIds,
+              )
+            : [] // avoid unnecessary api call
+
+        // get actualized questionnaire ids for interrogations that are already in local datastore
+        const existingQuestionnaireIds =
+          existingInterrogationsQuestionnairesIds.map(
+            (interrogation) => interrogation.questionnaireId,
+          )
 
         /*
          * questionnaires
          */
 
-        const questionnaireIds = deduplicate(
-          interrogations.map(({ questionnaireId }) => questionnaireId),
-        )
+        const questionnaireIds = deduplicate([
+          ...newInterrogations.map(({ questionnaireId }) => questionnaireId),
+          ...existingQuestionnaireIds,
+        ])
 
         const questionnaireResults = await Promise.all(
           questionnaireIds.map((questionnaireId) =>
@@ -222,18 +246,53 @@ export const thunks = {
          * store interrogations
          */
 
-        prInterrogations = Promise.all(
-          interrogations.map((interrogation) => {
-            dataStore.updateInterrogation({
-              ...interrogation,
-              hasBeenUpdated: false,
-            })
+        // update questionnaireId for existing interrogations in local datastore
+        await Promise.all(
+          existingInterrogationsQuestionnairesIds.map(async (interrogation) => {
+            const localInterrogation = await dataStore.getInterrogation(
+              interrogation.interrogationId,
+            )
+            if (
+              localInterrogation &&
+              localInterrogation.questionnaireId !==
+                interrogation.questionnaireId
+            ) {
+              dataStore.updateInterrogation({
+                ...localInterrogation,
+                questionnaireId: interrogation.questionnaireId,
+              })
+            }
             if (
               questionnaireIdsInSuccess.includes(interrogation.questionnaireId)
             ) {
-              localSyncStorage.addIdToInterrogationsSuccess(interrogation.id)
+              localSyncStorage.addIdToInterrogationsSuccess(
+                interrogation.interrogationId,
+              )
             }
             dispatch(actions.downloadInterrogationCompleted())
+          }),
+        )
+
+        // store new interrogations
+        prInterrogations = Promise.all(
+          newInterrogations.map((interrogation) => {
+            return dataStore
+              .updateInterrogation({
+                ...interrogation,
+                hasBeenUpdated: false,
+              })
+              .then(() => {
+                if (
+                  questionnaireIdsInSuccess.includes(
+                    interrogation.questionnaireId,
+                  )
+                ) {
+                  localSyncStorage.addIdToInterrogationsSuccess(
+                    interrogation.id,
+                  )
+                }
+                dispatch(actions.downloadInterrogationCompleted())
+              })
           }),
         )
       } else {

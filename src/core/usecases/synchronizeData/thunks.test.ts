@@ -24,6 +24,7 @@ const mockGetState: () => {
 
 const mockDataStore = {
   getAllInterrogations: vi.fn(),
+  getInterrogation: vi.fn(),
   updateInterrogation: vi.fn(),
   deleteInterrogation: vi.fn(),
   getAllParadata: vi.fn(),
@@ -35,6 +36,7 @@ const mockQueenApi = {
   getQuestionnaire: vi.fn(),
   getInterrogationsIdsAndQuestionnaireIdsByCampaign: vi.fn(),
   getInterrogation: vi.fn(),
+  getInterrogationsQuestionnaireLink: vi.fn(),
   putInterrogation: vi.fn(),
   postInterrogationInTemp: vi.fn(),
   fetchMoved: vi.fn(),
@@ -66,7 +68,7 @@ describe('download thunk', () => {
   })
 
   afterEach(() => {
-    vi.clearAllMocks()
+    vi.resetAllMocks()
     localStorage.clear()
   })
 
@@ -76,9 +78,10 @@ describe('download thunk', () => {
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
+    // Set expected interrogation to have locally
     localStorage.setItem(
       'SYNCHRONIZATION_INTERROGATION_IDS',
-      JSON.stringify(['interro1', 'interro2', 'interro3']),
+      JSON.stringify(['interro1', 'interro3']),
     )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
@@ -98,39 +101,41 @@ describe('download thunk', () => {
       questionnaireId: 'q1',
       data: {},
     }
-    const interro4: Interrogation = {
-      id: 'interro4',
-      questionnaireId: 'q1',
-      data: {},
-    }
 
-    // Mock that interro1 already exists in local datastore, but interro2 and interro4 are new
-    const existingInterrogations = [interro1, interro4]
+    // Mock that interro1 are already exists in local datastore, but interro3 is new
+    const existingInterrogations = [interro1, interro2]
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
       existingInterrogations,
     )
 
-    // Fetch only interro2 & interro3 (interro1 is already local)
-    vi.mocked(mockQueenApi.getInterrogation)
-      .mockResolvedValueOnce(interro2)
-      .mockResolvedValueOnce(interro3)
+    vi.mocked(mockDataStore.getInterrogation).mockResolvedValueOnce(interro1)
+
+    // Fetch only interro3 (interro1 is already local, interro2 is not expected)
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValueOnce(interro3)
+
+    // No change of questionnaire for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+    ])
+
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro3')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
 
-    // Total interrogation to download : interrogations that are fetched
+    // Total interrogation to process during download step : expected interrogations (new & existing ones)
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
     )
 
-    // Insert new interrogations in local datastore
-    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
-    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
-      ...interro2,
-      hasBeenUpdated: false,
-    })
+    // Insert new interrogation in local datastore
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(1)
     expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
       ...interro3,
       hasBeenUpdated: false,
@@ -145,19 +150,16 @@ describe('download thunk', () => {
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
 
-    // Only the new interrogation should be marked as success
+    // Only the expected interrogations should be marked as success
     expect(
       mockLocalSyncStorage.addIdToInterrogationsSuccess,
-    ).toHaveBeenCalledWith('interro2')
+    ).toHaveBeenCalledTimes(2)
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
     expect(
       mockLocalSyncStorage.addIdToInterrogationsSuccess,
     ).toHaveBeenCalledWith('interro3')
-    expect(
-      mockLocalSyncStorage.addIdToInterrogationsSuccess,
-    ).not.toHaveBeenCalledWith('interro1')
-    expect(
-      mockLocalSyncStorage.addIdToInterrogationsSuccess,
-    ).not.toHaveBeenCalledWith('interro4')
 
     // Ensure the list of interrogation ids is cleared from local storage
     expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
@@ -193,7 +195,13 @@ describe('download thunk', () => {
     vi.mocked(mockQueenApi.getInterrogation)
       .mockResolvedValueOnce(interro1)
       .mockResolvedValueOnce(interro2)
+
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    // Mock successful updateInterrogation responses
+    vi.mocked(mockDataStore.updateInterrogation)
+      .mockResolvedValue('interro1')
+      .mockResolvedValue('interro2')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
@@ -234,7 +242,7 @@ describe('download thunk', () => {
     expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
   })
 
-  it('should successfully download questionnaires', async () => {
+  it('should update existing interrogations with new questionnaire IDs', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
@@ -247,21 +255,143 @@ describe('download thunk', () => {
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
-    vi.mocked(mockQueenApi.getInterrogation)
-      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
+    const existingInterro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1-old',
+      data: {},
+    }
+    const existingInterro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2-old',
+      data: {},
+    }
+
+    // Mock that both interrogations already exist in local datastore
+    const existingInterrogations = [existingInterro1, existingInterro2]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    vi.mocked(mockDataStore.getInterrogation)
+      .mockResolvedValueOnce(existingInterro1)
+      .mockResolvedValueOnce(existingInterro2)
+
+    // Mock that no new interrogations are fetched (empty array)
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValue(undefined)
+
+    // Mock the new API call to get updated questionnaire IDs for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1-new' },
+      { interrogationId: 'interro2', questionnaireId: 'q2-new' },
+    ])
+
+    vi.mocked(mockQueenApi.getQuestionnaire)
+      .mockResolvedValueOnce({ id: 'q1-new' })
+      .mockResolvedValueOnce({ id: 'q2-new' })
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
+    )
+
+    // Should update existing interrogations with new questionnaire IDs
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...existingInterro1,
+      questionnaireId: 'q1-new',
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...existingInterro2,
+      questionnaireId: 'q2-new',
+    })
+
+    // Check interrogation actions
+    const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) =>
+        action.type === actions.downloadInterrogationCompleted().type,
+    )
+    expect(downloadInterrogationCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+    // Check questionnaire actions
+    const downloadQuestionnaireCalls = mockDispatch.mock.calls.filter(
+      ([action]) => action.type === actions.downloadSurveyCompleted().type,
+    )
+    expect(mockQueenApi.getQuestionnaire).toHaveBeenCalledTimes(2)
+    expect(downloadQuestionnaireCalls).toHaveLength(2)
+
+    // Ensure the local sync storage actions were called
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro2')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  it('should successfully download questionnaires for new interrogations', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    }
+
+    // Mock that interro1 already exists in local datastore, but  interro3 is new
+    const existingInterrogations = [interro1]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValueOnce(interro2)
+
+    // No change of questionnaire for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+    ])
+
     vi.mocked(mockQueenApi.getQuestionnaire)
       .mockResolvedValue({ id: 'q1' })
       .mockResolvedValue({ id: 'q2' })
+
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro2')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
 
-    // Check interrogation actions
+    // Check questionnaire actions
     const downloadQuestionnaireCalls = mockDispatch.mock.calls.filter(
       ([action]) => action.type === actions.downloadSurveyCompleted().type,
     )
+    expect(mockQueenApi.getQuestionnaire).toHaveBeenCalledTimes(2)
     expect(downloadQuestionnaireCalls).toHaveLength(2)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
@@ -287,6 +417,31 @@ describe('download thunk', () => {
     )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
+
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    }
+
+    // Mock that interro1 already exists in local datastore, but  interro3 is new
+    const existingInterrogations = [interro1, interro2]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    // No change of questionnaire for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+      { interrogationId: 'interro2', questionnaireId: 'q2' },
+    ])
 
     vi.mocked(mockQueenApi.getInterrogation)
       .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
@@ -331,6 +486,8 @@ describe('download thunk', () => {
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
@@ -356,13 +513,15 @@ describe('download thunk', () => {
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
     vi.mocked(mockQueenApi.getInterrogation).mockRejectedValue(
       new Error('Failed to fetch interrogation'),
     )
 
     await expect(() =>
       thunks.download()(mockDispatch, mockGetState, mockContext as any),
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
 
     expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
