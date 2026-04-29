@@ -2,6 +2,7 @@ import { createSelector, createUsecaseActions } from 'redux-clean-architecture'
 import { id } from 'tsafe/id'
 
 import type { State as RootState, Thunks } from '@/core/bootstrap'
+import type { LocalInterrogation } from '@/core/model'
 import i18n from '@/libs/i18n'
 
 /**
@@ -52,7 +53,14 @@ export const thunks = {
         const interrogation = await queenApi.syncInterrogation(
           params.interrogationId,
         )
-        await dataStore.updateInterrogation(interrogation)
+
+        // Set hasBeenUpdated flag when taking control of an interrogation
+        const updatedInterrogation: LocalInterrogation = {
+          ...interrogation,
+          hasBeenUpdated: true,
+        }
+
+        await dataStore.updateInterrogation(updatedInterrogation)
         dispatch(actions.finished())
       } catch (e) {
         dispatch(actions.fail(e as Error))
