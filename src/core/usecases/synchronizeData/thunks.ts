@@ -276,16 +276,23 @@ export const thunks = {
         // store new interrogations
         prInterrogations = Promise.all(
           newInterrogations.map((interrogation) => {
-            dataStore.updateInterrogation({
-              ...interrogation,
-              hasBeenUpdated: false,
-            })
-            if (
-              questionnaireIdsInSuccess.includes(interrogation.questionnaireId)
-            ) {
-              localSyncStorage.addIdToInterrogationsSuccess(interrogation.id)
-            }
-            dispatch(actions.downloadInterrogationCompleted())
+            return dataStore
+              .updateInterrogation({
+                ...interrogation,
+                hasBeenUpdated: false,
+              })
+              .then(() => {
+                if (
+                  questionnaireIdsInSuccess.includes(
+                    interrogation.questionnaireId,
+                  )
+                ) {
+                  localSyncStorage.addIdToInterrogationsSuccess(
+                    interrogation.id,
+                  )
+                }
+                dispatch(actions.downloadInterrogationCompleted())
+              })
           }),
         )
       } else {

@@ -122,6 +122,9 @@ describe('download thunk', () => {
 
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
 
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro3')
+
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
@@ -194,6 +197,11 @@ describe('download thunk', () => {
       .mockResolvedValueOnce(interro2)
 
     vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    // Mock successful updateInterrogation responses
+    vi.mocked(mockDataStore.updateInterrogation)
+      .mockResolvedValue('interro1')
+      .mockResolvedValue('interro2')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
@@ -371,6 +379,9 @@ describe('download thunk', () => {
     vi.mocked(mockQueenApi.getQuestionnaire)
       .mockResolvedValue({ id: 'q1' })
       .mockResolvedValue({ id: 'q2' })
+
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro2')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
