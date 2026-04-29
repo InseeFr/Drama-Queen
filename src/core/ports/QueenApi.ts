@@ -2,6 +2,7 @@ import type {
   Campaign,
   IdAndQuestionnaireId,
   Interrogation,
+  InterrogationAndQuestionnaireId,
   Nomenclature,
   Paradata,
   Questionnaire,
@@ -19,6 +20,9 @@ export type QueenApi = {
    * /api/survey-units/interviewer
    */
   getInterrogations: () => Promise<Interrogation[]>
+  getInterrogationsQuestionnaireLink: (
+    interrogationIds: string[],
+  ) => Promise<InterrogationAndQuestionnaireId[]>
   getInterrogation: (idInterrogation: string) => Promise<Interrogation>
   putInterrogation: (interrogation: Interrogation) => Promise<void>
   syncInterrogation: (idInterrogation: string) => Promise<Interrogation>
