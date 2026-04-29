@@ -130,22 +130,33 @@ export const thunks = {
       let questionnaires: LunaticSource[] = []
       let prInterrogations
 
-      // get interrogation ids from local storage
-      const interrogationIds = getInterrogationIds()
+      // get expected interrogation ids from local storage
+      const expectedInterrogationIds = getExpectedInterrogationIds()
 
-      if (interrogationIds) {
+      if (expectedInterrogationIds) {
         /*
-         * get interrogations
+         * get new interrogations
          */
+
+        const localInterrogations = await dataStore.getAllInterrogations()
+        const localInterrogationIds = localInterrogations?.map(
+          (interrogation) => interrogation.id,
+        )
+
+        // create list of interrogation ids that are not currently in local datastore
+        const newInterrogationIds = expectedInterrogationIds.filter(
+          (id) => !localInterrogationIds.includes(id),
+        )
 
         dispatch(
           actions.updateDownloadTotalInterrogation({
-            totalInterrogation: interrogationIds.length,
+            totalInterrogation: newInterrogationIds.length,
           }),
         )
 
-        const interrogationsToProcess = await Promise.all(
-          interrogationIds.map((id) =>
+        // get only new interrogations
+        const newInterrogations = await Promise.all(
+          newInterrogationIds.map((id) =>
             queenApi.getInterrogation(id).catch((error) => {
               if (
                 error instanceof AxiosError &&
@@ -163,7 +174,7 @@ export const thunks = {
           ),
         )
 
-        const interrogations = interrogationsToProcess.filter(
+        const interrogations = newInterrogations.filter(
           (interrogation): interrogation is Interrogation => !!interrogation,
         )
 
@@ -388,7 +399,7 @@ export const thunks = {
 
     try {
       // Get interrogation IDs from local storage (provided by pilotage)
-      const localStorageInterrogationIds = getInterrogationIds()
+      const localStorageInterrogationIds = getExpectedInterrogationIds()
 
       // No interrogation IDs found in local storage, skipping cleanup
       if (!localStorageInterrogationIds) {
@@ -582,7 +593,7 @@ function deduplicate<T>(items: (T | undefined)[]): T[] {
 /**
  * Get the list of interrogations ids from local storage
  */
-function getInterrogationIds() {
+function getExpectedInterrogationIds() {
   const localStorageInterrogationsValue = localStorage.getItem(
     INTERROGATIONS_LIST_LOCAL_STORAGE_KEY,
   )

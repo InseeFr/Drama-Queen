@@ -70,7 +70,100 @@ describe('download thunk', () => {
     localStorage.clear()
   })
 
-  it('should successfully download interrogations', async () => {
+  it('should only download new interrogations not already in local datastore', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2', 'interro3']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro3: Interrogation = {
+      id: 'interro3',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro4: Interrogation = {
+      id: 'interro4',
+      questionnaireId: 'q1',
+      data: {},
+    }
+
+    // Mock that interro1 already exists in local datastore, but interro2 and interro4 are new
+    const existingInterrogations = [interro1, interro4]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    // Fetch only interro2 & interro3 (interro1 is already local)
+    vi.mocked(mockQueenApi.getInterrogation)
+      .mockResolvedValueOnce(interro2)
+      .mockResolvedValueOnce(interro3)
+    vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+
+    // Total interrogation to download : interrogations that are fetched
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
+    )
+
+    // Insert new interrogations in local datastore
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro2,
+      hasBeenUpdated: false,
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro3,
+      hasBeenUpdated: false,
+    })
+
+    // Only new interrogations should be marked as completed
+    const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) =>
+        action.type === actions.downloadInterrogationCompleted().type,
+    )
+    expect(downloadInterrogationCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+    // Only the new interrogation should be marked as success
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro2')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro3')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).not.toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).not.toHaveBeenCalledWith('interro4')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  it('should download all interrogations when local datastore is empty', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
@@ -93,6 +186,9 @@ describe('download thunk', () => {
       questionnaireId: 'q1',
       data: {},
     }
+
+    // Mock that no interrogations exist in local datastore (both are new)
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
 
     vi.mocked(mockQueenApi.getInterrogation)
       .mockResolvedValueOnce(interro1)
