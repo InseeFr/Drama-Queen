@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.3.2",
+  "version": "3.4.0-rc-expose-app-version.0",
   "type": "module",
   "scripts": {
     "generate-routes": "tsr generate",
