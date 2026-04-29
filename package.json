@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.3.1-rc-synchronization-optimization.1",
+  "version": "3.3.1-rc-synchronization-optimization.2",
   "type": "module",
   "scripts": {
     "generate-routes": "tsr generate",
