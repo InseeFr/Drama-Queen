@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Authentication:
+  - retrive scopes for jwt token
+  - new env variable: `VITE_OIDC_SCOPES` (default value `"profile,roles"`)
+
 ## [3.3.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.3.2) - 2026-04-14
 
 ### Fixed
