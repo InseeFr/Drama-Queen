@@ -1,11 +1,11 @@
 import Dexie, { type Table } from 'dexie'
 
 import { mockPrefixIdInterrogation } from '@/core/adapters/queenApi/mock'
-import type { Interrogation, Paradata } from '@/core/model'
+import type { Interrogation, LocalInterrogation, Paradata } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 
 type Tables = {
-  interrogation: Table<Interrogation, string>
+  interrogation: Table<LocalInterrogation, string>
   paradata: Table<Paradata>
 }
 

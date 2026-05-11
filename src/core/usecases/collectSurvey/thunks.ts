@@ -1,6 +1,6 @@
 import type { Thunks } from '@/core/bootstrap'
 import { LUNATIC_MODEL_VERSION_BREAKING } from '@/core/constants'
-import type { Interrogation, Paradata } from '@/core/model'
+import type { Interrogation, LocalInterrogation, Paradata } from '@/core/model'
 import type { QuestionnaireState } from '@/core/model/QuestionnaireState'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
 import i18n from '@/libs/i18n'
@@ -60,7 +60,13 @@ export const thunks = {
     (...args) => {
       const [, , { dataStore }] = args
 
-      dataStore.updateInterrogation(interrogation).catch((error) => {
+      // Set hasBeenUpdated flag when saving data changes in collect mode
+      const updatedInterrogation: LocalInterrogation = {
+        ...interrogation,
+        hasBeenUpdated: true,
+      }
+
+      dataStore.updateInterrogation(updatedInterrogation).catch((error) => {
         console.error('Error updating or inserting record:', error)
       })
     },
