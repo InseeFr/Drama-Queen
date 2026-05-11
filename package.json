@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.3.1-rc-interrogations-questionnaire-link.0",
+  "version": "3.3.1-rc-interrogations-questionnaire-link.1",
   "type": "module",
   "scripts": {
     "generate-routes": "tsr generate",
