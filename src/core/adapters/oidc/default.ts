@@ -4,6 +4,10 @@ import type { Oidc } from '@/core/ports/Oidc'
 
 import { getMockedOidc } from './mock'
 
+const oidcScopes = (import.meta.env.VITE_OIDC_SCOPES || 'profile,roles').split(
+  ',',
+)
+
 export function createOidc(params: {
   issuerUri: string
   clientId: string
@@ -23,6 +27,7 @@ export function createOidc(params: {
           issuerUri,
           clientId,
           homeUrl: '/queen',
+          scopes: oidcScopes,
         })
       } catch (e) {
         console.error(e)
