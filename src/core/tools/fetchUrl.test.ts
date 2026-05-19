@@ -18,9 +18,7 @@ describe('fetchUrl', () => {
 
     const result = await fetchUrl<{ key: string }>({ url: mockUrl })
 
-    expect(axios.get).toHaveBeenCalledWith(decodeURIComponent(mockUrl), {
-      headers: undefined,
-    })
+    expect(axios.get).toHaveBeenCalledWith(decodeURIComponent(mockUrl))
 
     expect(result).toEqual(mockResponseData)
   })
@@ -33,8 +31,6 @@ describe('fetchUrl', () => {
 
     await expect(fetchUrl({ url: mockUrl })).rejects.toThrow(mockError)
 
-    expect(axios.get).toHaveBeenCalledWith(decodeURIComponent(mockUrl), {
-      headers: undefined,
-    })
+    expect(axios.get).toHaveBeenCalledWith(decodeURIComponent(mockUrl))
   })
 })

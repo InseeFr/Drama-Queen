@@ -51,6 +51,15 @@ export async function bootstrapCore(
     })
   })()
 
+  const getAccessToken = async () => {
+    const oidc = await getOidc()
+
+    if (!oidc.isUserLoggedIn) {
+      return undefined
+    }
+    return oidc.getTokens().accessToken
+  }
+
   const queenApi = await (async () => {
     if (apiUrl === '') {
       // When no apiUrl is provided, we use the mock
@@ -62,14 +71,7 @@ export async function bootstrapCore(
 
     return createApiClient({
       apiUrl,
-      getAccessToken: async () => {
-        const oidc = await getOidc()
-
-        if (!oidc.isUserLoggedIn) {
-          return undefined
-        }
-        return oidc.getTokens().accessToken
-      },
+      getAccessToken,
     })
   })()
 
@@ -83,16 +85,7 @@ export async function bootstrapCore(
     const { createVisualizeClient } =
       await import('@/core/adapters/visualizeClient/default')
 
-    return createVisualizeClient({
-      getAccessToken: async () => {
-        const oidc = await getOidc()
-
-        if (!oidc.isUserLoggedIn) {
-          return undefined
-        }
-        return oidc.getTokens().accessToken
-      },
-    })
+    return createVisualizeClient({ getAccessToken })
   })()
 
   const dataStore = await (async () => {
