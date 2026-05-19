@@ -9,7 +9,6 @@ import type {
   WrappedQuestionnaire,
 } from '@/core/model'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
-import { fetchUrl } from '@/core/tools/fetchUrl'
 import { makeSearchParamsObjSchema } from '@/core/tools/makeSearchParamsObjectSchema'
 import i18n from '@/libs/i18n'
 
@@ -24,12 +23,7 @@ export const thunks = {
     (params: { requestUrl: string }) =>
     async (...args) => {
       const { requestUrl } = params
-      const [, , { getOidc }] = args
-
-      const oidc = await getOidc()
-      const authHeaders: Record<string, string> = oidc.isUserLoggedIn
-        ? { Authorization: `Bearer ${oidc.getTokens().accessToken}` }
-        : {}
+      const [, , { visualizeClient }] = args
 
       const url = new URL(requestUrl)
       const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
@@ -54,23 +48,20 @@ export const thunks = {
 
       // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
       // We must accept it and unwrap it
-      const fetchedSource = await fetchUrl<
-        Questionnaire | WrappedQuestionnaire
-      >({
-        url: questionnaire,
-        headers: authHeaders,
-      }).catch((error) => {
-        if (
-          error instanceof AxiosError &&
-          error.response &&
-          [400, 403, 404, 500].includes(error.response.status)
-        ) {
-          throw new Error(
-            i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
-          )
-        }
-        throw error
-      })
+      const fetchedSource = await visualizeClient
+        .get<Questionnaire | WrappedQuestionnaire>(questionnaire)
+        .catch((error) => {
+          if (
+            error instanceof AxiosError &&
+            error.response &&
+            [400, 403, 404, 500].includes(error.response.status)
+          ) {
+            throw new Error(
+              i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+            )
+          }
+          throw error
+        })
 
       const isWrappedQuestionnaire = (
         source: Questionnaire | WrappedQuestionnaire,
@@ -99,14 +90,12 @@ export const thunks = {
       }
 
       const interrogation = data
-        ? await fetchUrl<Interrogation>({
-            url: data,
-            headers: authHeaders,
-          })
+        ? await visualizeClient.get<Interrogation>(data)
         : undefined
 
       const getReferentiel = nomenclature
-        ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
+        ? (name: string) =>
+            visualizeClient.get<Nomenclature>(nomenclature[name])
         : undefined
 
       return { source, interrogation, readonly, getReferentiel }

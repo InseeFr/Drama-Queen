@@ -3,6 +3,7 @@ import { type GenericCore, createCore } from 'redux-clean-architecture'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { Oidc } from '@/core/ports/Oidc'
 import type { QueenApi } from '@/core/ports/QueenApi'
+import type { VisualizeClient } from '@/core/ports/VisualizeClient'
 
 import type { LocalSyncStorage } from './ports/LocalSyncStorage'
 import { usecases } from './usecases'
@@ -21,6 +22,7 @@ type Context = {
   paramsOfBootstrapCore: ParamsOfBootstrapCore
   getOidc: () => Promise<Oidc>
   queenApi: QueenApi
+  visualizeClient: VisualizeClient
   dataStore: DataStore
   localSyncStorage: LocalSyncStorage
 }
@@ -71,18 +73,38 @@ export async function bootstrapCore(
     })
   })()
 
+  const visualizeClient = await (async () => {
+    if (oidcParams === undefined || oidcParams.issuerUri === '') {
+      const { createVisualizeClient } =
+        await import('@/core/adapters/visualizeClient/mock')
+      return createVisualizeClient()
+    }
+
+    const { createVisualizeClient } =
+      await import('@/core/adapters/visualizeClient/default')
+
+    return createVisualizeClient({
+      getAccessToken: async () => {
+        const oidc = await getOidc()
+
+        if (!oidc.isUserLoggedIn) {
+          return undefined
+        }
+        return oidc.getTokens().accessToken
+      },
+    })
+  })()
+
   const dataStore = await (async () => {
-    const { createDataStore } = await import(
-      '@/core/adapters/datastore/default'
-    )
+    const { createDataStore } =
+      await import('@/core/adapters/datastore/default')
 
     return createDataStore()
   })()
 
   const localSyncStorage = await (async () => {
-    const { createLocalSyncStorage } = await import(
-      '@/core/adapters/localSyncStorage/default'
-    )
+    const { createLocalSyncStorage } =
+      await import('@/core/adapters/localSyncStorage/default')
 
     return createLocalSyncStorage({ localStorageKey: 'QUEEN_SYNC_RESULT' })
   })()
@@ -91,6 +113,7 @@ export async function bootstrapCore(
     paramsOfBootstrapCore: params,
     getOidc,
     queenApi,
+    visualizeClient,
     dataStore,
     localSyncStorage,
   }

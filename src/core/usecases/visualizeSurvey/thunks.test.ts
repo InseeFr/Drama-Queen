@@ -2,20 +2,16 @@ import { AxiosError } from 'axios'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
-import { fetchUrl } from '@/core/tools/fetchUrl'
 
 import { thunks } from './thunks'
-
-vi.mock('@/core/tools/fetchUrl', () => ({
-  fetchUrl: vi.fn(),
-}))
 
 vi.mock('@/core/tools/SurveyModelBreaking', () => ({
   isSurveyCompatibleWithQueen: vi.fn(),
 }))
 
+const mockGet = vi.fn()
 const mockContext = {
-  getOidc: vi.fn().mockResolvedValue({ isUserLoggedIn: false }),
+  visualizeClient: { get: mockGet },
 }
 
 describe('loader', () => {
@@ -34,8 +30,8 @@ describe('loader', () => {
     const questionnaire = { id: 'Q001' }
     const interrogation = { id: 'INTERRO001' }
 
-    vi.mocked(fetchUrl).mockImplementation(async ({ url }) => {
-      // since fetchUrl is called for both questionnaire and interrogation, needs to mock both results
+    mockGet.mockImplementation(async (url: string) => {
+      // since get is called for both questionnaire and interrogation, needs to mock both results
       if (url.includes('interrogation')) return interrogation
       return questionnaire
     })
@@ -52,7 +48,7 @@ describe('loader', () => {
   it('should handle a wrapped questionnaire', async () => {
     const requestUrl = 'http://example.com?questionnaire=my-questionnaire'
     const wrappedQuestionnaire = { value: { id: 'Q001' } }
-    vi.mocked(fetchUrl).mockResolvedValue(wrappedQuestionnaire)
+    mockGet.mockResolvedValue(wrappedQuestionnaire)
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
 
     const result = await thunks.loader({ requestUrl })(
@@ -73,7 +69,7 @@ describe('loader', () => {
       cities: 'https://nomenclature.com/cities',
     }
 
-    vi.mocked(fetchUrl).mockImplementation(async ({ url }) => {
+    mockGet.mockImplementation(async (url: string) => {
       // needs to mock result for interrogation & questionnaire to avoid the early fetch errors
       if (url.includes('interrogation')) return interrogation
       if (url.includes('questionnaire')) return questionnaire
@@ -89,14 +85,10 @@ describe('loader', () => {
     )
 
     await result?.getReferentiel!('countries')
-    expect(fetchUrl).toHaveBeenCalledWith({
-      url: nomenclatureParam.countries,
-    })
+    expect(mockGet).toHaveBeenCalledWith(nomenclatureParam.countries)
 
     await result?.getReferentiel!('cities')
-    expect(fetchUrl).toHaveBeenCalledWith({
-      url: nomenclatureParam.cities,
-    })
+    expect(mockGet).toHaveBeenCalledWith(nomenclatureParam.cities)
   })
 
   it('should return null if questionnaire is missing', async () => {
@@ -114,7 +106,7 @@ describe('loader', () => {
     const axiosError = new AxiosError('Request failed')
     axiosError.response = { status: 404 } as any
 
-    vi.mocked(fetchUrl).mockRejectedValue(axiosError)
+    mockGet.mockRejectedValue(axiosError)
 
     await expect(
       thunks.loader({ requestUrl })(
@@ -127,7 +119,7 @@ describe('loader', () => {
 
   it('should throw an error if the questionnaire is not compatible', async () => {
     const requestUrl = 'http://example.com?questionnaire=my-questionnaire'
-    vi.mocked(fetchUrl).mockResolvedValue({ id: 'Q001' })
+    mockGet.mockResolvedValue({ id: 'Q001' })
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(false)
 
     await expect(
