@@ -20,77 +20,95 @@ export const name = 'visualizeSurvey'
 export const reducer = null
 
 export const thunks = {
-  loader: (params: { requestUrl: string }) => async () => {
-    const { requestUrl } = params
-    const url = new URL(requestUrl)
-    const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
-      url.searchParams,
-    )
+  loader:
+    (params: { requestUrl: string }) =>
+    async (...args) => {
+      const { requestUrl } = params
+      const [, , { getOidc }] = args
 
-    if (!result.success) {
-      console.error(result.error)
-      return null
-    }
+      const oidc = await getOidc()
+      const authHeaders: Record<string, string> = oidc.isUserLoggedIn
+        ? { Authorization: `Bearer ${oidc.getTokens().accessToken}` }
+        : {}
 
-    const { questionnaire, data, readonly = false, nomenclature } = result.data
+      const url = new URL(requestUrl)
+      const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
+        url.searchParams,
+      )
 
-    if (!questionnaire) {
-      return null
-    }
+      if (!result.success) {
+        console.error(result.error)
+        return null
+      }
 
-    // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
-    // We must accept it and unwrap it
-    const fetchedSource = await fetchUrl<Questionnaire | WrappedQuestionnaire>({
-      url: questionnaire,
-    }).catch((error) => {
-      if (
-        error instanceof AxiosError &&
-        error.response &&
-        [400, 403, 404, 500].includes(error.response.status)
-      ) {
-        throw new Error(
-          i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+      const {
+        questionnaire,
+        data,
+        readonly = false,
+        nomenclature,
+      } = result.data
+
+      if (!questionnaire) {
+        return null
+      }
+
+      // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
+      // We must accept it and unwrap it
+      const fetchedSource = await fetchUrl<
+        Questionnaire | WrappedQuestionnaire
+      >({
+        url: questionnaire,
+        headers: authHeaders,
+      }).catch((error) => {
+        if (
+          error instanceof AxiosError &&
+          error.response &&
+          [400, 403, 404, 500].includes(error.response.status)
+        ) {
+          throw new Error(
+            i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+          )
+        }
+        throw error
+      })
+
+      const isWrappedQuestionnaire = (
+        source: Questionnaire | WrappedQuestionnaire,
+      ): source is WrappedQuestionnaire => {
+        return (
+          typeof source === 'object' &&
+          Object.keys(source).length === 1 &&
+          'value' in source
         )
       }
-      throw error
-    })
 
-    const isWrappedQuestionnaire = (
-      source: Questionnaire | WrappedQuestionnaire,
-    ): source is WrappedQuestionnaire => {
-      return (
-        typeof source === 'object' &&
-        Object.keys(source).length === 1 &&
-        'value' in source
-      )
-    }
+      const source = isWrappedQuestionnaire(fetchedSource)
+        ? fetchedSource.value
+        : fetchedSource
 
-    const source = isWrappedQuestionnaire(fetchedSource)
-      ? fetchedSource.value
-      : fetchedSource
+      const isQuestionnaireCompatible = isSurveyCompatibleWithQueen({
+        questionnaire: source,
+      })
 
-    const isQuestionnaireCompatible = isSurveyCompatibleWithQueen({
-      questionnaire: source,
-    })
+      if (!isQuestionnaireCompatible) {
+        throw new Error(
+          i18n.t('error.questionnaireNotCompatible', {
+            versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
+          }),
+        )
+      }
 
-    if (!isQuestionnaireCompatible) {
-      throw new Error(
-        i18n.t('error.questionnaireNotCompatible', {
-          versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
-        }),
-      )
-    }
+      const interrogation = data
+        ? await fetchUrl<Interrogation>({
+            url: data,
+            headers: authHeaders,
+          })
+        : undefined
 
-    const interrogation = data
-      ? await fetchUrl<Interrogation>({
-          url: data,
-        })
-      : undefined
+      const getReferentiel = nomenclature
+        ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
+        : undefined
 
-    const getReferentiel = nomenclature
-      ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
-      : undefined
-
-    return { source, interrogation, readonly, getReferentiel }
-  },
+      return { source, interrogation, readonly, getReferentiel }
+    },
 } satisfies Thunks

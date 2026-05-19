@@ -14,6 +14,10 @@ vi.mock('@/core/tools/SurveyModelBreaking', () => ({
   isSurveyCompatibleWithQueen: vi.fn(),
 }))
 
+const mockContext = {
+  getOidc: vi.fn().mockResolvedValue({ isUserLoggedIn: false }),
+}
+
 describe('loader', () => {
   beforeEach(() => {
     // mock console.error to avoid useless logs during tests
@@ -37,9 +41,11 @@ describe('loader', () => {
     })
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
 
-    const result = await thunks.loader({
-      requestUrl: requestUrl,
-    })()
+    const result = await thunks.loader({ requestUrl })(
+      undefined as any,
+      undefined as any,
+      mockContext as any,
+    )
     expect(result?.interrogation).toEqual(interrogation)
   })
 
@@ -49,9 +55,11 @@ describe('loader', () => {
     vi.mocked(fetchUrl).mockResolvedValue(wrappedQuestionnaire)
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
 
-    const result = await thunks.loader({
-      requestUrl: requestUrl,
-    })()
+    const result = await thunks.loader({ requestUrl })(
+      undefined as any,
+      undefined as any,
+      mockContext as any,
+    )
     expect(result?.source).toEqual({ id: 'Q001' })
   })
 
@@ -74,9 +82,11 @@ describe('loader', () => {
 
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(true)
 
-    const result = await thunks.loader({
-      requestUrl: requestUrl,
-    })()
+    const result = await thunks.loader({ requestUrl })(
+      undefined as any,
+      undefined as any,
+      mockContext as any,
+    )
 
     await result?.getReferentiel!('countries')
     expect(fetchUrl).toHaveBeenCalledWith({
@@ -90,7 +100,11 @@ describe('loader', () => {
   })
 
   it('should return null if questionnaire is missing', async () => {
-    const result = await thunks.loader({ requestUrl: 'https://example.com' })()
+    const result = await thunks.loader({ requestUrl: 'https://example.com' })(
+      undefined as any,
+      undefined as any,
+      mockContext as any,
+    )
     expect(result).toBeNull()
   })
 
@@ -102,9 +116,13 @@ describe('loader', () => {
 
     vi.mocked(fetchUrl).mockRejectedValue(axiosError)
 
-    await expect(thunks.loader({ requestUrl: requestUrl })()).rejects.toThrow(
-      'Unable to retrieve questionnaire .',
-    )
+    await expect(
+      thunks.loader({ requestUrl })(
+        undefined as any,
+        undefined as any,
+        mockContext as any,
+      ),
+    ).rejects.toThrow('Unable to retrieve questionnaire .')
   })
 
   it('should throw an error if the questionnaire is not compatible', async () => {
@@ -112,7 +130,13 @@ describe('loader', () => {
     vi.mocked(fetchUrl).mockResolvedValue({ id: 'Q001' })
     vi.mocked(isSurveyCompatibleWithQueen).mockReturnValue(false)
 
-    await expect(thunks.loader({ requestUrl: requestUrl })()).rejects.toThrow(
+    await expect(
+      thunks.loader({ requestUrl })(
+        undefined as any,
+        undefined as any,
+        mockContext as any,
+      ),
+    ).rejects.toThrow(
       "The questionnaire is not compatible. The 'lunaticModelVersion' must be higher than 2.2.10",
     )
   })

@@ -7,10 +7,13 @@ export type VisualizeLoaderArgs = {
 }
 
 export async function visualizeLoader({ location }: VisualizeLoaderArgs) {
+  const { userAuthentication, visualizeSurvey } = (await prCore).functions
+
+  await userAuthentication.loginIfNotLoggedIn()
+
   const fullUrl = location.publicHref.startsWith('http')
     ? location.publicHref
     : `${window.location.origin}${location.publicHref}`
 
-  const { visualizeSurvey } = (await prCore).functions
   return visualizeSurvey.loader({ requestUrl: fullUrl })
 }

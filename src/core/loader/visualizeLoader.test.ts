@@ -7,6 +7,9 @@ import { type VisualizeLoaderArgs, visualizeLoader } from './visualizeLoader'
 vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
+      userAuthentication: {
+        loginIfNotLoggedIn: vi.fn(),
+      },
       visualizeSurvey: {
         loader: vi.fn(),
       },
@@ -14,7 +17,7 @@ vi.mock('@/createCore', () => ({
   },
 }))
 
-describe('protectedRouteLoader', () => {
+describe('visualizeLoader', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
