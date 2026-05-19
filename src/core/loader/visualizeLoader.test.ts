@@ -38,4 +38,14 @@ describe('visualizeLoader', () => {
       requestUrl: 'http://localhost:3000/url',
     })
   })
+
+  it('should call loginIfNotLoggedIn before loading the survey', async () => {
+    const mockLoginIfNotLoggedIn = vi.fn()
+    ;(await prCore).functions.userAuthentication.loginIfNotLoggedIn =
+      mockLoginIfNotLoggedIn
+
+    await visualizeLoader({ location: { publicHref: '/url' } })
+
+    expect(mockLoginIfNotLoggedIn).toHaveBeenCalled()
+  })
 })
