@@ -23,6 +23,33 @@ export function createVisualizeClient(params: {
     }
   }
 
+  const trustedDomains: string[] = (
+    import.meta.env.VITE_TRUST_URI_DOMAINS ?? ''
+  )
+    .split(',')
+    .map((d: string) => d.trim())
+    .filter(Boolean)
+
+  const isUriAuthorized = (url: string): boolean => {
+    try {
+      const { hostname } = new URL(url)
+      return trustedDomains.some(
+        (domain) => hostname === domain || hostname.endsWith(`.${domain}`),
+      )
+    } catch {
+      return false
+    }
+  }
+
+  const onDomainCheck = (config: any) => {
+    if (!isUriAuthorized(config.url ?? '')) {
+      return Promise.reject(
+        new Error(`Request to untrusted domain: ${config.url}`),
+      )
+    }
+    return config
+  }
+
   axiosInstance.interceptors.request.use(onRequest)
 
   axiosInstance.interceptors.response.use(
@@ -34,6 +61,7 @@ export function createVisualizeClient(params: {
       return Promise.reject(handleAxiosError(error))
     },
   )
+  axiosInstance.interceptors.request.use(onDomainCheck)
 
   return {
     get: <T>(url: string) =>
