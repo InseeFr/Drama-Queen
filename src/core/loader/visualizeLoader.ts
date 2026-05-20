@@ -1,3 +1,4 @@
+import { protectedRouteLoader } from '@/core/loader/protectedLoader'
 import { prCore } from '@/createCore'
 
 export type VisualizeLoaderArgs = {
@@ -7,10 +8,13 @@ export type VisualizeLoaderArgs = {
 }
 
 export async function visualizeLoader({ location }: VisualizeLoaderArgs) {
+  await protectedRouteLoader()
+
+  const { visualizeSurvey } = (await prCore).functions
+
   const fullUrl = location.publicHref.startsWith('http')
     ? location.publicHref
     : `${window.location.origin}${location.publicHref}`
 
-  const { visualizeSurvey } = (await prCore).functions
   return visualizeSurvey.loader({ requestUrl: fullUrl })
 }

@@ -7,6 +7,9 @@ import { type VisualizeLoaderArgs, visualizeLoader } from './visualizeLoader'
 vi.mock('@/createCore', () => ({
   prCore: {
     functions: {
+      userAuthentication: {
+        loginIfNotLoggedIn: vi.fn(),
+      },
       visualizeSurvey: {
         loader: vi.fn(),
       },
@@ -14,7 +17,7 @@ vi.mock('@/createCore', () => ({
   },
 }))
 
-describe('protectedRouteLoader', () => {
+describe('visualizeLoader', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -34,5 +37,15 @@ describe('protectedRouteLoader', () => {
     expect(mockLoader).toHaveBeenCalledWith({
       requestUrl: 'http://localhost:3000/url',
     })
+  })
+
+  it('should call loginIfNotLoggedIn before loading the survey', async () => {
+    const mockLoginIfNotLoggedIn = vi.fn()
+    ;(await prCore).functions.userAuthentication.loginIfNotLoggedIn =
+      mockLoginIfNotLoggedIn
+
+    await visualizeLoader({ location: { publicHref: '/url' } })
+
+    expect(mockLoginIfNotLoggedIn).toHaveBeenCalled()
   })
 })
