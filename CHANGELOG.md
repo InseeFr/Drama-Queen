@@ -11,7 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added a new environment variable `VITE_TRUST_URI_DOMAINS` to specify trusted domains for visualization requests
 
+## [3.4.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.4.0) - 2026-05-20
+
 ### Changed
+
+- feature: expose app version for parent app (micro-frontend)
 
 - Authentication:
   - retrive scopes for jwt token
