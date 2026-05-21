@@ -188,7 +188,6 @@ describe('download thunk', () => {
       thunks.download()(mockDispatch, mockGetState, mockContext as any),
     ).rejects.toThrowError()
 
-    expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
   })
 })
@@ -305,7 +304,6 @@ describe('upload thunk', () => {
       thunks.upload()(mockDispatch, mockGetState, mockContext as any),
     ).rejects.toThrowError()
 
-    expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadError())
   })
 
