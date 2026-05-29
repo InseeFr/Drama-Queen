@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.0) - 2026-05-29
+
+### Changed
+
+- Improved synchronize summary : it now correctly considers the synchronization as a success only if everything went well (avoiding false positive if synchronization was stoped during process).
+
 ## [3.5.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.5.0) - 2026-05-20
 
 ### Changed
