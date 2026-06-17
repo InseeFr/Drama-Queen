@@ -1,22 +1,16 @@
 import { z } from 'zod'
 
-function safeParseJSON(string: string): any {
-  try {
-    return JSON.parse(string)
-  } catch {
-    return string
-  }
-}
+import { parseJSON } from './parseJSON'
 
 function searchParamsToValues(
   searchParams: URLSearchParams,
-): Record<string, any> {
+): Record<string, unknown> {
   return Array.from(searchParams.keys()).reduce(
     (record, key) => {
-      const values = searchParams.getAll(key).map(safeParseJSON)
+      const values = searchParams.getAll(key).map((s) => parseJSON(s, s))
       return { ...record, [key]: values.length > 1 ? values : values[0] }
     },
-    {} as Record<string, any>,
+    {} as Record<string, unknown>,
   )
 }
 

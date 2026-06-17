@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
+import { parseJSON } from '@/core/tools/parseJSON'
+
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
 
@@ -45,7 +47,7 @@ export function VisualizeForm() {
           <TextField
             {...register('nomenclature', {
               setValueAs: (value: string) =>
-                value ? (JSON.parse(value) as Record<string, string>) : null,
+                parseJSON<Record<string, string> | null>(value, null),
             })}
             id="nomenclature-url-form"
             label={t('visualize.nomenclature.label')}
