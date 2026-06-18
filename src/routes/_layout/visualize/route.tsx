@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { visualizeLoader } from '@/core/loader'
-import { parseJSON } from '@/core/tools/parseJSON'
+import { parseJSON } from '@/core/tools/jsonParsers'
 import type { FormValues } from '@/pages/visualize/models'
 
 import { Visualize } from './index'

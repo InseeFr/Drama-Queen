@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { tss } from 'tss-react/mui'
 
-import { parseJSON } from '@/core/tools/parseJSON'
+import { parseNomenclatureInput } from '@/core/tools/jsonParsers'
 
 import { getSearchParams } from './getSearchParams'
 import type { FormValues } from './models'
@@ -46,12 +46,17 @@ export function VisualizeForm() {
           />
           <TextField
             {...register('nomenclature', {
-              setValueAs: (value: string) =>
-                parseJSON<Record<string, string> | null>(value, null),
+              setValueAs: parseNomenclatureInput,
             })}
             id="nomenclature-url-form"
             label={t('visualize.nomenclature.label')}
-            helperText={t('visualize.nomenclature.helper')}
+            helperText={
+              <>
+                {t('visualize.nomenclature.helperDescription')}
+                <br />
+                {t('visualize.nomenclature.helperExample')}
+              </>
+            }
           />
         </Stack>
         <Stack direction={'row'} alignItems="center">

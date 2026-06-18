@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { parseJSON } from './parseJSON'
+import { parseJSON } from './jsonParsers'
 
 function searchParamsToValues(
   searchParams: URLSearchParams,

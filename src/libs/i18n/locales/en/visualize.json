@@ -5,7 +5,9 @@
   },
   "nomenclature": {
     "label": "Dictionary of nomenclatures",
-    "helper": "Dictionary with nomenclature name as key and url as value"
+    "helperDescription": "Dictionary with nomenclature name as key and url as value",
+    "helperExample": "E.g.: {\"NOMENCLATURE_ID\":\"https://...\"} or [\"NOMENCLATURE_ID_1:https://...\",\"NOMENCLATURE_ID_2:https://...\"]",
+    "errorMessage": "Invalid format. Please use: {\"NOMENCLATURE_ID\":\"https://...\"} or [\"NOMENCLATURE_ID:https://...\"]"
   },
   "readonly": "Read-only",
   "survey": {
