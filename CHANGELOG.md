@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.2) - 2026-06-22
+
 ### Fixed
 
 - Nomenclature field in visualize form is now correctly handled when the input is a decoded JSON string.

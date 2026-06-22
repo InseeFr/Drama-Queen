@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.6.2-rc.visualize-form.0",
+  "version": "3.6.2",
   "type": "module",
   "scripts": {
     "generate-routes": "tsr generate",
