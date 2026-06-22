@@ -3,6 +3,7 @@
   "private": true,
   "version": "3.6.2",
   "type": "module",
+  "packageManager": "pnpm@11.8.0",
   "scripts": {
     "generate-routes": "tsr generate",
     "dev": "pnpm run generate-routes && vite --port 5001 --strictPort",
