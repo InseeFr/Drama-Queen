@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { visualizeLoader } from '@/core/loader'
+import { parseJSON } from '@/core/tools/jsonParsers'
 import type { FormValues } from '@/pages/visualize/models'
 
 import { Visualize } from './index'
@@ -13,10 +14,16 @@ const parseStringSearch = (value: unknown) =>
 const parseBooleanSearch = (value: unknown) =>
   typeof value === 'boolean' ? value : false
 
-const parseObjectSearch = (value: unknown) => {
-  return typeof value === 'object'
-    ? (value as Record<string, string>)
-    : undefined
+const parseObjectSearch = (
+  value: unknown,
+): Record<string, string> | undefined => {
+  if (typeof value === 'object' && value !== null) {
+    return value as Record<string, string>
+  }
+  if (typeof value === 'string') {
+    return parseJSON<Record<string, string> | undefined>(value, undefined)
+  }
+  return undefined
 }
 
 export const Route = createFileRoute('/_layout/visualize')({
