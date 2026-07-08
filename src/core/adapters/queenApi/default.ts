@@ -4,6 +4,7 @@ import type {
   Campaign,
   IdAndQuestionnaireId,
   Interrogation,
+  InterrogationAndQuestionnaireId,
   Nomenclature,
   Questionnaire,
   RequiredNomenclatures,
@@ -19,6 +20,7 @@ import {
   nomenclatureSchema,
   requiredNomenclaturesSchema,
 } from './parserSchema'
+import { interrogationQuestionnaireLink } from './parserSchema/interrogationQuestionnaireLink'
 
 export function createApiClient(params: {
   apiUrl: string
@@ -78,6 +80,14 @@ export function createApiClient(params: {
         >(`/api/interrogations/${idInterrogation}`)
         .then(({ data }) =>
           interrogationSchema.parse({ id: idInterrogation, ...data }),
+        ),
+    getInterrogationsQuestionnaireLink: (interrogationIds) =>
+      axiosInstance
+        .post<
+          InterrogationAndQuestionnaireId[]
+        >(`/api/interrogations/questionnaire-link`, interrogationIds)
+        .then(({ data }) =>
+          data.map((link) => interrogationQuestionnaireLink.parse(link)),
         ),
     putInterrogation: (interrogation) =>
       axiosInstance

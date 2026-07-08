@@ -15,6 +15,7 @@ export function createApiClient(): QueenApi {
           idInterrogation: 'interro2',
         }),
       ]),
+    getInterrogationsQuestionnaireLink: () => Promise.resolve([]),
     fetchMoved: () => Promise.resolve([{ id: 'interro2' }]),
     syncInterrogation: (idInterrogation) =>
       Promise.resolve(

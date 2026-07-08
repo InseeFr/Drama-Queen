@@ -4,9 +4,10 @@ import {
   TELEMETRY_EVENT_EXIT_SOURCE,
   TELEMETRY_EVENT_TYPE,
 } from '@/constants/telemetry'
-import type { Interrogation, Paradata } from '@/core/model'
+import type { Interrogation, LocalInterrogation, Paradata } from '@/core/model'
 import type { DataStore } from '@/core/ports/DataStore'
 import type { LocalSyncStorage } from '@/core/ports/LocalSyncStorage'
+import { interrogationFromLocalInterrogation } from '@/utils/interrogation'
 
 import { type State } from './state'
 import { actions } from './state'
@@ -23,6 +24,7 @@ const mockGetState: () => {
 
 const mockDataStore = {
   getAllInterrogations: vi.fn(),
+  getInterrogation: vi.fn(),
   updateInterrogation: vi.fn(),
   deleteInterrogation: vi.fn(),
   getAllParadata: vi.fn(),
@@ -34,6 +36,7 @@ const mockQueenApi = {
   getQuestionnaire: vi.fn(),
   getInterrogationsIdsAndQuestionnaireIdsByCampaign: vi.fn(),
   getInterrogation: vi.fn(),
+  getInterrogationsQuestionnaireLink: vi.fn(),
   putInterrogation: vi.fn(),
   postInterrogationInTemp: vi.fn(),
   fetchMoved: vi.fn(),
@@ -65,49 +68,158 @@ describe('download thunk', () => {
   })
 
   afterEach(() => {
-    vi.clearAllMocks()
+    vi.resetAllMocks()
+    localStorage.clear()
   })
 
-  it('should successfully download campaigns, questionnaires and interrogations', async () => {
+  it('should only download new interrogations not already in local datastore', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
+    // Set expected interrogation to have locally
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro3']),
+    )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
-    const campaigns = [{ id: '1', questionnaireIds: ['q1', 'q2'] }]
-    vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
-    vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
-    vi.mocked(
-      mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
-    ).mockResolvedValue([
-      { id: 'interro1', questionnaireId: 'q1' },
-      { id: 'interro2', questionnaireId: 'q2' },
-    ])
-    vi.mocked(mockQueenApi.getInterrogation)
-      .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
-      .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro3: Interrogation = {
+      id: 'interro3',
+      questionnaireId: 'q1',
+      data: {},
+    }
 
-    vi.mocked(mockDispatch).mockResolvedValue(undefined)
-    // Mock successful updateInterrogation response
-    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro1')
+    // Mock that interro1 are already exists in local datastore, but interro3 is new
+    const existingInterrogations = [interro1, interro2]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    vi.mocked(mockDataStore.getInterrogation).mockResolvedValueOnce(interro1)
+
+    // Fetch only interro3 (interro1 is already local, interro2 is not expected)
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValueOnce(interro3)
+
+    // No change of questionnaire for existing interrogations
     vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+    ])
+
+    vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro3')
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+
+    // Total interrogation to process during download step : expected interrogations (new & existing ones)
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
+    )
+
+    // Insert new interrogation in local datastore
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(1)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro3,
+      hasBeenUpdated: false,
+    })
+
+    // Only new interrogations should be marked as completed
+    const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) =>
+        action.type === actions.downloadInterrogationCompleted().type,
+    )
+    expect(downloadInterrogationCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+    // Only the expected interrogations should be marked as success
+    expect(
       mockLocalSyncStorage.addIdToInterrogationsSuccess,
-    ).mockResolvedValue(undefined)
-    vi.mocked(mockLocalSyncStorage.addError).mockResolvedValue(undefined)
+    ).toHaveBeenCalledTimes(2)
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro3')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  it('should download all interrogations when local datastore is empty', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q1',
+      data: {},
+    }
+
+    // Mock that no interrogations exist in local datastore (both are new)
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
+    vi.mocked(mockQueenApi.getInterrogation)
+      .mockResolvedValueOnce(interro1)
+      .mockResolvedValueOnce(interro2)
+
+    vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+
+    // Mock successful updateInterrogation responses
+    vi.mocked(mockDataStore.updateInterrogation)
+      .mockResolvedValue('interro1')
+      .mockResolvedValue('interro2')
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.setDownloadTotalSurvey({ totalSurvey: 2 }),
-    )
-    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadSurveyCompleted())
-    expect(mockDispatch).toHaveBeenCalledWith(
       actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
     )
+
+    // insert interrogations in data store, setting them as not updated locally
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro1,
+      hasBeenUpdated: false,
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interro2,
+      hasBeenUpdated: false,
+    })
 
     // Check interrogation actions
     const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
@@ -115,6 +227,172 @@ describe('download thunk', () => {
         action.type === actions.downloadInterrogationCompleted().type,
     )
     expect(downloadInterrogationCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+    // Ensure the local sync storage actions were called
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro2')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  it('should update existing interrogations with new questionnaire IDs', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    const existingInterro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1-old',
+      data: {},
+    }
+    const existingInterro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2-old',
+      data: {},
+    }
+
+    // Mock that both interrogations already exist in local datastore
+    const existingInterrogations = [existingInterro1, existingInterro2]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    vi.mocked(mockDataStore.getInterrogation)
+      .mockResolvedValueOnce(existingInterro1)
+      .mockResolvedValueOnce(existingInterro2)
+
+    // Mock that no new interrogations are fetched (empty array)
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValue(undefined)
+
+    // Mock the new API call to get updated questionnaire IDs for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1-new' },
+      { interrogationId: 'interro2', questionnaireId: 'q2-new' },
+    ])
+
+    vi.mocked(mockQueenApi.getQuestionnaire)
+      .mockResolvedValueOnce({ id: 'q1-new' })
+      .mockResolvedValueOnce({ id: 'q2-new' })
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
+    )
+
+    // Should update existing interrogations with new questionnaire IDs
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledTimes(2)
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...existingInterro1,
+      questionnaireId: 'q1-new',
+    })
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...existingInterro2,
+      questionnaireId: 'q2-new',
+    })
+
+    // Check interrogation actions
+    const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+      ([action]) =>
+        action.type === actions.downloadInterrogationCompleted().type,
+    )
+    expect(downloadInterrogationCalls).toHaveLength(2)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+    // Check questionnaire actions
+    const downloadQuestionnaireCalls = mockDispatch.mock.calls.filter(
+      ([action]) => action.type === actions.downloadSurveyCompleted().type,
+    )
+    expect(mockQueenApi.getQuestionnaire).toHaveBeenCalledTimes(2)
+    expect(downloadQuestionnaireCalls).toHaveLength(2)
+
+    // Ensure the local sync storage actions were called
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro1')
+    expect(
+      mockLocalSyncStorage.addIdToInterrogationsSuccess,
+    ).toHaveBeenCalledWith('interro2')
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  it('should successfully download questionnaires for new interrogations', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    }
+
+    // Mock that interro1 already exists in local datastore, but  interro3 is new
+    const existingInterrogations = [interro1]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    vi.mocked(mockQueenApi.getInterrogation).mockResolvedValueOnce(interro2)
+
+    // No change of questionnaire for existing interrogations
+    vi.mocked(
+      mockQueenApi.getInterrogationsQuestionnaireLink,
+    ).mockResolvedValue([
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+    ])
+
+    vi.mocked(mockQueenApi.getQuestionnaire)
+      .mockResolvedValue({ id: 'q1' })
+      .mockResolvedValue({ id: 'q2' })
+
+    // Mock successful updateInterrogation response
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro2')
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+
+    // Check questionnaire actions
+    const downloadQuestionnaireCalls = mockDispatch.mock.calls.filter(
+      ([action]) => action.type === actions.downloadSurveyCompleted().type,
+    )
+    expect(mockQueenApi.getQuestionnaire).toHaveBeenCalledTimes(2)
+    expect(downloadQuestionnaireCalls).toHaveLength(2)
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
 
@@ -133,35 +411,61 @@ describe('download thunk', () => {
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
-    const campaigns = [{ id: '1', questionnaireIds: ['q1'] }]
-    const nomenclature = { id: 'nomen1', name: 'Nomenclature 1' }
-    vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
-    vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({
-      id: 'q1',
-      suggesters: [{ name: 'Nomenclature 1' }],
-    })
+    const interro1: Interrogation = {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    }
+    const interro2: Interrogation = {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    }
+
+    // Mock that interro1 already exists in local datastore, but  interro3 is new
+    const existingInterrogations = [interro1, interro2]
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      existingInterrogations,
+    )
+
+    // No change of questionnaire for existing interrogations
     vi.mocked(
-      mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
+      mockQueenApi.getInterrogationsQuestionnaireLink,
     ).mockResolvedValue([
-      { id: 'interro1', questionnaireId: 'q1' },
-      { id: 'interro2', questionnaireId: 'q2' },
+      { interrogationId: 'interro1', questionnaireId: 'q1' },
+      { interrogationId: 'interro2', questionnaireId: 'q2' },
     ])
+
     vi.mocked(mockQueenApi.getInterrogation)
       .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
       .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
+    vi.mocked(mockQueenApi.getQuestionnaire)
+      .mockResolvedValueOnce({
+        id: 'q1',
+        suggesters: [{ name: 'Nomenclature 1' }],
+      })
+      .mockResolvedValueOnce({
+        id: 'q2',
+        suggesters: [{ name: 'Nomenclature 2' }],
+      })
 
     vi.mocked(mockDispatch).mockResolvedValue(undefined)
 
-    vi.mocked(mockQueenApi.getNomenclature).mockResolvedValue(nomenclature)
-    vi.mocked(mockDispatch).mockResolvedValue(undefined)
+    vi.mocked(mockQueenApi.getNomenclature)
+      .mockResolvedValueOnce({ id: 'nomen1', name: 'Nomenclature 1' })
+      .mockResolvedValueOnce({ id: 'nomen2', name: 'Nomenclature 2' })
 
     await thunks.download()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockDispatch).toHaveBeenCalledWith(
-      actions.setDownloadTotalNomenclature({ totalNomenclature: 1 }),
+      actions.setDownloadTotalNomenclature({ totalNomenclature: 2 }),
     )
 
     expect(mockDispatch).toHaveBeenCalledWith(
@@ -169,26 +473,187 @@ describe('download thunk', () => {
     )
   })
 
-  it('should handle errors during downloading interrogations and resources', async () => {
+  it('should use localstorage strategy even if interrogations list is empty', async () => {
     // override global mock value of external resources url
     vi.doMock('@/core/constants', () => ({
       EXTERNAL_RESOURCES_URL: '',
       LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
     }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify([]),
+    )
     // Re-import after mocking
     const { thunks } = await import('./thunks')
 
-    const campaigns = [{ id: '1', questionnaireIds: ['q1', 'q2'] }]
-    vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
-    vi.mocked(mockQueenApi.getQuestionnaire).mockRejectedValue(
-      new Error('Failed to fetch questionnaire'),
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
+    await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+
+    expect(mockQueenApi.getCampaigns).not.toHaveBeenCalled()
+    expect(mockDispatch).toHaveBeenCalledWith(
+      actions.updateDownloadTotalInterrogation({ totalInterrogation: 0 }),
+    )
+
+    expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+  })
+
+  it('should handle errors during downloading interrogation', async () => {
+    // override global mock value of external resources url
+    vi.doMock('@/core/constants', () => ({
+      EXTERNAL_RESOURCES_URL: '',
+      LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+    }))
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1']),
+    )
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+
+    vi.mocked(mockQueenApi.getInterrogation).mockRejectedValue(
+      new Error('Failed to fetch interrogation'),
     )
 
     await expect(() =>
       thunks.download()(mockDispatch, mockGetState, mockContext as any),
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
+
+    // Ensure the list of interrogation ids is cleared from local storage
+    expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBeNull()
+  })
+
+  describe('legacy strategy', () => {
+    it('should successfully download campaigns, questionnaires and interrogations', async () => {
+      // override global mock value of external resources url
+      vi.doMock('@/core/constants', () => ({
+        EXTERNAL_RESOURCES_URL: '',
+        LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+      }))
+      // Re-import after mocking
+      const { thunks } = await import('./thunks')
+
+      const campaigns = [{ id: '1', questionnaireIds: ['q1', 'q2'] }]
+      vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
+      vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({ id: 'q1' })
+      vi.mocked(
+        mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
+      ).mockResolvedValue([
+        { id: 'interro1', questionnaireId: 'q1' },
+        { id: 'interro2', questionnaireId: 'q2' },
+      ])
+      vi.mocked(mockQueenApi.getInterrogation)
+        .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
+        .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
+
+      vi.mocked(mockDispatch).mockResolvedValue(undefined)
+      // Mock successful updateInterrogation response
+      vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('interro1')
+      vi.mocked(
+        mockLocalSyncStorage.addIdToInterrogationsSuccess,
+      ).mockResolvedValue(undefined)
+      vi.mocked(mockLocalSyncStorage.addError).mockResolvedValue(undefined)
+
+      await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+      expect(mockDispatch).toHaveBeenCalledWith(actions.runningDownload())
+      expect(mockDispatch).toHaveBeenCalledWith(
+        actions.setDownloadTotalSurvey({ totalSurvey: 2 }),
+      )
+      expect(mockDispatch).toHaveBeenCalledWith(
+        actions.downloadSurveyCompleted(),
+      )
+      expect(mockDispatch).toHaveBeenCalledWith(
+        actions.updateDownloadTotalInterrogation({ totalInterrogation: 2 }),
+      )
+
+      // Check interrogation actions
+      const downloadInterrogationCalls = mockDispatch.mock.calls.filter(
+        ([action]) =>
+          action.type === actions.downloadInterrogationCompleted().type,
+      )
+      expect(downloadInterrogationCalls).toHaveLength(2)
+
+      expect(mockDispatch).toHaveBeenCalledWith(actions.downloadCompleted())
+
+      // Ensure the local sync storage actions were called
+      expect(
+        mockLocalSyncStorage.addIdToInterrogationsSuccess,
+      ).toHaveBeenCalledWith('interro1')
+      expect(
+        mockLocalSyncStorage.addIdToInterrogationsSuccess,
+      ).toHaveBeenCalledWith('interro2')
+    })
+
+    it('should successfully fetch nomenclatures', async () => {
+      // override global mock value of external resources url
+      vi.doMock('@/core/constants', () => ({
+        EXTERNAL_RESOURCES_URL: '',
+        LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+      }))
+      // Re-import after mocking
+      const { thunks } = await import('./thunks')
+
+      const campaigns = [{ id: '1', questionnaireIds: ['q1'] }]
+      const nomenclature = { id: 'nomen1', name: 'Nomenclature 1' }
+      vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
+      vi.mocked(mockQueenApi.getQuestionnaire).mockResolvedValue({
+        id: 'q1',
+        suggesters: [{ name: 'Nomenclature 1' }],
+      })
+      vi.mocked(
+        mockQueenApi.getInterrogationsIdsAndQuestionnaireIdsByCampaign,
+      ).mockResolvedValue([
+        { id: 'interro1', questionnaireId: 'q1' },
+        { id: 'interro2', questionnaireId: 'q2' },
+      ])
+      vi.mocked(mockQueenApi.getInterrogation)
+        .mockResolvedValueOnce({ id: 'interro1', questionnaireId: 'q1' })
+        .mockResolvedValueOnce({ id: 'interro2', questionnaireId: 'q2' })
+
+      vi.mocked(mockDispatch).mockResolvedValue(undefined)
+
+      vi.mocked(mockQueenApi.getNomenclature).mockResolvedValue(nomenclature)
+      vi.mocked(mockDispatch).mockResolvedValue(undefined)
+
+      await thunks.download()(mockDispatch, mockGetState, mockContext as any)
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        actions.setDownloadTotalNomenclature({ totalNomenclature: 1 }),
+      )
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        actions.downloadNomenclatureCompleted(),
+      )
+    })
+
+    it('should handle errors during downloading interrogations and resources', async () => {
+      // override global mock value of external resources url
+      vi.doMock('@/core/constants', () => ({
+        EXTERNAL_RESOURCES_URL: '',
+        LUNATIC_MODEL_VERSION_BREAKING: '2.2.10',
+      }))
+      // Re-import after mocking
+      const { thunks } = await import('./thunks')
+
+      const campaigns = [{ id: '1', questionnaireIds: ['q1', 'q2'] }]
+      vi.mocked(mockQueenApi.getCampaigns).mockResolvedValue(campaigns)
+      vi.mocked(mockQueenApi.getQuestionnaire).mockRejectedValue(
+        new Error('Failed to fetch questionnaire'),
+      )
+
+      await expect(() =>
+        thunks.download()(mockDispatch, mockGetState, mockContext as any),
+      ).rejects.toThrowError()
+
+      expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
+    })
   })
 })
 
@@ -205,7 +670,7 @@ describe('upload thunk', () => {
     vi.clearAllMocks()
   })
 
-  it('should upload interrogations successfully', async () => {
+  it('should only upload interrogations that have been updated locally', async () => {
     // override global mock value for enable telemetry
     vi.doMock('@/core/constants', () => ({
       IS_TELEMETRY_ENABLED: true,
@@ -213,12 +678,40 @@ describe('upload thunk', () => {
     }))
     // Re-import after mocking
     const { thunks } = await import('./thunks')
-    const interrogations = [{ id: '1' }, { id: '2' }]
+    const interrogations: LocalInterrogation[] = [
+      {
+        id: '1',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: true,
+      },
+      {
+        id: '2',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: false,
+      },
+      {
+        id: '3',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+        hasBeenUpdated: true,
+      },
+      {
+        id: '4',
+        questionnaireId: 'q1',
+        data: { COLLECTED: {} },
+        stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      }, // undefined `hasBeenUpdated` should be treated as true
+    ]
+
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
-      interrogations as Interrogation[],
+      interrogations as LocalInterrogation[],
     )
     vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
     // no paradata
     vi.mocked(mockDataStore.getAllParadata).mockResolvedValue([])
 
@@ -229,11 +722,22 @@ describe('upload thunk', () => {
     const uploadInterrogationCalls = mockDispatch.mock.calls.filter(
       ([action]) => action.type === actions.uploadInterrogationCompleted().type,
     )
-    expect(uploadInterrogationCalls).toHaveLength(2)
+    expect(uploadInterrogationCalls).toHaveLength(3)
+
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledTimes(3)
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[0]),
+    )
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[2]),
+    )
+    expect(mockQueenApi.putInterrogation).toHaveBeenCalledWith(
+      interrogationFromLocalInterrogation(interrogations[3]),
+    )
 
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.setUploadTotalInterrogation({
-        totalInterrogation: interrogations.length,
+        totalInterrogation: 3,
       }),
     )
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
@@ -242,14 +746,45 @@ describe('upload thunk', () => {
      * Cannot do directly expect(mockDispatch).toHaveBeenCalledWith(thunks.download())
      * since it considers it has been called with [AsyncFunction (anonymous)]
      */
-    expect(mockDispatch).toHaveBeenCalledTimes(6)
+    expect(mockDispatch).toHaveBeenCalledTimes(7)
+  })
+
+  it('should set interrogations as not updated after successful upload', async () => {
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
+      interrogation,
+    ])
+    vi.mocked(mockQueenApi.putInterrogation).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.getAllParadata).mockResolvedValue([])
+
+    await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
+
+    // Should set interrogation locally as not updated
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interrogation,
+      hasBeenUpdated: false,
+    })
   })
 
   it('should handle interrogation upload failure and retry posting to temp zone', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
+
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
@@ -259,7 +794,7 @@ describe('upload thunk', () => {
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
-      interrogation,
+      interrogationFromLocalInterrogation(interrogation),
     )
     expect(
       mockLocalSyncStorage.addIdToInterrogationsInTempZone,
@@ -268,25 +803,32 @@ describe('upload thunk', () => {
   })
 
   it('should treat 423 response for interrogation as a success', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 423 },
     })
 
     vi.mocked(mockQueenApi.postInterrogationInTemp).mockResolvedValue(undefined)
-    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+    vi.mocked(mockDataStore.updateInterrogation).mockResolvedValue('1')
 
     await thunks.upload()(mockDispatch, mockGetState, mockContext as any)
 
     // Expect it to continue as if it were a success
     expect(mockQueenApi.postInterrogationInTemp).not.toHaveBeenCalled()
-    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledWith(
-      interrogation.id,
-    )
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interrogation,
+      hasBeenUpdated: false,
+    })
     expect(mockDispatch).toHaveBeenCalledWith(
       actions.uploadInterrogationCompleted(),
     )
@@ -308,7 +850,13 @@ describe('upload thunk', () => {
   })
 
   it('should delete paradata without sending it when interrogation upload fails', async () => {
-    const interrogation = { id: '1' }
+    const interrogation: LocalInterrogation = {
+      id: '1',
+      questionnaireId: 'q1',
+      data: { COLLECTED: {} },
+      stateData: { state: 'INIT', date: 17000000, currentPage: '1' },
+      hasBeenUpdated: true,
+    }
     const allParadata: Paradata[] = [
       {
         idInterrogation: '1',
@@ -324,7 +872,7 @@ describe('upload thunk', () => {
 
     vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([
       interrogation,
-    ] as Interrogation[])
+    ])
     vi.mocked(mockQueenApi.putInterrogation).mockRejectedValue({
       response: { status: 400 },
     })
@@ -337,7 +885,7 @@ describe('upload thunk', () => {
 
     // The post to temp should happen
     expect(mockQueenApi.postInterrogationInTemp).toHaveBeenCalledWith(
-      interrogation,
+      interrogationFromLocalInterrogation(interrogation),
     )
     // The paradata for this interrogation should be deleted
     expect(mockDataStore.deleteParadata).toHaveBeenCalledWith(interrogation.id)
@@ -471,5 +1019,189 @@ describe('upload thunk', () => {
     expect(mockDataStore.deleteParadata).not.toHaveBeenCalled()
 
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadCompleted())
+  })
+})
+
+describe('cleanupInterrogations thunk', () => {
+  // Base test data to avoid duplication
+  const baseInterrogations = [
+    {
+      id: 'interro1',
+      questionnaireId: 'q1',
+      data: {},
+    },
+    {
+      id: 'interro2',
+      questionnaireId: 'q2',
+      data: {},
+    },
+  ]
+
+  beforeEach(() => {
+    vi.resetModules()
+    vi.restoreAllMocks()
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+    localStorage.clear()
+  })
+
+  it('should delete differential interrogations', async () => {
+    // GIVEN: local storage contains interro1 and interro2, database contains interro1, interro2, and interro3 (orphan)
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    const allInterrogations = [
+      {
+        id: 'interro1',
+        questionnaireId: 'q1',
+        data: {},
+      },
+      {
+        id: 'interro2',
+        questionnaireId: 'q2',
+        data: {},
+      },
+      {
+        id: 'interro3',
+        questionnaireId: 'q3',
+        data: {},
+      }, // This should be deleted as it's not in local storage
+    ]
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should be called only for the orphan interrogation (interro3)
+    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledTimes(1)
+    expect(mockDataStore.deleteInterrogation).toHaveBeenCalledWith('interro3')
+
+    // AND: deleteInterrogation should NOT be called for interrogations that are in local storage
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalledWith(
+      'interro1',
+    )
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalledWith(
+      'interro2',
+    )
+  })
+
+  it('should do nothing when no interrogations to delete', async () => {
+    // GIVEN: local storage and database contain the same interrogations
+    const allInterrogations = [...baseInterrogations] // Use base interrogations
+
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(allInterrogations.map((i) => i.id)),
+    )
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle empty local storage', async () => {
+    // GIVEN: local storage is empty (no SYNCHRONIZATION_INTERROGATION_IDS key)
+    // Database contains some interrogations
+    const allInterrogations = [...baseInterrogations]
+
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue(
+      allInterrogations,
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle empty database', async () => {
+    // GIVEN: local storage contains interrogation IDs
+    // Database is empty
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    // Mock empty database
+    vi.mocked(mockDataStore.getAllInterrogations).mockResolvedValue([])
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    await thunks.cleanupInterrogations()(
+      mockDispatch,
+      mockGetState,
+      mockContext as any,
+    )
+
+    // THEN: deleteInterrogation should NOT be called at all
+    expect(mockDataStore.deleteInterrogation).not.toHaveBeenCalled()
+  })
+
+  it('should handle errors during cleanup', async () => {
+    // GIVEN: local storage contains interrogation IDs
+    localStorage.setItem(
+      'SYNCHRONIZATION_INTERROGATION_IDS',
+      JSON.stringify(['interro1', 'interro2']),
+    )
+
+    // Mock database error
+    vi.mocked(mockDataStore.getAllInterrogations).mockRejectedValue(
+      new Error('Database error'),
+    )
+    vi.mocked(mockDataStore.deleteInterrogation).mockResolvedValue(undefined)
+
+    // Re-import after mocking
+    const { thunks } = await import('./thunks')
+
+    // WHEN: cleanupInterrogations is called
+    // THEN: it should throw an error
+    await expect(() =>
+      thunks.cleanupInterrogations()(
+        mockDispatch,
+        mockGetState,
+        mockContext as any,
+      ),
+    ).rejects.toThrowError('Database error')
   })
 })

@@ -129,9 +129,10 @@ describe('changePage', () => {
       mockContext as any,
     )
 
-    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith(
-      interrogation,
-    )
+    expect(mockDataStore.updateInterrogation).toHaveBeenCalledWith({
+      ...interrogation,
+      hasBeenUpdated: true,
+    })
   })
 })
 
