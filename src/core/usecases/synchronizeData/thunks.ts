@@ -558,7 +558,7 @@ export const thunks = {
                   }
                   if (
                     error.response &&
-                    [400, 403, 404, 500].includes(error.response.status)
+                    [400, 403, 404].includes(error.response.status)
                   ) {
                     return queenApi
                       .postInterrogationInTemp(interrogation)
