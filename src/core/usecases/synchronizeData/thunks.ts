@@ -439,13 +439,14 @@ export const thunks = {
 
       clearInterrogationIds()
 
+      // Sync process is successful
+      localSyncStorage.addError(false)
       dispatch(actions.downloadCompleted())
     } catch (error) {
       console.error(
         'An unknown error occurred while we were fetching data so we stop the synchronization.',
         error,
       )
-      localSyncStorage.addError(true)
       clearInterrogationIds()
       dispatch(actions.downloadFailed())
       throw error
@@ -515,7 +516,7 @@ export const thunks = {
 
       //  If localStorageData exists, we refresh it; otherwise, we initialize it.
       localSyncStorage.saveObject({
-        error: false,
+        error: true,
         interrogationsInTempZone: [],
         interrogationsSuccess: [],
       })
@@ -635,7 +636,6 @@ export const thunks = {
 
         dispatch(actions.uploadCompleted())
       } catch (e) {
-        localSyncStorage.addError(true)
         dispatch(actions.uploadError())
         throw e
       }

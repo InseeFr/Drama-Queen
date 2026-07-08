@@ -523,7 +523,6 @@ describe('download thunk', () => {
       thunks.download()(mockDispatch, mockGetState, mockContext as any),
     ).rejects.toThrow()
 
-    expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
 
     // Ensure the list of interrogation ids is cleared from local storage
@@ -653,7 +652,6 @@ describe('download thunk', () => {
         thunks.download()(mockDispatch, mockGetState, mockContext as any),
       ).rejects.toThrowError()
 
-      expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
       expect(mockDispatch).toHaveBeenCalledWith(actions.downloadFailed())
     })
   })
@@ -848,7 +846,6 @@ describe('upload thunk', () => {
       thunks.upload()(mockDispatch, mockGetState, mockContext as any),
     ).rejects.toThrowError()
 
-    expect(mockLocalSyncStorage.addError).toHaveBeenCalledWith(true)
     expect(mockDispatch).toHaveBeenCalledWith(actions.uploadError())
   })
 

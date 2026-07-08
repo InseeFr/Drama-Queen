@@ -12,6 +12,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve synchronization performance : for download step, the list of interrogations is now retrieved from local storage (given by the parent app). If there is nothing in local storage, we keep the old implementation using api. Furthermore, we now download only new interrogations, we don't download anymore the interrogations that were already locally.
 - Improve synchronization performance : for upload step, we now upload only interrogations that have been locally updated since it was last sent to the server.
 
+## [3.6.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.2) - 2026-06-22
+
+### Fixed
+
+- Nomenclature field in visualize form is now correctly handled when the input is a decoded JSON string.
+
+## [3.6.1](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.1) - 2026-06-15
+
+### Fixed
+
+- Fixed CVEs on dependencies
+
+## [3.6.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.0) - 2026-05-29
+
+### Changed
+
+- Improved synchronize summary : it now correctly considers the synchronization as a success only if everything went well (avoiding false positive if synchronization was stoped during process).
+
+## [3.5.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.5.0) - 2026-05-20
+
+### Changed
+
+- Added a new environment variable `VITE_TRUST_URI_DOMAINS` to specify trusted domains for visualization requests
+
+## [3.4.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.4.0) - 2026-05-20
+
+### Changed
+
+- feature: expose app version for parent app (micro-frontend)
+
+- Authentication:
+  - retrive scopes for jwt token
+  - new env variable: `VITE_OIDC_SCOPES` (default value `"profile,roles"`)
+  - added authentication check on visualization page
+
 ## [3.3.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.3.2) - 2026-04-14
 
 ### Fixed

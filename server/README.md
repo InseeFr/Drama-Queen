@@ -34,7 +34,7 @@ This behavior is implemented by the `synchronizeData` use case (`thunks.ts` and 
 
 Code: `thunks.upload()` in `src/core/usecases/synchronizeData/thunks.ts`.
 
-- Initializes local sync status in `localSyncStorage` (clears error, success/temp lists).
+- Initializes local sync status in `localSyncStorage` (clears error, success/temp lists). Error status starting value is `true` to prevent falsy evaluation if sync process is interrupted (closing the tab/navigator, or navigating to another location).
 - Interrogations:
   - Reads all locally stored interrogations: `dataStore.getAllInterrogations()`.
   - For each interrogation:
@@ -50,7 +50,7 @@ Code: `thunks.upload()` in `src/core/usecases/synchronizeData/thunks.ts`.
   - For each remaining paradata:
     - `queenApi.postParadata(paradata)` then `dataStore.deleteParadata(paradata.idInterrogation)` and update progress.
 - On success: dispatches `uploadCompleted` and immediately triggers the download step with `dispatch(thunks.download())`.
-- On error: flags `localSyncStorage.addError(true)` and dispatches `uploadError` (the page will redirect).
+- On error: dispatches `uploadError` (the page will redirect).
 
 APIs used during upload:
 
@@ -83,8 +83,8 @@ Code: `thunks.download()` in `src/core/usecases/synchronizeData/thunks.ts`.
   - For each needed questionnaire: `getResourcesFromExternalQuestionnaire({ questionnaire, callBackTotal, callBackReset, callBackUnit })` which fetches and puts files into the browser Cache Storage, updating progress callbacks along the way.
   - Deletes caches for `notNeededQuestionnaires` and any “old” external caches not in the list (`getOldExternalCacheNames` + `caches.delete`). If none are needed, it also deletes the root cache `cache-root-external`.
 - Completion:
-  - After all of the above finish, dispatches `downloadCompleted`.
-  - On any unexpected error: sets `localSyncStorage.addError(true)` and dispatches `downloadFailed`.
+  - After all of the above finish, flags `localSyncStorage.addError(false)` and dispatches `downloadCompleted`.
+  - On any unexpected error: dispatches `downloadFailed`.
 
 APIs used during download:
 

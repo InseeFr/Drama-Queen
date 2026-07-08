@@ -36,6 +36,7 @@ export default defineConfig({
         './getArticulationTable': './src/federation/getArticulationTable.ts',
         './partialResetInterrogation':
           './src/federation/partialResetInterrogation.ts',
+        './getQueenVersion': './src/federation/getQueenVersion.ts',
       },
       shared: ['react', 'react-dom'],
     }),

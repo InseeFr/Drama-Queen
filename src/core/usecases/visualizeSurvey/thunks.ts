@@ -9,7 +9,6 @@ import type {
   WrappedQuestionnaire,
 } from '@/core/model'
 import { isSurveyCompatibleWithQueen } from '@/core/tools/SurveyModelBreaking'
-import { fetchUrl } from '@/core/tools/fetchUrl'
 import { makeSearchParamsObjSchema } from '@/core/tools/makeSearchParamsObjectSchema'
 import i18n from '@/libs/i18n'
 
@@ -20,77 +19,85 @@ export const name = 'visualizeSurvey'
 export const reducer = null
 
 export const thunks = {
-  loader: (params: { requestUrl: string }) => async () => {
-    const { requestUrl } = params
-    const url = new URL(requestUrl)
-    const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
-      url.searchParams,
-    )
+  loader:
+    (params: { requestUrl: string }) =>
+    async (...args) => {
+      const { requestUrl } = params
+      const [, , { visualizeClient }] = args
 
-    if (!result.success) {
-      console.error(result.error)
-      return null
-    }
+      const url = new URL(requestUrl)
+      const result = makeSearchParamsObjSchema(searchParamsSchema).safeParse(
+        url.searchParams,
+      )
 
-    const { questionnaire, data, readonly = false, nomenclature } = result.data
+      if (!result.success) {
+        console.error(result.error)
+        return null
+      }
 
-    if (!questionnaire) {
-      return null
-    }
+      const {
+        questionnaire,
+        data,
+        readonly = false,
+        nomenclature,
+      } = result.data
 
-    // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
-    // We must accept it and unwrap it
-    const fetchedSource = await fetchUrl<Questionnaire | WrappedQuestionnaire>({
-      url: questionnaire,
-    }).catch((error) => {
-      if (
-        error instanceof AxiosError &&
-        error.response &&
-        [400, 403, 404, 500].includes(error.response.status)
-      ) {
-        throw new Error(
-          i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+      if (!questionnaire) {
+        return null
+      }
+
+      // TEMP : for PE, we fetch source from Queen-api which provides wrapped object : {value: source}
+      // We must accept it and unwrap it
+      const fetchedSource = await visualizeClient
+        .get<Questionnaire | WrappedQuestionnaire>(questionnaire)
+        .catch((error) => {
+          if (
+            error instanceof AxiosError &&
+            error.response &&
+            [400, 403, 404, 500].includes(error.response.status)
+          ) {
+            throw new Error(
+              i18n.t('error.questionnaireNotFound', { questionnaireId: '' }),
+            )
+          }
+          throw error
+        })
+
+      const isWrappedQuestionnaire = (
+        source: Questionnaire | WrappedQuestionnaire,
+      ): source is WrappedQuestionnaire => {
+        return (
+          typeof source === 'object' &&
+          Object.keys(source).length === 1 &&
+          'value' in source
         )
       }
-      throw error
-    })
 
-    const isWrappedQuestionnaire = (
-      source: Questionnaire | WrappedQuestionnaire,
-    ): source is WrappedQuestionnaire => {
-      return (
-        typeof source === 'object' &&
-        Object.keys(source).length === 1 &&
-        'value' in source
-      )
-    }
+      const source = isWrappedQuestionnaire(fetchedSource)
+        ? fetchedSource.value
+        : fetchedSource
 
-    const source = isWrappedQuestionnaire(fetchedSource)
-      ? fetchedSource.value
-      : fetchedSource
+      const isQuestionnaireCompatible = isSurveyCompatibleWithQueen({
+        questionnaire: source,
+      })
 
-    const isQuestionnaireCompatible = isSurveyCompatibleWithQueen({
-      questionnaire: source,
-    })
+      if (!isQuestionnaireCompatible) {
+        throw new Error(
+          i18n.t('error.questionnaireNotCompatible', {
+            versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
+          }),
+        )
+      }
 
-    if (!isQuestionnaireCompatible) {
-      throw new Error(
-        i18n.t('error.questionnaireNotCompatible', {
-          versionBreaking: LUNATIC_MODEL_VERSION_BREAKING,
-        }),
-      )
-    }
+      const interrogation = data
+        ? await visualizeClient.get<Interrogation>(data)
+        : undefined
 
-    const interrogation = data
-      ? await fetchUrl<Interrogation>({
-          url: data,
-        })
-      : undefined
+      const getReferentiel = nomenclature
+        ? (name: string) =>
+            visualizeClient.get<Nomenclature>(nomenclature[name])
+        : undefined
 
-    const getReferentiel = nomenclature
-      ? (name: string) => fetchUrl<Nomenclature>({ url: nomenclature[name] })
-      : undefined
-
-    return { source, interrogation, readonly, getReferentiel }
-  },
+      return { source, interrogation, readonly, getReferentiel }
+    },
 } satisfies Thunks
