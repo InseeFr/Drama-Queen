@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.0) - 2026-07-08
+
 ### Changed
 
 - Improve synchronization performance : for download step, the list of interrogations is now retrieved from local storage (given by the parent app). If there is nothing in local storage, we keep the old implementation using api. Furthermore, we now download only new interrogations, we don't download anymore the interrogations that were already locally.
 - Improve synchronization performance : for upload step, we now upload only interrogations that have been locally updated since it was last sent to the server.
+
+### Fixed
+
+- During synchronization, when the put interrogation leads to a code 500 (server error), we now stop the synchronization as error, without trying to post in tempzone. It avoids many useless calls that would also lead to code 500.
 
 ## [3.6.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.6.2) - 2026-06-22
 
