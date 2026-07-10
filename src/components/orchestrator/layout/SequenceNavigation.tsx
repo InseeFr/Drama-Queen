@@ -11,6 +11,7 @@ type SequenceNavigationProps = {
   questionnaireTitle: string
   overview: Overview
   selectedSequence: OverviewItem | undefined
+  readonly: boolean
   sequenceOnClick: (sequence: OverviewItem) => void
 }
 
@@ -18,6 +19,7 @@ export function SequenceNavigation({
   questionnaireTitle,
   overview,
   selectedSequence,
+  readonly,
   sequenceOnClick,
 }: Readonly<SequenceNavigationProps>) {
   const { classes } = useStyles()
@@ -33,14 +35,14 @@ export function SequenceNavigation({
       </Typography>
       <Stack>
         {overview.map((sequence) => (
-          // we can only navigate to a sequence that has already been reached
+          // Except in readonly mode, we can only navigate to a sequence that has already been reached
           <MenuNavigationButton
             key={sequence.id}
             className={
               selectedSequence === sequence ? classes.sequenceOpen : ''
             }
             label={sequence.label}
-            disabled={!sequence.reached}
+            disabled={!readonly && !sequence.reached}
             endIcon={getSequenceEndIcon(sequence)}
             onClick={() => sequenceOnClick(sequence)}
           />

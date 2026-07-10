@@ -7,11 +7,13 @@ import { MenuNavigationButton } from './MenuNavigationButton'
 
 type subSequenceNavigationProps = {
   sequence: OverviewItem
+  readonly: boolean
   subSequenceOnClick: (subSequence: OverviewItem) => void
 }
 
 export function SubSequenceNavigation({
   sequence,
+  readonly,
   subSequenceOnClick,
 }: Readonly<subSequenceNavigationProps>) {
   const { classes } = useStyles()
@@ -25,11 +27,11 @@ export function SubSequenceNavigation({
       />
       <Stack>
         {sequence.children.map((subSequence) => (
-          // we can only navigate to a subSequence that has already been reached
+          // Except in readonly mode, we can only navigate to a subSequence that has already been reached
           <MenuNavigationButton
             key={subSequence.id}
             label={subSequence.label}
-            disabled={!subSequence.reached}
+            disabled={!readonly && !subSequence.reached}
             onClick={() => subSequenceOnClick(subSequence)}
           />
         ))}
