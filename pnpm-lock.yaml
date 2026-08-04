@@ -75,8 +75,8 @@ importers:
         specifier: ^7.51.1
         version: 7.84.0(react@19.2.8)
       react-hot-keys:
-        specifier: ^2.7.3
-        version: 2.7.3(@babel/runtime@7.29.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: ^3.0.0
+        version: 3.0.0(@babel/runtime@7.29.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-i18next:
         specifier: ^17.0.0
         version: 17.0.11(i18next@26.3.6(typescript@5.9.3))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@5.9.3)
@@ -2938,8 +2938,8 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  hotkeys-js@3.13.7:
-    resolution: {integrity: sha512-ygFIdTqqwG4fFP7kkiYlvayZppeIQX2aPpirsngkv1xM1lP0piDY5QEh68nQnIKvz64hfocxhBaD/uK3sSK1yQ==}
+  hotkeys-js@4.0.4:
+    resolution: {integrity: sha512-hseNiqaskxSnujuGp8aRMLJfcjaFiTSS0I2GQhqru82N/sx6CGyUf6pvU5X1iycvw2EqmvILkFIb5OzYFXY+9A==}
 
   html-encoding-sniffer@3.0.0:
     resolution: {integrity: sha512-oWv4T4yJ52iKrufjnyZPkrN0CH3QnrUqdB6In1g5Fe1mia8GmF36gnfNySxoZtxD5+NmYw1EElVXiBk93UeskA==}
@@ -3695,8 +3695,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-hot-keys@2.7.3:
-    resolution: {integrity: sha512-OoX1kTookqQx/OBXBgBLQCANpw3KGUcJNOl+MNv8xJYyH/Rojv+jTjQbksDGQMIOWVfvLqOZi/ZVcVdsWUAUWg==}
+  react-hot-keys@3.0.0:
+    resolution: {integrity: sha512-lcP0imYdnd8kLj9YE4TpgIoJp+wfJ+5WBoSZHryNCGzhavKmf5zf1rQsQ+z1tsbckc1x4dZNkaZLu2v3N+pShQ==}
     peerDependencies:
       '@babel/runtime': '>=7.10.0'
       react: '>=16.9.0'
@@ -7563,7 +7563,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hotkeys-js@3.13.7: {}
+  hotkeys-js@4.0.4: {}
 
   html-encoding-sniffer@3.0.0:
     dependencies:
@@ -8430,11 +8430,10 @@ snapshots:
     dependencies:
       react: 19.2.8
 
-  react-hot-keys@2.7.3(@babel/runtime@7.29.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-hot-keys@3.0.0(@babel/runtime@7.29.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@babel/runtime': 7.29.2
-      hotkeys-js: 3.13.7
-      prop-types: 15.8.1
+      hotkeys-js: 4.0.4
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
