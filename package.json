@@ -83,7 +83,7 @@
     "vite": "^6.0.0",
     "vite-envs": "^4.6.0",
     "vite-plugin-pwa": "^0.21.0",
-    "vite-tsconfig-paths": "^5.0.0",
+    "vite-tsconfig-paths": "^6.0.0",
     "vitest": "^4.0.18"
   },
   "lint-staged": {

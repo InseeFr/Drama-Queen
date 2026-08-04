@@ -184,8 +184,8 @@ importers:
         specifier: ^0.21.0
         version: 0.21.2(supports-color@7.2.0)(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0))(workbox-build@7.3.0(@types/babel__core@7.20.5)(supports-color@7.2.0))(workbox-window@7.3.0)
       vite-tsconfig-paths:
-        specifier: ^5.0.0
-        version: 5.1.4(supports-color@7.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0))
+        specifier: ^6.0.0
+        version: 6.1.1(supports-color@7.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0))
       vitest:
         specifier: ^4.0.18
         version: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(jsdom@26.1.0(supports-color@7.2.0))(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0))
@@ -4302,13 +4302,10 @@ packages:
       '@vite-pwa/assets-generator':
         optional: true
 
-  vite-tsconfig-paths@5.1.4:
-    resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
+  vite-tsconfig-paths@6.1.1:
+    resolution: {integrity: sha512-2cihq7zliibCCZ8P9cKJrQBkfgdvcFkOOc3Y02o3GWUDLgqjWsZudaoiuOwO/gzTzy17cS5F7ZPo4bsnS4DGkg==}
     peerDependencies:
       vite: '*'
-    peerDependenciesMeta:
-      vite:
-        optional: true
 
   vite@6.4.3:
     resolution: {integrity: sha512-NTKlcQjlAK7MlQoyb6LgaqHc8sso/pVyUJYWMws3jg21uTJw/LddqIFPcPqP6PzpgbIcZyKI85sFE4HBrQDA8A==}
@@ -9035,12 +9032,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-tsconfig-paths@5.1.4(supports-color@7.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0)):
+  vite-tsconfig-paths@6.1.1(supports-color@7.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0)):
     dependencies:
-      debug: 4.4.1(supports-color@7.2.0)
+      debug: 4.4.3(supports-color@7.2.0)
       globrex: 0.1.2
       tsconfck: 3.1.4(typescript@5.9.3)
-    optionalDependencies:
       vite: 6.4.3(@types/node@24.13.3)(jiti@2.7.0)(sass@1.89.2)(terser@5.49.1)(tsx@4.21.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
