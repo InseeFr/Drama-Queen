@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Remove documentation and server they were no longer used
+
 ## [3.7.0](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.0) - 2026-07-08
 
 ### Changed
