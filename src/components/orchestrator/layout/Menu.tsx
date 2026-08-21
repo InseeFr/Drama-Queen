@@ -158,6 +158,7 @@ export function Menu({
                 questionnaireTitle={questionnaireTitle}
                 overview={overview}
                 selectedSequence={selectedSequence}
+                readonly={readonly}
                 sequenceOnClick={sequenceOnClick}
               />
             </Stack>
@@ -181,6 +182,7 @@ export function Menu({
           <Stack className={classes.navigationContainer}>
             <SubSequenceNavigation
               sequence={selectedSequence}
+              readonly={readonly}
               subSequenceOnClick={subSequenceOnClick}
             />
           </Stack>
