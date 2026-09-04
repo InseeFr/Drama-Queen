@@ -38,7 +38,7 @@ export default defineConfig({
           './src/federation/partialResetInterrogation.ts',
         './getQueenVersion': './src/federation/getQueenVersion.ts',
       },
-      shared: ['react', 'react-dom'],
+      shared: [],
     }),
     tsconfigPaths({
       projects: [
