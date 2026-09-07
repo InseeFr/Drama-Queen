@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.2](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.2) - 2026-09-07
+
+### Fixed
+
+- Fix cves in Docker by upgrading nginx to `1.31.5-alpine`
+
 ## [3.7.1](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.1) - 2026-09-07
 
 ### Changed
