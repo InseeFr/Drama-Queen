@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.7.1-rc-review-navigation.1",
+  "version": "3.7.1",
   "type": "module",
   "packageManager": "pnpm@11.22.0",
   "scripts": {

@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.1](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.1) - 2026-09-07
+
 ### Changed
 
 - In review mode, it's now always possible to navigate in every modules (sequence/subsequence) through the navigation menu
+
 ### Removed
 
 - Remove documentation and server they were no longer used
