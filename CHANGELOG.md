@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- In review mode, it's now always possible to navigate in every modules (sequence/subsequence) through the navigation menu
 ### Removed
 
 - Remove documentation and server they were no longer used

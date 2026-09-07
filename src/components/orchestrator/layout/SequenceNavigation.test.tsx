@@ -45,6 +45,7 @@ describe('SequenceNavigation Component', () => {
     questionnaireTitle: 'Questionnaire Title',
     overview: defaultOverview,
     selectedSequence: undefined,
+    readonly: false,
     sequenceOnClick: mockSequenceOnClick,
   }
 
@@ -109,6 +110,33 @@ describe('SequenceNavigation Component', () => {
       expect.objectContaining({
         label: defaultProps.overview[0].label,
         className: expect.stringContaining('sequenceOpen'),
+      }),
+      undefined,
+    )
+  })
+
+  it('enables all sequences when readonly is true, even if not reached', () => {
+    const props = {
+      ...defaultProps,
+      readonly: true,
+    }
+
+    renderWithTheme(<SequenceNavigation {...props} />)
+
+    // first sequence (reached)
+    expect(MenuNavigationButton).toHaveBeenCalledWith(
+      expect.objectContaining({
+        label: defaultProps.overview[0].label,
+        disabled: false,
+      }),
+      undefined,
+    )
+
+    // second sequence (not reached)
+    expect(MenuNavigationButton).toHaveBeenCalledWith(
+      expect.objectContaining({
+        label: defaultProps.overview[1].label,
+        disabled: false,
       }),
       undefined,
     )

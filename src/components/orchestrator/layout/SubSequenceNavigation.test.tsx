@@ -52,6 +52,7 @@ describe('SubSequenceNavigation Component', () => {
 
   const defaultProps = {
     sequence: defaultSequence,
+    readonly: false,
     subSequenceOnClick: mockSubSequenceOnClick,
   }
 
@@ -101,6 +102,33 @@ describe('SubSequenceNavigation Component', () => {
         label: defaultProps.sequence.children[1].label,
         disabled: true,
         onClick: expect.any(Function),
+      }),
+      undefined,
+    )
+  })
+
+  it('enables all subSequences when readonly is true, even if not reached', () => {
+    const props = {
+      ...defaultProps,
+      readonly: true,
+    }
+
+    renderWithTheme(<SubSequenceNavigation {...props} />)
+
+    // first subSequence (reached)
+    expect(MenuNavigationButton).toHaveBeenCalledWith(
+      expect.objectContaining({
+        label: defaultProps.sequence.children[0].label,
+        disabled: false,
+      }),
+      undefined,
+    )
+
+    // second subSequence (not reached)
+    expect(MenuNavigationButton).toHaveBeenCalledWith(
+      expect.objectContaining({
+        label: defaultProps.sequence.children[1].label,
+        disabled: false,
       }),
       undefined,
     )
