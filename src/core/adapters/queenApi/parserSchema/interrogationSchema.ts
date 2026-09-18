@@ -10,19 +10,30 @@ export const idAndQuestionnaireIdSchema = z.object({
   questionnaireId: z.string(),
 })
 
-// PageTag being literal type, zod currently does not support it we need to force the type with a refine
+const FIRST_PAGE: PageTag = '1'
+
+// PageTag being literal type, zod currently does not support it we need to force the type with a transform
 const stateDataSchema = z.object({
+  // "IS_MOVED" is a state produced by the multimode events : the interrogation has to be
+  // treated as a fresh one, so we map it to the "not started" state (null)
   state: z
-    .enum(['INIT', 'COMPLETED', 'VALIDATED', 'TOEXTRACT', 'EXTRACTED'])
-    .nullable(),
+    .enum([
+      'INIT',
+      'COMPLETED',
+      'VALIDATED',
+      'TOEXTRACT',
+      'EXTRACTED',
+      'IS_MOVED',
+    ])
+    .nullable()
+    .transform((state) => (state === 'IS_MOVED' ? null : state)),
   date: z.number().int().min(0), //Should be improve when zod support unix timestamp
+  // The web orchestrator (stromae) stores its own pages ("welcomePage", "validationPage",
+  // "endPage") in currentPage : they are not lunatic page tags, so we fall back to the first page
+  // instead of failing the whole synchronization
   currentPage: z
     .string()
-    .refine(isPageTag, {
-      message:
-        'currentPage must be in the format `${number}.${number}#${number}` or `${number}`',
-    })
-    .transform((val) => val as PageTag),
+    .transform((val) => (isPageTag(val) ? val : FIRST_PAGE)),
 })
 
 export const interrogationSchema: z.ZodType<Interrogation> = z.object({
