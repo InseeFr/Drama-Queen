@@ -15,7 +15,7 @@ import { Route as LayoutExternalRouteRouteImport } from './routes/_layout/extern
 import { Route as LayoutSynchronizeRouteRouteImport } from './routes/_layout/synchronize/route'
 import { Route as LayoutVisualizeRouteRouteImport } from './routes/_layout/visualize/route'
 import { Route as LayoutInterrogationsInterrogationIdRouteRouteImport } from './routes/_layout/interrogations/$interrogationId/route'
-import { Route as LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport } from './routes/_layout/interrogations/$interrogationId/synchronize/route'
+import { Route as LayoutInterrogationsSynchronizeInterrogationIdRouteRouteImport } from './routes/_layout/interrogations/synchronize/$interrogationId/route'
 import { Route as LayoutReviewInterrogationsInterrogationIdRouteRouteImport } from './routes/_layout/review/interrogations/$interrogationId/route'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -48,11 +48,11 @@ const LayoutInterrogationsInterrogationIdRouteRoute =
     path: '/interrogations/$interrogationId',
     getParentRoute: () => LayoutRoute,
   } as any)
-const LayoutInterrogationsInterrogationIdSynchronizeRouteRoute =
-  LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport.update({
-    id: '/synchronize',
-    path: '/synchronize',
-    getParentRoute: () => LayoutInterrogationsInterrogationIdRouteRoute,
+const LayoutInterrogationsSynchronizeInterrogationIdRouteRoute =
+  LayoutInterrogationsSynchronizeInterrogationIdRouteRouteImport.update({
+    id: '/interrogations/synchronize/$interrogationId',
+    path: '/interrogations/synchronize/$interrogationId',
+    getParentRoute: () => LayoutRoute,
   } as any)
 const LayoutReviewInterrogationsInterrogationIdRouteRoute =
   LayoutReviewInterrogationsInterrogationIdRouteRouteImport.update({
@@ -67,8 +67,8 @@ export interface FileRoutesByFullPath {
   '/external': typeof LayoutExternalRouteRoute
   '/synchronize': typeof LayoutSynchronizeRouteRoute
   '/visualize': typeof LayoutVisualizeRouteRoute
-  '/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRouteWithChildren
-  '/interrogations/$interrogationId/synchronize': typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRoute
+  '/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRoute
+  '/interrogations/synchronize/$interrogationId': typeof LayoutInterrogationsSynchronizeInterrogationIdRouteRoute
   '/review/interrogations/$interrogationId': typeof LayoutReviewInterrogationsInterrogationIdRouteRoute
 }
 export interface FileRoutesByTo {
@@ -77,8 +77,8 @@ export interface FileRoutesByTo {
   '/external': typeof LayoutExternalRouteRoute
   '/synchronize': typeof LayoutSynchronizeRouteRoute
   '/visualize': typeof LayoutVisualizeRouteRoute
-  '/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRouteWithChildren
-  '/interrogations/$interrogationId/synchronize': typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRoute
+  '/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRoute
+  '/interrogations/synchronize/$interrogationId': typeof LayoutInterrogationsSynchronizeInterrogationIdRouteRoute
   '/review/interrogations/$interrogationId': typeof LayoutReviewInterrogationsInterrogationIdRouteRoute
 }
 export interface FileRoutesById {
@@ -88,8 +88,8 @@ export interface FileRoutesById {
   '/_layout/external': typeof LayoutExternalRouteRoute
   '/_layout/synchronize': typeof LayoutSynchronizeRouteRoute
   '/_layout/visualize': typeof LayoutVisualizeRouteRoute
-  '/_layout/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRouteWithChildren
-  '/_layout/interrogations/$interrogationId/synchronize': typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRoute
+  '/_layout/interrogations/$interrogationId': typeof LayoutInterrogationsInterrogationIdRouteRoute
+  '/_layout/interrogations/synchronize/$interrogationId': typeof LayoutInterrogationsSynchronizeInterrogationIdRouteRoute
   '/_layout/review/interrogations/$interrogationId': typeof LayoutReviewInterrogationsInterrogationIdRouteRoute
 }
 export interface FileRouteTypes {
@@ -101,7 +101,7 @@ export interface FileRouteTypes {
     | '/synchronize'
     | '/visualize'
     | '/interrogations/$interrogationId'
-    | '/interrogations/$interrogationId/synchronize'
+    | '/interrogations/synchronize/$interrogationId'
     | '/review/interrogations/$interrogationId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -111,7 +111,7 @@ export interface FileRouteTypes {
     | '/synchronize'
     | '/visualize'
     | '/interrogations/$interrogationId'
-    | '/interrogations/$interrogationId/synchronize'
+    | '/interrogations/synchronize/$interrogationId'
     | '/review/interrogations/$interrogationId'
   id:
     | '__root__'
@@ -121,7 +121,7 @@ export interface FileRouteTypes {
     | '/_layout/synchronize'
     | '/_layout/visualize'
     | '/_layout/interrogations/$interrogationId'
-    | '/_layout/interrogations/$interrogationId/synchronize'
+    | '/_layout/interrogations/synchronize/$interrogationId'
     | '/_layout/review/interrogations/$interrogationId'
   fileRoutesById: FileRoutesById
 }
@@ -173,12 +173,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterrogationsInterrogationIdRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/interrogations/$interrogationId/synchronize': {
-      id: '/_layout/interrogations/$interrogationId/synchronize'
-      path: '/synchronize'
-      fullPath: '/interrogations/$interrogationId/synchronize'
-      preLoaderRoute: typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport
-      parentRoute: typeof LayoutInterrogationsInterrogationIdRouteRoute
+    '/_layout/interrogations/synchronize/$interrogationId': {
+      id: '/_layout/interrogations/synchronize/$interrogationId'
+      path: '/interrogations/synchronize/$interrogationId'
+      fullPath: '/interrogations/synchronize/$interrogationId'
+      preLoaderRoute: typeof LayoutInterrogationsSynchronizeInterrogationIdRouteRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/review/interrogations/$interrogationId': {
       id: '/_layout/review/interrogations/$interrogationId'
@@ -190,27 +190,13 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface LayoutInterrogationsInterrogationIdRouteRouteChildren {
-  LayoutInterrogationsInterrogationIdSynchronizeRouteRoute: typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRoute
-}
-
-const LayoutInterrogationsInterrogationIdRouteRouteChildren: LayoutInterrogationsInterrogationIdRouteRouteChildren =
-  {
-    LayoutInterrogationsInterrogationIdSynchronizeRouteRoute:
-      LayoutInterrogationsInterrogationIdSynchronizeRouteRoute,
-  }
-
-const LayoutInterrogationsInterrogationIdRouteRouteWithChildren =
-  LayoutInterrogationsInterrogationIdRouteRoute._addFileChildren(
-    LayoutInterrogationsInterrogationIdRouteRouteChildren,
-  )
-
 interface LayoutRouteChildren {
   LayoutEnvRouteRoute: typeof LayoutEnvRouteRoute
   LayoutExternalRouteRoute: typeof LayoutExternalRouteRoute
   LayoutSynchronizeRouteRoute: typeof LayoutSynchronizeRouteRoute
   LayoutVisualizeRouteRoute: typeof LayoutVisualizeRouteRoute
-  LayoutInterrogationsInterrogationIdRouteRoute: typeof LayoutInterrogationsInterrogationIdRouteRouteWithChildren
+  LayoutInterrogationsInterrogationIdRouteRoute: typeof LayoutInterrogationsInterrogationIdRouteRoute
+  LayoutInterrogationsSynchronizeInterrogationIdRouteRoute: typeof LayoutInterrogationsSynchronizeInterrogationIdRouteRoute
   LayoutReviewInterrogationsInterrogationIdRouteRoute: typeof LayoutReviewInterrogationsInterrogationIdRouteRoute
 }
 
@@ -220,7 +206,9 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutSynchronizeRouteRoute: LayoutSynchronizeRouteRoute,
   LayoutVisualizeRouteRoute: LayoutVisualizeRouteRoute,
   LayoutInterrogationsInterrogationIdRouteRoute:
-    LayoutInterrogationsInterrogationIdRouteRouteWithChildren,
+    LayoutInterrogationsInterrogationIdRouteRoute,
+  LayoutInterrogationsSynchronizeInterrogationIdRouteRoute:
+    LayoutInterrogationsSynchronizeInterrogationIdRouteRoute,
   LayoutReviewInterrogationsInterrogationIdRouteRoute:
     LayoutReviewInterrogationsInterrogationIdRouteRoute,
 }
