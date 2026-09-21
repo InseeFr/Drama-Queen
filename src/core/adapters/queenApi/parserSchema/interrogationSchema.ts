@@ -47,7 +47,7 @@ const stateDataSchema = z.object({
   currentPage: z
     .string()
     .transform((val) => (isPageTag(val) ? val : FIRST_PAGE)),
-  leafStates: z.array(leafStateSchema).optional(),
+  leafStates: z.array(leafStateSchema).optional().nullable(),
 })
 
 export const interrogationSchema: z.ZodType<Interrogation> = z.object({
