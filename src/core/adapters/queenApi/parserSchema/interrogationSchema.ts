@@ -14,7 +14,7 @@ const FIRST_PAGE: PageTag = '1'
 
 // PageTag being literal type, zod currently does not support it we need to force the type with a transform
 const leafStateSchema = z.object({
-  state: z.enum(['NOT_INIT', 'INIT', 'COMPLETED', null]).nullable(),
+  state: z.enum(['NOT_INIT', 'INIT', 'COMPLETED']).nullable(),
   date: z.number().int().min(0),
   cells: z
     .array(
