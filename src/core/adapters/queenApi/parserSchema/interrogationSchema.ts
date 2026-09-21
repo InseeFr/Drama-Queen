@@ -13,6 +13,19 @@ export const idAndQuestionnaireIdSchema = z.object({
 const FIRST_PAGE: PageTag = '1'
 
 // PageTag being literal type, zod currently does not support it we need to force the type with a transform
+const leafStateSchema = z.object({
+  state: z.enum(['NOT_INIT', 'INIT', 'COMPLETED', null]).nullable(),
+  date: z.number().int().min(0),
+  cells: z
+    .array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+      }),
+    )
+    .optional(),
+})
+
 const stateDataSchema = z.object({
   // "IS_MOVED" is a state produced by the multimode events : the interrogation has to be
   // treated as a fresh one, so we map it to the "not started" state (null)
@@ -34,6 +47,7 @@ const stateDataSchema = z.object({
   currentPage: z
     .string()
     .transform((val) => (isPageTag(val) ? val : FIRST_PAGE)),
+  leafStates: z.array(leafStateSchema).optional(),
 })
 
 export const interrogationSchema: z.ZodType<Interrogation> = z.object({
