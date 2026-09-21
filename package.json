@@ -3,7 +3,6 @@
   "private": true,
   "version": "3.7.3-fix-multimode-rc.0",
   "type": "module",
-  "packageManager": "pnpm@11.22.0",
   "scripts": {
     "generate-routes": "tsr generate",
     "dev": "pnpm run generate-routes && vite --port 5001 --strictPort",
@@ -25,7 +24,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@inseefr/lunatic": "^3.13.6-rc-fix-multimode.1",
+    "@inseefr/lunatic": "^3.13.6-rc-fix-multimode.2",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@mui/x-date-pickers": "^7.28.2",
