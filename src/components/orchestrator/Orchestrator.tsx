@@ -99,6 +99,7 @@ export function Orchestrator({
   const [isTelemetryInitialized, setIsTelemetryInitialized] =
     useState<boolean>(false)
 
+  console.log('Orchestrator intialPage args:', initialPage)
   const {
     isTelemetryEnabled,
     pushEvent,

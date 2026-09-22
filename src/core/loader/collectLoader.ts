@@ -20,6 +20,7 @@ export async function collectLoader({
   const pageWithTag: PageTag | undefined = isPageTag(pageValue)
     ? pageValue
     : undefined
+  console.log('collectLoader page:', page, 'pageWithTag:', pageWithTag)
 
   const { collectSurvey } = (await prCore).functions
 
