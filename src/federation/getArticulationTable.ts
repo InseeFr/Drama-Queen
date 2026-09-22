@@ -85,12 +85,7 @@ function hasArticulation(
 }
 
 const buildUrl = (interrogationId: string, page: string): string => {
-  const url = new URL(
-    `/queen/interrogations/${interrogationId}`,
-    window.location.origin,
-  )
-  url.searchParams.set('page', page.toString())
-  return url.toString()
+  return `/queen/interrogations/${interrogationId}?page=${encodeURIComponent(page)}`
 }
 
 const progressLabel = (n: number) => {
