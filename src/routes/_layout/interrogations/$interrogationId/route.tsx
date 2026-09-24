@@ -14,17 +14,15 @@ export const Route = createFileRoute(
 )({
   component: Collect,
   validateSearch: (search: Record<string, unknown>): CollectSearch => {
-    console.log(
-      'Collecte ROUTE, validate search, search JSON.string:',
-      JSON.stringify(search),
-      'search.page:',
-      search.page,
-    )
+    const rawPage = search.page
+    const page =
+      typeof rawPage === 'string'
+        ? rawPage
+        : typeof rawPage === 'number'
+          ? String(rawPage)
+          : undefined
     return {
-      page:
-        typeof search.page === 'string' && isPageTag(search.page)
-          ? search.page
-          : undefined,
+      page: page !== undefined && isPageTag(page) ? page : undefined,
     }
   },
   loaderDeps: ({ search }) => ({ page: search.page }),
