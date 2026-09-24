@@ -105,7 +105,7 @@ describe('NavigationManager', () => {
 
     vi.mocked(useLocation).mockReturnValue({
       pathname: '/test-path',
-      search: '?foo=bar',
+      searchStr: '?foo=bar',
     } as any)
 
     vi.mocked(useNavigate).mockReturnValue(navigate)

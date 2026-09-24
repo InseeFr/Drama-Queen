@@ -40,7 +40,7 @@ export function NavigationManager({ children }: PropsWithChildren) {
       new CustomEvent<NavigationEventDetail>('[Drama Queen] navigated', {
         detail: {
           pathname: location.pathname,
-          search: location.search,
+          search: location.searchStr,
         },
       }),
     )
