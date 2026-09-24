@@ -1,6 +1,11 @@
+import { useLocation, useNavigate } from '@tanstack/react-router'
+
 import { type PropsWithChildren, useEffect } from 'react'
 
-import { useLocation, useNavigate } from '@tanstack/react-router'
+type NavigationEventDetail = {
+  pathname: string
+  search?: string
+}
 
 export function NavigationManager({ children }: PropsWithChildren) {
   const location = useLocation()
@@ -8,11 +13,19 @@ export function NavigationManager({ children }: PropsWithChildren) {
 
   useEffect(() => {
     function shellNavigationHandler(event: Event) {
-      const pathname = (event as CustomEvent<string>).detail
-      if (location.pathname === pathname) {
+      const { pathname, search } = (event as CustomEvent<NavigationEventDetail>)
+        .detail
+
+      if (location.pathname === pathname && location.search === search) {
         return
       }
-      navigate({ to: pathname })
+
+      navigate({
+        to: pathname,
+        search: search
+          ? Object.fromEntries(new URLSearchParams(search))
+          : undefined,
+      })
     }
 
     window.addEventListener('[Pearl] navigated', shellNavigationHandler)
@@ -24,7 +37,12 @@ export function NavigationManager({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent('[Drama Queen] navigated', { detail: location.pathname }),
+      new CustomEvent<NavigationEventDetail>('[Drama Queen] navigated', {
+        detail: {
+          pathname: location.pathname,
+          search: location.search,
+        },
+      }),
     )
   }, [location])
 
