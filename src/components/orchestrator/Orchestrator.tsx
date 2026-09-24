@@ -91,6 +91,7 @@ export function Orchestrator({
 
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(
     !readonly &&
+      initialPage === undefined &&
       initialInterrogation.stateData !== undefined &&
       initialInterrogation.stateData.currentPage !== '1',
   )
@@ -99,7 +100,6 @@ export function Orchestrator({
   const [isTelemetryInitialized, setIsTelemetryInitialized] =
     useState<boolean>(false)
 
-  console.log('Orchestrator intialPage args:', initialPage)
   const {
     isTelemetryEnabled,
     pushEvent,
