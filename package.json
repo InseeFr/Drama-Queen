@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.7.3-fix-multimode-rc.5",
+  "version": "3.7.3-fix-multimode-rc.6",
   "type": "module",
   "packageManager": "pnpm@11.22.0",
   "scripts": {
