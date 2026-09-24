@@ -1,5 +1,5 @@
-import { createRoot } from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
+import { createRoot } from 'react-dom/client'
 
 import { CenteredSpinner } from '@/components/ui/CenteredSpinner'
 import { CoreProvider } from '@/createCore'
@@ -11,11 +11,9 @@ import { unsubscribeOldSW } from '@/unsubscribe_old_sw'
 
 const mount = ({
   mountPoint,
-  initialPathname,
   routingStrategy,
 }: {
   mountPoint: HTMLElement
-  initialPathname?: string
   routingStrategy?: RoutingStrategy
 }) => {
   console.log('Mount Drama Queen')
@@ -23,7 +21,7 @@ const mount = ({
   // unsubscribe to old SW
   unsubscribeOldSW()
 
-  const router = createRouter({ strategy: routingStrategy, initialPathname })
+  const router = createRouter({ strategy: routingStrategy })
   const root = createRoot(mountPoint)
   root.render(
     <CoreProvider fallback={<CenteredSpinner />}>

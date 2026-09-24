@@ -19,13 +19,6 @@ export function NavigationManager({ children }: PropsWithChildren) {
       if (location.pathname === pathname && location.search === search) {
         return
       }
-      console.log('[NavigationManager] event ', event)
-      console.log('[NavigationManager] Navigate to ', {
-        to: pathname,
-        search: search
-          ? Object.fromEntries(new URLSearchParams(search))
-          : undefined,
-      })
       navigate({
         to: pathname,
         search: search

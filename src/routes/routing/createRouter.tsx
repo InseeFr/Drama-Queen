@@ -7,30 +7,31 @@ import {
 
 import { routeTree } from '@/routeTree.gen'
 
+const queenBasePath = '/queen'
+
 export type RoutingStrategy = 'memory' | 'browser'
 
 type CreateRouterProps = {
   strategy?: RoutingStrategy
-  initialPathname?: string
 }
 
 const queryClient = new QueryClient()
 
-export function createRouter({
-  strategy = 'memory',
-  initialPathname = '/',
-}: CreateRouterProps) {
+export function createRouter({ strategy = 'memory' }: CreateRouterProps) {
   if (strategy === 'browser') {
     return createTanStackRouter({
       routeTree,
       history: createBrowserHistory(),
-      basepath: '/queen',
+      basepath: queenBasePath,
       context: { queryClient },
       stringifySearch: stringifySearchWith(JSON.stringify),
     })
   }
 
-  const initialEntries = [initialPathname || '/']
+  const currentUrl = new URL(window.location.href)
+  const initialEntry = `${currentUrl.pathname.replace(queenBasePath, '')}${currentUrl.search}${currentUrl.hash}`
+
+  const initialEntries = [initialEntry]
   return createTanStackRouter({
     routeTree,
     history: createMemoryHistory({ initialEntries }),
