@@ -8,6 +8,7 @@ import { assert } from 'tsafe'
 import { useEffect } from 'react'
 
 import { useCore, useCoreState } from '@/core'
+import { sendRegainedControlDoneEvent } from '@/core/usecases/collectSurvey/eventSender'
 import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/interrogations/synchronize/$interrogationId/route'
 
 export function SynchronizeInterrogation() {
@@ -28,7 +29,7 @@ export function SynchronizeInterrogation() {
 
   useEffect(() => {
     if (state.done) {
-      navigate({ to: `/interrogations/${interrogationId}` })
+      sendRegainedControlDoneEvent(interrogationId)
     }
   }, [interrogationId, state.done, navigate])
 
