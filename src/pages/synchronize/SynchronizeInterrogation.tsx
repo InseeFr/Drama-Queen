@@ -8,7 +8,8 @@ import { assert } from 'tsafe'
 import { useEffect } from 'react'
 
 import { useCore, useCoreState } from '@/core'
-import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/interrogations/$interrogationId/synchronize/route'
+import { sendRegainedControlDoneEvent } from '@/core/usecases/collectSurvey/eventSender'
+import { Route as SynchronizeInterrogationRoute } from '@/routes/_layout/interrogations/synchronize/$interrogationId/route'
 
 export function SynchronizeInterrogation() {
   const { interrogationId } = SynchronizeInterrogationRoute.useParams()
@@ -21,13 +22,14 @@ export function SynchronizeInterrogation() {
   const { start } = useCore().functions.takeControl
 
   useEffect(() => {
+    console.log(`Let's taking control for interrogationId: ${interrogationId}`)
     start({ interrogationId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interrogationId])
 
   useEffect(() => {
     if (state.done) {
-      navigate({ to: `/interrogations/${interrogationId}` })
+      sendRegainedControlDoneEvent(interrogationId)
     }
   }, [interrogationId, state.done, navigate])
 

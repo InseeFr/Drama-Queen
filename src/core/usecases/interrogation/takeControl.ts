@@ -57,6 +57,7 @@ export const thunks = {
         // Set hasBeenUpdated flag when taking control of an interrogation
         const updatedInterrogation: LocalInterrogation = {
           ...interrogation,
+          stateData: undefined,
           hasBeenUpdated: true,
         }
 

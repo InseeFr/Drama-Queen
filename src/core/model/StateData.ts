@@ -7,5 +7,5 @@ export type StateData = {
   state: QuestionnaireState
   date: number
   currentPage: PageTag
-  leafStates?: LeafState[]
+  leafStates?: LeafState[] | null
 }
