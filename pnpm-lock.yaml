@@ -22,8 +22,8 @@ importers:
         specifier: ^11.11.0
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.18)(react@19.2.8)(supports-color@7.2.0)
       '@inseefr/lunatic':
-        specifier: ^3.13.5-rc-fix-controls.0
-        version: 3.13.5-rc-fix-controls.0(@types/react@19.2.18)(debug@4.4.3(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)
+        specifier: ^3.13.5
+        version: 3.13.5(@types/react@19.2.18)(debug@4.4.3(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)
       '@mui/icons-material':
         specifier: ^5.15.14
         version: 5.18.0(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.18)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.18)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react@19.2.8)
@@ -1905,10 +1905,10 @@ packages:
       }
     engines: { node: '>=18.18' }
 
-  '@inseefr/lunatic@3.13.5-rc-fix-controls.0':
+  '@inseefr/lunatic@3.13.5':
     resolution:
       {
-        integrity: sha512-5SZ2RbDBJcugUtmjKYQf5zBPZ/lAGCHbSDYkTBKnt6U98gQUGRoZCFQMerW4O+yTWauyCOSLJbrVEG+FeLHuiQ==,
+        integrity: sha512-A4k7HOrgvi4E5+NUcFmPqbfIGmGiyR9jV1e3S0l/dxDCidZgMICtq3abjMcD+ozrCoZKistGCEX4/yshT+67uA==,
       }
     peerDependencies:
       react: ^19.2.3
@@ -8782,7 +8782,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@inseefr/lunatic@3.13.5-rc-fix-controls.0(@types/react@19.2.18)(debug@4.4.3(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)':
+  '@inseefr/lunatic@3.13.5(@types/react@19.2.18)(debug@4.4.3(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)':
     dependencies:
       '@inseefr/trevas': 0.1.21
       '@inseefr/vtl-2.0-antlr-tools': 0.3.2
