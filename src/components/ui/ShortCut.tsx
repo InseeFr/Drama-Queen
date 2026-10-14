@@ -12,6 +12,9 @@ export function ShortCut({
 }: Readonly<ShortCutProps>) {
   function onClickShortCut(onClickMethod: () => void) {
     return (_keyName: string, event: KeyboardEvent) => {
+      // temp fix : react-hot-keys v3 calls onKeyDown on both keydown and keyup,
+      // so shorcut were trigger twice
+      if (event.type !== 'keydown') return
       onClickMethod()
       event.preventDefault()
     }
@@ -26,6 +29,7 @@ export function ShortCut({
       keyName={shortCutKey}
       onKeyDown={handleShortCut}
       filter={() => true}
+      allowRepeat
     />
   )
 }
