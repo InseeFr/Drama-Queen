@@ -10,26 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
-import { Route as LayoutVisualizeRouteRouteImport } from './routes/_layout/visualize/route'
-import { Route as LayoutSynchronizeRouteRouteImport } from './routes/_layout/synchronize/route'
-import { Route as LayoutExternalRouteRouteImport } from './routes/_layout/external/route'
 import { Route as LayoutEnvRouteRouteImport } from './routes/_layout/env/route'
+import { Route as LayoutExternalRouteRouteImport } from './routes/_layout/external/route'
+import { Route as LayoutSynchronizeRouteRouteImport } from './routes/_layout/synchronize/route'
+import { Route as LayoutVisualizeRouteRouteImport } from './routes/_layout/visualize/route'
 import { Route as LayoutInterrogationsInterrogationIdRouteRouteImport } from './routes/_layout/interrogations/$interrogationId/route'
-import { Route as LayoutReviewInterrogationsInterrogationIdRouteRouteImport } from './routes/_layout/review/interrogations/$interrogationId/route'
 import { Route as LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport } from './routes/_layout/interrogations/$interrogationId/synchronize/route'
+import { Route as LayoutReviewInterrogationsInterrogationIdRouteRouteImport } from './routes/_layout/review/interrogations/$interrogationId/route'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutVisualizeRouteRoute = LayoutVisualizeRouteRouteImport.update({
-  id: '/visualize',
-  path: '/visualize',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutSynchronizeRouteRoute = LayoutSynchronizeRouteRouteImport.update({
-  id: '/synchronize',
-  path: '/synchronize',
+const LayoutEnvRouteRoute = LayoutEnvRouteRouteImport.update({
+  id: '/env',
+  path: '/env',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutExternalRouteRoute = LayoutExternalRouteRouteImport.update({
@@ -37,9 +32,14 @@ const LayoutExternalRouteRoute = LayoutExternalRouteRouteImport.update({
   path: '/external',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutEnvRouteRoute = LayoutEnvRouteRouteImport.update({
-  id: '/env',
-  path: '/env',
+const LayoutSynchronizeRouteRoute = LayoutSynchronizeRouteRouteImport.update({
+  id: '/synchronize',
+  path: '/synchronize',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutVisualizeRouteRoute = LayoutVisualizeRouteRouteImport.update({
+  id: '/visualize',
+  path: '/visualize',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutInterrogationsInterrogationIdRouteRoute =
@@ -48,17 +48,17 @@ const LayoutInterrogationsInterrogationIdRouteRoute =
     path: '/interrogations/$interrogationId',
     getParentRoute: () => LayoutRoute,
   } as any)
-const LayoutReviewInterrogationsInterrogationIdRouteRoute =
-  LayoutReviewInterrogationsInterrogationIdRouteRouteImport.update({
-    id: '/review/interrogations/$interrogationId',
-    path: '/review/interrogations/$interrogationId',
-    getParentRoute: () => LayoutRoute,
-  } as any)
 const LayoutInterrogationsInterrogationIdSynchronizeRouteRoute =
   LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport.update({
     id: '/synchronize',
     path: '/synchronize',
     getParentRoute: () => LayoutInterrogationsInterrogationIdRouteRoute,
+  } as any)
+const LayoutReviewInterrogationsInterrogationIdRouteRoute =
+  LayoutReviewInterrogationsInterrogationIdRouteRouteImport.update({
+    id: '/review/interrogations/$interrogationId',
+    path: '/review/interrogations/$interrogationId',
+    getParentRoute: () => LayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -138,18 +138,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_layout/visualize': {
-      id: '/_layout/visualize'
-      path: '/visualize'
-      fullPath: '/visualize'
-      preLoaderRoute: typeof LayoutVisualizeRouteRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/synchronize': {
-      id: '/_layout/synchronize'
-      path: '/synchronize'
-      fullPath: '/synchronize'
-      preLoaderRoute: typeof LayoutSynchronizeRouteRouteImport
+    '/_layout/env': {
+      id: '/_layout/env'
+      path: '/env'
+      fullPath: '/env'
+      preLoaderRoute: typeof LayoutEnvRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/external': {
@@ -159,11 +152,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutExternalRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/env': {
-      id: '/_layout/env'
-      path: '/env'
-      fullPath: '/env'
-      preLoaderRoute: typeof LayoutEnvRouteRouteImport
+    '/_layout/synchronize': {
+      id: '/_layout/synchronize'
+      path: '/synchronize'
+      fullPath: '/synchronize'
+      preLoaderRoute: typeof LayoutSynchronizeRouteRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/visualize': {
+      id: '/_layout/visualize'
+      path: '/visualize'
+      fullPath: '/visualize'
+      preLoaderRoute: typeof LayoutVisualizeRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/interrogations/$interrogationId': {
@@ -173,19 +173,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterrogationsInterrogationIdRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/review/interrogations/$interrogationId': {
-      id: '/_layout/review/interrogations/$interrogationId'
-      path: '/review/interrogations/$interrogationId'
-      fullPath: '/review/interrogations/$interrogationId'
-      preLoaderRoute: typeof LayoutReviewInterrogationsInterrogationIdRouteRouteImport
-      parentRoute: typeof LayoutRoute
-    }
     '/_layout/interrogations/$interrogationId/synchronize': {
       id: '/_layout/interrogations/$interrogationId/synchronize'
       path: '/synchronize'
       fullPath: '/interrogations/$interrogationId/synchronize'
       preLoaderRoute: typeof LayoutInterrogationsInterrogationIdSynchronizeRouteRouteImport
       parentRoute: typeof LayoutInterrogationsInterrogationIdRouteRoute
+    }
+    '/_layout/review/interrogations/$interrogationId': {
+      id: '/_layout/review/interrogations/$interrogationId'
+      path: '/review/interrogations/$interrogationId'
+      fullPath: '/review/interrogations/$interrogationId'
+      preLoaderRoute: typeof LayoutReviewInterrogationsInterrogationIdRouteRouteImport
+      parentRoute: typeof LayoutRoute
     }
   }
 }

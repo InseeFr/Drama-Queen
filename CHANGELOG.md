@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.7](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.7) - 2026-10-26
+
+### Changed
+
+- Base DockerFile `nginxinc/nginx-unprivileged` to `nginx/nginx-unprivileged`
+
+### Fixed
+
+- Fix high cves
+- Fix cves in Docker by upgrading nginx to `1.31.8-alpine`
+
+## [3.7.6](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.6) - 2026-10-20
+
+### Fixed
+
+- Fix cves
+
+## [3.7.5](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.5) - 2026-10-20
+
+### Fixed
+
+- Shortcuts are not more triggered twice.
+
+## [3.7.4](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.4) - 2026-10-09
+
+### Changed
+
+- change the CI due to migration on Gitlab.
+
 ## [3.7.3](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.3) - 2026-10-02
 
 ### Fixed
