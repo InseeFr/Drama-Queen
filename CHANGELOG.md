@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.7.7](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.7) - 2026-10-26
+### Changed
+
+- upgrade devdependencies (minors & patch)
+
+## [3.7.8](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.8) - 2026-11-05
+
+### Changed
+
+- upgrade dependencies : Lunatic 4.0.2
+
+### Fixed
+
+- upgrade all dependencies (minors & patch)
+
+## [3.7.7](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.7) - 2026-10-26
 
 ### Changed
 
@@ -18,19 +32,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix high cves
 - Fix cves in Docker by upgrading nginx to `1.31.8-alpine`
 
-## [3.7.6](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.6) - 2026-10-20
+## [3.7.6](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.6) - 2026-10-20
 
 ### Fixed
 
 - Fix cves
 
-## [3.7.5](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.5) - 2026-10-20
+## [3.7.5](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.5) - 2026-10-20
 
 ### Fixed
 
 - Shortcuts are not more triggered twice.
 
-## [3.7.4](https://github.com/InseeFr/Drama-Queen/releases/tag/3.7.4) - 2026-10-09
+## [3.7.4](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.4) - 2026-10-09
 
 ### Changed
 

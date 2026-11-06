@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ErrorComponent } from '@/components/ui/ErrorComponent'
 
 type Props = {
-  error: Error
+  error: unknown
 }
 
 export function ErrorPage({ error }: Props) {

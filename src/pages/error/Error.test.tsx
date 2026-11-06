@@ -29,4 +29,20 @@ describe('ErrorPage', () => {
       undefined,
     )
   })
+
+  it.each([
+    ['a string', 'Something went wrong'],
+    ['an object', { message: 'Something went wrong' }],
+    ['undefined', undefined],
+  ])(
+    'calls ErrorComponent with unknown error message when error is %s',
+    (_, error) => {
+      render(<ErrorPage error={error} />)
+
+      expect(ErrorComponent).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'error.unknownError.short' }),
+        undefined,
+      )
+    },
+  )
 })
