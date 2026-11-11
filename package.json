@@ -35,7 +35,7 @@
     "@types/memoizee": "^0.4.12",
     "axios": "^1.21.0",
     "date-fns": "^4.4.0",
-    "dexie": "^3.2.7",
+    "dexie": "^4.0.0",
     "dexie-react-hooks": "^1.1.7",
     "evt": "^2.5.9",
     "i18next": "^26.7.1",
