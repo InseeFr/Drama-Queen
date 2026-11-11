@@ -1,7 +1,7 @@
 {
   "name": "drama-queen",
   "private": true,
-  "version": "3.7.8",
+  "version": "3.7.9",
   "type": "module",
   "packageManager": "pnpm@11.23.0",
   "scripts": {

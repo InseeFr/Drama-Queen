@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.9](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.9) - 2026-11-10
+
 ### Changed
 
 - upgrade devdependencies (minors & patch)
