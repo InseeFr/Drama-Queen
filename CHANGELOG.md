@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.8.0](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.8.0) - 2026-11-27
+
+### Added
+
+- Added missing HTTP headers to improve security (CSP, X-Frame-Options, Cross-Origin-Resource-Policy, X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security)
+
+## [3.7.10](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.10) - 2026-11-25
+
+### Changed
+
+- Update nginx/nginx-unprivileged version
+
 ## [3.7.9](https://gitlab.insee.fr/filiere-enquete/concevoir-traiter/applications/concevoir/questionnaire-enqueteur-ui/-/releases/3.7.9) - 2026-11-10
 
 ### Changed
